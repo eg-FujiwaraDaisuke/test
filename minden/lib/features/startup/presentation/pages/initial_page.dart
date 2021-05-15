@@ -14,12 +14,7 @@ class InitialPage extends StatefulWidget {
   State<StatefulWidget> createState() => _InitialPageState();
 }
 
-class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
-  @override
-  void afterFirstLayout(BuildContext context) {
-    _bloc.add(GetMaintenanceInfoEvent());
-  }
-
+class _InitialPageState extends State<InitialPage> {
   final _bloc = StartupBloc(
     Empty(),
     GetMaintenanceInfo(
@@ -32,6 +27,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
+    _bloc.add(GetMaintenanceInfoEvent());
   }
 
   @override
