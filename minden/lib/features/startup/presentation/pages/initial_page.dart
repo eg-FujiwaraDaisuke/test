@@ -59,7 +59,6 @@ class _InitialPageState extends State<InitialPage> {
                     return Container();
                   } else if (state is Loaded) {
                     return Column(children: [
-                      Text(state.info.supportVersion),
                       Text(state.info.maintenanceUrl),
                     ]);
                   } else if (state is Error) {

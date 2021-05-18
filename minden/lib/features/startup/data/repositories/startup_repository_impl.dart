@@ -9,6 +9,14 @@ import 'package:minden/features/startup/domain/repositories/startup_repository.d
 
 import '../../domain/entities/maintenance_info.dart';
 
+// data - repository
+
+// 実装ガイド
+// ドメイン層では、usecaseがrepositoryを使ってentityを返す仕組みを作りました。
+// データ層も構造は似ていて、repositoryの実装で、datasourceを使って、modelを返します。
+// 異なる点としては、
+// ドメイン層では、repositoryはEntityを返すことと、エラーはFailureとして返すことです。
+// データ層では、datasourceはModelを返すことと、エラーはexceptionを投げることです。
 class StartupRepositoryImpl implements StartupRepository {
   final MaintenanceInfoDataSource dataSource;
 
