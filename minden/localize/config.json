@@ -2,9 +2,9 @@
   "files": [
       {
         "column_key": "jp",
-        "path": "../assets/flutter_i18n/ja.json"
+        "path": "../assets/i18n/ja.json"
       },{
         "column_key": "en",
-        "path": "../assets/flutter_i18n/en.json"
+        "path": "../assets/i18n/en.json"
       }]
 }

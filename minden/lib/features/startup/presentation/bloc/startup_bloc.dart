@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
@@ -32,7 +33,6 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
     yield failureOrInfo.fold<StartupState>(
       (failure) => StartupStateError(message: _mapFailureToMessage(failure)),
       (info) {
-        print("${info.maintenanceDescription}, ${info.maintenanceUrl}, ${info.underMaintenance} ");
         return StartupStateLoaded(info: info);
       },
     );

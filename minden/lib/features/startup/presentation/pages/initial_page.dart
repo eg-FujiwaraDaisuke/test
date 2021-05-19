@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/startup/data/datasources/maintenance_info_datasource.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
 import 'package:minden/features/startup/domain/usecases/get_maintenance_info.dart';
@@ -41,7 +42,7 @@ class _InitialPageState extends State<InitialPage> {
       }
 
       if (state is StartupStateLoaded) {
-        if (state.info.underMaintenance) {
+        if (!state.info.underMaintenance) {
           (() async {
             final result = await showDialog<bool>(
                 context: context,
@@ -53,7 +54,7 @@ class _InitialPageState extends State<InitialPage> {
                       content: Text(state.info.maintenanceDescription),
                       actions: <Widget>[
                         TextButton(
-                          child: Text("OK"),
+                          child: Text(i18nTranslate(context, "minden_app")),
                           onPressed: () => Navigator.pop(context, true),
                         ),
                       ],
