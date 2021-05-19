@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../domain/entities/maintenance_info.dart';
+import '../../domain/entities/startup_info.dart';
 
 @immutable
 abstract class StartupState extends Equatable {
@@ -14,7 +14,7 @@ class StartupStateEmpty extends StartupState {}
 class StartupStateLoading extends StartupState {}
 
 class StartupStateLoaded extends StartupState {
-  final MaintenanceInfo info;
+  final StartupInfo info;
 
   StartupStateLoaded({@required this.info});
 

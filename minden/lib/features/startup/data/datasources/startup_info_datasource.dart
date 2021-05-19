@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
-import 'package:minden/features/startup/data/models/maintenance_info_model.dart';
+import 'package:minden/features/startup/data/models/startup_info_model.dart';
 
 import '../../../../injection_container.dart';
 
@@ -9,14 +9,14 @@ import '../../../../injection_container.dart';
 // 実装ガイド
 // dataの取得や保存などの制御する実装をここで行います。
 // ビジネスロジックや何かを表示するための実装はここには書きません。
-abstract class MaintenanceInfoDataSource {
-  Future<MaintenanceInfoModel> getMaintenanceInfo();
+abstract class StartupInfoDataSource {
+  Future<StartupInfoModel> getStartupInfo();
 }
 
 // データ層は、datasourceはModelを返すことと、エラー発生時はexceptionを投げるようにします。
-class MaintenanceInfoDataSourceImpl implements MaintenanceInfoDataSource {
+class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   @override
-  Future<MaintenanceInfoModel> getMaintenanceInfo() async {
+  Future<StartupInfoModel> getStartupInfo() async {
     await sl<RemoteConfig>().fetch(expiration: const Duration(seconds: 0));
     await sl<RemoteConfig>().activateFetched();
     final maintenanceDescription =
@@ -26,7 +26,7 @@ class MaintenanceInfoDataSourceImpl implements MaintenanceInfoDataSource {
     if (maintenanceUrl?.isEmpty ?? true && underMaintenance) {
       throw ServerException();
     }
-    return MaintenanceInfoModel(
+    return StartupInfoModel(
         maintenanceUrl: maintenanceUrl,
         maintenanceDescription: maintenanceDescription,
         underMaintenance: underMaintenance);

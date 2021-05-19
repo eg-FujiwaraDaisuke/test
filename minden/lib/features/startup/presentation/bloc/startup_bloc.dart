@@ -8,11 +8,11 @@ import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/maintenance_info.dart';
-import '../../domain/usecases/get_maintenance_info.dart';
+import '../../domain/entities/startup_info.dart';
+import '../../domain/usecases/get_startup_info.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
-  final GetMaintenanceInfo usecase;
+  final GetStartupInfo usecase;
 
   StartupBloc(StartupState initialState, this.usecase) : super(initialState);
 
@@ -20,7 +20,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   Stream<StartupState> mapEventToState(
     StartupEvent event,
   ) async* {
-    if (event is GetMaintenanceInfoEvent) {
+    if (event is GetStartupInfoEvent) {
       yield StartupStateLoading();
       final failureOrInfo = await usecase.call(NoParams());
       yield* _eitherLoadedOrErrorState(failureOrInfo);
@@ -28,7 +28,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   }
 
   Stream<StartupState> _eitherLoadedOrErrorState(
-    Either<Failure, MaintenanceInfo> failureOrInfo,
+    Either<Failure, StartupInfo> failureOrInfo,
   ) async* {
     yield failureOrInfo.fold<StartupState>(
       (failure) => StartupStateError(message: _mapFailureToMessage(failure)),
