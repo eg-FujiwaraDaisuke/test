@@ -23,12 +23,17 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
         sl<RemoteConfig>().getString("maintenance_description");
     final maintenanceUrl = sl<RemoteConfig>().getString("maintenance_url");
     final underMaintenance = sl<RemoteConfig>().getBool('under_maintenance');
+    final storeUrl = sl<RemoteConfig>().getString("store_url");
+    final supportVersion = sl<RemoteConfig>().getString("support_version");
     if (maintenanceUrl?.isEmpty ?? true && underMaintenance) {
       throw ServerException();
     }
     return StartupInfoModel(
-        maintenanceUrl: maintenanceUrl,
-        maintenanceDescription: maintenanceDescription,
-        underMaintenance: underMaintenance);
+      maintenanceUrl: maintenanceUrl,
+      maintenanceDescription: maintenanceDescription,
+      underMaintenance: underMaintenance,
+      storeUrl: storeUrl,
+      supportVersion: supportVersion,
+    );
   }
 }

@@ -20,13 +20,22 @@ class StartupInfo extends Equatable {
     @required this.maintenanceUrl,
     @required this.maintenanceDescription,
     @required this.underMaintenance,
+    @required this.storeUrl,
+    @required this.supportVersion,
   });
 
   final String maintenanceUrl;
   final String maintenanceDescription;
   final bool underMaintenance;
+  final String storeUrl;
+  final String supportVersion;
 
   @override
-  List<Object> get props =>
-      [maintenanceUrl, maintenanceDescription, underMaintenance];
+  List<Object> get props => [
+        maintenanceUrl,
+        maintenanceDescription,
+        underMaintenance,
+        storeUrl,
+        supportVersion
+      ];
 }

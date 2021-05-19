@@ -7,7 +7,12 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final model = StartupInfoModel(
-      maintenanceUrl: "", maintenanceDescription: "", underMaintenance: false);
+    maintenanceUrl: "",
+    maintenanceDescription: "",
+    underMaintenance: false,
+    storeUrl: "",
+    supportVersion: "",
+  );
 
   test(
     'should be a subclass of MaintenanceInfo entity',
