@@ -9,23 +9,23 @@ abstract class StartupState extends Equatable {
   List<Object> get props => [];
 }
 
-class Empty extends StartupState {}
+class StartupStateEmpty extends StartupState {}
 
-class Loading extends StartupState {}
+class StartupStateLoading extends StartupState {}
 
-class Loaded extends StartupState {
+class StartupStateLoaded extends StartupState {
   final MaintenanceInfo info;
 
-  Loaded({@required this.info});
+  StartupStateLoaded({@required this.info});
 
   @override
   List<Object> get props => [info];
 }
 
-class Error extends StartupState {
+class StartupStateError extends StartupState {
   final String message;
 
-  Error({@required this.message});
+  StartupStateError({@required this.message});
 
   @override
   List<Object> get props => [message];

@@ -6,8 +6,7 @@ import 'package:minden/features/startup/domain/repositories/startup_repository.d
 import 'package:minden/features/startup/domain/usecases/get_maintenance_info.dart';
 import 'package:mockito/mockito.dart';
 
-class MockStartupRepository extends Mock
-    implements StartupRepository {}
+class MockStartupRepository extends Mock implements StartupRepository {}
 
 void main() {
   GetMaintenanceInfo usecase;
@@ -18,20 +17,21 @@ void main() {
     usecase = GetMaintenanceInfo(mockStartupRepository);
   });
 
-  final maintenanceInfo = MaintenanceInfo();
+  final maintenanceInfo = MaintenanceInfo(
+      maintenanceUrl: "", maintenanceDescription: "", underMaintenance: false);
   test(
     'should get maintenance info from the repository',
-        () async {
-          when(mockStartupRepository.getMaintenanceInfo())
-              .thenAnswer((_) async => Right(maintenanceInfo));
+    () async {
+      when(mockStartupRepository.getMaintenanceInfo())
+          .thenAnswer((_) async => Right(maintenanceInfo));
 
-          final result = await usecase(NoParams());
+      final result = await usecase(NoParams());
 
-          expect(result, Right(maintenanceInfo));
+      expect(result, Right(maintenanceInfo));
 
-          verify(mockStartupRepository.getMaintenanceInfo());
+      verify(mockStartupRepository.getMaintenanceInfo());
 
-          verifyNoMoreInteractions(mockStartupRepository);
+      verifyNoMoreInteractions(mockStartupRepository);
     },
   );
 }

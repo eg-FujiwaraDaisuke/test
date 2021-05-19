@@ -26,10 +26,9 @@ class MaintenanceInfoDataSourceImpl implements MaintenanceInfoDataSource {
     if (maintenanceUrl?.isEmpty ?? true && underMaintenance) {
       throw ServerException();
     }
-    return MaintenanceInfoModel.fromJson({
-      "maintenance_description": maintenanceDescription,
-      "maintenance_url": maintenanceUrl,
-      "underMaintenance": underMaintenance
-    });
+    return MaintenanceInfoModel(
+        maintenanceUrl: maintenanceUrl,
+        maintenanceDescription: maintenanceDescription,
+        underMaintenance: underMaintenance);
   }
 }

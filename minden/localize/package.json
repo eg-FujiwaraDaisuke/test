@@ -1,0 +1,14 @@
+{
+  "name": "localization",
+  "version": "0.0.0",
+  "description": "localization text loader.",
+  "main": "index.js",
+  "scripts": {},
+  "license": "BSD",
+  "dependencies": {
+    "async": "0.*",
+    "colors": "0.*",
+    "google-auth-library": "0.9.6",
+    "sheet-loader": "0.*"
+  }
+}
