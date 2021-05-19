@@ -1,5 +1,5 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
@@ -25,8 +25,8 @@ class StartupRepositoryImpl implements StartupRepository {
   });
 
   Future<Either<Failure, MaintenanceInfo>> getMaintenanceInfo() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
+    final hasConnection = await (DataConnectionChecker().hasConnection);
+    if (!hasConnection) {
       return Left(ConnectionFailure());
     }
     try {

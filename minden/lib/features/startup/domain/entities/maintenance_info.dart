@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-
 // 仕様
 // アプリ起動時にサービスがメンテ状態の際は、メンテナンスである表示を行いアプリ外のURLへ飛ばしたい。
 
@@ -23,10 +22,11 @@ class MaintenanceInfo extends Equatable {
     @required this.underMaintenance,
   });
 
-  String maintenanceUrl;
-  String maintenanceDescription;
-  bool underMaintenance;
+  final String maintenanceUrl;
+  final String maintenanceDescription;
+  final bool underMaintenance;
 
   @override
-  List<Object> get props => [maintenanceUrl, maintenanceDescription, underMaintenance];
+  List<Object> get props =>
+      [maintenanceUrl, maintenanceDescription, underMaintenance];
 }

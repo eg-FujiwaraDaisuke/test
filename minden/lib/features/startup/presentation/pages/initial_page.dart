@@ -1,13 +1,15 @@
-import 'package:after_layout/after_layout.dart';
+import 'dart:async';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minden/features/startup/data/datasources/maintenance_info_datasource.dart';
+import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
+import 'package:minden/features/startup/domain/usecases/get_maintenance_info.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_bloc.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
-
-import '../../data/datasources/maintenance_info_datasource.dart';
-import '../../data/repositories/startup_repository_impl.dart';
-import '../../domain/usecases/get_maintenance_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InitialPage extends StatefulWidget {
   @override
@@ -15,8 +17,9 @@ class InitialPage extends StatefulWidget {
 }
 
 class _InitialPageState extends State<InitialPage> {
+  StreamSubscription _subscription;
   final _bloc = StartupBloc(
-    Empty(),
+    StartupStateEmpty(),
     GetMaintenanceInfo(
       StartupRepositoryImpl(
         dataSource: MaintenanceInfoDataSourceImpl(),
@@ -28,51 +31,61 @@ class _InitialPageState extends State<InitialPage> {
   void initState() {
     super.initState();
     _bloc.add(GetMaintenanceInfoEvent());
+    _subscription = _bloc.stream.listen((state) {
+      if (state is StartupStateLoading) {
+        BotToast.showCustomLoading(
+            toastBuilder: (_) => CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).accentColor)));
+        return;
+      }
+
+      if (state is StartupStateLoaded) {
+        if (state.info.underMaintenance) {
+          (() async {
+            final result = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return WillPopScope(
+                    onWillPop: () async => false,
+                    child: AlertDialog(
+                      content: Text(state.info.maintenanceDescription),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () => Navigator.pop(context, true),
+                        ),
+                      ],
+                    ),
+                  );
+                });
+            if (result) {
+              // メンテナンス中は取得したURLをブラウザで開く。
+              _bloc.add(GetMaintenanceInfoEvent());
+              await launch(state.info.maintenanceUrl);
+            }
+          })();
+          return;
+        }
+      }
+      BotToast.closeAllLoading();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Heee Haaa'),
-      ),
-      body: SingleChildScrollView(
-        child: buildBody(context),
+      body: BlocProvider(
+        create: (_) => _bloc,
+        child: Container(),
       ),
     );
   }
 
-  BlocProvider<StartupBloc> buildBody(BuildContext context) {
-    return BlocProvider(
-      create: (_) => _bloc,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 10),
-              BlocBuilder<StartupBloc, StartupState>(
-                builder: (context, state) {
-                  if (state is Empty) {
-                    return Container();
-                  } else if (state is Loading) {
-                    return Container();
-                  } else if (state is Loaded) {
-                    return Column(children: [
-                      Text(state.info.maintenanceUrl),
-                    ]);
-                  } else if (state is Error) {
-                    return Container();
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
   }
 }
