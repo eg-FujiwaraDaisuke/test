@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 
 // 仕様
 // アプリ起動時にサービスがメンテ状態の際は、メンテナンスである表示を行いアプリ外のURLへ飛ばしたい。
-
+// サービスのバージョンがアプリのバージョン以上だったら必ずストアへ飛ばしたい。
+// サービスのバージョンのpatchがアプリのバージョン以上だったらユーザーの任意でストアへ飛ばしたい。
 // domain - entity
 
 // 実装ガイド
@@ -11,31 +12,24 @@ import 'package:flutter/foundation.dart';
 // entityは仕様で扱うデータ群を表すので、設計後変更されにくいためです。
 // StartupInfoの各プロパティはアプリ起動時にremote configより取得するメンテ関係のデータをもとにして作られています。
 //
-// maintenanceUrl : 遷移先URL
-// maintenanceDescription : メンテナンスの説明表示用
-// underMaintenance : メンテの状態 [通常運用中 false / メンテ中 true]
-
+// storeUrl : 各OSのストアURL
+// supportVersion : アプリのサポートバージョン
+// latestVersion : サービスの最新バージョン
 class StartupInfo extends Equatable {
   StartupInfo({
-    @required this.maintenanceUrl,
-    @required this.maintenanceDescription,
-    @required this.underMaintenance,
     @required this.storeUrl,
-    @required this.supportVersion,
+    @required this.hasLatestVersion,
+    @required this.latestVersion,
   });
 
-  final String maintenanceUrl;
-  final String maintenanceDescription;
-  final bool underMaintenance;
   final String storeUrl;
-  final String supportVersion;
+  final bool hasLatestVersion;
+  final String latestVersion;
 
   @override
   List<Object> get props => [
-        maintenanceUrl,
-        maintenanceDescription,
-        underMaintenance,
         storeUrl,
-        supportVersion
+        hasLatestVersion,
+        latestVersion,
       ];
 }

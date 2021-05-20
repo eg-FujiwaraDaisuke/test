@@ -7,11 +7,9 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final model = StartupInfoModel(
-    maintenanceUrl: "",
-    maintenanceDescription: "",
-    underMaintenance: false,
-    storeUrl: "",
-    supportVersion: "",
+    storeUrl: "https://minden.co.jp/",
+    hasLatestVersion: false,
+    latestVersion: "1.0.0"
   );
 
   test(

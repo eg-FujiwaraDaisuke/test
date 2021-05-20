@@ -18,12 +18,9 @@ void main() {
   });
 
   final maintenanceInfo = StartupInfo(
-    maintenanceUrl: "",
-    maintenanceDescription: "",
-    underMaintenance: false,
-    storeUrl: "",
-    supportVersion: "",
-  );
+      storeUrl: "",
+      hasLatestVersion: false,
+      latestVersion: "1.0.0");
   test(
     'should get maintenance info from the repository',
     () async {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:minden/features/startup/domain/entities/startup_info.dart';
 
@@ -8,36 +9,28 @@ import 'package:minden/features/startup/domain/entities/startup_info.dart';
 // （ドメイン層でmodelは扱わないし、データ層でentityを扱わないようにするため）
 class StartupInfoModel extends StartupInfo {
   StartupInfoModel({
-    @required String maintenanceUrl,
-    @required String maintenanceDescription,
-    @required bool underMaintenance,
     @required String storeUrl,
-    @required String supportVersion,
+    @required bool hasLatestVersion,
+    @required String latestVersion,
   }) : super(
-          maintenanceUrl: maintenanceUrl,
-          maintenanceDescription: maintenanceDescription,
-          underMaintenance: underMaintenance,
           storeUrl: storeUrl,
-          supportVersion: supportVersion,
+          hasLatestVersion: hasLatestVersion,
+          latestVersion: latestVersion,
         );
 
   factory StartupInfoModel.fromJson(Map<String, dynamic> json) {
     return StartupInfoModel(
-      maintenanceUrl: json["maintenance_url"],
-      maintenanceDescription: json["maintenance_description"],
-      underMaintenance: json["under_maintenance"],
       storeUrl: json["store_url"],
-      supportVersion: json["support_version"],
+      hasLatestVersion: json["has_latest_version"],
+      latestVersion: json["latest_version"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "maintenance_url": maintenanceUrl,
-      "maintenance_description": maintenanceDescription,
-      "under_maintenance": underMaintenance,
       "store_url": storeUrl,
-      "support_version": supportVersion,
+      "has_latest_version": hasLatestVersion,
+      "latest_version": latestVersion,
     };
   }
 }

@@ -30,19 +30,32 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
     Either<Failure, StartupInfo> failureOrInfo,
   ) async* {
     yield failureOrInfo.fold<StartupState>(
-      (failure) => StartupStateError(message: _mapFailureToMessage(failure)),
+      (failure) => _buildError(failure),
       (info) {
         return StartupStateLoaded(info: info);
       },
     );
   }
 
-  String _mapFailureToMessage(Failure failure) {
+  StartupStateError _buildError(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
-        return "SERVER_FAILURE_MESSAGE";
+        return StartupStateError(localizedKey: "unsupported_error", actionKey: "ok");
+      case SupportVersionFailure:
+        return StartupStateError(
+          localizedKey: "update_version_message_%s",
+          actionKey: "store_action",
+          args: [(failure as SupportVersionFailure).supportVersion],
+          actionUrl: (failure as SupportVersionFailure).actionUrl,
+        );
+      case UnderMaintenanceFailure:
+        return StartupStateError(
+          localizedKey: (failure as UnderMaintenanceFailure).description,
+          actionKey: "maintenance_action",
+          actionUrl: (failure as UnderMaintenanceFailure).actionUrl,
+        );
       default:
-        return 'Unexpected error';
+        return StartupStateError(localizedKey: "unsupported_error", actionKey: "ok");
     }
   }
 }

@@ -10,6 +10,9 @@ String i18nTranslate(
   if (args == null) {
     return FlutterI18n.translate(context, key);
   } else {
+    if (args is List && args.isEmpty) {
+      return FlutterI18n.translate(context, key);
+    }
     return sprintf(
       FlutterI18n.translate(context, key),
       args is List ? args : [args],

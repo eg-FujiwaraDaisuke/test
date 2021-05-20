@@ -219,7 +219,7 @@ packages:
     source: hosted
     version: "0.5.3"
   firebase_core_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
@@ -378,6 +378,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  package_info:
+    dependency: "direct main"
+    description:
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   path:
     dependency: transitive
     description:
@@ -400,7 +407,7 @@ packages:
     source: hosted
     version: "4.1.0"
   plugin_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
@@ -544,6 +551,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  version:
+    dependency: "direct main"
+    description:
+      name: version
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   watcher:
     dependency: transitive
     description:

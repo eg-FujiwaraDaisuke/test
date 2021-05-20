@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
@@ -31,7 +32,18 @@ class StartupRepositoryImpl implements StartupRepository {
     }
     try {
       final startupInfo = await dataSource.getStartupInfo();
+      print("[startup Info] ${startupInfo.toJson().toString()}");
       return Right(startupInfo);
+    } on SupportVersionException catch (e) {
+      return Left(SupportVersionFailure(
+        actionUrl: e.storeUrl,
+        supportVersion: e.supportVersion,
+      ));
+    } on MaintenanceException catch (e) {
+      return Left(UnderMaintenanceFailure(
+        description: e.maintenanceDescription,
+        actionUrl: e.maintenanceUrl,
+      ));
     } on ServerException {
       return Left(ServerFailure());
     }

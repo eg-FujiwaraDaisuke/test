@@ -1,3 +1,9 @@
 {
-"minden_app" : "みんな電力アプリ"
+"latest_version_message_%s" : "最新バージョン %s がリリースされました！\nこのバージョンへの更新が可能です。",
+"maintenance_action" : "メンテナンス詳細",
+"minden_app" : "みんな電力アプリ",
+"ok" : "OK",
+"store_action" : "ストアへ",
+"unsupported_error" : "サポートされていないエラーが発生しました。",
+"update_version_message_%s" : "最新バージョン %s への更新が必要です。"
 }

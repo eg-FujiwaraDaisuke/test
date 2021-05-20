@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/entities/startup_info.dart';
@@ -23,10 +24,18 @@ class StartupStateLoaded extends StartupState {
 }
 
 class StartupStateError extends StartupState {
-  final String message;
+  final String localizedKey;
+  final String actionKey;
+  final List<String> args;
+  final String actionUrl;
 
-  StartupStateError({@required this.message});
+  StartupStateError({
+    @required this.localizedKey,
+    @required this.actionKey,
+    this.args,
+    this.actionUrl,
+  });
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [localizedKey, args, actionKey, actionUrl];
 }

@@ -41,33 +41,28 @@ class _InitialPageState extends State<InitialPage> {
         return;
       }
 
+      // support versionエラーアラート / メンテ中アラート
+      if (state is StartupStateError) {
+        (() async {
+          await _showAlert(
+              message: i18nTranslate(context, state.localizedKey, state.args),
+              actionName: i18nTranslate(context, state.actionKey),
+              actionUrl: state.actionUrl,
+              barrierDismissible: false);
+          _bloc.add(GetStartupInfoEvent());
+        })();
+        return;
+      }
       if (state is StartupStateLoaded) {
-        if (state.info.underMaintenance) {
+        if (state.info.hasLatestVersion) {
           (() async {
-            final result = await showDialog<bool>(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return WillPopScope(
-                    onWillPop: () async => false,
-                    child: AlertDialog(
-                      content: Text(state.info.maintenanceDescription),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(i18nTranslate(context, "minden_app")),
-                          onPressed: () => Navigator.pop(context, true),
-                        ),
-                      ],
-                    ),
-                  );
-                });
-            if (result) {
-              // メンテナンス中は取得したURLをブラウザで開く。
-              _bloc.add(GetStartupInfoEvent());
-              await launch(state.info.maintenanceUrl);
-            }
+            await _showAlert(
+                message: i18nTranslate(context, "latest_version_message_%s",
+                    [state.info.latestVersion]),
+                actionName: i18nTranslate(context, "store_action"),
+                actionUrl: state.info.storeUrl,
+                barrierDismissible: true);
           })();
-          return;
         }
       }
       BotToast.closeAllLoading();
@@ -81,6 +76,54 @@ class _InitialPageState extends State<InitialPage> {
         create: (_) => _bloc,
         child: Container(),
       ),
+    );
+  }
+
+  Future<void> _showAlert(
+      {String message,
+      String actionName,
+      String actionUrl,
+      bool barrierDismissible}) async {
+    if (barrierDismissible) {
+      final result = await showDialog<bool>(
+          context: context,
+          barrierDismissible: barrierDismissible,
+          builder: (_) {
+            return _alertWidget(message, actionName);
+          });
+      if (result != null) {
+        if (actionUrl?.isNotEmpty ?? false) {
+          await launch(actionUrl);
+        }
+      }
+      return;
+    }
+
+    final result = await showDialog<bool>(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        builder: (_) {
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: _alertWidget(message, actionName),
+          );
+        });
+    if (result) {
+      if (actionUrl?.isNotEmpty ?? false) {
+        await launch(actionUrl);
+      }
+    }
+  }
+
+  Widget _alertWidget(String message, String actionName) {
+    return AlertDialog(
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          child: Text(actionName),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
   }
 
