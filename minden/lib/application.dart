@@ -4,28 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:minden/features/startup/presentation/bloc/startup_bloc.dart';
+import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
+import 'package:minden/features/localize/data/repositories/localized_info_repository_impl.dart';
+import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
+import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
+import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
-class Application extends StatefulWidget {
-  @override
-  _ApplicationState createState() => _ApplicationState();
-}
-
-class _ApplicationState extends State<Application> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StartupBloc>(
-          create: (BuildContext context) => sl(),
+        BlocProvider<LocalizedBloc>(
+          create: (BuildContext context) => LocalizedBloc(
+            LocalizedStateEmpty(),
+            GetLocalizedInfo(
+              LocalizedInfoRepositoryImpl(
+                dataSource: LocalizedInfoDataSourceImpl(),
+              ),
+            ),
+          ),
         ),
       ],
       child: MaterialApp(
@@ -48,10 +50,5 @@ class _ApplicationState extends State<Application> {
         home: InitialPage(),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

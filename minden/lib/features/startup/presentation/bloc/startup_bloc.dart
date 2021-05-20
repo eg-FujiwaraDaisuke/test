@@ -21,7 +21,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   ) async* {
     if (event is GetStartupInfoEvent) {
       yield StartupStateLoading();
-      final failureOrInfo = await usecase.call(NoParams());
+      final failureOrInfo = await usecase(NoParams());
       yield* _eitherLoadedOrErrorState(failureOrInfo);
     }
   }

@@ -37,6 +37,7 @@ dependencies:
   sprintf: ^6.0.0
   package_info: ^2.0.0
   version: ^2.0.0
+  shared_preferences: ^2.0.5
 
   bot_toast: ^4.0.1
   after_layout: ^1.1.0

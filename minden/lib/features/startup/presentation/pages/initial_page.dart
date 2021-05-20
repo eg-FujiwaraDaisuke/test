@@ -1,9 +1,14 @@
 import 'dart:async';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
+import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
+import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
 import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
@@ -17,7 +22,7 @@ class InitialPage extends StatefulWidget {
   State<StatefulWidget> createState() => _InitialPageState();
 }
 
-class _InitialPageState extends State<InitialPage> {
+class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   StreamSubscription _subscription;
   final _bloc = StartupBloc(
     StartupStateEmpty(),
@@ -31,7 +36,23 @@ class _InitialPageState extends State<InitialPage> {
   @override
   void initState() {
     super.initState();
-    _bloc.add(GetStartupInfoEvent());
+
+    // ローカライズの初期化
+    BlocProvider.of<LocalizedBloc>(context).stream.listen((state) async {
+      if (state is LocalizedStateLoaded) {
+        await FlutterI18n.refresh(context, Locale(state.info.languageCode));
+        BlocProvider.of<LocalizedBloc>(context)
+            .add(UpdateLocalizedInfoEvent(state.info.languageCode));
+      } else if (state is LocalizedStateUpdated) {
+        // localizeの取得設定の後、remote configの読み込みを行う。
+        _bloc.add(GetStartupInfoEvent());
+      } else if (state is LocalizedStateError) {
+        await FlutterI18n.refresh(context, Locale("ja"));
+        BlocProvider.of<LocalizedBloc>(context)
+            .add(UpdateLocalizedInfoEvent("ja"));
+      }
+    });
+
     _subscription = _bloc.stream.listen((state) {
       if (state is StartupStateLoading) {
         BotToast.showCustomLoading(
@@ -131,5 +152,12 @@ class _InitialPageState extends State<InitialPage> {
   void dispose() {
     super.dispose();
     _subscription?.cancel();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final osLocale = Localizations.localeOf(context);
+    BlocProvider.of<LocalizedBloc>(context)
+        .add(GetLocalizedInfoEvent(osLocale.languageCode));
   }
 }

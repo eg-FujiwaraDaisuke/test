@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class ServerException implements Exception {}
+class LocalCacheException implements Exception {}
 
 class SupportVersionException implements Exception {
   SupportVersionException({
