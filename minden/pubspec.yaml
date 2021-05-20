@@ -35,10 +35,14 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_i18n: ^0.22.3
   sprintf: ^6.0.0
+  package_info: ^2.0.0
+  version: ^2.0.0
+  shared_preferences: ^2.0.5
 
   bot_toast: ^4.0.1
   after_layout: ^1.1.0
 
+  firebase_core_platform_interface: ^2.0.0
   firebase_core: ^0.5.3
   firebase_remote_config: ^0.4.3
   firebase_analytics: ^6.3.0
@@ -47,9 +51,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  plugin_platform_interface: ^1.0.0
 
 # The following section is specific to Flutter.
 flutter:

@@ -7,8 +7,8 @@ abstract class StartupEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetMaintenanceInfoEvent extends StartupEvent {
-  GetMaintenanceInfoEvent();
+class GetStartupInfoEvent extends StartupEvent {
+  GetStartupInfoEvent();
 
   @override
   List<Object> get props => [];

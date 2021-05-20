@@ -1,4 +1,5 @@
 {
-  "url": "https://minden.co.jp/",
-  "support_version": "1.0.0"
+  "store_url": "https://minden.co.jp/",
+  "has_latest_version": false,
+  "latest_version": "1.0.0"
 }

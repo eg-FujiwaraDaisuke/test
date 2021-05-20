@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
@@ -8,42 +7,55 @@ import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/maintenance_info.dart';
-import '../../domain/usecases/get_maintenance_info.dart';
+import '../../domain/entities/startup_info.dart';
+import '../../domain/usecases/get_startup_info.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
-  final GetMaintenanceInfo usecase;
+  final GetStartupInfo usecase;
 
   StartupBloc(StartupState initialState, this.usecase) : super(initialState);
 
   @override
-  Stream<StartupState> mapEventToState(
-    StartupEvent event,
-  ) async* {
-    if (event is GetMaintenanceInfoEvent) {
+  Stream<StartupState> mapEventToState(StartupEvent event) async* {
+    if (event is GetStartupInfoEvent) {
       yield StartupStateLoading();
-      final failureOrInfo = await usecase.call(NoParams());
+      final failureOrInfo = await usecase(NoParams());
       yield* _eitherLoadedOrErrorState(failureOrInfo);
     }
   }
 
   Stream<StartupState> _eitherLoadedOrErrorState(
-    Either<Failure, MaintenanceInfo> failureOrInfo,
+    Either<Failure, StartupInfo> failureOrInfo
   ) async* {
     yield failureOrInfo.fold<StartupState>(
-      (failure) => StartupStateError(message: _mapFailureToMessage(failure)),
+      (failure) => _buildError(failure),
       (info) {
         return StartupStateLoaded(info: info);
       },
     );
   }
 
-  String _mapFailureToMessage(Failure failure) {
+  StartupStateError _buildError(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
-        return "SERVER_FAILURE_MESSAGE";
+        return StartupStateError(
+            localizedKey: "unsupported_error", actionKey: "ok");
+      case SupportVersionFailure:
+        return StartupStateError(
+          localizedKey: "update_version_message_%s",
+          actionKey: "store_action",
+          args: [(failure as SupportVersionFailure).supportVersion],
+          actionUrl: (failure as SupportVersionFailure).actionUrl,
+        );
+      case UnderMaintenanceFailure:
+        return StartupStateError(
+          localizedKey: (failure as UnderMaintenanceFailure).description,
+          actionKey: "maintenance_action",
+          actionUrl: (failure as UnderMaintenanceFailure).actionUrl,
+        );
       default:
-        return 'Unexpected error';
+        return StartupStateError(
+            localizedKey: "unsupported_error", actionKey: "ok");
     }
   }
 }

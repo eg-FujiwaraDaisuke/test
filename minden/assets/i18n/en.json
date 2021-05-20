@@ -1,3 +1,9 @@
 {
-"minden_app" : "Minden App"
+"latest_version_message_%s" : "The latest version %s has been released! \nYou can update to this version.",
+"maintenance_action" : "Maintenance Info",
+"minden_app" : "Minden App",
+"ok" : "OK",
+"store_action" : "Store",
+"unsupported_error" : "An unsupported error has occurred.",
+"update_version_message_%s" : "Need to update to the latest version %s."
 }
