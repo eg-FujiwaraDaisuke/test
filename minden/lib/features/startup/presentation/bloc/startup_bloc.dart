@@ -16,9 +16,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   StartupBloc(StartupState initialState, this.usecase) : super(initialState);
 
   @override
-  Stream<StartupState> mapEventToState(
-    StartupEvent event,
-  ) async* {
+  Stream<StartupState> mapEventToState(StartupEvent event) async* {
     if (event is GetStartupInfoEvent) {
       yield StartupStateLoading();
       final failureOrInfo = await usecase(NoParams());
@@ -27,7 +25,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   }
 
   Stream<StartupState> _eitherLoadedOrErrorState(
-    Either<Failure, StartupInfo> failureOrInfo,
+    Either<Failure, StartupInfo> failureOrInfo
   ) async* {
     yield failureOrInfo.fold<StartupState>(
       (failure) => _buildError(failure),
@@ -40,7 +38,8 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   StartupStateError _buildError(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
-        return StartupStateError(localizedKey: "unsupported_error", actionKey: "ok");
+        return StartupStateError(
+            localizedKey: "unsupported_error", actionKey: "ok");
       case SupportVersionFailure:
         return StartupStateError(
           localizedKey: "update_version_message_%s",
@@ -55,7 +54,8 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
           actionUrl: (failure as UnderMaintenanceFailure).actionUrl,
         );
       default:
-        return StartupStateError(localizedKey: "unsupported_error", actionKey: "ok");
+        return StartupStateError(
+            localizedKey: "unsupported_error", actionKey: "ok");
     }
   }
 }

@@ -16,18 +16,14 @@ class LocalizedBloc extends Bloc<LocalizedEvent, LocalizedState> {
       : super(initialState);
 
   @override
-  Stream<LocalizedState> mapEventToState(
-    LocalizedEvent event,
-  ) async* {
+  Stream<LocalizedState> mapEventToState(LocalizedEvent event) async* {
     if (event is GetLocalizedInfoEvent) {
       yield LocalizedStateLoading();
-      final info =
-          await usecase(LocalizedInfoParams(event.languageCode));
+      final info = await usecase(LocalizedInfoParams(event.languageCode));
       yield* _loadedState(info);
     } else if (event is UpdateLocalizedInfoEvent) {
       yield LocalizedStateLoading();
-      await usecase
-          .update(LocalizedInfoParams(event.languageCode));
+      await usecase.update(LocalizedInfoParams(event.languageCode));
       yield LocalizedStateUpdated();
     }
   }

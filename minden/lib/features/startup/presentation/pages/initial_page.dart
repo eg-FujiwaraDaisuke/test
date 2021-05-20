@@ -5,6 +5,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -23,7 +24,6 @@ class InitialPage extends StatefulWidget {
 }
 
 class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
-  StreamSubscription _subscription;
   final _bloc = StartupBloc(
     StartupStateEmpty(),
     GetStartupInfo(
@@ -38,12 +38,15 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     super.initState();
 
     // ローカライズの初期化
-    BlocProvider.of<LocalizedBloc>(context).stream.listen((state) async {
+    StreamSubscription localizedSubscription;
+    localizedSubscription =
+        BlocProvider.of<LocalizedBloc>(context).stream.listen((state) async {
       if (state is LocalizedStateLoaded) {
         await FlutterI18n.refresh(context, Locale(state.info.languageCode));
         BlocProvider.of<LocalizedBloc>(context)
             .add(UpdateLocalizedInfoEvent(state.info.languageCode));
       } else if (state is LocalizedStateUpdated) {
+        localizedSubscription?.cancel();
         // localizeの取得設定の後、remote configの読み込みを行う。
         _bloc.add(GetStartupInfoEvent());
       } else if (state is LocalizedStateError) {
@@ -53,7 +56,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       }
     });
 
-    _subscription = _bloc.stream.listen((state) {
+    StreamSubscription startupSubscription;
+    startupSubscription = _bloc.stream.listen((state) {
       if (state is StartupStateLoading) {
         BotToast.showCustomLoading(
             toastBuilder: (_) => CircularProgressIndicator(
@@ -61,6 +65,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
                     Theme.of(context).accentColor)));
         return;
       }
+      BotToast.closeAllLoading();
 
       // support versionエラーアラート / メンテ中アラート
       if (state is StartupStateError) {
@@ -83,18 +88,24 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
                 actionName: i18nTranslate(context, "store_action"),
                 actionUrl: state.info.storeUrl,
                 barrierDismissible: true);
+
+            startupSubscription.cancel();
+            _nextPage();
           })();
+          return;
         }
+
+        startupSubscription.cancel();
+        _nextPage();
       }
-      BotToast.closeAllLoading();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (_) => _bloc,
+      body: BlocProvider.value(
+        value: _bloc,
         child: Container(),
       ),
     );
@@ -148,16 +159,24 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     );
   }
 
+  void _nextPage() {
+    // final route = NoAnimationMaterialPageRoute(
+    //   settings: RouteSettings(name: "InitialPage"),
+    //   builder: (context) => InitialPage(),
+    // );
+    // Navigator.pushReplacement(context, route);
+  }
+
   @override
   void dispose() {
     super.dispose();
-    _subscription?.cancel();
+    _bloc?.close();
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final osLocale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
     BlocProvider.of<LocalizedBloc>(context)
-        .add(GetLocalizedInfoEvent(osLocale.languageCode));
+        .add(GetLocalizedInfoEvent(locale.languageCode));
   }
 }
