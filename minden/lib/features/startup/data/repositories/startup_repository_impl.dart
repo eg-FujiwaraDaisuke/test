@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
-import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/domain/entities/startup_info.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';

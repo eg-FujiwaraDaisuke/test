@@ -21,11 +21,13 @@ class LocalizedBloc extends Bloc<LocalizedEvent, LocalizedState> {
   ) async* {
     if (event is GetLocalizedInfoEvent) {
       yield LocalizedStateLoading();
-      final info = await usecase(Params(languageCode: event.languageCode));
+      final info =
+          await usecase(LocalizedInfoParams(event.languageCode));
       yield* _loadedState(info);
     } else if (event is UpdateLocalizedInfoEvent) {
       yield LocalizedStateLoading();
-      await usecase.update(Params(languageCode: event.languageCode));
+      await usecase
+          .update(LocalizedInfoParams(event.languageCode));
       yield LocalizedStateUpdated();
     }
   }
