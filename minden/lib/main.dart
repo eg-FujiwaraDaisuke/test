@@ -11,12 +11,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
 
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
   if (kReleaseMode) {
     runZonedGuarded(() async {
       runApp(Application());
-    }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
+    }, (e, s) async => await Crashlytics.instance.recordError(e, s));
   } else {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     runApp(Application());
   }
 }
