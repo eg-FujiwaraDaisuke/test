@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 // domain - entity
 
 class LocalizedInfo extends Equatable {
   LocalizedInfo({
-    @required this.languageCode,
+    required this.languageCode,
   });
 
   final String languageCode;

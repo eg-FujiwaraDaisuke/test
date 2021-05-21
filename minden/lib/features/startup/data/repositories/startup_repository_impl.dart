@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
@@ -22,7 +20,7 @@ class StartupRepositoryImpl implements StartupRepository {
   final StartupInfoDataSource dataSource;
 
   StartupRepositoryImpl({
-    @required this.dataSource,
+    required this.dataSource,
   });
 
   Future<Either<Failure, StartupInfo>> getStartupInfo() async {

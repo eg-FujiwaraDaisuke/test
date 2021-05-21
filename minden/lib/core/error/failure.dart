@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 class Failure extends Equatable {
   @override
@@ -14,8 +13,8 @@ class ConnectionFailure extends Failure {}
 
 class SupportVersionFailure extends Failure {
   SupportVersionFailure({
-    @required this.actionUrl,
-    @required this.supportVersion,
+    required this.actionUrl,
+    required this.supportVersion,
   });
 
   final String actionUrl;
@@ -30,8 +29,8 @@ class SupportVersionFailure extends Failure {
 
 class UnderMaintenanceFailure extends Failure {
   UnderMaintenanceFailure({
-    @required this.description,
-    @required this.actionUrl,
+    required this.description,
+    required this.actionUrl,
   });
 
   final String description;

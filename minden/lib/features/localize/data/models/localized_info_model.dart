@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:minden/features/localize/domain/entities/localized_info.dart';
 
 // data - model
 
 class LocalizedInfoModel extends LocalizedInfo {
   LocalizedInfoModel({
-    @required String languageCode,
+    required String languageCode,
   }) : super(languageCode: languageCode);
 
   factory LocalizedInfoModel.fromJson(Map<String, dynamic> json) {

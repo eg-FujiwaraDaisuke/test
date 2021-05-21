@@ -36,7 +36,7 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
     print(
         "[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}");
 
-    if (maintenanceUrl?.isEmpty ?? true && underMaintenance) {
+    if (maintenanceUrl.isEmpty && underMaintenance) {
       throw ServerException();
     }
     if (underMaintenance) {

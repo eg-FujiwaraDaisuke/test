@@ -45,13 +45,13 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
           localizedKey: "update_version_message_%s",
           actionKey: "store_action",
           args: [(failure as SupportVersionFailure).supportVersion],
-          actionUrl: (failure as SupportVersionFailure).actionUrl,
+          actionUrl: (failure).actionUrl,
         );
       case UnderMaintenanceFailure:
         return StartupStateError(
           localizedKey: (failure as UnderMaintenanceFailure).description,
           actionKey: "maintenance_action",
-          actionUrl: (failure as UnderMaintenanceFailure).actionUrl,
+          actionUrl: (failure).actionUrl,
         );
       default:
         return StartupStateError(

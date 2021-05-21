@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class LocalizedInfoDataSource {
   Future<LocalizedInfoModel> getLocalizedInfo({
-    String osLanguageCode,
+    required String osLanguageCode,
   });
 
   Future<LocalizedInfoModel> updateLocalizedInfo(String updateCode);
@@ -15,14 +15,14 @@ abstract class LocalizedInfoDataSource {
 class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
   @override
   Future<LocalizedInfoModel> getLocalizedInfo({
-    String osLanguageCode,
+    required String osLanguageCode,
   }) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     String languageCode = sharedPreferences.getString("language_code") ?? "";
     if (languageCode.isEmpty) {
       languageCode = osLanguageCode;
     }
-    if (languageCode?.isEmpty ?? true) {
+    if (languageCode.isEmpty) {
       throw LocalCacheException();
     }
     return LocalizedInfoModel(languageCode: languageCode);
