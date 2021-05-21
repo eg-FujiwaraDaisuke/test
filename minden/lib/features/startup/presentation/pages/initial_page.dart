@@ -5,7 +5,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -38,7 +37,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     super.initState();
 
     // ローカライズの初期化
-    StreamSubscription localizedSubscription;
+    StreamSubscription? localizedSubscription;
     localizedSubscription =
         BlocProvider.of<LocalizedBloc>(context).stream.listen((state) async {
       if (state is LocalizedStateLoaded) {
@@ -56,7 +55,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       }
     });
 
-    StreamSubscription startupSubscription;
+    StreamSubscription? startupSubscription;
     startupSubscription = _bloc.stream.listen((state) {
       if (state is StartupStateLoading) {
         BotToast.showCustomLoading(
@@ -73,7 +72,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
           await _showAlert(
               message: i18nTranslate(context, state.localizedKey, state.args),
               actionName: i18nTranslate(context, state.actionKey),
-              actionUrl: state.actionUrl,
+              actionUrl: state.actionUrl ?? "",
               barrierDismissible: false);
           _bloc.add(GetStartupInfoEvent());
         })();
@@ -89,13 +88,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
                 actionUrl: state.info.storeUrl,
                 barrierDismissible: true);
 
-            startupSubscription.cancel();
+            startupSubscription?.cancel();
             _nextPage();
           })();
           return;
         }
 
-        startupSubscription.cancel();
+        startupSubscription?.cancel();
         _nextPage();
       }
     });
@@ -112,10 +111,10 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   Future<void> _showAlert(
-      {String message,
-      String actionName,
-      String actionUrl,
-      bool barrierDismissible}) async {
+      {required String message,
+      required String actionName,
+      required String actionUrl,
+      required bool barrierDismissible}) async {
     if (barrierDismissible) {
       final result = await showDialog<bool>(
           context: context,
@@ -124,7 +123,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
             return _alertWidget(message, actionName);
           });
       if (result != null) {
-        if (actionUrl?.isNotEmpty ?? false) {
+        if (actionUrl.isNotEmpty) {
           await launch(actionUrl);
         }
       }
@@ -140,8 +139,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
             child: _alertWidget(message, actionName),
           );
         });
-    if (result) {
-      if (actionUrl?.isNotEmpty ?? false) {
+    if (result != null) {
+      if (actionUrl.isNotEmpty) {
         await launch(actionUrl);
       }
     }
@@ -170,7 +169,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   @override
   void dispose() {
     super.dispose();
-    _bloc?.close();
+    _bloc.close();
   }
 
   @override

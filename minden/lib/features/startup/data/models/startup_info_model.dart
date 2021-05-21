@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:minden/features/startup/domain/entities/startup_info.dart';
 
 // data - model
@@ -9,9 +7,9 @@ import 'package:minden/features/startup/domain/entities/startup_info.dart';
 // （ドメイン層でmodelは扱わないし、データ層でentityを扱わないようにするため）
 class StartupInfoModel extends StartupInfo {
   StartupInfoModel({
-    @required String storeUrl,
-    @required bool hasLatestVersion,
-    @required String latestVersion,
+    required String storeUrl,
+    required bool hasLatestVersion,
+    required String latestVersion,
   }) : super(
           storeUrl: storeUrl,
           hasLatestVersion: hasLatestVersion,

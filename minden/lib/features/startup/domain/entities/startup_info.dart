@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 // 仕様
 // アプリ起動時にサービスがメンテ状態の際は、メンテナンスである表示を行いアプリ外のURLへ飛ばしたい。
@@ -17,9 +16,9 @@ import 'package:flutter/foundation.dart';
 // latestVersion : サービスの最新バージョン
 class StartupInfo extends Equatable {
   StartupInfo({
-    @required this.storeUrl,
-    @required this.hasLatestVersion,
-    @required this.latestVersion,
+    required this.storeUrl,
+    required this.hasLatestVersion,
+    required this.latestVersion,
   });
 
   final String storeUrl;

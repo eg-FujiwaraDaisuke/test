@@ -30,7 +30,7 @@ Future<void> init() async {
         basePath: 'assets/i18n',
         forcedLocale: Locale('ja')),
   );
-  await flutterI18nDelegate.load(null);
+  await flutterI18nDelegate.load(Locale('ja'));
 
   sl.registerLazySingleton(() => firebaseApp);
   sl.registerLazySingleton(() => remoteConfig);

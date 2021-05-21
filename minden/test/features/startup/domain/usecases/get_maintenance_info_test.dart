@@ -9,12 +9,12 @@ import 'package:mockito/mockito.dart';
 class MockStartupRepository extends Mock implements StartupRepository {}
 
 void main() {
-  GetStartupInfo usecase;
-  MockStartupRepository mockStartupRepository;
+  GetStartupInfo? usecase;
+  MockStartupRepository? mockStartupRepository;
 
   setUp(() {
     mockStartupRepository = MockStartupRepository();
-    usecase = GetStartupInfo(mockStartupRepository);
+    usecase = GetStartupInfo(mockStartupRepository!);
   });
 
   final maintenanceInfo = StartupInfo(
@@ -24,14 +24,14 @@ void main() {
   test(
     'should get maintenance info from the repository',
     () async {
-      when(mockStartupRepository.getStartupInfo())
+      when(mockStartupRepository?.getStartupInfo())
           .thenAnswer((_) async => Right(maintenanceInfo));
 
-      final result = await usecase(NoParams());
+      final result = await usecase!(NoParams());
 
       expect(result, Right(maintenanceInfo));
 
-      verify(mockStartupRepository.getStartupInfo());
+      verify(mockStartupRepository?.getStartupInfo());
 
       verifyNoMoreInteractions(mockStartupRepository);
     },

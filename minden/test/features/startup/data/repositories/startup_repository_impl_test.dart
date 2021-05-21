@@ -15,7 +15,7 @@ class MockMaintenanceInfoDataSource extends Mock
 }
 
 void main() {
-  StartupRepositoryImpl repository;
+  StartupRepositoryImpl? repository;
   MockMaintenanceInfoDataSource mockDataSource;
 
   setUp(() {
@@ -27,8 +27,8 @@ void main() {
 
   group('getMaintenanceInfo', () {
     test('should check if under maintenance', () async {
-      final info = await repository.getStartupInfo();
-      info.fold(
+      final info = await repository?.getStartupInfo();
+      info?.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());
         },

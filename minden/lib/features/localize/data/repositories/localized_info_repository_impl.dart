@@ -1,6 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
@@ -13,7 +11,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
   final LocalizedInfoDataSource dataSource;
 
   LocalizedInfoRepositoryImpl({
-    @required this.dataSource,
+    required this.dataSource,
   });
 
   @override
