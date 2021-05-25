@@ -16,6 +16,8 @@ void main() async {
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
+  const env = String.fromEnvironment("DEFINE_BUILD_ENV");
+  print("${env}");
   if (kReleaseMode) {
     runZonedGuarded(() async {
       runApp(Application());
