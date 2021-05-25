@@ -21,10 +21,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-// ここから追記 --
 def dartEnvironmentVariables = [
-        DEFINE_BUILD_ENV: 'dev',
-];
+        DEFINE_BUILD_ENV: ''
+]
 
 if (project.hasProperty('dart-defines')) {
     dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
@@ -35,26 +34,25 @@ if (project.hasProperty('dart-defines')) {
             }
 }
 
-// firebaseファイルをコピーして android/app ディレクトリに移動
-def googleServicesJson = "src/config/${dartEnvironmentVariables.DEFINE_BUILD_ENV}/google-services.json"
 task copyGoogleServicesJson(type: Copy) {
-    from googleServicesJson
+    from "src/config/${dartEnvironmentVariables.DEFINE_BUILD_ENV}/google-services.json"
     into './'
-    if(inputs.sourceFiles.empty){
-        throw new StopExecutionException("No files found: ${googleServicesJson}")
-    }
 }
 
-// firebaseファイルのコピータスクを待ってからファイルが必要な処理を行うよう設定
 tasks.whenTaskAdded { task ->
-    if (task.name == 'processDebugGoogleServices') {
+    if (task.name == 'processDevDebugGoogleServices') {
         task.dependsOn copyGoogleServicesJson
     }
-    if (task.name == 'processReleaseGoogleServices') {
+    if (task.name == 'processStagingDebugGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+    if (task.name == 'processProdDebugGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+    if (task.name == 'processProdReleaseGoogleServices') {
         task.dependsOn copyGoogleServicesJson
     }
 }
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
@@ -93,6 +91,10 @@ android {
         dev {
             dimension "default"
             applicationIdSuffix ".dev"
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".staging"
         }
         prod {
             dimension "default"
