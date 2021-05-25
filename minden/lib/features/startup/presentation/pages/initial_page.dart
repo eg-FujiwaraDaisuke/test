@@ -5,6 +5,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:minden/core/env/config.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -105,7 +106,9 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     return Scaffold(
       body: BlocProvider.value(
         value: _bloc,
-        child: Container(),
+        child: Center(
+          child: Text(Config.getEnvironmentString()),
+        ),
       ),
     );
   }

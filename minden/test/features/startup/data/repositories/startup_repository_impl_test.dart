@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
@@ -15,7 +16,7 @@ class MockMaintenanceInfoDataSource extends Mock
 }
 
 void main() {
-  StartupRepositoryImpl? repository;
+  StartupRepositoryImpl repository;
   MockMaintenanceInfoDataSource mockDataSource;
 
   setUp(() {

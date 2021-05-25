@@ -21,6 +21,38 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dartEnvironmentVariables = [
+        DEFINE_BUILD_ENV: ''
+]
+
+if (project.hasProperty('dart-defines')) {
+    dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = URLDecoder.decode(entry).split('=')
+                [(pair.first()): pair.last()]
+            }
+}
+
+task copyGoogleServicesJson(type: Copy) {
+    from "src/config/${dartEnvironmentVariables.DEFINE_BUILD_ENV}/google-services.json"
+    into './'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'processDevDebugGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+    if (task.name == 'processStagingDebugGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+    if (task.name == 'processProdDebugGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+    if (task.name == 'processProdReleaseGoogleServices') {
+        task.dependsOn copyGoogleServicesJson
+    }
+}
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
@@ -56,11 +88,20 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        kyc {
+        dev {
             dimension "default"
-            applicationIdSuffix ".kyc"
+            applicationIdSuffix ".dev"
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".staging"
+        }
+        prod {
+            dimension "default"
+            applicationIdSuffix ".prod"
         }
     }
+
 }
 
 flutter {

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/usecase/usecase.dart';
@@ -9,12 +11,12 @@ import 'package:mockito/mockito.dart';
 class MockStartupRepository extends Mock implements StartupRepository {}
 
 void main() {
-  GetStartupInfo? usecase;
-  MockStartupRepository? mockStartupRepository;
+  GetStartupInfo usecase;
+  MockStartupRepository mockStartupRepository;
 
   setUp(() {
     mockStartupRepository = MockStartupRepository();
-    usecase = GetStartupInfo(mockStartupRepository!);
+    usecase = GetStartupInfo(mockStartupRepository);
   });
 
   final maintenanceInfo = StartupInfo(
@@ -27,7 +29,7 @@ void main() {
       when(mockStartupRepository?.getStartupInfo())
           .thenAnswer((_) async => Right(maintenanceInfo));
 
-      final result = await usecase!(NoParams());
+      final result = await usecase(NoParams());
 
       expect(result, Right(maintenanceInfo));
 

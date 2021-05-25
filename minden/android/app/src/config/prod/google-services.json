@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:587283047081:android:9b1bf222b73887ce033fb8",
         "android_client_info": {
-          "package_name": "jp.co.minden.dev"
+          "package_name": "jp.co.minden.prod"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "jp.co.minden.dev"
+                "bundle_id": "jp.co.minden.prod"
               }
             }
           ]
