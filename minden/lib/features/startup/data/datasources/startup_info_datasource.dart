@@ -2,6 +2,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/startup/data/models/startup_info_model.dart';
 import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
 
 import '../../../../injection_container.dart';
@@ -33,6 +34,8 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
     final supportVersion = Version.parse(remoteSupportVersion);
     final appVersion = await _appVersion();
 
+    final hasTutorial = await _hasTutorial();
+
     print(
         "[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}");
 
@@ -52,9 +55,11 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
     }
 
     return StartupInfoModel(
-        storeUrl: storeUrl,
-        hasLatestVersion: appVersion.compareTo(supportVersion) < 0,
-        latestVersion: supportVersion.toString());
+      storeUrl: storeUrl,
+      hasLatestVersion: appVersion.compareTo(supportVersion) < 0,
+      latestVersion: supportVersion.toString(),
+      hasTutorial: hasTutorial,
+    );
   }
 
   Future<bool> _isSupportVersion(
@@ -77,5 +82,11 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
         localVersion.major, localVersion.minor, localVersion.patch,
         build: packageInfo.buildNumber);
     return appVersion;
+  }
+
+  Future<bool> _hasTutorial() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final hasTutorial = sharedPreferences.getBool("has_tutorial") ?? false;
+    return hasTutorial;
   }
 }

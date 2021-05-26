@@ -90,13 +90,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
                 barrierDismissible: true);
 
             startupSubscription?.cancel();
-            _nextPage();
+            _nextPage(state.info.hasTutorial);
           })();
           return;
         }
 
         startupSubscription?.cancel();
-        _nextPage();
+        _nextPage(state.info.hasTutorial);
       }
     });
   }
@@ -161,7 +161,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     );
   }
 
-  void _nextPage() {
+  void _nextPage(bool hasTutorial) {
+    if (hasTutorial) {}
     // final route = NoAnimationMaterialPageRoute(
     //   settings: RouteSettings(name: "InitialPage"),
     //   builder: (context) => InitialPage(),
