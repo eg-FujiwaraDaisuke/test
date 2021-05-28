@@ -20,17 +20,17 @@ abstract class StartupInfoDataSource {
 class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   @override
   Future<StartupInfoModel> getStartupInfo() async {
-    await sl<RemoteConfig>().fetch(expiration: const Duration(seconds: 0));
-    await sl<RemoteConfig>().activateFetched();
+    await si<RemoteConfig>().fetch(expiration: const Duration(seconds: 0));
+    await si<RemoteConfig>().activateFetched();
 
     final maintenanceDescription =
-        sl<RemoteConfig>().getString("maintenance_description");
-    final maintenanceUrl = sl<RemoteConfig>().getString("maintenance_url");
-    final underMaintenance = sl<RemoteConfig>().getBool('under_maintenance');
+        si<RemoteConfig>().getString("maintenance_description");
+    final maintenanceUrl = si<RemoteConfig>().getString("maintenance_url");
+    final underMaintenance = si<RemoteConfig>().getBool('under_maintenance');
 
-    final storeUrl = sl<RemoteConfig>().getString("store_url");
+    final storeUrl = si<RemoteConfig>().getString("store_url");
     final remoteSupportVersion =
-        sl<RemoteConfig>().getString("support_version");
+        si<RemoteConfig>().getString("support_version");
     final supportVersion = Version.parse(remoteSupportVersion);
     final appVersion = await _appVersion();
 

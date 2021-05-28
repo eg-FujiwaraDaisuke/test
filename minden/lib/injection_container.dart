@@ -10,7 +10,8 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_i18n/loaders/file_translation_loader.dart';
 import 'package:get_it/get_it.dart';
 
-final sl = GetIt.instance;
+// singleton instance
+final si = GetIt.instance;
 
 Future<void> init() async {
   final firebaseApp = await Firebase.initializeApp();
@@ -33,9 +34,9 @@ Future<void> init() async {
   );
   await flutterI18nDelegate.load(Locale('ja'));
 
-  sl.registerLazySingleton(() => firebaseApp);
-  sl.registerLazySingleton(() => remoteConfig);
-  sl.registerLazySingleton(() => firebaseAnalyticsObserver);
-  sl.registerLazySingleton(() => botToastNavigatorObserver);
-  sl.registerLazySingleton(() => flutterI18nDelegate);
+  si.registerLazySingleton(() => firebaseApp);
+  si.registerLazySingleton(() => remoteConfig);
+  si.registerLazySingleton(() => firebaseAnalyticsObserver);
+  si.registerLazySingleton(() => botToastNavigatorObserver);
+  si.registerLazySingleton(() => flutterI18nDelegate);
 }
