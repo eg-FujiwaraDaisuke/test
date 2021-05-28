@@ -10,19 +10,20 @@ void main() {
   final model = StartupInfoModel(
     storeUrl: "https://minden.co.jp/",
     hasLatestVersion: false,
-    latestVersion: "1.0.0"
+    latestVersion: "1.0.0",
+    hasTutorial: true,
   );
 
   test(
     'should be a subclass of MaintenanceInfo entity',
-    () async {
+        () async {
       expect(model, isA<StartupInfoModel>());
     },
   );
   group('fromJson', () {
     test('should return a valid model', () async {
       final Map<String, dynamic> jsonMap =
-          json.decode(fixture('maintenance_data.json'));
+      json.decode(fixture('maintenance_data.json'));
       final result = StartupInfoModel.fromJson(jsonMap);
       expect(result, model);
     });
