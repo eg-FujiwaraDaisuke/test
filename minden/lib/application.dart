@@ -34,11 +34,11 @@ class Application extends StatelessWidget {
         builder: BotToastInit(),
         title: 'Minden app',
         navigatorObservers: [
-          sl<BotToastNavigatorObserver>(),
-          sl<FirebaseAnalyticsObserver>()
+          si<BotToastNavigatorObserver>(),
+          si<FirebaseAnalyticsObserver>()
         ],
         localizationsDelegates: [
-          sl<FlutterI18nDelegate>(),
+          si<FlutterI18nDelegate>(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate, // This is required

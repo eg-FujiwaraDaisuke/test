@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:minden/core/env/config.dart';
+import 'package:minden/core/util/bot_tast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -59,13 +59,10 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     StreamSubscription? startupSubscription;
     startupSubscription = _bloc.stream.listen((state) {
       if (state is StartupStateLoading) {
-        BotToast.showCustomLoading(
-            toastBuilder: (_) => CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).accentColor)));
+        Loading.show(context);
         return;
       }
-      BotToast.closeAllLoading();
+      Loading.hide();
 
       // support versionエラーアラート / メンテ中アラート
       if (state is StartupStateError) {
@@ -90,13 +87,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
                 barrierDismissible: true);
 
             startupSubscription?.cancel();
-            _nextPage();
+            _nextPage(state.info.hasTutorial);
           })();
           return;
         }
 
         startupSubscription?.cancel();
-        _nextPage();
+        _nextPage(state.info.hasTutorial);
       }
     });
   }
@@ -161,7 +158,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     );
   }
 
-  void _nextPage() {
+  void _nextPage(bool hasTutorial) {
+    if (hasTutorial) {}
     // final route = NoAnimationMaterialPageRoute(
     //   settings: RouteSettings(name: "InitialPage"),
     //   builder: (context) => InitialPage(),

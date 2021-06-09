@@ -19,16 +19,19 @@ class StartupInfo extends Equatable {
     required this.storeUrl,
     required this.hasLatestVersion,
     required this.latestVersion,
+    required this.hasTutorial,
   });
 
   final String storeUrl;
   final bool hasLatestVersion;
   final String latestVersion;
+  final bool hasTutorial;
 
   @override
   List<Object> get props => [
         storeUrl,
         hasLatestVersion,
         latestVersion,
+        hasTutorial,
       ];
 }

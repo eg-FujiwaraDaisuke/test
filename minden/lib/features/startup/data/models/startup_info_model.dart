@@ -10,18 +10,19 @@ class StartupInfoModel extends StartupInfo {
     required String storeUrl,
     required bool hasLatestVersion,
     required String latestVersion,
+    required bool hasTutorial,
   }) : super(
-          storeUrl: storeUrl,
-          hasLatestVersion: hasLatestVersion,
-          latestVersion: latestVersion,
-        );
+            storeUrl: storeUrl,
+            hasLatestVersion: hasLatestVersion,
+            latestVersion: latestVersion,
+            hasTutorial: hasTutorial);
 
   factory StartupInfoModel.fromJson(Map<String, dynamic> json) {
     return StartupInfoModel(
-      storeUrl: json["store_url"],
-      hasLatestVersion: json["has_latest_version"],
-      latestVersion: json["latest_version"],
-    );
+        storeUrl: json["store_url"],
+        hasLatestVersion: json["has_latest_version"],
+        latestVersion: json["latest_version"],
+        hasTutorial: json["has_tutorial"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +30,7 @@ class StartupInfoModel extends StartupInfo {
       "store_url": storeUrl,
       "has_latest_version": hasLatestVersion,
       "latest_version": latestVersion,
+      "has_tutorial": hasTutorial
     };
   }
 }

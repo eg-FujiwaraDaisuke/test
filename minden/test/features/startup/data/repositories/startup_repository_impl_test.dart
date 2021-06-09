@@ -1,6 +1,6 @@
 // @dart=2.9
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/data/models/startup_info_model.dart';
@@ -11,11 +11,18 @@ class MockMaintenanceInfoDataSource extends Mock
     implements StartupInfoDataSource {
   @override
   Future<StartupInfoModel> getStartupInfo() async {
-    throw ServerException();
+    return StartupInfoModel(
+      storeUrl: "",
+      hasLatestVersion: false,
+      latestVersion: "",
+      hasTutorial: false,
+    );
   }
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   StartupRepositoryImpl repository;
   MockMaintenanceInfoDataSource mockDataSource;
 
@@ -26,16 +33,39 @@ void main() {
     );
   });
 
-  group('getMaintenanceInfo', () {
-    test('should check if under maintenance', () async {
+  group('getStartupInfo', () {
+    test('should check StartupInfoModel', () async {
+      const MethodChannel('plugins.flutter.io/connectivity')
+          .setMockMethodCallHandler((MethodCall methodCall) async {
+        if (methodCall.method == 'check') {
+          return "wifi";
+        }
+        return null;
+      });
+
       final info = await repository?.getStartupInfo();
       info?.fold(
-        (failure) {
-          expect(failure, isA<ServerFailure>());
-        },
+        (failure) {},
         (model) {
           expect(model, isA<StartupInfoModel>());
         },
+      );
+    });
+    test('should check connection error', () async {
+      const MethodChannel('plugins.flutter.io/connectivity')
+          .setMockMethodCallHandler((MethodCall methodCall) async {
+        if (methodCall.method == 'check') {
+          return "";
+        }
+        return null;
+      });
+
+      final info = await repository?.getStartupInfo();
+      info?.fold(
+        (failure) {
+          expect(failure, isA<ConnectionFailure>());
+        },
+        (model) {},
       );
     });
   });
