@@ -4,93 +4,134 @@ import 'package:flutter/material.dart';
 class Tutorial {
   late final String title;
   late final String description;
+  late final String imagePath;
 
   Tutorial({
     required this.title,
     required this.description,
+    required this.imagePath,
   });
 }
 
-class TutorialPage extends StatelessWidget {
-  const TutorialPage() : super();
+class TutorialPage extends StatefulWidget {
+  TutorialPage({Key? key}) : super(key: key);
+
+  @override
+  _TutorialPageState createState() => _TutorialPageState();
+}
+
+class _TutorialPageState extends State<TutorialPage> {
+  final CarouselController _controller = CarouselController();
+  List<Tutorial> tutorialData = [
+    Tutorial(
+        imagePath: 'tutorial-1.png',
+        title: '電気の生産者の顔が\n見える・つながる',
+        description:
+            '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
+    Tutorial(
+        imagePath: 'tutorial-2.png',
+        title: '電気の使用量や\n料金の行き先が見える',
+        description:
+            '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
+    Tutorial(
+        imagePath: 'tutorial-3.png',
+        title: 'あの有名企業も使っている',
+        description:
+            '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
+  ];
+
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final CarouselController _controller = CarouselController();
-    List<Tutorial> tutorialData = [
-      Tutorial(
-          title: '電気の生産者の顔が\n見える・つながる',
-          description:
-              '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
-      Tutorial(
-          title: '電気の使用量や\n料金の行き先が見える',
-          description:
-              '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
-      Tutorial(
-          title: 'あの有名企業も使っている',
-          description:
-              '何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。'),
-    ];
-
     return Scaffold(
       body: SizedBox.expand(
         child: Container(
-            color: Color(0xFFf6f5f0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 599,
+          color: Color(0xFFf6f5f0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                    height: 585,
                     enableInfiniteScroll: false,
                     enlargeCenterPage: false,
                     viewportFraction: 1,
-                  ),
-                  carouselController: _controller,
-                  items: tutorialData.map((Tutorial data) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Slide(data: data);
-                      },
-                    );
-                  }).toList(),
-                ),
-                // Slide(data: tutorialData[0]),
-                Row(
+                    initialPage: _currentIndex,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    }),
+                carouselController: _controller,
+                items: tutorialData.map((Tutorial data) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Slide(data: data);
+                    },
+                  );
+                }).toList(),
+              ),
+              Container(
+                width: 291,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      'Skip',
-                      style: const TextStyle(
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
+                    GestureDetector(
+                      onTap: () {
+                        // ここで別ページに飛ばす
+                        print('skip');
+                      },
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: Color(0xFF000000)),
                       ),
                     ),
                     Row(
-                      children: tutorialData.map((i) {
+                      children: tutorialData.asMap().entries.map((entry) {
+                        int index = entry.key;
                         return Container(
                           width: 7,
                           height: 7,
                           margin: EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 4),
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0xFFCCCCCC)),
+                              shape: BoxShape.circle,
+                              color: _currentIndex == index
+                                  ? Color(0xFF000000)
+                                  : Color(0xFFCCCCCC)),
                         );
                       }).toList(),
                     ),
-                    Text(
-                      'Next',
-                      style: const TextStyle(
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
+                    GestureDetector(
+                      onTap: () {
+                        _controller.nextPage(
+                            duration: Duration(milliseconds: 200),
+                            curve: Curves.easeOut);
+                      },
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: _currentIndex != tutorialData.length - 1
+                              ? Color(0xFF000000)
+                              : Color(0xFFCCCCCC),
+                        ),
                       ),
                     ),
                   ],
-                )
-              ],
-            )),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -103,7 +144,6 @@ class Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
@@ -114,7 +154,7 @@ class Slide extends StatelessWidget {
               shape: BoxShape.circle,
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage('assets/images/tutorial/test1.png'),
+                image: AssetImage('assets/images/tutorial/${data.imagePath}'),
               ),
             ),
           ),
@@ -127,7 +167,7 @@ class Slide extends StatelessWidget {
             child: Text(
               data.title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -143,14 +183,14 @@ class Slide extends StatelessWidget {
             child: Text(
               data.description,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 12,
               ),
             ),
           ),
           SizedBox(
-            height: 116,
+            height: 109,
           ),
         ],
       ),
