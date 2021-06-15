@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:minden/core/env/config.dart';
 import 'package:minden/core/util/bot_tast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -16,6 +17,7 @@ import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_bloc.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
+import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InitialPage extends StatefulWidget {
@@ -159,7 +161,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   void _nextPage(bool hasTutorial) {
-    if (hasTutorial) {}
+    if (hasTutorial) {
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => TutorialPage(),
+        settings: RouteSettings(name: "TutorialPage"),
+      );
+      Navigator.pushReplacement(context, route);
+    }
     // final route = NoAnimationMaterialPageRoute(
     //   settings: RouteSettings(name: "InitialPage"),
     //   builder: (context) => InitialPage(),
