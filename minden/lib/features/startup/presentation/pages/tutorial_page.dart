@@ -78,18 +78,28 @@ class _TutorialPageState extends State<TutorialPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        // ここで別ページに飛ばす
-                        print('skip');
-                      },
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: Color(0xFF000000)),
+                    Container(
+                      width: 47,
+                      height: 17,
+                      child: GestureDetector(
+                        onTap: () {
+                          // ここで別ページに飛ばす
+                          print('skip');
+                        },
+                        child: Opacity(
+                          opacity: _currentIndex != tutorialData.length - 1
+                              ? 1.0
+                              : 0.0,
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Row(
@@ -108,21 +118,25 @@ class _TutorialPageState extends State<TutorialPage> {
                         );
                       }).toList(),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        _controller.nextPage(
-                            duration: Duration(milliseconds: 200),
-                            curve: Curves.easeOut);
-                      },
-                      child: Text(
-                        _currentIndex != tutorialData.length - 1
-                            ? 'Next'
-                            : 'START',
-                        style: TextStyle(
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: Color(0xFF000000)),
+                    Container(
+                      width: 47,
+                      height: 17,
+                      child: GestureDetector(
+                        onTap: () {
+                          _controller.nextPage(
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.easeOut);
+                        },
+                        child: Text(
+                          _currentIndex != tutorialData.length - 1
+                              ? 'Next'
+                              : 'START',
+                          style: TextStyle(
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: Color(0xFF000000)),
+                        ),
                       ),
                     ),
                   ],
