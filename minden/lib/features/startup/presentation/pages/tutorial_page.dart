@@ -115,15 +115,14 @@ class _TutorialPageState extends State<TutorialPage> {
                             curve: Curves.easeOut);
                       },
                       child: Text(
-                        'Next',
+                        _currentIndex != tutorialData.length - 1
+                            ? 'Next'
+                            : 'START',
                         style: TextStyle(
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: _currentIndex != tutorialData.length - 1
-                              ? Color(0xFF000000)
-                              : Color(0xFFCCCCCC),
-                        ),
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: Color(0xFF000000)),
                       ),
                     ),
                   ],
