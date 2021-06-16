@@ -9,7 +9,6 @@ import 'package:minden/features/localize/data/repositories/localized_info_reposi
 import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
-import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
@@ -46,8 +45,7 @@ class Application extends StatelessWidget {
           const Locale('ja'),
           const Locale('en'),
         ],
-        // home: InitialPage(),
-        home: TutorialPage(),
+        home: InitialPage(),
       ),
     );
   }

@@ -78,6 +78,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
         })();
         return;
       }
+
       if (state is StartupStateLoaded) {
         if (state.info.hasLatestVersion) {
           (() async {
@@ -161,18 +162,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   void _nextPage(bool hasTutorial) {
-    if (hasTutorial) {
-      final route = NoAnimationMaterialPageRoute(
-        builder: (context) => TutorialPage(),
-        settings: RouteSettings(name: "TutorialPage"),
-      );
-      Navigator.pushReplacement(context, route);
-    }
-    // final route = NoAnimationMaterialPageRoute(
-    //   settings: RouteSettings(name: "InitialPage"),
-    //   builder: (context) => InitialPage(),
-    // );
-    // Navigator.pushReplacement(context, route);
+    // if (hasTutorial) {
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => TutorialPage(),
+      settings: RouteSettings(name: "TutorialPage"),
+    );
+    Navigator.pushReplacement(context, route);
+    // }
   }
 
   @override
