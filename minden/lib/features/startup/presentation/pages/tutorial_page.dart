@@ -121,23 +121,36 @@ class _TutorialPageState extends State<TutorialPage> {
                     Container(
                       width: 47,
                       height: 17,
-                      child: GestureDetector(
-                        onTap: () {
-                          _controller.nextPage(
-                              duration: Duration(milliseconds: 250),
-                              curve: Curves.easeOut);
-                        },
-                        child: Text(
-                          _currentIndex != tutorialData.length - 1
-                              ? 'Next'
-                              : 'START',
-                          style: TextStyle(
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Color(0xFF000000)),
-                        ),
-                      ),
+                      child: _currentIndex != tutorialData.length - 1
+                          ? GestureDetector(
+                              onTap: () {
+                                _controller.nextPage(
+                                    duration: Duration(milliseconds: 250),
+                                    curve: Curves.easeOut);
+                              },
+                              child: Text(
+                                'Next',
+                                style: TextStyle(
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Color(0xFF000000)),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                // ここで別ページに飛ばす
+                                print('Start');
+                              },
+                              child: Text(
+                                'Start',
+                                style: TextStyle(
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Color(0xFF000000)),
+                              ),
+                            ),
                     ),
                   ],
                 ),
