@@ -2,8 +2,17 @@
 "latest_version_message_%s" : "The latest version %s has been released! \nYou can update to this version.",
 "maintenance_action" : "Maintenance Info",
 "minden_app" : "Minden App",
+"next" : "Next",
 "ok" : "OK",
+"skip" : "Skip",
+"start" : "START",
 "store_action" : "Store",
+"tutorial_step_1_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_1_title" : "電気の生産者の顔が\n見える・つながる",
+"tutorial_step_2_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_2_title" : "電気の使用量や\n料金の行き先が見える",
+"tutorial_step_3_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_3_title" : "あの有名企業も使っている",
 "unsupported_error" : "An unsupported error has occurred.",
 "update_version_message_%s" : "Need to update to the latest version %s."
 }

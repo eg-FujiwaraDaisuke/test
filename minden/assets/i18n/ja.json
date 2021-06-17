@@ -2,8 +2,17 @@
 "latest_version_message_%s" : "最新バージョン %s がリリースされました！\nこのバージョンへの更新が可能です。",
 "maintenance_action" : "メンテナンス詳細",
 "minden_app" : "みんな電力アプリ",
+"next" : "Next",
 "ok" : "OK",
+"skip" : "Skip",
+"start" : "START",
 "store_action" : "ストアへ",
+"tutorial_step_1_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_1_title" : "電気の生産者の顔が\n見える・つながる",
+"tutorial_step_2_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_2_title" : "電気の使用量や\n料金の行き先が見える",
+"tutorial_step_3_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
+"tutorial_step_3_title" : "あの有名企業も使っている",
 "unsupported_error" : "サポートされていないエラーが発生しました。",
 "update_version_message_%s" : "最新バージョン %s への更新が必要です。"
 }
