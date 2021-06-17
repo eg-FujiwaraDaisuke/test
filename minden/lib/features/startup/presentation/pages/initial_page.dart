@@ -162,14 +162,13 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   void _nextPage(bool hasTutorial) {
-    // hasTutorialがtrueのときにtutorialpageを表示させる
-    // if (hasTutorial) {
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => TutorialPage(),
-      settings: RouteSettings(name: "TutorialPage"),
-    );
-    Navigator.pushReplacement(context, route);
-    // }
+    if (!hasTutorial) {
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => TutorialPage(),
+        settings: RouteSettings(name: "TutorialPage"),
+      );
+      Navigator.pushReplacement(context, route);
+    }
   }
 
   @override
