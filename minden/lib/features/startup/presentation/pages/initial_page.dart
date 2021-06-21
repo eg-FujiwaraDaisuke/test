@@ -11,6 +11,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
 import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
@@ -169,6 +170,12 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       );
       Navigator.pushReplacement(context, route);
     }
+
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => LoginPage(),
+      settings: RouteSettings(name: "LoginPage"),
+    );
+    Navigator.pushReplacement(context, route);
   }
 
   @override

@@ -14,8 +14,7 @@
                 "--debug",
                 "--flavor",
                 "dev",
-                "--dart-define",
-                "DEFINE_BUILD_ENV=dev"
+                "--dart-define=DEFINE_BUILD_ENV=dev",
              ]
         },    
     ]
