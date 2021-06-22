@@ -10,7 +10,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _checkBox = false;
+  bool checkBox = false;
+  bool isShowPassword = false;
+  bool isError = false;
+  String userLoginEmail = '';
+  String userLoginPassword = '';
+
+  void onEmailChanged(value) {
+    setState(() {
+      userLoginEmail = value;
+    });
+  }
+
+  void onEmailReset() {
+    setState(() {
+      userLoginEmail = '';
+      print(userLoginEmail);
+    });
+  }
+
+  void onPasswordChanged(value) {
+    setState(() {
+      userLoginPassword = value;
+    });
+  }
+
+  void onShowPassword() {
+    setState(() {
+      isShowPassword = !isShowPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +62,37 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    EmailInput(),
+                    EmailInput(
+                      onChanged: onEmailChanged,
+                      onReset: onEmailReset,
+                    ),
                     SizedBox(
                       height: 29,
                     ),
-                    PasswordInput(),
-                    SizedBox(
-                      height: 16,
+                    PasswordInput(
+                      isShowPassword: isShowPassword,
+                      onChanged: onEmailChanged,
+                      onShowPassword: onShowPassword,
                     ),
-                    Text(
-                      '※メールアドレスまたはパスワードが正しくありません。',
-                      style: TextStyle(
-                        color: Color(0xFFFF0000).withOpacity(0.6),
-                        fontSize: 12,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Container(
+                      child: isError
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  '※メールアドレスまたはパスワードが正しくありません。',
+                                  style: TextStyle(
+                                    color: Color(0xFFFF0000).withOpacity(0.6),
+                                    fontSize: 12,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : null,
                     ),
                     SizedBox(
                       height: 21,
@@ -62,15 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Checkbox(
                                   activeColor: Color(0xFFFF8C00),
-                                  value: _checkBox,
+                                  value: checkBox,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      _checkBox = value ?? false;
+                                      checkBox = value ?? false;
                                     });
                                   },
                                 ),
                                 Text(
-                                  "自動ログインを有効",
+                                  "自動ログインを有効にする",
                                   style: TextStyle(
                                     fontSize: 11,
                                     letterSpacing: calcLetterSpacing(letter: 1),
@@ -145,6 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              // TODO アカウント作成ページに飛ばす
                               print('アカウント作成');
                             },
                             child: Text(
@@ -162,6 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              // TODO どこかのページに飛ばす
                               print('ログインせずに利用する');
                             },
                             child: Text(
@@ -188,14 +234,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class EmailInput extends StatefulWidget {
-  EmailInput({Key? key}) : super(key: key);
+class EmailInput extends StatelessWidget {
+  final Function onChanged;
+  final Function onReset;
 
-  @override
-  _EmailInputState createState() => _EmailInputState();
-}
+  const EmailInput({
+    required this.onChanged,
+    required this.onReset,
+  }) : super();
 
-class _EmailInputState extends State<EmailInput> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -213,7 +260,10 @@ class _EmailInputState extends State<EmailInput> {
         SizedBox(
           height: 14,
         ),
-        TextField(
+        TextFormField(
+          onChanged: (value) {
+            onChanged(value);
+          },
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
@@ -226,9 +276,13 @@ class _EmailInputState extends State<EmailInput> {
               ),
             ),
             suffixIcon: IconButton(
-              icon: Icon(Icons.remove),
+              icon: SvgPicture.asset(
+                'assets/images/login/cancel.svg',
+                width: 26,
+                height: 26,
+              ),
               onPressed: () {
-                debugPrint('remove');
+                onReset();
               },
             ),
           ),
@@ -245,15 +299,17 @@ class _EmailInputState extends State<EmailInput> {
   }
 }
 
-class PasswordInput extends StatefulWidget {
-  PasswordInput({Key? key}) : super(key: key);
+class PasswordInput extends StatelessWidget {
+  final isShowPassword;
+  final Function onChanged;
+  final Function onShowPassword;
 
-  @override
-  _PasswordInputState createState() => _PasswordInputState();
-}
+  PasswordInput({
+    @required this.isShowPassword,
+    required this.onChanged,
+    required this.onShowPassword,
+  }) : super();
 
-class _PasswordInputState extends State<PasswordInput> {
-  var _showPassword = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -271,8 +327,11 @@ class _PasswordInputState extends State<PasswordInput> {
         SizedBox(
           height: 14,
         ),
-        TextField(
-          obscureText: !_showPassword,
+        TextFormField(
+          onChanged: (value) {
+            onChanged(value);
+          },
+          obscureText: !isShowPassword,
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
@@ -285,9 +344,15 @@ class _PasswordInputState extends State<PasswordInput> {
               ),
             ),
             suffixIcon: IconButton(
-              icon: Icon(Icons.remove),
+              icon: Icon(
+                isShowPassword
+                    ? Icons.visibility
+                    : Icons.visibility_off_outlined,
+                color: Color(0xFFA7A7A7),
+              ),
               onPressed: () {
                 debugPrint('remove');
+                onShowPassword();
               },
             ),
           ),
