@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   void onEmailReset() {
     setState(() {
       userLoginEmail = '';
-      print(userLoginEmail);
     });
   }
 
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                           : null,
                     ),
                     SizedBox(
-                      height: 21,
+                      height: 16,
                     ),
                     Container(
                       child: Row(
