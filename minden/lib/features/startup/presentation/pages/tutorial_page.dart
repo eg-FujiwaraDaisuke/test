@@ -48,13 +48,13 @@ class _TutorialPageState extends State<TutorialPage> {
     return Scaffold(
       body: SizedBox.expand(
         child: Container(
-          color: Color(0xFFf6f5f0),
+          color: Color(0xFFf5f3ed),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                    height: 585,
+                    height: 690,
                     enableInfiniteScroll: false,
                     enlargeCenterPage: false,
                     viewportFraction: 1,
@@ -98,7 +98,7 @@ class _TutorialPageState extends State<TutorialPage> {
                               fontFamily: 'NotoSansJP',
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
-                              color: Color(0xFF000000),
+                              color: Color(0xFFABAAAB),
                               letterSpacing: calcLetterSpacing(letter: 4),
                             ),
                           ),
@@ -183,16 +183,37 @@ class Slide extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          width: 270,
-          height: 270,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage('assets/images/tutorial/${data.imagePath}'),
+        Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 328,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/tutorial/${data.imagePath}'),
+                ),
+              ),
             ),
-          ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 328,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: FractionalOffset.center,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    const Color(0xFFf5f3ed).withOpacity(0),
+                    const Color(0xFFf5f3ed).withOpacity(1),
+                  ],
+                  stops: const [
+                    0.0,
+                    1.0,
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 48,
