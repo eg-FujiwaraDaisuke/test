@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool checkBox = false;
+  bool isAutoLogin = false;
   bool isShowPassword = false;
   bool isError = false;
   String userLoginId = '';
@@ -127,10 +127,10 @@ class _LoginPageState extends State<LoginPage> {
                                   width: 13.0,
                                   child: Checkbox(
                                     activeColor: Color(0xFFFF8C00),
-                                    value: checkBox,
+                                    value: isAutoLogin,
                                     onChanged: (bool? value) {
                                       setState(() {
-                                        checkBox = value ?? false;
+                                        isAutoLogin = value ?? false;
                                       });
                                     },
                                   ),
@@ -260,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class EmailInput extends StatelessWidget {
+class EmailInput extends StatefulWidget {
   final Function onChanged;
   final Function onReset;
 
@@ -269,6 +269,12 @@ class EmailInput extends StatelessWidget {
     required this.onReset,
   }) : super();
 
+  @override
+  _EmailInputState createState() => _EmailInputState();
+}
+
+class _EmailInputState extends State<EmailInput> {
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -287,8 +293,9 @@ class EmailInput extends StatelessWidget {
           height: 14,
         ),
         TextFormField(
+          controller: _controller,
           onChanged: (value) {
-            onChanged(value);
+            widget.onChanged(value);
           },
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
@@ -308,7 +315,8 @@ class EmailInput extends StatelessWidget {
                 height: 26,
               ),
               onPressed: () {
-                onReset();
+                widget.onReset();
+                _controller.clear();
               },
             ),
           ),
@@ -377,7 +385,6 @@ class PasswordInput extends StatelessWidget {
                 color: Color(0xFFA7A7A7),
               ),
               onPressed: () {
-                debugPrint('remove');
                 onShowPassword();
               },
             ),

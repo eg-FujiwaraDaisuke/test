@@ -6,7 +6,6 @@ class LoginUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(user);
     return Scaffold(
       body: Container(
         child: ListView(
@@ -24,5 +23,3 @@ class LoginUserPage extends StatelessWidget {
     );
   }
 }
-
-// {key: 20190707085551963zhayz, loginId: nakajo@minden.co.jp, name: ï¿½Ýï¿½È@ï¿½dï¿½ï¿½, secret: 20000102, provider: MINDEN, service: portal, email: nakajo@minden.co.jp}
