@@ -46,7 +46,7 @@ class _TutorialPageState extends State<TutorialPage> {
     ];
 
     return Scaffold(
-      body: SizedBox.expand(
+      body: SafeArea(
         child: Container(
           color: Color(0xFFf5f3ed),
           child: Column(
