@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/login_api.dart';
 import 'package:minden/features/login/presentation/pages/login_user_page.dart';
 import 'package:minden/utile.dart';
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 16,
                                 ),
                                 Text(
-                                  '※メールアドレスまたはパスワードが正しくありません。',
+                                  i18nTranslate(context, 'login_error'),
                                   style: TextStyle(
                                     color: Color(0xFFFF0000).withOpacity(0.6),
                                     fontSize: 12,
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                   width: 7,
                                 ),
                                 Text(
-                                  "自動ログインを有効にする",
+                                  i18nTranslate(context, 'login_auto_login'),
                                   style: TextStyle(
                                     fontSize: 11,
                                     letterSpacing: calcLetterSpacing(letter: 1),
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               )),
                               child: Text(
-                                'パスワードをお忘れですか？',
+                                i18nTranslate(context, 'login_forgot_password'),
                                 style: TextStyle(
                                   fontSize: 11,
                                   letterSpacing: calcLetterSpacing(letter: 1),
@@ -196,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: Center(
                           child: Text(
-                            'ログイン',
+                            i18nTranslate(context, 'login_login'),
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NotoSansJP',
@@ -219,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                               print('アカウント作成');
                             },
                             child: Text(
-                              'アカウント作成',
+                              i18nTranslate(context, 'login_create_account'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'NotoSansJP',
@@ -237,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                               print('ログインせずに利用する');
                             },
                             child: Text(
-                              'ログインせずに利用する',
+                              i18nTranslate(context, 'login_not_login_use'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'NotoSansJP',
@@ -281,7 +282,7 @@ class _EmailInputState extends State<EmailInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'ログインID（メールアドレス）',
+          i18nTranslate(context, 'login_id'),
           style: TextStyle(
             fontSize: 14.0,
             color: Color(0xFF6A6F7D),
@@ -350,7 +351,7 @@ class PasswordInput extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'パスワード',
+          i18nTranslate(context, 'login_password'),
           style: TextStyle(
             fontSize: 14.0,
             color: Color(0xFF6A6F7D),
