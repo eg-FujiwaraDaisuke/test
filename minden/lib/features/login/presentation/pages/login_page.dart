@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/features/login/login_api.dart';
 import 'package:minden/utile.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,22 +14,22 @@ class _LoginPageState extends State<LoginPage> {
   bool checkBox = false;
   bool isShowPassword = false;
   bool isError = false;
-  String userLoginEmail = '';
+  String userLoginId = '';
   String userLoginPassword = '';
 
-  void onEmailChanged(value) {
+  void onInputChangedId(value) {
     setState(() {
-      userLoginEmail = value;
+      userLoginId = value;
     });
   }
 
-  void onEmailReset() {
+  void onInputResetId() {
     setState(() {
-      userLoginEmail = '';
+      userLoginId = '';
     });
   }
 
-  void onPasswordChanged(value) {
+  void onInputChangedPassword(value) {
     setState(() {
       userLoginPassword = value;
     });
@@ -38,6 +39,18 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isShowPassword = !isShowPassword;
     });
+  }
+
+  void getUserData() async {
+    final res = await login(id: userLoginId, password: userLoginPassword);
+    // print('getUserData:' + res);
+    if (res['statusCode'] == 200) {
+      print(res['user']);
+    } else {
+      setState(() {
+        isError = true;
+      });
+    }
   }
 
   @override
@@ -62,15 +75,15 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EmailInput(
-                      onChanged: onEmailChanged,
-                      onReset: onEmailReset,
+                      onChanged: onInputChangedId,
+                      onReset: onInputResetId,
                     ),
                     SizedBox(
                       height: 29,
                     ),
                     PasswordInput(
                       isShowPassword: isShowPassword,
-                      onChanged: onEmailChanged,
+                      onChanged: onInputChangedPassword,
                       onShowPassword: onShowPassword,
                     ),
                     Container(
@@ -103,14 +116,21 @@ class _LoginPageState extends State<LoginPage> {
                           Container(
                             child: Row(
                               children: [
-                                Checkbox(
-                                  activeColor: Color(0xFFFF8C00),
-                                  value: checkBox,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      checkBox = value ?? false;
-                                    });
-                                  },
+                                SizedBox(
+                                  height: 13.0,
+                                  width: 13.0,
+                                  child: Checkbox(
+                                    activeColor: Color(0xFFFF8C00),
+                                    value: checkBox,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        checkBox = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 7,
                                 ),
                                 Text(
                                   "自動ログインを有効にする",
@@ -155,8 +175,9 @@ class _LoginPageState extends State<LoginPage> {
                       height: 32,
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         print('login');
+                        getUserData();
                       },
                       child: Container(
                         width: 399,
@@ -360,7 +381,7 @@ class PasswordInput extends StatelessWidget {
             color: Color(0xFF000000),
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
-            letterSpacing: calcLetterSpacing(letter: 400),
+            letterSpacing: calcLetterSpacing(letter: 4),
           ),
         ),
       ],
