@@ -1,5 +1,13 @@
 {
 "latest_version_message_%s" : "最新バージョン %s がリリースされました！\nこのバージョンへの更新が可能です。",
+"login_auto_login" : "自動ログインを有効にする",
+"login_create_account" : "アカウント作成",
+"login_error" : "※メールアドレスまたはパスワードが正しくありません。",
+"login_forgot_password" : "パスワードをお忘れですか？",
+"login_id" : "ログインID（メールアドレス）",
+"login_login" : "ログイン",
+"login_not_login_use" : "ログインせずに利用する",
+"login_password" : "パスワード",
 "maintenance_action" : "メンテナンス詳細",
 "minden_app" : "みんな電力アプリ",
 "next" : "Next",

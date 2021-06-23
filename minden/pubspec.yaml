@@ -50,6 +50,7 @@ dependencies:
   firebase_analytics: ^6.3.0
   firebase_crashlytics: ^0.1.4+1
   carousel_slider: ^4.0.0-nullsafety.0
+  flutter_svg: ^0.22.0
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +67,8 @@ flutter:
   assets:
     - assets/i18n/
     - assets/images/tutorial/
+    - assets/images/login/
     - assets/fonts/
-
   fonts:
     - family: NotoSansJP
       fonts:

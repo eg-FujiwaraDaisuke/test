@@ -1,5 +1,13 @@
 {
 "latest_version_message_%s" : "The latest version %s has been released! \nYou can update to this version.",
+"login_auto_login" : "自動ログインを有効にする",
+"login_create_account" : "アカウント作成",
+"login_error" : "※メールアドレスまたはパスワードが正しくありません。",
+"login_forgot_password" : "パスワードをお忘れですか？",
+"login_id" : "ログインID（メールアドレス）",
+"login_login" : "ログイン",
+"login_not_login_use" : "ログインせずに利用する",
+"login_password" : "パスワード",
 "maintenance_action" : "Maintenance Info",
 "minden_app" : "Minden App",
 "next" : "Next",
