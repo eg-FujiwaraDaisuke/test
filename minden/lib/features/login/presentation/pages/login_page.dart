@@ -44,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void getUserData() async {
-    final res = await login(id: userLoginId, password: userLoginPassword);
+  void login() async {
+    final res = await getUserData(id: userLoginId, password: userLoginPassword);
 
     if (res['statusCode'] == 200) {
       final route = NoAnimationMaterialPageRoute(
@@ -153,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           GestureDetector(
                             onTap: () {
+                              // TODO パスワードリセットページに遷移
                               print('パスワードをお忘れですか？');
                             },
                             child: Container(
@@ -182,9 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                       height: 32,
                     ),
                     GestureDetector(
-                      onTap: () async {
-                        print('login');
-                        getUserData();
+                      onTap: () {
+                        login();
                       },
                       child: Container(
                         width: 399,
