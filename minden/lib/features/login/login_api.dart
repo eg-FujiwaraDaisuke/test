@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+// ログイン検証用コード
 Future<dynamic> getUserData(
     {required String id, required String password}) async {
   final headers = {

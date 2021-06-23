@@ -14,48 +14,49 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isAutoLogin = false;
-  bool isShowPassword = false;
-  bool isError = false;
-  String userLoginId = '';
-  String userLoginPassword = '';
+  bool _isAutoLogin = false;
+  bool _isShowPassword = false;
+  bool _isError = false;
+  String _userLoginId = '';
+  String _userLoginPassword = '';
 
-  void onInputChangedId(value) {
+  void _onInputChangedId(value) {
     setState(() {
-      userLoginId = value;
+      _userLoginId = value;
     });
   }
 
-  void onInputResetId() {
+  void _onInputResetId() {
     setState(() {
-      userLoginId = '';
+      _userLoginId = '';
     });
   }
 
-  void onInputChangedPassword(value) {
+  void _onInputChangedPassword(value) {
     setState(() {
-      userLoginPassword = value;
+      _userLoginPassword = value;
     });
   }
 
-  void onShowPassword() {
+  void _onShowPassword() {
     setState(() {
-      isShowPassword = !isShowPassword;
+      _isShowPassword = !_isShowPassword;
     });
   }
 
-  void login() async {
-    final res = await getUserData(id: userLoginId, password: userLoginPassword);
+  void _login() async {
+    final res =
+        await getUserData(id: _userLoginId, password: _userLoginPassword);
 
     if (res['statusCode'] == 200) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => LoginUserPage(user: res['user']),
         settings: RouteSettings(name: "LoginUserPage"),
       );
-      Navigator.pushReplacement(context, route);
+      Navigator.push(context, route);
     } else {
       setState(() {
-        isError = true;
+        _isError = true;
       });
     }
   }
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -82,19 +83,19 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EmailInput(
-                      onChanged: onInputChangedId,
-                      onReset: onInputResetId,
+                      onChanged: _onInputChangedId,
+                      onReset: _onInputResetId,
                     ),
                     SizedBox(
                       height: 29,
                     ),
                     PasswordInput(
-                      isShowPassword: isShowPassword,
-                      onChanged: onInputChangedPassword,
-                      onShowPassword: onShowPassword,
+                      isShowPassword: _isShowPassword,
+                      onChanged: _onInputChangedPassword,
+                      onShowPassword: _onShowPassword,
                     ),
                     Container(
-                      child: isError
+                      child: _isError
                           ? Column(
                               children: [
                                 SizedBox(
@@ -128,10 +129,10 @@ class _LoginPageState extends State<LoginPage> {
                                   width: 13.0,
                                   child: Checkbox(
                                     activeColor: Color(0xFFFF8C00),
-                                    value: isAutoLogin,
+                                    value: _isAutoLogin,
                                     onChanged: (bool? value) {
                                       setState(() {
-                                        isAutoLogin = value ?? false;
+                                        _isAutoLogin = value ?? false;
                                       });
                                     },
                                   ),
@@ -184,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        login();
+                        _login();
                       },
                       child: Container(
                         width: 399,
