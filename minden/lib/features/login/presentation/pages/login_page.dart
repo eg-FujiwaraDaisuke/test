@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/login/login_api.dart';
+import 'package:minden/features/login/presentation/pages/login_user_page.dart';
 import 'package:minden/utile.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,9 +45,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void getUserData() async {
     final res = await login(id: userLoginId, password: userLoginPassword);
-    // print('getUserData:' + res);
+
     if (res['statusCode'] == 200) {
-      print(res['user']);
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => LoginUserPage(user: res['user']),
+        settings: RouteSettings(name: "LoginUserPage"),
+      );
+      Navigator.pushReplacement(context, route);
     } else {
       setState(() {
         isError = true;
@@ -325,7 +331,7 @@ class PasswordInput extends StatelessWidget {
   final Function onShowPassword;
 
   PasswordInput({
-    @required this.isShowPassword,
+    required this.isShowPassword,
     required this.onChanged,
     required this.onShowPassword,
   }) : super();
