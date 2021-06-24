@@ -15,12 +15,12 @@
 "skip" : "Skip",
 "start" : "START",
 "store_action" : "ストアへ",
-"tutorial_step_1_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
-"tutorial_step_1_title" : "電気の生産者の顔が\n見える・つながる",
-"tutorial_step_2_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
-"tutorial_step_2_title" : "電気の使用量や\n料金の行き先が見える",
-"tutorial_step_3_description" : "何でも薄暗いじめじめした所でニャーニャー泣いていた\n事だけは記憶している。\n吾輩はここで始めて人間というものを見た。",
-"tutorial_step_3_title" : "あの有名企業も使っている",
+"tutorial_step_1_description" : "このアプリでは、発電所の選べたり\nどのような人が発電しているかなど\nさまざまなことを「見える化」していきます。",
+"tutorial_step_1_title" : "みんな発電所アプリへ\nようこそ",
+"tutorial_step_2_description" : "この電気をつくっている人の顔が見れられます。\nさらに、生産者を選択しているユーザーが\nどれくらいいるかも確認できます。",
+"tutorial_step_2_title" : "電気の生産者さんの\n顔が見える",
+"tutorial_step_3_description" : "どれだけ電気を使ったかだけでなく、\n料金が誰に支払われたかまで確認できます。\n自分の電気が。",
+"tutorial_step_3_title" : "電気の使用量や料金の\n行き先が見える",
 "unsupported_error" : "サポートされていないエラーが発生しました。",
 "update_version_message_%s" : "最新バージョン %s への更新が必要です。"
 }
