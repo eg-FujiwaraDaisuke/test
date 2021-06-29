@@ -13,14 +13,14 @@ class LoginApiProvider {
     'content-type': 'application/json',
     'x-client-id': '5vf80b3tln2q7ge87af1vtcutc'
   };
-  final client = http.Client();
+  final _client = http.Client();
 
   Future<User> fetchUserData(
       {required String id, required String password}) async {
     try {
       final body = json.encode({'loginId': id, 'password': password});
       final url = Uri.parse(_url);
-      final response = await client.post(url, headers: _headers, body: body);
+      final response = await _client.post(url, headers: _headers, body: body);
 
       if (response.statusCode != 200) {
         throw LoginError("error");
