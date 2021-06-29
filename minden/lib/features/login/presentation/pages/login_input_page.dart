@@ -54,195 +54,206 @@ class _LoginInputPageState extends State<LoginInputPage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'assets/images/login/logo.svg',
-                width: 159,
-                height: 45,
-              ),
-              SizedBox(
-                height: 146,
-              ),
-              Container(
-                width: 339,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EmailInput(
-                      onChanged: _onInputChangedId,
-                      onReset: _onInputResetId,
-                    ),
-                    SizedBox(
-                      height: 29,
-                    ),
-                    PasswordInput(
-                      isShowPassword: _isShowPassword,
-                      onChanged: _onInputChangedPassword,
-                      onShowPassword: _onShowPassword,
-                    ),
-                    Container(
-                      child: widget.isError
-                          ? Column(
-                              children: [
-                                SizedBox(
-                                  height: 16,
+          child: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/login/logo.svg',
+                    width: 159,
+                    height: 45,
+                  ),
+                  SizedBox(
+                    height: 146,
+                  ),
+                  Container(
+                    width: 339,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        EmailInput(
+                          onChanged: _onInputChangedId,
+                          onReset: _onInputResetId,
+                        ),
+                        SizedBox(
+                          height: 29,
+                        ),
+                        PasswordInput(
+                          isShowPassword: _isShowPassword,
+                          onChanged: _onInputChangedPassword,
+                          onShowPassword: _onShowPassword,
+                        ),
+                        Container(
+                          child: widget.isError
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    Text(
+                                      i18nTranslate(context, 'login_error'),
+                                      style: TextStyle(
+                                        color:
+                                            Color(0xFFFF0000).withOpacity(0.6),
+                                        fontSize: 12,
+                                        fontFamily: 'NotoSansJP',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : null,
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 13.0,
+                                      width: 13.0,
+                                      child: Checkbox(
+                                        activeColor: Color(0xFFFF8C00),
+                                        value: _isAutoLogin,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            _isAutoLogin = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    Text(
+                                      i18nTranslate(
+                                          context, 'login_auto_login'),
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        letterSpacing:
+                                            calcLetterSpacing(letter: 1),
+                                        fontFamily: 'NotoSansJP',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  i18nTranslate(context, 'login_error'),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // TODO パスワードリセットページに遷移
+                                  print('パスワードをお忘れですか？');
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                    bottom: const BorderSide(
+                                      color: Color(0xFFFF8C00),
+                                      width: 1,
+                                    ),
+                                  )),
+                                  child: Text(
+                                    i18nTranslate(
+                                        context, 'login_forgot_password'),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      letterSpacing:
+                                          calcLetterSpacing(letter: 1),
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFFFF8C00),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _login();
+                          },
+                          child: Container(
+                            width: 399,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF8C00),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                i18nTranslate(context, 'login_login'),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 27,
+                        ),
+                        Center(
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // TODO アカウント作成ページに飛ばす
+                                  print('アカウント作成');
+                                },
+                                child: Text(
+                                  i18nTranslate(
+                                      context, 'login_create_account'),
                                   style: TextStyle(
-                                    color: Color(0xFFFF0000).withOpacity(0.6),
                                     fontSize: 12,
                                     fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFFF8C00),
                                   ),
                                 ),
-                              ],
-                            )
-                          : null,
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: 13.0,
-                                  width: 13.0,
-                                  child: Checkbox(
-                                    activeColor: Color(0xFFFF8C00),
-                                    value: _isAutoLogin,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        _isAutoLogin = value ?? false;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 7,
-                                ),
-                                Text(
-                                  i18nTranslate(context, 'login_auto_login'),
+                              ),
+                              SizedBox(
+                                height: 17,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // TODO どこかのページに飛ばす
+                                  print('ログインせずに利用する');
+                                },
+                                child: Text(
+                                  i18nTranslate(context, 'login_not_login_use'),
                                   style: TextStyle(
-                                    fontSize: 11,
-                                    letterSpacing: calcLetterSpacing(letter: 1),
+                                    fontSize: 12,
                                     fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF787877),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // TODO パスワードリセットページに遷移
-                              print('パスワードをお忘れですか？');
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                bottom: const BorderSide(
-                                  color: Color(0xFFFF8C00),
-                                  width: 1,
-                                ),
-                              )),
-                              child: Text(
-                                i18nTranslate(context, 'login_forgot_password'),
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  letterSpacing: calcLetterSpacing(letter: 1),
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFFF8C00),
-                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _login();
-                      },
-                      child: Container(
-                        width: 399,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFF8C00),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25),
+                            ],
                           ),
                         ),
-                        child: Center(
-                          child: Text(
-                            i18nTranslate(context, 'login_login'),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFFFFFFFF),
-                            ),
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 27,
-                    ),
-                    Center(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // TODO アカウント作成ページに飛ばす
-                              print('アカウント作成');
-                            },
-                            child: Text(
-                              i18nTranslate(context, 'login_create_account'),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFFFF8C00),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 17,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // TODO どこかのページに飛ばす
-                              print('ログインせずに利用する');
-                            },
-                            child: Text(
-                              i18nTranslate(context, 'login_not_login_use'),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF787877),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
