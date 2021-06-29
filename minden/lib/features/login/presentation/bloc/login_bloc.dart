@@ -20,7 +20,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield LoginLoading();
         final user = await repository.fetchUserData(
             id: event.loginId, password: event.loginPassword);
-        print(user.email);
         yield LoginLoaded(user);
       } catch (e) {
         yield LoginError(e.toString());

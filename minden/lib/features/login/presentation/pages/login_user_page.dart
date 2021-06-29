@@ -7,7 +7,6 @@ class LoginUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(user.email);
     return Scaffold(
       appBar: new AppBar(
         title: new Text('login_user_page'),
