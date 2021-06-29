@@ -5,10 +5,10 @@ abstract class LoginEvent extends Equatable {
 }
 
 class GetLoginUserInfo extends LoginEvent {
-  final String loginId;
-  final String loginPassword;
-  const GetLoginUserInfo(this.loginId, this.loginPassword);
+  final String inputLoginId;
+  final String inputPassword;
+  const GetLoginUserInfo(this.inputLoginId, this.inputPassword);
 
   @override
-  List<Object> get props => [loginId, loginPassword];
+  List<Object> get props => [inputLoginId, inputPassword];
 }
