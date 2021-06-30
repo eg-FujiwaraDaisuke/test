@@ -10,7 +10,7 @@ class LoginApiProvider {
   final _client = http.Client();
 
   final _loginApiEnvironment = {
-    'dev': {
+    Config.kDevFlavor: {
       'url':
           'https://bgzprevlv9.execute-api.ap-northeast-1.amazonaws.com/dev/auth',
       'headers': {
@@ -18,7 +18,7 @@ class LoginApiProvider {
         'x-client-id': '5vf80b3tln2q7ge87af1vtcutc'
       }
     },
-    'staging': {
+    Config.kStagingFlavor: {
       'url':
           'https://pwr8b8ylx4.execute-api.ap-northeast-1.amazonaws.com/stg/auth',
       'headers': {
@@ -26,7 +26,7 @@ class LoginApiProvider {
         'x-client-id': '215g1bfg97b8shlchhupgklc6h'
       }
     },
-    'prod': {
+    Config.isProduct: {
       'url':
           'https://btzj4dqhvc.execute-api.ap-northeast-1.amazonaws.com/prod/auth',
       'headers': {
@@ -42,12 +42,10 @@ class LoginApiProvider {
   }) async {
     try {
       final body = json.encode({'loginId': id, 'password': password});
-      final url =
-          Uri.parse(_loginApiEnvironment[Config.getEnvironmentString()]['url']);
-      final response = await _client.post(url,
-          headers: _loginApiEnvironment[Config.getEnvironmentString()]
-              ['headers'],
-          body: body);
+      final env = _loginApiEnvironment[Config.getEnvironmentString()];
+
+      final response = await _client.post(Uri.parse(env?['url'] as String),
+          headers: env?['headers'] as Map<String, String>, body: body);
 
       if (response.statusCode != 200) {
         throw LoginError("error");
