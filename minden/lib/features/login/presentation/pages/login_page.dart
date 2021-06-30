@@ -31,24 +31,24 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             if (state is LoginInitial) {
-              return buildInitialInput(isError: false);
+              return _buildInitialInput(isError: false);
             } else if (state is LoginLoaded) {
-              return buildUserInfo(state.user);
+              return _buildUserInfo(state.user);
             } else if (state is LoginError) {
-              return buildInitialInput(isError: true);
+              return _buildInitialInput(isError: true);
             }
-            return buildInitialInput(isError: false);
+            return _buildInitialInput(isError: false);
           },
         ),
       ),
     ));
   }
 
-  Widget buildInitialInput({required bool isError}) {
+  Widget _buildInitialInput({required bool isError}) {
     return LoginInputPage(isError: isError);
   }
 
-  Widget buildUserInfo(User user) {
+  Widget _buildUserInfo(User user) {
     return LoginUserPage(
       user: user,
     );
