@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/login/data/model/user.dart';
 import 'package:minden/features/login/login_api_repository.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
@@ -27,13 +28,22 @@ class _LoginPageState extends State<LoginPage> {
             return;
           }
           Loading.hide();
+
+          if (state is LoginLoaded) {
+            final route = NoAnimationMaterialPageRoute(
+              builder: (context) => LoginUserPage(
+                user: state.user,
+              ),
+              settings: RouteSettings(name: "LoginUserPage"),
+            );
+            Navigator.push(context, route);
+            return;
+          }
         },
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             if (state is LoginInitial) {
               return _buildInitialInput(isError: false);
-            } else if (state is LoginLoaded) {
-              return _buildUserInfo(state.user);
             } else if (state is LoginError) {
               return _buildInitialInput(isError: true);
             }
@@ -46,11 +56,5 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildInitialInput({required bool isError}) {
     return LoginInputPage(isError: isError);
-  }
-
-  Widget _buildUserInfo(User user) {
-    return LoginUserPage(
-      user: user,
-    );
   }
 }
