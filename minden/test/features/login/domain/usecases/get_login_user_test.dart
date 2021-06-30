@@ -32,7 +32,7 @@ void main() {
     when(mockLoginRepository.getLoginUser(tId, tPassword))
         .thenAnswer((_) async => Right(tUser));
 
-    final result = await usecase.execute(id: tId, password: tPassword);
+    final result = await usecase(Params(id: tId, password: tPassword));
 
     expect(result, Right(tUser));
     verify(mockLoginRepository.getLoginUser(tId, tPassword));
