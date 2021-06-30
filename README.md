@@ -1,3 +1,12 @@
+# flutter version
+
+```
+Flutter 2.2.2 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision d79295af24 (3 weeks ago) • 2021-06-11 08:56:01 -0700
+Engine • revision 91c9fc8fe0
+Tools • Dart 2.13.3
+```
+
 # cl-minden-app
 案件概要などの情報はウィキをご確認ください
 
