@@ -11,6 +11,8 @@ class ServerFailure extends Failure {}
 
 class ConnectionFailure extends Failure {}
 
+class LoginFailure extends Failure {}
+
 class SupportVersionFailure extends Failure {
   SupportVersionFailure({
     required this.actionUrl,
