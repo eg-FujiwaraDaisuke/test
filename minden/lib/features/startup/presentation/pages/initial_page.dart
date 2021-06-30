@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:minden/core/env/config.dart';
-import 'package:minden/core/util/bot_tast_helper.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
