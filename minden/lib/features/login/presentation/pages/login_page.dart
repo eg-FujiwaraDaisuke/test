@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
-import 'package:minden/features/login/data/model/user.dart';
 import 'package:minden/features/login/login_api_repository.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
@@ -34,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => LoginUserPage(
                 user: state.user,
               ),
-              settings: RouteSettings(name: "LoginUserPage"),
+              settings: RouteSettings(name: "/login/user"),
             );
             Navigator.push(context, route);
             return;
