@@ -16,6 +16,7 @@ class MatchingRatioTab extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Container(
+        color: Colors.white,
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,6 +84,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: 18),
               Text(
                 "${data.selectedCompanyPercentage()}",
                 style: TextStyle(
