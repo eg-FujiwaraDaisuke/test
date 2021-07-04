@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 final matchingPageViewModelProvider = StateNotifierProvider(
   (ref) => MatchingPageViewModel(),
@@ -50,7 +51,8 @@ class MatchingPage extends StatelessWidget {
             child: Scaffold(
                 appBar: AppBar(
                   elevation: 0,
-                  title: const Text('test'),
+                  leading: _buildBackLeadingButton(context),
+                  actions: [_buildActionConfirmContract(context)],
                   bottom: TabBar(
                     isScrollable: false,
                     tabs: tabs
@@ -66,6 +68,50 @@ class MatchingPage extends StatelessWidget {
                   children: tabs.map((tab) => tab.tabPage).toList(),
                 )));
       },
+    );
+  }
+
+  Widget _buildBackLeadingButton(BuildContext context) {
+    return IconButton(
+      icon: SvgPicture.asset(
+        'assets/images/common/leading_back.svg',
+        width: 44,
+        height: 44,
+      ),
+      onPressed: () => Navigator.pop(context),
+      color: Colors.black,
+    );
+  }
+
+  Widget _buildActionConfirmContract(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 8,
+      ),
+      // 影を付けたくないため、ElevatedButtonではなくTextButtonを使用
+      child: TextButton(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: const Text(
+            'ご契約内容の確認',
+            style: TextStyle(
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+              height: 1.0,
+            ),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFFFF8C00),
+          onPrimary: Color(0xFFFFFFFF),
+          shape: const StadiumBorder(),
+        ),
+        onPressed: () {
+          print("ご契約内容の確認");
+        },
+      ),
     );
   }
 }

@@ -72,6 +72,7 @@ flutter:
 
   assets:
     - assets/i18n/
+    - assets/images/common/
     - assets/images/tutorial/
     - assets/images/login/
     - assets/fonts/
