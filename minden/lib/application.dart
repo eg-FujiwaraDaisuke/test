@@ -10,9 +10,10 @@ import 'package:minden/features/localize/domain/usecases/get_localized_info.dart
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 
-import 'features/startup/presentation/pages/initial_page.dart';
+import 'core/ui/TabIndicator.dart';
 import 'injection_container.dart';
 
 class Application extends StatelessWidget {
@@ -44,6 +45,24 @@ class Application extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate, // This is required
         ],
+        theme: ThemeData(
+            tabBarTheme: TabBarTheme().copyWith(
+                indicator: TabIndicator(),
+                labelPadding: EdgeInsets.symmetric(vertical: 12.0),
+                labelColor: Colors.black,
+                labelStyle: TextStyle(
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  letterSpacing: 0.2,
+                ),
+                unselectedLabelColor: Colors.black.withOpacity(0.7),
+                unselectedLabelStyle: TextStyle(
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  letterSpacing: 0.2,
+                ))),
         supportedLocales: [
           const Locale('ja'),
           const Locale('en'),
