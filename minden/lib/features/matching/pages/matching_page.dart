@@ -6,7 +6,7 @@ import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart
 import 'matching_ratio_tab.dart';
 
 final matchingPageViewModelProvider =
-    StateNotifierProvider<MatchingPageViewModel, MatchingData>(
+    StateNotifierProvider<MatchingPageViewModel, MatchingPageState>(
         (ref) => MatchingPageViewModel());
 
 class MatchingTabData {

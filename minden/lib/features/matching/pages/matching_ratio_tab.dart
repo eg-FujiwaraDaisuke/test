@@ -21,15 +21,19 @@ class MatchingRatioTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // マッチング率（円グラフ）
-            MatchingRatioByCompany(),
+            _MatchingRatioByCompany(),
+            // 凡例
+            _ChartLegends(),
+            SizedBox(height: 44),
             Text(
               'マッチング量（日別）',
               style: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                  height: 1.0,
-                  letterSpacing: 0.4),
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                height: 1.0,
+                letterSpacing: 0.4,
+              ),
             ),
             Text(
                 "${context.read(matchingPageViewModelProvider).selectedCompanyIndex}")
@@ -40,7 +44,7 @@ class MatchingRatioTab extends StatelessWidget {
   }
 }
 
-class MatchingRatioByCompany extends ConsumerWidget {
+class _MatchingRatioByCompany extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final viewModel = watch(matchingPageViewModelProvider.notifier);
@@ -109,7 +113,7 @@ class MatchingRatioByCompany extends ConsumerWidget {
   }
 
   /// 電力会社のマッチングデータに基づき、円グラフの各構成要素（セクション）データを作成する
-  List<PieChartSectionData> _generateSections(MatchingData data) {
+  List<PieChartSectionData> _generateSections(MatchingPageState data) {
     final selectedIndex = data.selectedCompanyIndex;
     return data.value.map((v) {
       final index = data.value.indexOf(v);
@@ -117,11 +121,64 @@ class MatchingRatioByCompany extends ConsumerWidget {
 
       return PieChartSectionData(
         color: isSelected ? const Color(0xFFFF8C00) : const Color(0xfFFFFE7C9),
-        value: v,
+        value: v.ratio,
         // NOTE: 未設定の場合、[value]の値を表示するため、空文字を設定
         title: '',
         radius: 62,
       );
+    }).toList();
+  }
+}
+
+class _ChartLegends extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final data = watch(matchingPageViewModelProvider);
+
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: _generateLegends(data),
+    );
+  }
+
+  /// 電力会社のマッチングデータに基づき、円グラフの各構成要素（セクション）データを作成する
+  List<Widget> _generateLegends(MatchingPageState data) {
+    final selectedIndex = data.selectedCompanyIndex;
+    return data.value.map((v) {
+      final index = data.value.indexOf(v);
+      final isSelected = index == selectedIndex;
+
+      return Row(
+        children: <Widget>[
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+              color: isSelected
+                  ? const Color(0xFFFF8C00)
+                  : const Color(0xfFFFFE7C9),
+            ),
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+            v.energyCompanyName,
+            style: TextStyle(
+              color: Color(0xFF6A6F7D),
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+              height: 1.1,
+              letterSpacing: 0.04,
+            ),
+          )
+        ],
+      );
+      ;
     }).toList();
   }
 }
