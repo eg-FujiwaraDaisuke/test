@@ -1,73 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
 
-final matchingPageViewModelProvider = StateNotifierProvider(
-  (ref) => MatchingPageViewModel(),
-);
+import 'matching_ratio_tab.dart';
 
-class MatchingTab {
+final matchingPageViewModelProvider =
+    StateNotifierProvider<MatchingPageViewModel, MatchingData>(
+        (ref) => MatchingPageViewModel());
+
+class MatchingTabData {
   late final String tabName;
   late final Widget tabPage;
 
-  MatchingTab({
+  MatchingTabData({
     required this.tabName,
     required this.tabPage,
   });
 }
 
-class MatchingTabs {
-  late final List<MatchingTab> tabs;
-
-  MatchingTabs({required this.tabs});
-}
-
-class MatchingPageViewModel extends StateNotifier<MatchingTabs> {
-  MatchingPageViewModel()
-      : super(MatchingTabs(tabs: [
-          MatchingTab(tabName: '電気使用量・料金', tabPage: Text('電気使用量・料金タブ')),
-          MatchingTab(tabName: '利用明細', tabPage: Text('利用明細タブ')),
-          MatchingTab(tabName: 'マッチング率', tabPage: Text('マッチング率タブ')),
-        ]));
-}
-
 /// マイページ - マッチング
 /// マッチング関連のタブを表示する
 class MatchingPage extends StatelessWidget {
-  final List<MatchingTab> tabs = [
-    MatchingTab(tabName: '電気使用量・料金', tabPage: Text('電気使用量・料金タブ')),
-    MatchingTab(tabName: '利用明細', tabPage: Text('利用明細タブ')),
-    MatchingTab(tabName: 'マッチング率', tabPage: Text('マッチング率タブ')),
+  final List<MatchingTabData> tabs = [
+    MatchingTabData(tabName: '電気使用量・料金', tabPage: Text('電気使用量・料金タブ')),
+    MatchingTabData(tabName: '利用明細', tabPage: Text('利用明細タブ')),
+    MatchingTabData(tabName: 'マッチング率', tabPage: MatchingRatioTab()),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        final viewModel = watch(matchingPageViewModelProvider);
-
-        return DefaultTabController(
-            length: tabs.length,
-            child: Scaffold(
-                appBar: AppBar(
-                  elevation: 0,
-                  leading: _buildBackLeadingButton(context),
-                  actions: [_buildActionConfirmContract(context)],
-                  bottom: TabBar(
-                    isScrollable: false,
-                    tabs: tabs
-                        .map((tab) => Text(
-                              tab.tabName,
-                              textAlign: TextAlign.center,
-                            ))
-                        .toList(),
-                  ),
-                  backgroundColor: Colors.white,
-                ),
-                body: TabBarView(
-                  children: tabs.map((tab) => tab.tabPage).toList(),
-                )));
-      },
+    return DefaultTabController(
+      length: tabs.length,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          leading: _buildBackLeadingButton(context),
+          actions: [_buildActionConfirmContract(context)],
+          bottom: TabBar(
+            isScrollable: false,
+            tabs: tabs
+                .map((tab) => Text(
+                      tab.tabName,
+                      textAlign: TextAlign.center,
+                    ))
+                .toList(),
+          ),
+          backgroundColor: Colors.white,
+        ),
+        body: TabBarView(
+          children: tabs.map((tab) => tab.tabPage).toList(),
+        ),
+      ),
     );
   }
 
