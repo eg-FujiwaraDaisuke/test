@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// 本画面のタブも共用とする
 class MatchingPageViewModel extends StateNotifier<MatchingData> {
   MatchingPageViewModel()
-      : super(MatchingData(value: [20], selectedCompanyIndex: -1));
+      : super(MatchingData(value: [20], selectedCompanyIndex: 0));
 
   MatchingData matchingData() => state;
 

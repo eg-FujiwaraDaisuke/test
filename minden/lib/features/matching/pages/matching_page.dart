@@ -11,7 +11,7 @@ final matchingPageViewModelProvider =
 
 class MatchingTabData {
   late final String tabName;
-  late final Widget tabPage;
+  late final WidgetBuilder tabPage;
 
   MatchingTabData({
     required this.tabName,
@@ -23,9 +23,9 @@ class MatchingTabData {
 /// マッチング関連のタブを表示する
 class MatchingPage extends StatelessWidget {
   final List<MatchingTabData> tabs = [
-    MatchingTabData(tabName: '電気使用量・料金', tabPage: Text('電気使用量・料金タブ')),
-    MatchingTabData(tabName: '利用明細', tabPage: Text('利用明細タブ')),
-    MatchingTabData(tabName: 'マッチング率', tabPage: MatchingRatioTab()),
+    MatchingTabData(tabName: '電気使用量・料金', tabPage: (_) => Text('電気使用量・料金タブ')),
+    MatchingTabData(tabName: '利用明細', tabPage: (_) => Text('利用明細タブ')),
+    MatchingTabData(tabName: 'マッチング率', tabPage: (_) => MatchingRatioTab()),
   ];
 
   @override
@@ -49,7 +49,7 @@ class MatchingPage extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         body: TabBarView(
-          children: tabs.map((tab) => tab.tabPage).toList(),
+          children: tabs.map((tab) => tab.tabPage(context)).toList(),
         ),
       ),
     );

@@ -9,6 +9,11 @@ import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart
 class MatchingRatioTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO 初期データ取得
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read(matchingPageViewModelProvider.notifier).fetch();
+    });
+
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16),
