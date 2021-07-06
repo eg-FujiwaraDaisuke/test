@@ -16,7 +16,6 @@ class MatchingRatioTab extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Container(
-        color: Colors.white,
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
