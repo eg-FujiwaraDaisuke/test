@@ -23,8 +23,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.inputPassword,
         ));
 
-        print(failureOrUser);
-
         yield failureOrUser.fold<LoginState>(
           (failure) => throw UnimplementedError(),
           (user) => LoginLoaded(user: user),

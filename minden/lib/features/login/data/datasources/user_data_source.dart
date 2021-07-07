@@ -46,9 +46,6 @@ class UserDataSourceImpl implements UserDataSource {
       headers: {'content-type': 'application/json'},
       body: body,
     );
-    print(env);
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 201) {
       return UserModel.fromJson(json.decode(response.body));
