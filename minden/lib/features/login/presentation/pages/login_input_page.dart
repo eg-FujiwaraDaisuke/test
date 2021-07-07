@@ -7,7 +7,10 @@ import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
   bool isError = false;
-  LoginInputPage({required this.isError});
+
+  LoginInputPage({
+    required this.isError,
+  });
 
   @override
   _LoginInputPageState createState() => _LoginInputPageState();
