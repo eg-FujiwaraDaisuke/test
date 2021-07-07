@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/login/data/datasources/user_data_source.dart';
 import 'package:minden/features/login/data/model/user_model.dart';
@@ -43,15 +44,13 @@ void main() {
       expect(result, equals(Right(tUser)));
     });
 
-    // test('should return server failure', () async {
-    //   when(loginRepositoryImpl.getLoginUser(tId, tPassword))
-    //       .thenThrow(LoginFailure());
+    test('should return server failure', () async {
+      when(loginRepositoryImpl.getLoginUser(tId, tPassword))
+          .thenThrow(ServerException());
 
-    //   final result = await loginRepositoryImpl.getLoginUser(tId, tPassword);
-
-    //   verify(mockUserDataSource.getLoginUser(tId, tPassword));
-    //   verifyZeroInteractions(mockUserDataSource);
-    //   expect(result, equals(Left(LoginFailure())));
-    // });
+      final result = await loginRepositoryImpl.getLoginUser(tId, tPassword);
+      verify(mockUserDataSource.getLoginUser(tId, tPassword));
+      expect(result, equals(Left(LoginFailure())));
+    });
   });
 }

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/error/exceptions.dart';
@@ -10,58 +12,70 @@ import '../../../../fixtures/fixture_reader.dart';
 class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
-  late UserDataSourceImpl dataSourceImpl;
-  late MockHttpClient mockHttpClient;
+  UserDataSourceImpl dataSource;
+  MockHttpClient mockHttpClient;
 
   setUp(() {
     mockHttpClient = MockHttpClient();
-    dataSourceImpl = UserDataSourceImpl(client: mockHttpClient);
+    dataSource = UserDataSourceImpl(client: mockHttpClient);
   });
 
   group('getLoginUser', () {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tBody = json.encode({'loginId': tId, 'password': tPassword});
+    final tUrl = 'https://www.dev.minapp.minden.co.jp/api/v1/auth';
     final tUserModel =
         UserModel.fromJson(json.decode(fixture('login_data.json')));
-    test('should preform a Post request', () {
+
+    test('should preform a Post request', () async {
       when(
-        mockHttpClient.post(any, headers: anyNamed('header'), body: tBody),
+        mockHttpClient.post(
+          any,
+          headers: anyNamed('headers'),
+          body: tBody,
+        ),
       ).thenAnswer(
-        (_) async => http.Response(fixture('login_data.json'), 200),
+        (_) async => http.Response(
+          fixture('login_data.json'),
+          200,
+        ),
       );
 
-      dataSourceImpl.getLoginUser(tId, tPassword);
+      dataSource.getLoginUser(tId, tPassword);
       verify(
         mockHttpClient.post(
-          'https://bgzprevlv9.execute-api.ap-northeast-1.amazonaws.com/dev/auth',
-          headers: {
-            'content-type': 'application/json',
-            'x-client-id': '5vf80b3tln2q7ge87af1vtcutc'
-          },
+          tUrl,
+          headers: {'Content-Type': 'application/json'},
           body: tBody,
         ),
       );
     });
 
-    // test('response code is 200', () async {
-    //   when(mockHttpClient.post(any, headers: anyNamed('headers'), body: tBody))
-    //       .thenAnswer(
-    //     (_) async => http.Response(fixture('login_data.json'), 200),
-    //   );
-    //   final result = await dataSourceImpl.getLoginUser(tId, tPassword);
-    //   expect(result, equals(tUserModel));
-    // });
+    test('response code is 200', () async {
+      when(mockHttpClient.post(
+        any,
+        headers: anyNamed('headers'),
+        body: tBody,
+      )).thenAnswer(
+        (_) async => http.Response(fixture('login_data.json'), 200),
+      );
+      final result = await dataSource.getLoginUser(tId, tPassword);
+      expect(result, equals(tUserModel));
+    });
 
-    // test('response code is 404', () async {
-    //   when(mockHttpClient.post(any, headers: anyNamed('headers'), body: tBody))
-    //       .thenAnswer(
-    //     (_) async => http.Response('Something went wrong', 404),
-    //   );
+    test('response code is 404', () async {
+      when(mockHttpClient.post(
+        any,
+        headers: anyNamed('headers'),
+        body: tBody,
+      )).thenAnswer(
+        (_) async => http.Response('Something went wrong', 404),
+      );
 
-    //   final call = dataSourceImpl.getLoginUser;
-    //   expect(
-    //       () => call(tId, tPassword), throwsA(TypeMatcher<ServerException>()));
-    // });
+      final call = dataSource.getLoginUser;
+      expect(
+          () => call(tId, tPassword), throwsA(TypeMatcher<ServerException>()));
+    });
   });
 }
