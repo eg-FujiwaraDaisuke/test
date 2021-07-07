@@ -18,7 +18,7 @@ class LoginLoading extends LoginState {
 
 class LoginLoaded extends LoginState {
   final User user;
-  const LoginLoaded(this.user);
+  const LoginLoaded({required this.user});
   @override
   List<Object> get props => [user];
 }
