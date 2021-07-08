@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final bloc = LoginBloc(
+  final _bloc = LoginBloc(
     LoginInitial(),
     GetLoginUser(
       LoginRepositoryImpl(
@@ -30,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocProvider(
-      create: (context) => bloc,
+        body: BlocProvider.value(
+      value: _bloc,
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginLoading) {

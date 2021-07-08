@@ -14,35 +14,32 @@ class UserDataSourceImpl implements UserDataSource {
 
   final _loginApiEnvironment = {
     Config.kDevFlavor: {
-      'url': 'https://www.dev.minapp.minden.co.jp/api/v1/auth',
+      'url': 'https://www.dev.minapp.minden.co.jp',
       'headers': {
         'content-type': 'application/json',
       }
     },
     Config.kStagingFlavor: {
-      'url':
-          'https://pwr8b8ylx4.execute-api.ap-northeast-1.amazonaws.com/stg/auth',
+      'url': 'https://www.stg.minapp.minden.co.jp',
       'headers': {
         'content-type': 'application/json',
-        'x-client-id': '215g1bfg97b8shlchhupgklc6h'
       }
     },
     Config.isProduct: {
-      'url':
-          'https://btzj4dqhvc.execute-api.ap-northeast-1.amazonaws.com/prod/auth',
+      'url': 'https://www.minapp.minden.co.jp',
       'headers': {
         'content-type': 'application/json',
-        'x-client-id': '22sem99lu00jv6ilrj1r1ijdko'
       }
     }
   };
+  final _authEndpoint = '/api/v1/auth';
 
   @override
   Future<UserModel> getLoginUser(String id, String password) async {
     final env = _loginApiEnvironment[Config.getEnvironmentString()];
     final body = json.encode({'loginId': id, 'password': password});
     final response = await client.post(
-      Uri.parse(env?['url'] as String),
+      Uri.parse((env?['url'] as String) + _authEndpoint),
       headers: {'content-type': 'application/json'},
       body: body,
     );
