@@ -166,14 +166,14 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     if (!hasTutorial) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => TutorialPage(),
-        settings: RouteSettings(name: "TutorialPage"),
+        settings: RouteSettings(name: "/tutorial"),
       );
       Navigator.pushReplacement(context, route);
     }
 
     final route = NoAnimationMaterialPageRoute(
       builder: (context) => LoginPage(),
-      settings: RouteSettings(name: "LoginPage"),
+      settings: RouteSettings(name: "/login"),
     );
     Navigator.pushReplacement(context, route);
   }

@@ -52,6 +52,12 @@ dependencies:
   carousel_slider: ^4.0.0-nullsafety.0
   flutter_svg: ^0.22.0
 
+  # 状態管理（providerの後継）
+  # https://riverpod.dev/docs/getting_started/#what-package-to-install
+  flutter_riverpod: ^0.14.0+3
+
+  fl_chart: ^0.36.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,6 +72,7 @@ flutter:
 
   assets:
     - assets/i18n/
+    - assets/images/common/
     - assets/images/tutorial/
     - assets/images/login/
     - assets/fonts/
