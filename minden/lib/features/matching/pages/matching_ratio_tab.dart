@@ -25,6 +25,8 @@ class MatchingRatioTab extends StatelessWidget {
             // 凡例
             _ChartLegends(),
             SizedBox(height: 44),
+            // マッチング量（日別）
+            // TODO デザイン確定後、設定している条件に応じて棒グラフの表示内容も変わる見込み
             Text(
               'マッチング量（日別）',
               style: TextStyle(
@@ -35,8 +37,8 @@ class MatchingRatioTab extends StatelessWidget {
                 letterSpacing: 0.4,
               ),
             ),
-            Text(
-                "${context.read(matchingPageViewModelProvider).selectedCompanyIndex}")
+            SizedBox(height: 20),
+            _MatchingRatioByDate(),
           ],
         ),
       ),
@@ -179,7 +181,131 @@ class _ChartLegends extends ConsumerWidget {
           )
         ],
       );
-      ;
     }).toList();
   }
+}
+
+class _MatchingRatioByDate extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Stack(
+        children: [
+          BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.center,
+              barTouchData: BarTouchData(enabled: false),
+              titlesData: FlTitlesData(
+                show: true,
+                // 下側軸ラベル
+                bottomTitles: SideTitles(
+                  showTitles: true,
+                  getTextStyles: (value) => const TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                  ),
+                  getTitles: (double value) {
+                    switch (value.toInt()) {
+                      case 0:
+                        return '1';
+                      case 1:
+                        return '2';
+                      case 2:
+                        return '3';
+                      case 3:
+                        return '4';
+                      case 4:
+                        return '5';
+                      case 5:
+                        return '6';
+                      case 6:
+                        return '7';
+                      case 7:
+                        return '8';
+                      case 8:
+                        return '9';
+                      default:
+                        return '';
+                    }
+                  },
+                ),
+                // 左側軸ラベル
+                leftTitles: SideTitles(
+                  showTitles: true,
+                  getTextStyles: (value) => const TextStyle(
+                      color: Color(
+                        0xff939393,
+                      ),
+                      fontSize: 10),
+                  getTitles: (value) {
+                    if (value == 9) {
+                      return 'kWh';
+                    } else {
+                      return value.toStringAsFixed(0);
+                    }
+                  },
+                  margin: 4,
+                ),
+              ),
+              // 目盛線
+              gridData: FlGridData(
+                show: true,
+                getDrawingHorizontalLine: (value) => FlLine(
+                    color: const Color(0xffe7e8ec),
+                    strokeWidth: 1,
+                    dashArray: [2]),
+              ),
+              borderData: FlBorderData(
+                show: true,
+                border: Border(
+                  bottom: BorderSide(
+                    color: const Color(0xffe7e8ec),
+                    width: 1,
+                  ),
+                ),
+              ),
+              // TODO データ最大値 + 1とし、ラベルを設定する
+              maxY: 9,
+              groupsSpace: 20,
+              barGroups: getData(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<BarChartGroupData> getData() {
+    return [
+      _generateBarChartGroupData(0, 7),
+      _generateBarChartGroupData(1, 1),
+      _generateBarChartGroupData(2, 4),
+      _generateBarChartGroupData(3, 8),
+      _generateBarChartGroupData(4, 2),
+      _generateBarChartGroupData(5, 3),
+      _generateBarChartGroupData(6, 4),
+      _generateBarChartGroupData(7, 5),
+      _generateBarChartGroupData(8, 9),
+    ];
+  }
+}
+
+BarChartGroupData _generateBarChartGroupData(int x, double value) {
+  return BarChartGroupData(
+    x: x,
+    barsSpace: 4,
+    barRods: [
+      _generateBarChartRodData(value),
+    ],
+  );
+}
+
+BarChartRodData _generateBarChartRodData(double value) {
+  return BarChartRodData(
+    y: value,
+    width: 16,
+    colors: [Color(0xFFFF8C00)],
+    borderRadius: const BorderRadius.all(Radius.zero),
+  );
 }

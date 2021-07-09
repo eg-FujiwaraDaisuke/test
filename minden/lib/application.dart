@@ -74,7 +74,7 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      "/": (_) => InitialPage(),
+      "/": (_) => MatchingPage(), //InitialPage(),
       "/tutorial": (_) => TutorialPage(),
       "/login": (_) => LoginPage(),
     };
