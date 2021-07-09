@@ -5,8 +5,10 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/injection_container.dart' as di;
 
 void main() async {
@@ -20,9 +22,24 @@ void main() async {
 
   if (kReleaseMode) {
     runZonedGuarded(() async {
-      runApp(Application());
+      runApp(wrapApplication());
     }, (e, s) async => await Crashlytics.instance.recordError(e, s));
   } else {
-    runApp(Application());
+    runApp(wrapApplication());
+  }
+}
+
+Widget wrapApplication() {
+  return ProviderScope(
+    observers: [RiverPodLogger()],
+    child: Application(),
+  );
+}
+
+class RiverPodLogger extends ProviderObserver {
+  @override
+  void didUpdateProvider(ProviderBase provider, Object newValue) {
+    logD("provider: ${provider.name ?? provider.runtimeType}\n"
+        "newValue: $newValue");
   }
 }

@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => LoginUserPage(
                 user: state.user,
               ),
-              settings: RouteSettings(name: "LoginUserPage"),
+              settings: RouteSettings(name: "/login/user"),
             );
             Navigator.push(context, route);
             return;
