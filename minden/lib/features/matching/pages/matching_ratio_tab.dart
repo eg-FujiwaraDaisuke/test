@@ -201,8 +201,9 @@ class _MatchingRatioByDate extends ConsumerWidget {
                 // 下側軸ラベル
                 bottomTitles: SideTitles(
                   showTitles: true,
+                  margin: 16,
                   getTextStyles: (value) => const TextStyle(
-                    color: Colors.black,
+                    color: Color(0xFF9CA3AF),
                     fontSize: 10,
                   ),
                   getTitles: (double value) {
@@ -234,10 +235,9 @@ class _MatchingRatioByDate extends ConsumerWidget {
                 leftTitles: SideTitles(
                   showTitles: true,
                   getTextStyles: (value) => const TextStyle(
-                      color: Color(
-                        0xff939393,
-                      ),
-                      fontSize: 10),
+                    color: Color(0xFF9CA3AF),
+                    fontSize: 10,
+                  ),
                   getTitles: (value) {
                     if (value == 9) {
                       return 'kWh';
@@ -252,7 +252,7 @@ class _MatchingRatioByDate extends ConsumerWidget {
               gridData: FlGridData(
                 show: true,
                 getDrawingHorizontalLine: (value) => FlLine(
-                    color: const Color(0xffe7e8ec),
+                    color: const Color(0xFFE5E7EB),
                     strokeWidth: 1,
                     dashArray: [2]),
               ),
@@ -260,7 +260,7 @@ class _MatchingRatioByDate extends ConsumerWidget {
                 show: true,
                 border: Border(
                   bottom: BorderSide(
-                    color: const Color(0xffe7e8ec),
+                    color: const Color(0xFFE5E7EB),
                     width: 1,
                   ),
                 ),
