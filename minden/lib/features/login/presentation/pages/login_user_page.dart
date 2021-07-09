@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/login/data/model/user.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
 
 class LoginUserPage extends StatelessWidget {
   final User user;
