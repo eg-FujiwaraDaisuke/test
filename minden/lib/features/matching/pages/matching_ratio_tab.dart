@@ -89,8 +89,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
               Text(
                 "${data.selectedCompanyPercentage()}",
                 style: TextStyle(
-                  // TODO Barlowフォントを適用
-                  fontFamily: 'NotoSansJP',
+                  fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
                   fontSize: 36,
                   height: 1.2,
@@ -100,8 +99,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
               Text(
                 "%",
                 style: TextStyle(
-                  // TODO Barlowフォントを適用
-                  fontFamily: 'NotoSansJP',
+                  fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
                   height: 1.2,

@@ -93,3 +93,17 @@ flutter:
           weight: 300
         - asset: assets/fonts/Noto_Sans_JP/NotoSansJP-Thin.otf
           weight: 100
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/Barlow/Barlow-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Barlow/Barlow-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow/Barlow-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Barlow/Barlow-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow/Barlow-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Barlow/Barlow-Thin.ttf
+          weight: 100
