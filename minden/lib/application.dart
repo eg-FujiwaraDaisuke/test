@@ -13,6 +13,7 @@ import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 
 import 'core/ui/TabIndicator.dart';
+import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
 class Application extends StatelessWidget {
