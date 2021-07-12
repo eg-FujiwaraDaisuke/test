@@ -77,6 +77,7 @@ flutter:
     - assets/images/common/
     - assets/images/tutorial/
     - assets/images/login/
+    - assets/images/user/
     - assets/fonts/
   fonts:
     - family: NotoSansJP

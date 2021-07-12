@@ -10,10 +10,10 @@ import 'package:minden/features/localize/domain/usecases/get_localized_info.dart
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
-
+import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'core/ui/TabIndicator.dart';
+import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
 class Application extends StatelessWidget {
@@ -74,9 +74,10 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      "/": (_) => InitialPage(),
+      // "/": (_) => InitialPage(),
       "/tutorial": (_) => TutorialPage(),
       "/login": (_) => LoginPage(),
+      "/": (_) => UserPage(),
     };
   }
 }
