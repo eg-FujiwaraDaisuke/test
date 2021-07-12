@@ -1,15 +1,18 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
 import 'package:minden/features/localize/data/repositories/localized_info_repository_impl.dart';
 import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 
 import 'core/ui/TabIndicator.dart';
@@ -74,9 +77,16 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      "/": (_) => InitialPage(),
+      "/": (_) {
+        if (kReleaseMode) {
+          return InitialPage();
+        } else {
+          return DebugPage();
+        }
+      },
       "/tutorial": (_) => TutorialPage(),
       "/login": (_) => LoginPage(),
+      "/my_page/matching": (_) => MatchingPage(),
     };
   }
 }
