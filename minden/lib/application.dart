@@ -12,6 +12,7 @@ import 'package:minden/features/localize/presentation/bloc/localized_state.dart'
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
+import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'core/ui/TabIndicator.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
@@ -80,7 +81,8 @@ class Application extends StatelessWidget {
       "/login": (_) => LoginPage(),
       "/user": (_) => UserPage(),
       "/user/profile": (_) => UserProfilePage(),
-      "/": (_) => UserProfilePage(),
+      "/user/profile/edit": (_) => UserProfileEditPage(),
+      "/": (_) => UserProfileEditPage(),
     };
   }
 }

@@ -133,7 +133,7 @@ class _ProfileInfo extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                     border: Border.all(
                       color: Colors.white,
-                      width: 3,
+                      width: 2,
                     ),
                   ),
                 ),
