@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import '../../../../utile.dart';
@@ -16,7 +17,7 @@ class UserPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0.0,
         title: Text(
-          'マイページ',
+          i18nTranslate(context, 'user_mypage'),
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
@@ -118,55 +119,54 @@ class _Menu {
 }
 
 class _MenuListView extends StatelessWidget {
-  final _menuList = [
-    _Menu(
-      title: 'ご利用明細・ご契約内容の確認',
-      icon: 'contract',
-      // TODO routeは仮
-      route: NoAnimationMaterialPageRoute(
-        builder: (context) => UserProfilePage(),
-        settings: RouteSettings(name: "/user/profile"),
-      ),
-    ),
-    _Menu(
-      title: '選択した発電所',
-      icon: 'select_plant',
-      // TODO routeは仮
-      route: NoAnimationMaterialPageRoute(
-        builder: (context) => UserProfilePage(),
-        settings: RouteSettings(name: "/user/profile"),
-      ),
-    ),
-    _Menu(
-      title: 'プロフィール',
-      icon: 'person',
-      route: NoAnimationMaterialPageRoute(
-        builder: (context) => UserProfilePage(),
-        settings: RouteSettings(name: "/user/profile"),
-      ),
-    ),
-    _Menu(
-      title: 'お問い合わせ',
-      icon: 'contact',
-      // TODO routeは仮
-      route: NoAnimationMaterialPageRoute(
-        builder: (context) => UserProfilePage(),
-        settings: RouteSettings(name: "/user/profile"),
-      ),
-    ),
-    _Menu(
-      title: 'ログアウト',
-      icon: 'logout',
-      // TODO routeは仮
-      route: NoAnimationMaterialPageRoute(
-        builder: (context) => UserProfilePage(),
-        settings: RouteSettings(name: "/user/profile"),
-      ),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final _menuList = [
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_contract'),
+        icon: 'contract',
+        // TODO routeは仮
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserProfilePage(),
+          settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_select_plant'),
+        icon: 'select_plant',
+        // TODO routeは仮
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserProfilePage(),
+          settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_profile'),
+        icon: 'person',
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserProfilePage(),
+          settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_contact'),
+        icon: 'contact',
+        // TODO routeは仮
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserProfilePage(),
+          settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_logout'),
+        icon: 'logout',
+        // TODO routeは仮
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserProfilePage(),
+          settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+    ];
     return Container(
       child: Column(
         children: _menuList

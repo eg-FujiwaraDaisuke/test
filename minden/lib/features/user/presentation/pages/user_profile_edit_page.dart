@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
@@ -67,7 +68,7 @@ class UserProfileEditPage extends StatelessWidget {
                         width: 10.5,
                       ),
                       Text(
-                        '完了',
+                        i18nTranslate(context, 'user_edit_complete'),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -341,7 +342,7 @@ class _TagsList extends StatelessWidget {
                   // TODO tagの追加
                 },
                 child: Text(
-                  '大切にしていること',
+                  i18nTranslate(context, 'user_important'),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14,

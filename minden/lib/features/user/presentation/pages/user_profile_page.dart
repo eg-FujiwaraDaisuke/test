@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
@@ -67,7 +68,7 @@ class UserProfilePage extends StatelessWidget {
                         width: 9,
                       ),
                       Text(
-                        '編集',
+                        i18nTranslate(context, 'user_edit'),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -221,7 +222,7 @@ class _TagsList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '大切にしていること',
+            i18nTranslate(context, 'user_important'),
             style: TextStyle(
               color: Colors.black,
               fontSize: 14,
@@ -285,7 +286,7 @@ class _SelectedPlantList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '選択中の電力会社',
+            i18nTranslate(context, 'user_select_plant'),
             style: TextStyle(
               color: Colors.black,
               fontSize: 14,
