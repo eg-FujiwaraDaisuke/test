@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import '../../../../utile.dart';
 
 class UserPage extends StatelessWidget {
-  // 確認用仮データ
-  final String userPhoto = '';
-  final String userName = 'Username';
-  final String userFullName = 'Full Name';
+// 確認用仮データ
+  final data = ProfileDamyData().damyData;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +30,9 @@ class UserPage extends StatelessWidget {
         child: Column(
           children: [
             _UserProfile(
-              userPhoto: userPhoto,
-              userName: userName,
-              userFullName: userFullName,
+              icon: data.icon,
+              name: data.name,
+              contractor: data.contractor,
             ),
             SizedBox(
               height: 39,
@@ -47,13 +46,13 @@ class UserPage extends StatelessWidget {
 }
 
 class _UserProfile extends StatelessWidget {
-  final String userPhoto;
-  final String userFullName;
-  final String userName;
+  final String name;
+  final String contractor;
+  final String icon;
   _UserProfile({
-    required this.userPhoto,
-    required this.userFullName,
-    required this.userName,
+    required this.name,
+    required this.contractor,
+    required this.icon,
   }) : super();
 
   @override
@@ -77,7 +76,7 @@ class _UserProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userFullName,
+                contractor,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -89,7 +88,7 @@ class _UserProfile extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                userName,
+                name,
                 style: TextStyle(
                   color: Color(0xFF7C7C7C),
                   fontSize: 14,
