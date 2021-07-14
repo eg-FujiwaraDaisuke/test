@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/user_page.dart';
+import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import '../../../../utile.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -19,43 +22,61 @@ class UserProfilePage extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Container(
-                width: 44.0,
-                height: 44.0,
-                child: SvgPicture.asset(
-                  'assets/images/common/leading_back.svg',
-                  fit: BoxFit.fill,
+              child: GestureDetector(
+                onTap: () {
+                  final route = NoAnimationMaterialPageRoute(
+                    builder: (context) => UserPage(),
+                    settings: RouteSettings(name: "/user"),
+                  );
+                  Navigator.pushReplacement(context, route);
+                },
+                child: Container(
                   width: 44.0,
                   height: 44.0,
+                  child: SvgPicture.asset(
+                    'assets/images/common/leading_back.svg',
+                    fit: BoxFit.fill,
+                    width: 44.0,
+                    height: 44.0,
+                  ),
                 ),
               ),
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: Container(
-                width: 90,
-                height: 44,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/user/edit.svg'),
-                    SizedBox(
-                      width: 9,
-                    ),
-                    Text(
-                      '編集',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap: () {
+                  final route = NoAnimationMaterialPageRoute(
+                    builder: (context) => UserProfileEditPage(),
+                    settings: RouteSettings(name: "/user/profile/edit"),
+                  );
+                  Navigator.pushReplacement(context, route);
+                },
+                child: Container(
+                  width: 90,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset('assets/images/user/edit.svg'),
+                      SizedBox(
+                        width: 9,
                       ),
-                    )
-                  ],
+                      Text(
+                        '編集',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             )

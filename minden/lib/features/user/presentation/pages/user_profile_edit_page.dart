@@ -44,7 +44,14 @@ class UserProfileEditPage extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  // TODO ここでデータの保存をする
+                  final route = NoAnimationMaterialPageRoute(
+                    builder: (context) => UserProfilePage(),
+                    settings: RouteSettings(name: "/user/profile"),
+                  );
+                  Navigator.pushReplacement(context, route);
+                },
                 child: Container(
                   width: 90,
                   height: 44,
@@ -143,7 +150,9 @@ class _ProfileImageEdit extends StatelessWidget {
                 bottom: 9,
                 right: 28,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // TODO 写真選択or撮影
+                  },
                   child: Container(
                     child: SvgPicture.asset('assets/images/user/camera.svg'),
                   ),
@@ -173,7 +182,9 @@ class _ProfileImageEdit extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      // TODO 写真選択or撮影
+                    },
                     child: Container(
                       width: 30,
                       height: 30,
@@ -255,7 +266,9 @@ class _ProfileNameEditForm extends StatelessWidget {
                   icon: SvgPicture.asset(
                     'assets/images/user/clear.svg',
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO  入力のリセット
+                  },
                 ),
               ),
               style: TextStyle(
@@ -323,14 +336,19 @@ class _TagsList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '大切にしていること',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: calcLetterSpacing(letter: 4),
+              GestureDetector(
+                onTap: () {
+                  // TODO tagの追加
+                },
+                child: Text(
+                  '大切にしていること',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: calcLetterSpacing(letter: 4),
+                  ),
                 ),
               ),
               GestureDetector(
@@ -378,33 +396,38 @@ class _TagsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      decoration: BoxDecoration(
-        color: Color(0xFFFFFB92),
-        borderRadius: BorderRadius.circular(17),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '#$tag',
-            style: TextStyle(
-              color: Color(0xFF487254),
-              fontSize: 12,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: () {
+        // TODO tagの削除
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        decoration: BoxDecoration(
+          color: Color(0xFFFFFB92),
+          borderRadius: BorderRadius.circular(17),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '#$tag',
+              style: TextStyle(
+                color: Color(0xFF487254),
+                fontSize: 12,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          GestureDetector(
-            child: SvgPicture.asset(
-              'assets/images/user/close.svg',
+            SizedBox(
+              width: 12,
             ),
-          ),
-        ],
+            GestureDetector(
+              child: SvgPicture.asset(
+                'assets/images/user/close.svg',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import '../../../../utile.dart';
 
 class UserPage extends StatelessWidget {
@@ -104,23 +106,63 @@ class _UserProfile extends StatelessWidget {
   }
 }
 
-class Menu {
-  late final String title;
-  late final String icon;
-
-  Menu({
+class _Menu {
+  final String title;
+  final String icon;
+  final NoAnimationMaterialPageRoute route;
+  _Menu({
     required this.title,
     required this.icon,
+    required this.route,
   });
 }
 
 class _MenuListView extends StatelessWidget {
   final _menuList = [
-    Menu(title: 'ご利用明細・ご契約内容の確認', icon: 'contract'),
-    Menu(title: '選択した発電所', icon: 'select_plant'),
-    Menu(title: 'プロフィール', icon: 'profile'),
-    Menu(title: 'お問い合わせ', icon: 'contact'),
-    Menu(title: 'ログアウト', icon: 'logout'),
+    _Menu(
+      title: 'ご利用明細・ご契約内容の確認',
+      icon: 'contract',
+      // TODO routeは仮
+      route: NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      ),
+    ),
+    _Menu(
+      title: '選択した発電所',
+      icon: 'select_plant',
+      // TODO routeは仮
+      route: NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      ),
+    ),
+    _Menu(
+      title: 'プロフィール',
+      icon: 'person',
+      route: NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      ),
+    ),
+    _Menu(
+      title: 'お問い合わせ',
+      icon: 'contact',
+      // TODO routeは仮
+      route: NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      ),
+    ),
+    _Menu(
+      title: 'ログアウト',
+      icon: 'logout',
+      // TODO routeは仮
+      route: NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      ),
+    ),
   ];
 
   @override
@@ -132,6 +174,7 @@ class _MenuListView extends StatelessWidget {
               (e) => _MenuItem(
                 title: e.title,
                 icon: e.icon,
+                route: e.route,
               ),
             )
             .toList(),
@@ -143,9 +186,11 @@ class _MenuListView extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final title;
   final icon;
+  final route;
   const _MenuItem({
     required this.title,
     required this.icon,
+    required this.route,
   }) : super();
 
   @override
@@ -153,10 +198,10 @@ class _MenuItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        print(title);
+        Navigator.pushReplacement(context, route);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 22),
+        padding: EdgeInsets.only(left: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
         child: Row(
@@ -196,8 +241,7 @@ class _Footer extends StatelessWidget {
         BottomNavigationBarItem(
           label: '',
           icon: SvgPicture.asset(
-            'assets/images/user/profile.svg',
-            color: Colors.black,
+            'assets/images/user/person_black.svg',
           ),
         ),
       ],

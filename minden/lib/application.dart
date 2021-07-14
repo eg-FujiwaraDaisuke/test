@@ -82,7 +82,7 @@ class Application extends StatelessWidget {
       "/user": (_) => UserPage(),
       "/user/profile": (_) => UserProfilePage(),
       "/user/profile/edit": (_) => UserProfileEditPage(),
-      "/": (_) => UserProfileEditPage(),
+      "/": (_) => UserPage(),
     };
   }
 }
