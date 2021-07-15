@@ -60,6 +60,9 @@ dependencies:
 
   logger: ^1.0.0
 
+  image_picker: ^0.6.7+12
+  image_cropper: ^1.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
