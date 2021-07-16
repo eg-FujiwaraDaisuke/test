@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minden/core/util/string_util.dart';
 
 class CameraMock extends StatefulWidget {
   @override
@@ -79,14 +80,14 @@ class _CameraMockState extends State<CameraMock> {
             builder: (context) => CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
-                  child: Text('カメラロールから選択する'),
+                  child: Text(i18nTranslate(context, 'image_select_gallery')),
                   onPressed: () {
                     Navigator.pop(context);
                     _getImage(ImageSource.gallery);
                   },
                 ),
                 CupertinoActionSheetAction(
-                  child: Text('写真を撮影する'),
+                  child: Text(i18nTranslate(context, 'image_select_camera')),
                   onPressed: () {
                     Navigator.pop(context);
                     _getImage(ImageSource.camera);
@@ -94,7 +95,7 @@ class _CameraMockState extends State<CameraMock> {
                 )
               ],
               cancelButton: CupertinoActionSheetAction(
-                child: const Text('Cancel'),
+                child: Text(i18nTranslate(context, 'cancel')),
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
@@ -107,21 +108,21 @@ class _CameraMockState extends State<CameraMock> {
             builder: (context) => Wrap(
               children: [
                 ListTile(
-                  title: Text('カメラロールから選択する'),
+                  title: Text(i18nTranslate(context, 'image_select_gallery')),
                   onTap: () {
                     Navigator.pop(context);
                     _getImage(ImageSource.gallery);
                   },
                 ),
                 ListTile(
-                  title: Text('写真を撮影する'),
+                  title: Text(i18nTranslate(context, 'image_select_camera')),
                   onTap: () {
                     Navigator.pop(context);
                     _getImage(ImageSource.camera);
                   },
                 ),
                 ListTile(
-                  title: Text('Cancel'),
+                  title: Text(i18nTranslate(context, 'cancel')),
                   onTap: () {
                     Navigator.pop(context);
                   },

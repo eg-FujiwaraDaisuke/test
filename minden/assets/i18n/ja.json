@@ -1,4 +1,7 @@
 {
+"cancel" : "キャンセル",
+"image_select_camera" : "写真を撮影する",
+"image_select_gallery" : "カメラロールから選択する",
 "latest_version_message_%s" : "最新バージョン %s がリリースされました！\nこのバージョンへの更新が可能です。",
 "login_auto_login" : "自動ログインを有効にする",
 "login_create_account" : "アカウント作成",
@@ -22,5 +25,15 @@
 "tutorial_step_3_description" : "どれだけ電気を使ったかだけでなく、\n料金が誰に支払われたかまで確認できます。\n自分の電気が。",
 "tutorial_step_3_title" : "電気の使用量や料金の\n行き先が見える",
 "unsupported_error" : "サポートされていないエラーが発生しました。",
-"update_version_message_%s" : "最新バージョン %s への更新が必要です。"
+"update_version_message_%s" : "最新バージョン %s への更新が必要です。",
+"user_edit" : "編集",
+"user_edit_complete" : "完了",
+"user_important" : "大切にしていること",
+"user_menu_contact" : "お問い合わせ",
+"user_menu_contract" : "ご利用明細・ご契約内容の確認",
+"user_menu_logout" : "ログアウト",
+"user_menu_profile" : "プロフィール",
+"user_menu_select_plant" : "選択した発電所",
+"user_mypage" : "マイページ",
+"user_select_plant" : "選択中の電力会社"
 }
