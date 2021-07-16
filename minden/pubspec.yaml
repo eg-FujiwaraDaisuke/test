@@ -60,6 +60,9 @@ dependencies:
 
   logger: ^1.0.0
 
+  image_picker: ^0.6.7+12
+  image_cropper: ^1.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -93,4 +96,18 @@ flutter:
         - asset: assets/fonts/Noto_Sans_JP/NotoSansJP-Light.otf
           weight: 300
         - asset: assets/fonts/Noto_Sans_JP/NotoSansJP-Thin.otf
+          weight: 100
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/Barlow/Barlow-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Barlow/Barlow-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow/Barlow-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Barlow/Barlow-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow/Barlow-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Barlow/Barlow-Thin.ttf
           weight: 100

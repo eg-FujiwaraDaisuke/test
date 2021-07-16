@@ -46,6 +46,7 @@ class MatchingPageState {
   MatchingPageState({required this.value, required this.selectedCompanyIndex});
 }
 
+/// 仮のマッチングデータ
 class MatchingData {
   final String energyCompanyName;
   final double ratio;
