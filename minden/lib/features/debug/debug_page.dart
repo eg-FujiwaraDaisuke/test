@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/features/camera/pages/camera_mock_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 
@@ -23,6 +24,8 @@ class DebugPage extends StatelessWidget {
                     context, '通常遷移', (context) => InitialPage(), '/'),
                 _generateNavigatorPush(context, 'マイページ - マッチング',
                     (context) => MatchingPage(), '/my_page/matching'),
+                _generateNavigatorPush(context, '画像選択Camera or Gallery',
+                    (context) => CameraMock(), '/camera_mock'),
               ],
             ),
           ),
