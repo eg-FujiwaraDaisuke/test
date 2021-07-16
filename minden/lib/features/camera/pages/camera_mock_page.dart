@@ -97,7 +97,7 @@ class _CameraMockState extends State<CameraMock> {
                 child: const Text('Cancel'),
                 isDefaultAction: true,
                 onPressed: () {
-                  Navigator.pop(context, 'Cancel');
+                  Navigator.pop(context);
                 },
               ),
             ),
