@@ -78,8 +78,10 @@ flutter:
   assets:
     - assets/i18n/
     - assets/images/common/
-    - assets/images/tutorial/
     - assets/images/login/
+    - assets/images/power_plant/
+    - assets/images/tutorial/
+    - assets/images/sample/
     - assets/fonts/
   fonts:
     - family: NotoSansJP

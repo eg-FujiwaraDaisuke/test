@@ -13,9 +13,10 @@ import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
+import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 
-import 'core/ui/TabIndicator.dart';
+import 'core/ui/tab_indicator.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
@@ -86,6 +87,7 @@ class Application extends StatelessWidget {
       },
       "/tutorial": (_) => TutorialPage(),
       "/login": (_) => LoginPage(),
+      "/home/top": (_) => HomeTopPage(),
       "/my_page/matching": (_) => MatchingPage(),
     };
   }
