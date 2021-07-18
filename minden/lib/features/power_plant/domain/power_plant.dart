@@ -18,7 +18,7 @@ class PowerPlant extends Equatable {
   /// 位置情報
   /// NOTE: issue記載のレスポンス内容準拠
   /// しかし実際は緯度経度と精度を持つモデルを定義されると思われる
-  final int location;
+  final String location;
 
   /// 発電容量
   final String capacity;

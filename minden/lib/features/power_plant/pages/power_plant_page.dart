@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/features/power_plant/domain/power_plant.dart';
+import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
+
+final powerPlantPageViewModelProvider =
+    StateNotifierProvider<PowerPlantPageViewModel, PowerPlantPageState>(
+        (ref) => PowerPlantPageViewModel());
 
 /// ホーム - トップ
 class HomeTopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read(powerPlantPageViewModelProvider.notifier).fetch();
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -56,19 +67,17 @@ class HomeTopPage extends StatelessWidget {
 }
 
 /// 電力会社一覧
-class _PowerPlantList extends StatelessWidget {
+class _PowerPlantList extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final data = watch(powerPlantPageViewModelProvider);
+
     return Column(
-      children: [
-        _generateListItem(),
-        _generateListItem(),
-        _generateListItem(),
-      ],
+      children: data.value.map((p) => _generateListItem(p)).toList(),
     );
   }
 
-  Widget _generateListItem() {
+  Widget _generateListItem(PowerPlant powerPlant) {
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +91,7 @@ class _PowerPlantList extends StatelessWidget {
           // 発電所情報
           Flexible(
             flex: 6,
-            child: _PowerPlantInfo(),
+            child: _PowerPlantInfo(powerPlant: powerPlant),
           )
         ],
       ),
@@ -122,6 +131,13 @@ class _PowerPlantSummaryImage extends StatelessWidget {
 
 /// 電力会社詳細
 class _PowerPlantInfo extends StatelessWidget {
+  final PowerPlant powerPlant;
+
+  const _PowerPlantInfo({
+    Key? key,
+    required this.powerPlant,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -131,7 +147,7 @@ class _PowerPlantInfo extends StatelessWidget {
         children: [
           // 発電所名
           Text(
-            'ABCDEFGHIJKLMN発電所',
+            powerPlant.name,
             style: _generateTextStyle(14, FontWeight.w500),
           ),
           SizedBox(height: 8),
