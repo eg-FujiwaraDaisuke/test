@@ -183,7 +183,7 @@ class _PowerPlantInfo extends StatelessWidget {
                   ),
                   SizedBox(width: 2),
                   Text(
-                    '所在地 山形県',
+                    '所在地 ${powerPlant.location}',
                     style: _generateTextStyle(9, FontWeight.w500),
                   ),
                 ],
