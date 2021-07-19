@@ -155,7 +155,7 @@ class _PowerPlantInfo extends StatelessWidget {
           Row(
             children: [
               Text(
-                '太陽光発電',
+                powerPlant.powerGenerationMethods,
                 style: _generateTextStyle(9, FontWeight.w500),
               ),
               SizedBox(width: 24),
@@ -168,7 +168,7 @@ class _PowerPlantInfo extends StatelessWidget {
                   ),
                   SizedBox(width: 2),
                   Text(
-                    '0000kWh',
+                    '${powerPlant.capacity}kWh',
                     style: _generateTextStyle(9, FontWeight.w500),
                   ),
                 ],
