@@ -79,6 +79,7 @@ class _PowerPlantList extends ConsumerWidget {
 
   Widget _generateListItem(PowerPlant powerPlant) {
     return Container(
+      height: 134,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
@@ -237,7 +238,8 @@ class _PowerPlantInfo extends StatelessWidget {
       fontFamily: 'NotoSansJP',
       fontWeight: fontWeight,
       color: Color(0xFF828282),
-      height: 1.45,
+      // NOTE: デザイン通りの指定だと、高さが134pxを超えてしまうため、要調整
+      height: 1.22,
     );
   }
 }
