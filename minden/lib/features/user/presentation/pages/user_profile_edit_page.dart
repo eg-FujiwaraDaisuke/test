@@ -410,13 +410,15 @@ class _TagsListItem extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '#$tag',
-              style: TextStyle(
-                color: Color(0xFF487254),
-                fontSize: 12,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w500,
+            Flexible(
+              child: Text(
+                '#$tag',
+                style: TextStyle(
+                  color: Color(0xFF487254),
+                  fontSize: 12,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             SizedBox(
