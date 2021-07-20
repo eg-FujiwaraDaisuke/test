@@ -79,6 +79,7 @@ flutter:
     - assets/i18n/
     - assets/images/common/
     - assets/images/login/
+    - assets/images/user/
     - assets/images/power_plant/
     - assets/images/tutorial/
     - assets/images/sample/
