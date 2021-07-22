@@ -4,7 +4,11 @@ import 'package:minden/features/power_plant/domain/power_plant.dart';
 /// マイページ - マッチングのViewModel
 /// 本画面のタブも共用とする
 class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
-  PowerPlantPageViewModel() : super(PowerPlantPageState(value: []));
+  PowerPlantPageViewModel()
+      : super(PowerPlantPageState(
+          value: [],
+          selectedCompanyIndex: 0,
+        ));
 
   PowerPlantPageState matchingData() => state;
 
@@ -48,6 +52,14 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
           modified: DateTime.now(),
         ),
       ],
+      selectedCompanyIndex: 0,
+    );
+  }
+
+  void setSelectedPickupIndex(int index) {
+    state = PowerPlantPageState(
+      value: state.value,
+      selectedCompanyIndex: index,
     );
   }
 }
@@ -56,5 +68,9 @@ class PowerPlantPageState {
   /// 電力会社情報
   late final List<PowerPlant> value;
 
-  PowerPlantPageState({required this.value});
+  /// 選択中のピックアップ電力会社index
+  late final int selectedCompanyIndex;
+
+  PowerPlantPageState(
+      {required this.value, required this.selectedCompanyIndex});
 }

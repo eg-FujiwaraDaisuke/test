@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -56,6 +57,7 @@ class HomeTopPage extends StatelessWidget {
                   ),
                 ),
               ),
+              _PowerPlantPickup(),
               // 大切にしていることから探す
               // 電力会社一覧
             ],
@@ -240,6 +242,64 @@ class _PowerPlantInfo extends StatelessWidget {
       color: Color(0xFF828282),
       // NOTE: デザイン通りの指定だと、高さが134pxを超えてしまうため、要調整
       height: 1.22,
+    );
+  }
+}
+
+/// 電力会社ピックアップ一覧
+class _PowerPlantPickup extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final viewModel = watch(powerPlantPageViewModelProvider.notifier);
+    final data = watch(powerPlantPageViewModelProvider);
+
+    return Column(
+      children: [
+        CarouselSlider(
+          items: [1, 2, 3].map((i) {
+            return Builder(builder: (context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: 282,
+                color: Colors.black,
+              );
+            });
+          }).toList(),
+          options: _generateOptions(
+              (index) => viewModel.setSelectedPickupIndex(index)),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [1, 2, 3].asMap().entries.map((entry) {
+            return Container(
+              width: 12.0,
+              height: 12.0,
+              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black)
+                      .withOpacity(
+                          data.selectedCompanyIndex == entry.key ? 0.9 : 0.4)),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  CarouselOptions _generateOptions(Function(int index) onPageChanged) {
+    return CarouselOptions(
+      height: 282,
+      aspectRatio: 16 / 9,
+      viewportFraction: 1.0,
+      initialPage: 0,
+      enableInfiniteScroll: true,
+      reverse: false,
+      enlargeCenterPage: true,
+      onPageChanged: (index, reason) => onPageChanged(index),
+      scrollDirection: Axis.horizontal,
     );
   }
 }
