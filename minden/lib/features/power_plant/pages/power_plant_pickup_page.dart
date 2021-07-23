@@ -14,6 +14,7 @@ class PowerPlantPickup extends ConsumerWidget {
     return Column(
       children: [
         CarouselSlider(
+          // カルーセル
           items: data.value.map((data) {
             return Builder(builder: (context) {
               return _PickupImage();
@@ -22,6 +23,46 @@ class PowerPlantPickup extends ConsumerWidget {
           options: _generateCarouselOpts(
               (index) => viewModel.setSelectedPickupIndex(index)),
         ),
+        // 電力会社名
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    data.value[data.selectedCompanyIndex].name,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF787877),
+                      height: 1.45,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                child: const Text(
+                  '詳しくみる',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFFF8C00),
+                      height: 1.45),
+                ),
+                style: TextButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                onPressed: () {
+                  print("詳しくみる");
+                },
+              ),
+            ],
+          ),
+        ),
         // インジケーター
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,6 +70,7 @@ class PowerPlantPickup extends ConsumerWidget {
             return _PickupIndicator(index: entry.key);
           }).toList(),
         ),
+        SizedBox(height: 62),
       ],
     );
   }
@@ -65,7 +107,7 @@ class _PickupIndicator extends ConsumerWidget {
         Container(
           width: indicatorSize,
           height: indicatorSize,
-          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
               shape: BoxShape.circle, color: _specificColor(data)),
         ),
