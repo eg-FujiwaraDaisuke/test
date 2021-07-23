@@ -1,6 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/features/power_plant/domain/power_plant.dart';
 
+final powerPlantPageViewModelProvider =
+    StateNotifierProvider<PowerPlantPageViewModel, PowerPlantPageState>(
+        (ref) => PowerPlantPageViewModel());
+
 /// マイページ - マッチングのViewModel
 /// 本画面のタブも共用とする
 class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
