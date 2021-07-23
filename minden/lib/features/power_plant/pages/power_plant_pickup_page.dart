@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
@@ -57,7 +58,7 @@ class PowerPlantPickup extends ConsumerWidget {
                 style: TextButton.styleFrom(
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 onPressed: () {
-                  print("詳しくみる");
+                  logD("詳しくみる");
                 },
               ),
             ],
@@ -70,6 +71,7 @@ class PowerPlantPickup extends ConsumerWidget {
             return _PickupIndicator(index: entry.key);
           }).toList(),
         ),
+        // TODO 現状デザイン通りではあるが、以下の余白は不要かもしれない
         SizedBox(height: 62),
       ],
     );
