@@ -2,11 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
 class PowerPlantPickup extends ConsumerWidget {
+  final CarouselController _carouselController = CarouselController();
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final viewModel = watch(powerPlantPageViewModelProvider.notifier);
@@ -14,15 +17,23 @@ class PowerPlantPickup extends ConsumerWidget {
 
     return Column(
       children: [
-        CarouselSlider(
-          // カルーセル
-          items: data.value.map((data) {
-            return Builder(builder: (context) {
-              return _PickupImage();
-            });
-          }).toList(),
-          options: _generateCarouselOpts(
-              (index) => viewModel.setSelectedPickupIndex(index)),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            // カルーセル
+            CarouselSlider(
+              items: data.value.map((data) {
+                return Builder(builder: (context) {
+                  return _PickupImage();
+                });
+              }).toList(),
+              options: _generateCarouselOpts(
+                  (index) => viewModel.setSelectedPickupIndex(index)),
+              carouselController: _carouselController,
+            ),
+            // カルーセル操作ボタン
+            CarouselNextPrevController(controller: _carouselController),
+          ],
         ),
         // 電力会社名
         Padding(
@@ -83,11 +94,82 @@ class PowerPlantPickup extends ConsumerWidget {
       aspectRatio: 16 / 9,
       viewportFraction: 1.0,
       initialPage: 0,
-      enableInfiniteScroll: false,
+      enableInfiniteScroll: true,
       reverse: false,
       enlargeCenterPage: true,
       onPageChanged: (index, reason) => onPageChanged(index),
       scrollDirection: Axis.horizontal,
+    );
+  }
+}
+
+/// カルーセルの操作UI（Next/Prev操作）
+class CarouselNextPrevController extends StatelessWidget {
+  static const double _radius = 35;
+
+  final CarouselController controller;
+
+  const CarouselNextPrevController({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _generatePrevButton(),
+        Spacer(),
+        _generateNextButton(),
+      ],
+    );
+  }
+
+  Widget _generatePrevButton() {
+    return GestureDetector(
+      onTap: () => controller.previousPage(curve: Curves.decelerate),
+      child: Container(
+        height: _radius * 2,
+        width: _radius,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: SvgPicture.asset(
+            'assets/images/common/ic_arrow_prev.svg',
+            fit: BoxFit.none,
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0x9CFFFFFF),
+          borderRadius: BorderRadius.only(
+            topRight: const Radius.circular(_radius),
+            bottomRight: const Radius.circular(_radius),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _generateNextButton() {
+    return GestureDetector(
+      onTap: () => controller.nextPage(curve: Curves.decelerate),
+      child: Container(
+        height: _radius * 2,
+        width: _radius,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 4),
+          child: SvgPicture.asset(
+            'assets/images/common/ic_arrow_next.svg',
+            fit: BoxFit.none,
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0x9CFFFFFF),
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(_radius),
+            bottomLeft: const Radius.circular(_radius),
+          ),
+        ),
+      ),
     );
   }
 }
