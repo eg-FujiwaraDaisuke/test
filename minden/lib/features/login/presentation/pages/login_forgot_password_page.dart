@@ -4,7 +4,6 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/pages/login_forgot_password_message_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-
 import '../../../../utile.dart';
 
 class LoginForgotPassword extends StatefulWidget {
@@ -62,65 +61,68 @@ class _LoginForgotPasswordState extends State<LoginForgotPassword> {
           ],
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 21),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'パスワードリセット',
-              style: TextStyle(
-                color: Color(0xFF787877),
-                fontSize: 20,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w700,
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 21),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBox(
-              height: 49,
-            ),
-            EmailInput(
-              onChanged: _onInputChangedId,
-              onReset: _onInputResetId,
-            ),
-            SizedBox(
-              height: 43,
-            ),
-            GestureDetector(
-              onTap: () {
-                // TODO リセットリンクを送る
-                final route = NoAnimationMaterialPageRoute(
-                  builder: (context) => LoginForgotPasswordMessage(),
-                  settings: RouteSettings(name: "/login/forgotPasswordMessage"),
-                );
-                Navigator.pushReplacement(context, route);
-              },
-              child: Container(
-                width: 399,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFF8C00),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(25),
-                  ),
+              Text(
+                'パスワードリセット',
+                style: TextStyle(
+                  color: Color(0xFF787877),
+                  fontSize: 20,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
                 ),
-                child: Center(
-                  child: Text(
-                    'リセットリンクを送る',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFFFFFFFF),
+              ),
+              SizedBox(
+                height: 49,
+              ),
+              EmailInput(
+                onChanged: _onInputChangedId,
+                onReset: _onInputResetId,
+              ),
+              SizedBox(
+                height: 43,
+              ),
+              GestureDetector(
+                onTap: () {
+                  // TODO リセットリンクを送る
+                  final route = NoAnimationMaterialPageRoute(
+                    builder: (context) => LoginForgotPasswordMessage(),
+                    settings:
+                        RouteSettings(name: "/login/forgotPasswordMessage"),
+                  );
+                  Navigator.pushReplacement(context, route);
+                },
+                child: Container(
+                  width: 399,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFF8C00),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'リセットリンクを送る',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NotoSansJP',
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFFFFFFF),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
