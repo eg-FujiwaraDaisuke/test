@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/string_util.dart';
 import '../../../../utile.dart';
 
 class LoginResetPassword extends StatefulWidget {
@@ -55,7 +56,7 @@ class _LoginResetPasswordState extends State<LoginResetPassword> {
                 height: 20,
               ),
               Text(
-                'パスワードリセット',
+                i18nTranslate(context, 'forgot_password_reset'),
                 style: TextStyle(
                   color: Color(0xFF787877),
                   fontSize: 20,
@@ -99,7 +100,7 @@ class _LoginResetPasswordState extends State<LoginResetPassword> {
                   ),
                   child: Center(
                     child: Text(
-                      '設定を完了する',
+                      i18nTranslate(context, 'profile_setting_complete'),
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'NotoSansJP',

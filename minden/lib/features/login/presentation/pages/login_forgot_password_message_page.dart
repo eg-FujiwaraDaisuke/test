@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/utile.dart';
 
 class LoginForgotPasswordMessage extends StatelessWidget {
@@ -13,7 +14,7 @@ class LoginForgotPasswordMessage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'パスワードのリセットリンクを\nメールアドレスに送信しました。…',
+                i18nTranslate(context, 'forgot_reset_send_mail'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 17.0,

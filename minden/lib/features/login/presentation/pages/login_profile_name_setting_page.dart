@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import '../../../../utile.dart';
 
@@ -95,7 +96,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
                     ),
                     child: Center(
                       child: Text(
-                        '次へ',
+                        i18nTranslate(context, 'profile_setting_next'),
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'NotoSansJP',

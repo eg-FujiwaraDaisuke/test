@@ -71,7 +71,7 @@ class _LoginForgotPasswordState extends State<LoginForgotPassword> {
                 height: 20,
               ),
               Text(
-                'パスワードリセット',
+                i18nTranslate(context, 'forgot_password_reset'),
                 style: TextStyle(
                   color: Color(0xFF787877),
                   fontSize: 20,
@@ -110,7 +110,7 @@ class _LoginForgotPasswordState extends State<LoginForgotPassword> {
                   ),
                   child: Center(
                     child: Text(
-                      'リセットリンクを送る',
+                      i18nTranslate(context, 'forgot_password_send_reset_link'),
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'NotoSansJP',

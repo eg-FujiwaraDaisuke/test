@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_tags_setting_page.dart';
 
@@ -62,7 +63,7 @@ class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
               children: [
                 SizedBox(height: 38),
                 Text(
-                  '自己紹介',
+                  i18nTranslate(context, 'profile_setting_bio'),
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
@@ -94,7 +95,7 @@ class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
                     ),
                     child: Center(
                       child: Text(
-                        '次へ',
+                        i18nTranslate(context, 'profile_setting_next'),
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'NotoSansJP',

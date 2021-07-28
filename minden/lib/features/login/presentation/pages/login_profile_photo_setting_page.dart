@@ -125,7 +125,7 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
                     ),
                     child: Center(
                       child: Text(
-                        '次へ',
+                        i18nTranslate(context, 'profile_setting_next'),
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'NotoSansJP',

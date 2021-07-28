@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/utile.dart';
@@ -41,7 +42,6 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
     setState(() {
       _selectedTags.add(tag);
     });
-    print(_selectedTags);
   }
 
   @override
@@ -88,7 +88,7 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
               children: [
                 SizedBox(height: 38),
                 Text(
-                  '大切にしていることを\n選択してください',
+                  i18nTranslate(context, 'profile_setting_select_tags'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -100,7 +100,7 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '（何個でも選択可）',
+                  i18nTranslate(context, 'profile_setting_select_tags_any_num'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -131,7 +131,7 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
                     ),
                     child: Center(
                       child: Text(
-                        '完了',
+                        i18nTranslate(context, 'profile_setting_complete'),
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'NotoSansJP',
