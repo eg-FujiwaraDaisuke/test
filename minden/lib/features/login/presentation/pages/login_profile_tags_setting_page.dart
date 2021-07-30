@@ -39,9 +39,15 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
   List<Tag> _selectedTags = [];
 
   void _onSelectTag(Tag tag) {
-    setState(() {
-      _selectedTags.add(tag);
-    });
+    if (_selectedTags.contains(tag)) {
+      setState(() {
+        _selectedTags.remove(tag);
+      });
+    } else {
+      setState(() {
+        _selectedTags.add(tag);
+      });
+    }
   }
 
   @override
@@ -162,10 +168,10 @@ class _TagsList extends StatefulWidget {
       : super();
 
   @override
-  __TagsListState createState() => __TagsListState();
+  _TagsListState createState() => _TagsListState();
 }
 
-class __TagsListState extends State<_TagsList> {
+class _TagsListState extends State<_TagsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -206,10 +212,10 @@ class _TagsListItem extends StatefulWidget {
       : super();
 
   @override
-  __TagsListItemState createState() => __TagsListItemState();
+  _TagsListItemState createState() => _TagsListItemState();
 }
 
-class __TagsListItemState extends State<_TagsListItem> {
+class _TagsListItemState extends State<_TagsListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
