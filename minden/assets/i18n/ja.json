@@ -27,6 +27,8 @@
 "skip" : "Skip",
 "start" : "START",
 "store_action" : "ストアへ",
+"thanks_message_from_plant" : "からのメッセージ",
+"thanks_message_new" : "NEW!",
 "tutorial_step_1_description" : "このアプリでは、発電所の選べたり\nどのような人が発電しているかなど\nさまざまなことを「見える化」していきます。",
 "tutorial_step_1_title" : "みんな発電所アプリへ\nようこそ",
 "tutorial_step_2_description" : "この電気をつくっている人の顔が見れられます。\nさらに、生産者を選択しているユーザーが\nどれくらいいるかも確認できます。",

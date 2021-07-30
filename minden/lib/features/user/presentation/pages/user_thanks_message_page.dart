@@ -99,7 +99,9 @@ class _ThanksMessage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    message.isNew ? 'NEW!' : '',
+                    message.isNew
+                        ? i18nTranslate(context, 'thanks_message_new')
+                        : '',
                     style: TextStyle(
                       color: Color(0xFFFF8C00),
                       fontSize: 12,
@@ -117,7 +119,8 @@ class _ThanksMessage extends StatelessWidget {
                     Container(
                       width: 200,
                       child: Text(
-                        '${message.powerPlant.name}からのメッセージ',
+                        '${message.powerPlant.name}' +
+                            i18nTranslate(context, 'thanks_message_from_plant'),
                         style: TextStyle(
                           color: Color(0xFFFF8C00),
                           fontSize: 10,
