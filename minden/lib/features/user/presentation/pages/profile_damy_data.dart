@@ -75,6 +75,39 @@ class ThanksMessageDamyData {
         images: [''],
         catchphrase: 'キャッチフレーズ',
       ),
+    ),
+    ThanksMessage(
+      isNew: false,
+      message: '応援ありがとうございます！応援ありがとうございます！',
+      time: DateTime(2021, 06, 25, 12, 00),
+      powerPlant: PowerPlant(
+        plantId: '生産者ID',
+        name: '生産者名称',
+        images: [''],
+        catchphrase: 'キャッチフレーズ',
+      ),
+    ),
+    ThanksMessage(
+      isNew: false,
+      message: '応援ありがとうございます！',
+      time: DateTime(2021, 06, 25, 12, 00),
+      powerPlant: PowerPlant(
+        plantId: '生産者ID',
+        name: '生産者名称生産者名称',
+        images: [''],
+        catchphrase: 'キャッチフレーズ',
+      ),
+    ),
+    ThanksMessage(
+      isNew: false,
+      message: '応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！',
+      time: DateTime(2021, 06, 25, 12, 00),
+      powerPlant: PowerPlant(
+        plantId: '生産者ID',
+        name: '生産者名称',
+        images: [''],
+        catchphrase: 'キャッチフレーズ',
+      ),
     )
   ];
 }
