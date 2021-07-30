@@ -53,7 +53,7 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F5EF),
+      backgroundColor: Color(0xFFFAF9E5),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -175,13 +175,18 @@ class _TagsListState extends State<_TagsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330,
+      width: 340,
+      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 35),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(13),
+        color: Colors.white,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             child: Wrap(
-              alignment: WrapAlignment.start,
+              alignment: WrapAlignment.center,
               spacing: 8,
               runSpacing: 10,
               children: widget.tagsList

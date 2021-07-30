@@ -22,7 +22,7 @@ class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F5EF),
+      backgroundColor: Color(0xFFFAF9E5),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,

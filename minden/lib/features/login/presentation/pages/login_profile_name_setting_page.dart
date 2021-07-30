@@ -23,7 +23,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F5EF),
+      backgroundColor: Color(0xFFFAF9E5),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -73,7 +73,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
                   ),
                 ),
                 SizedBox(height: 38),
-                NameInput(onChanged: _onInputChangedName),
+                _NameInput(onChanged: _onInputChangedName),
                 SizedBox(height: 182),
                 GestureDetector(
                   onTap: () {
@@ -116,10 +116,10 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
   }
 }
 
-class NameInput extends StatefulWidget {
+class _NameInput extends StatefulWidget {
   final Function onChanged;
 
-  const NameInput({
+  const _NameInput({
     required this.onChanged,
   }) : super();
 
@@ -127,12 +127,12 @@ class NameInput extends StatefulWidget {
   _NameInputState createState() => _NameInputState();
 }
 
-class _NameInputState extends State<NameInput> {
+class _NameInputState extends State<_NameInput> {
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 18),
+      width: 339,
       child: Column(
         children: [
           TextFormField(
