@@ -1,11 +1,13 @@
 class ThanksMessage {
   final bool isNew;
+  final String title;
   final String message;
   final DateTime time;
   final PowerPlant powerPlant;
 
   ThanksMessage({
     required this.isNew,
+    required this.title,
     required this.message,
     required this.time,
     required this.powerPlant,

@@ -112,10 +112,12 @@ class _Menu {
   final String title;
   final String icon;
   final NoAnimationMaterialPageRoute route;
+  final bool isNewNotification;
   _Menu({
     required this.title,
     required this.icon,
     required this.route,
+    this.isNewNotification = false,
   });
 }
 
@@ -152,6 +154,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
         title: i18nTranslate(context, 'user_menu_thanks_message'),
         icon: 'message',
+        isNewNotification: true,
         route: NoAnimationMaterialPageRoute(
           builder: (context) => UserThanksMessagePage(),
           settings: RouteSettings(name: "/user/thanksMessage"),
@@ -184,6 +187,7 @@ class _MenuListView extends StatelessWidget {
                 title: e.title,
                 icon: e.icon,
                 route: e.route,
+                isNewNotification: e.isNewNotification,
               ),
             )
             .toList(),
@@ -196,10 +200,12 @@ class _MenuItem extends StatelessWidget {
   final title;
   final icon;
   final route;
+  final bool isNewNotification;
   const _MenuItem({
     required this.title,
     required this.icon,
     required this.route,
+    this.isNewNotification = false,
   }) : super();
 
   @override
@@ -213,20 +219,85 @@ class _MenuItem extends StatelessWidget {
         padding: EdgeInsets.only(left: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
-        child: Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset('assets/images/user/$icon.svg'),
-            SizedBox(width: 17.5),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w400,
-                letterSpacing: calcLetterSpacing(letter: 0.5),
+            Container(
+              child: Row(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        child: SvgPicture.asset('assets/images/user/$icon.svg'),
+                      ),
+                      Positioned(
+                        right: -6,
+                        top: -3,
+                        child: Opacity(
+                          opacity: isNewNotification ? 1 : 0,
+                          child: Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF8C00),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 3,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(width: 17.5),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: calcLetterSpacing(letter: 0.5),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            )
+            ),
+            isNewNotification
+                ? Row(
+                    children: [
+                      SizedBox(width: 37),
+                      Column(
+                        children: [
+                          SizedBox(height: 6),
+                          Text(
+                            'XXX発電所' +
+                                i18nTranslate(
+                                    context, 'thanks_message_notification'),
+                            style: TextStyle(
+                              color: Color(0xFFFF8C00),
+                              fontSize: 9,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: calcLetterSpacing(letter: 0.5),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                : Container()
           ],
         ),
       ),

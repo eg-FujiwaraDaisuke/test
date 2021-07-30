@@ -34,8 +34,9 @@ class ThanksMessageDamyData {
   final List<ThanksMessage> damyData = [
     ThanksMessage(
       isNew: true,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
@@ -45,8 +46,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
@@ -56,8 +58,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
@@ -67,8 +70,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
@@ -78,8 +82,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
@@ -89,8 +94,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称生産者名称',
@@ -100,8 +106,9 @@ class ThanksMessageDamyData {
     ),
     ThanksMessage(
       isNew: false,
+      title: '応援ありがとうございます！',
       message: '応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！',
-      time: DateTime(2021, 06, 25, 12, 00),
+      time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
         name: '生産者名称',
