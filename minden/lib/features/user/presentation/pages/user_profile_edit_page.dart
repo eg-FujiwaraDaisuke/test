@@ -324,7 +324,7 @@ class _ProfileBioEditForm extends StatelessWidget {
 }
 
 class _TagsList extends StatelessWidget {
-  final List<Tags> tagsList;
+  final List<Tag> tagsList;
   const _TagsList({required this.tagsList}) : super();
 
   @override

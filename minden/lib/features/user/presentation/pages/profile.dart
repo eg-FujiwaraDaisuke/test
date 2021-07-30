@@ -5,7 +5,7 @@ class Profile {
   final String icon;
   final String bio;
   final String wallPaper;
-  final List<Tags> tags;
+  final List<Tag> tags;
   final SelectPowerPlant selectedPowerPlant;
 
   Profile({
@@ -20,10 +20,10 @@ class Profile {
   });
 }
 
-class Tags {
+class Tag {
   final String tagId;
   final String tagName;
-  Tags({
+  Tag({
     required this.tagId,
     required this.tagName,
   });
