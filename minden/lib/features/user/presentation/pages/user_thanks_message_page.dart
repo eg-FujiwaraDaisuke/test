@@ -4,7 +4,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/thanks_message.dart';
-import 'package:minden/features/user/presentation/pages/thanks_message_model_page.dart';
+import 'package:minden/features/user/presentation/pages/thanks_message_modal_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 import '../../../../utile.dart';
