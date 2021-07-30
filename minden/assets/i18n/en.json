@@ -1,5 +1,8 @@
 {
-"cancel" : "キャンセル",
+"cancel" : "Cancel",
+"forgot_password_reset" : "パスワードリセット",
+"forgot_password_send_reset_link" : "リセットリンクを送る",
+"forgot_reset_send_mail" : "パスワードのリセットリンクを\nメールアドレスに送信しました。",
 "image_select_camera" : "写真を撮影する",
 "image_select_gallery" : "カメラロールから選択する",
 "latest_version_message_%s" : "The latest version %s has been released! \nYou can update to this version.",
@@ -15,6 +18,12 @@
 "minden_app" : "Minden App",
 "next" : "Next",
 "ok" : "OK",
+"profile_complete" : "完了",
+"profile_setting_bio" : "自己紹介",
+"profile_setting_complete" : "設定を完了する",
+"profile_setting_next" : "次へ",
+"profile_setting_select_tags" : "大切にしていることを\n選択してください",
+"profile_setting_select_tags_any_num" : "（何個でも選択可）",
 "skip" : "Skip",
 "start" : "START",
 "store_action" : "Store",
@@ -34,6 +43,7 @@
 "user_menu_logout" : "ログアウト",
 "user_menu_profile" : "プロフィール",
 "user_menu_select_plant" : "選択した発電所",
+"user_menu_thanks_message" : "メッセージ",
 "user_mypage" : "マイページ",
 "user_select_plant" : "選択中の電力会社"
 }

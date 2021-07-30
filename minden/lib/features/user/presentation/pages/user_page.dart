@@ -4,6 +4,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
 import '../../../../utile.dart';
 
 class UserPage extends StatelessWidget {
@@ -146,6 +147,14 @@ class _MenuListView extends StatelessWidget {
         route: NoAnimationMaterialPageRoute(
           builder: (context) => UserProfilePage(),
           settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_thanks_message'),
+        icon: 'message',
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserThanksMessagePage(),
+          settings: RouteSettings(name: "/user/thanksMessage"),
         ),
       ),
       _Menu(
