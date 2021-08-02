@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/power_plant.dart';
 import 'package:minden/features/power_plant/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
@@ -25,7 +26,7 @@ class HomeTopPage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
                 child: Text(
-                  '電力会社一覧',
+                  i18nTranslate(context, 'plant_list'),
                   style: TextStyle(
                     fontSize: 18,
                     letterSpacing: 0.04,
@@ -42,7 +43,7 @@ class HomeTopPage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
                 child: Text(
-                  'ピックアップ',
+                  i18nTranslate(context, 'pickup'),
                   style: TextStyle(
                     fontSize: 18,
                     letterSpacing: 0.04,

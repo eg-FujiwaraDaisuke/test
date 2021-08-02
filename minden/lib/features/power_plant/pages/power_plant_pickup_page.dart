@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
@@ -46,8 +47,8 @@ class PowerPlantPickup extends ConsumerWidget {
                 ),
               ),
               TextButton(
-                child: const Text(
-                  '詳しくみる',
+                child: Text(
+                  i18nTranslate(context, 'pickup_see_details'),
                   style: TextStyle(
                       fontSize: 15,
                       fontFamily: 'NotoSansJP',
