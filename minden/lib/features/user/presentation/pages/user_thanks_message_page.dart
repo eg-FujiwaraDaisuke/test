@@ -4,7 +4,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/thanks_message.dart';
-import 'package:minden/features/user/presentation/pages/thanks_message_modal_page.dart';
+import 'package:minden/features/user/presentation/pages/thanks_message_dialog.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 import '../../../../utile.dart';
@@ -74,11 +74,8 @@ class _ThanksMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final route = NoAnimationMaterialPageRoute(
-          builder: (context) => ThanksMessageModalPage(),
-          settings: RouteSettings(name: "/user/thanksMessageModalPage"),
-        );
-        Navigator.pushReplacement(context, route);
+        // TODO ここでメッセージのダイアログを出す
+        ThanksMessageDialog(context: context, message: message).showDialog();
       },
       child: Container(
         width: 288,

@@ -95,7 +95,8 @@ class ThanksMessageDamyData {
     ThanksMessage(
       isNew: false,
       title: '応援ありがとうございます！',
-      message: '応援ありがとうございます！',
+      message:
+          '応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！応援ありがとうございます！',
       time: DateTime(2021, 06, 25),
       powerPlant: PowerPlant(
         plantId: '生産者ID',
