@@ -12,6 +12,7 @@ class ThanksMessageDialog {
       context,
       CustomDialogOverlay(
         Stack(
+          clipBehavior: Clip.none,
           children: [
             Positioned(
               child: Container(
@@ -87,6 +88,15 @@ class ThanksMessageDialog {
                 onTap: () {
                   _hideDialog();
                 },
+              ),
+            ),
+            Positioned(
+              bottom: -75,
+              right: -80,
+              child: Image.asset(
+                'assets/images/user/bee.png',
+                width: 236,
+                height: 104,
               ),
             ),
           ],
