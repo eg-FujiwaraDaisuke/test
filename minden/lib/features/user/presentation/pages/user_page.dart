@@ -4,6 +4,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
 import '../../../../utile.dart';
 
 class UserPage extends StatelessWidget {
@@ -110,11 +111,15 @@ class _UserProfile extends StatelessWidget {
 class _Menu {
   final String title;
   final String icon;
-  final NoAnimationMaterialPageRoute route;
+  final NoAnimationMaterialPageRoute? route;
+  final bool isNewNotification;
+  final bool isAccordion;
   _Menu({
     required this.title,
     required this.icon,
-    required this.route,
+    this.route,
+    this.isNewNotification = false,
+    this.isAccordion = false,
   });
 }
 
@@ -123,13 +128,10 @@ class _MenuListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _menuList = [
       _Menu(
+        // TODO 契約内容はタップしたらアコーディオンで契約内容が出現する
         title: i18nTranslate(context, 'user_menu_contract'),
         icon: 'contract',
-        // TODO routeは仮
-        route: NoAnimationMaterialPageRoute(
-          builder: (context) => UserProfilePage(),
-          settings: RouteSettings(name: "/user/profile"),
-        ),
+        isAccordion: true,
       ),
       _Menu(
         title: i18nTranslate(context, 'user_menu_select_plant'),
@@ -146,6 +148,15 @@ class _MenuListView extends StatelessWidget {
         route: NoAnimationMaterialPageRoute(
           builder: (context) => UserProfilePage(),
           settings: RouteSettings(name: "/user/profile"),
+        ),
+      ),
+      _Menu(
+        title: i18nTranslate(context, 'user_menu_thanks_message'),
+        icon: 'message',
+        isNewNotification: true,
+        route: NoAnimationMaterialPageRoute(
+          builder: (context) => UserThanksMessagePage(),
+          settings: RouteSettings(name: "/user/thanksMessage"),
         ),
       ),
       _Menu(
@@ -175,6 +186,8 @@ class _MenuListView extends StatelessWidget {
                 title: e.title,
                 icon: e.icon,
                 route: e.route,
+                isNewNotification: e.isNewNotification,
+                isAccordion: e.isAccordion,
               ),
             )
             .toList(),
@@ -187,10 +200,14 @@ class _MenuItem extends StatelessWidget {
   final title;
   final icon;
   final route;
+  final bool isNewNotification;
+  final bool isAccordion;
   const _MenuItem({
     required this.title,
     required this.icon,
     required this.route,
+    this.isNewNotification = false,
+    this.isAccordion = false,
   }) : super();
 
   @override
@@ -198,26 +215,81 @@ class _MenuItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Navigator.pushReplacement(context, route);
+        print(route);
+        if (route != null) {
+          Navigator.pushReplacement(context, route);
+        }
       },
       child: Container(
-        padding: EdgeInsets.only(left: 22),
+        padding: EdgeInsets.symmetric(horizontal: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
-        child: Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset('assets/images/user/$icon.svg'),
-            SizedBox(width: 17.5),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w400,
-                letterSpacing: calcLetterSpacing(letter: 0.5),
+            Container(
+              child: Row(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        child: SvgPicture.asset('assets/images/user/$icon.svg'),
+                      ),
+                      Positioned(
+                        right: -6,
+                        top: -3,
+                        child: Opacity(
+                          opacity: isNewNotification ? 1 : 0,
+                          child: Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF8C00),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 3,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(width: 17.5),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: calcLetterSpacing(letter: 0.5),
+                    ),
+                  ),
+                  SizedBox(width: 22),
+                  isAccordion ? Icon(Icons.keyboard_arrow_right) : Container(),
+                  isNewNotification
+                      ? Flexible(
+                          child: Text(
+                            'XXX発電所' +
+                                i18nTranslate(
+                                    context, 'thanks_message_notification'),
+                            style: TextStyle(
+                              color: Color(0xFFFF8C00),
+                              fontSize: 9,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: calcLetterSpacing(letter: 0.5),
+                            ),
+                          ),
+                        )
+                      : Container()
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),
