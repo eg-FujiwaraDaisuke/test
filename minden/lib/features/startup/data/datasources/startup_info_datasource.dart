@@ -20,8 +20,8 @@ abstract class StartupInfoDataSource {
 class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   @override
   Future<StartupInfoModel> getStartupInfo() async {
-    await si<RemoteConfig>().fetch(expiration: const Duration(seconds: 0));
-    await si<RemoteConfig>().activateFetched();
+    await si<RemoteConfig>().fetch();
+    await si<RemoteConfig>().fetchAndActivate();
 
     final maintenanceDescription =
         si<RemoteConfig>().getString("maintenance_description");

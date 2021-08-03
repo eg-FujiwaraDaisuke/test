@@ -16,9 +16,12 @@ final si = GetIt.instance;
 Future<void> init() async {
   final firebaseApp = await Firebase.initializeApp();
 
-  final remoteConfig = await RemoteConfig.instance;
-  await remoteConfig
-      .setConfigSettings(RemoteConfigSettings(debugMode: !kReleaseMode));
+  final RemoteConfig remoteConfig = RemoteConfig.instance;
+  await remoteConfig.setConfigSettings(RemoteConfigSettings(
+    fetchTimeout: const Duration(seconds: 0),
+    minimumFetchInterval: const Duration(hours: 1),
+  ));
+
   final analytics = FirebaseAnalytics();
   final firebaseAnalyticsObserver =
       FirebaseAnalyticsObserver(analytics: analytics);
