@@ -111,13 +111,15 @@ class _UserProfile extends StatelessWidget {
 class _Menu {
   final String title;
   final String icon;
-  final NoAnimationMaterialPageRoute route;
+  final NoAnimationMaterialPageRoute? route;
   final bool isNewNotification;
+  final bool isAccordion;
   _Menu({
     required this.title,
     required this.icon,
-    required this.route,
+    this.route,
     this.isNewNotification = false,
+    this.isAccordion = false,
   });
 }
 
@@ -126,13 +128,10 @@ class _MenuListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _menuList = [
       _Menu(
+        // TODO 契約内容はタップしたらアコーディオンで契約内容が出現する
         title: i18nTranslate(context, 'user_menu_contract'),
         icon: 'contract',
-        // TODO routeは仮
-        route: NoAnimationMaterialPageRoute(
-          builder: (context) => UserProfilePage(),
-          settings: RouteSettings(name: "/user/profile"),
-        ),
+        isAccordion: true,
       ),
       _Menu(
         title: i18nTranslate(context, 'user_menu_select_plant'),
@@ -188,6 +187,7 @@ class _MenuListView extends StatelessWidget {
                 icon: e.icon,
                 route: e.route,
                 isNewNotification: e.isNewNotification,
+                isAccordion: e.isAccordion,
               ),
             )
             .toList(),
@@ -201,11 +201,13 @@ class _MenuItem extends StatelessWidget {
   final icon;
   final route;
   final bool isNewNotification;
+  final bool isAccordion;
   const _MenuItem({
     required this.title,
     required this.icon,
     required this.route,
     this.isNewNotification = false,
+    this.isAccordion = false,
   }) : super();
 
   @override
@@ -213,10 +215,13 @@ class _MenuItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Navigator.pushReplacement(context, route);
+        print(route);
+        if (route != null) {
+          Navigator.pushReplacement(context, route);
+        }
       },
       child: Container(
-        padding: EdgeInsets.only(left: 22),
+        padding: EdgeInsets.symmetric(horizontal: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -254,34 +259,21 @@ class _MenuItem extends StatelessWidget {
                     ],
                   ),
                   SizedBox(width: 17.5),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: calcLetterSpacing(letter: 0.5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            isNewNotification
-                ? Row(
-                    children: [
-                      SizedBox(width: 37),
-                      Column(
-                        children: [
-                          SizedBox(height: 6),
-                          Text(
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: calcLetterSpacing(letter: 0.5),
+                    ),
+                  ),
+                  SizedBox(width: 22),
+                  isAccordion ? Icon(Icons.keyboard_arrow_right) : Container(),
+                  isNewNotification
+                      ? Flexible(
+                          child: Text(
                             'XXX発電所' +
                                 i18nTranslate(
                                     context, 'thanks_message_notification'),
@@ -292,12 +284,12 @@ class _MenuItem extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               letterSpacing: calcLetterSpacing(letter: 0.5),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  )
-                : Container()
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
           ],
         ),
       ),
