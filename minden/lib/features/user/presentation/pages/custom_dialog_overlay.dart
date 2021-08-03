@@ -14,7 +14,7 @@ class CustomDialogOverlay extends ModalRoute<void> {
   @override
   bool get opaque => false;
   @override
-  bool get barrierDismissible => true;
+  bool get barrierDismissible => false;
   @override
   Color get barrierColor => Colors.black.withOpacity(0.5);
   @override
@@ -30,8 +30,16 @@ class CustomDialogOverlay extends ModalRoute<void> {
   ) {
     return Material(
       type: MaterialType.transparency,
-      child: SafeArea(
-        child: _buildOverlayContent(context),
+      child: Stack(
+        children: <Widget>[
+          GestureDetector(
+            child: Container(color: Colors.transparent),
+            onTap: () => Navigator.of(context).pop(),
+          ),
+          SafeArea(
+            child: _buildOverlayContent(context),
+          )
+        ],
       ),
     );
   }
@@ -49,8 +57,8 @@ class CustomDialogOverlay extends ModalRoute<void> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
+    return Center(
+      child: SingleChildScrollView(
         child: dialogContent(context),
       ),
     );
