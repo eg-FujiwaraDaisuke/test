@@ -6,6 +6,7 @@ import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_reset_password_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
+import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
@@ -36,6 +37,8 @@ class DebugPage extends StatelessWidget {
                     '/login/profileNameSetting'),
                 _generateNavigatorPush(context, 'ログイン パスワードリセット',
                     (context) => LoginResetPassword(), '/login/resetPassword'),
+                _generateNavigatorPush(context, 'ホーム - トップ',
+                    (context) => HomeTopPage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',
                     (context) => UserPage(), '/user/matching'),
                 _generateNavigatorPush(context, 'マイページ - プロフィール',
