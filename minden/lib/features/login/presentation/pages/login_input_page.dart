@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
+import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
@@ -151,8 +153,13 @@ class _LoginInputPageState extends State<LoginInputPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // TODO パスワードリセットページに遷移
                                   print('パスワードをお忘れですか？');
+                                  final route = NoAnimationMaterialPageRoute(
+                                    builder: (context) => LoginForgotPassword(),
+                                    settings: RouteSettings(
+                                        name: "/login/forgotPassword"),
+                                  );
+                                  Navigator.pushReplacement(context, route);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
