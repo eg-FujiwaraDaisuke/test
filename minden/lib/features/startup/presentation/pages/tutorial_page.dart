@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/startup/presentation/pages/push_notification_permission_dialog.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,9 +101,10 @@ class _TutorialPageState extends State<TutorialPage> {
                       height: 17,
                       child: GestureDetector(
                         onTap: () async {
-                          // ここで別ページに飛ばす
+                          // ここでプッシュ通知許可ダイアログを出す
+                          PushNotificationPermissionDialog(context: context)
+                              .showPermissionDialog();
                           await setHasTutorial();
-                          print('skip');
                         },
                         child: Opacity(
                           opacity: _currentIndex != _tutorialData.length - 1
@@ -160,7 +162,10 @@ class _TutorialPageState extends State<TutorialPage> {
                             )
                           : GestureDetector(
                               onTap: () async {
-                                print('Start');
+                                // ここでプッシュ通知許可ダイアログを出す
+                                PushNotificationPermissionDialog(
+                                        context: context)
+                                    .showPermissionDialog();
                                 await setHasTutorial();
                               },
                               child: Text(
