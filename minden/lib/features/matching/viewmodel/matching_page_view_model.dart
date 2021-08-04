@@ -33,7 +33,7 @@ class MatchingPageState {
   late final List<MatchingData> value;
 
   /// 選択中の電力会社index
-  late final selectedCompanyIndex;
+  late final int selectedCompanyIndex;
 
   String selectedCompanyPercentage() {
     final molecule = value[selectedCompanyIndex].ratio;

@@ -48,6 +48,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-
-# ios
+# iOS
 /ios/build/
+
