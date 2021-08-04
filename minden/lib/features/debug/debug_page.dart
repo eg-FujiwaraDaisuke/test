@@ -8,6 +8,7 @@ import 'package:minden/features/login/presentation/pages/login_reset_password_pa
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
+import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
@@ -30,6 +31,8 @@ class DebugPage extends StatelessWidget {
                     context, '通常遷移', (context) => InitialPage(), '/'),
                 _generateNavigatorPush(
                     context, 'ログイン', (context) => LoginPage(), '/login'),
+                _generateNavigatorPush(context, 'チュートリアル',
+                    (context) => TutorialPage(), '/tutorial'),
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',

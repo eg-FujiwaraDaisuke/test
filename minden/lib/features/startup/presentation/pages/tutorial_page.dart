@@ -4,16 +4,23 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Tutorial {
-  late final String title;
-  late final String description;
-  late final String imagePath;
+enum PositionAlign { left, right }
 
-  Tutorial({
-    required this.title,
-    required this.description,
-    required this.imagePath,
-  });
+class Tutorial {
+  final String title;
+  final String description;
+  final String imagePath;
+  final Map<String, double> tittlePosition;
+  final TextAlign titleTextAlign;
+  final PositionAlign positionAlign;
+
+  Tutorial(
+      {required this.title,
+      required this.description,
+      required this.imagePath,
+      required this.tittlePosition,
+      required this.titleTextAlign,
+      required this.positionAlign});
 }
 
 class TutorialPage extends StatefulWidget {
@@ -32,16 +39,25 @@ class _TutorialPageState extends State<TutorialPage> {
         imagePath: 'tutorial-1.png',
         title: i18nTranslate(context, 'tutorial_step_1_title'),
         description: i18nTranslate(context, 'tutorial_step_1_description'),
+        titleTextAlign: TextAlign.left,
+        tittlePosition: {'left': 39, 'right': 0, 'top': 227},
+        positionAlign: PositionAlign.left,
       ),
       Tutorial(
         imagePath: 'tutorial-2.png',
         title: i18nTranslate(context, 'tutorial_step_2_title'),
         description: i18nTranslate(context, 'tutorial_step_2_description'),
+        titleTextAlign: TextAlign.right,
+        tittlePosition: {'right': 18, 'left': 0, 'top': 201},
+        positionAlign: PositionAlign.right,
       ),
       Tutorial(
         imagePath: 'tutorial-3.png',
         title: i18nTranslate(context, 'tutorial_step_3_title'),
         description: i18nTranslate(context, 'tutorial_step_3_description'),
+        titleTextAlign: TextAlign.right,
+        tittlePosition: {'right': 32, 'left': 0, 'top': 74},
+        positionAlign: PositionAlign.right,
       ),
     ];
 
@@ -187,7 +203,7 @@ class Slide extends StatelessWidget {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 328,
+              height: 484,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
@@ -197,7 +213,7 @@ class Slide extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 328,
+              height: 484,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: FractionalOffset.center,
@@ -213,31 +229,29 @@ class Slide extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+              top: data.tittlePosition['top'],
+              left: data.tittlePosition['left'],
+              right: data.tittlePosition['right'],
+              child: Text(
+                data.title,
+                textAlign: data.titleTextAlign,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  height: calcFontHeight(fontSize: 18, lineHeight: 32.4),
+                  letterSpacing: calcLetterSpacing(letter: 4),
+                ),
+              ),
+            ),
           ],
         ),
         SizedBox(
-          height: 48,
+          height: 50,
         ),
         Container(
-          height: 65,
-          alignment: Alignment.center,
-          child: Text(
-            data.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              height: calcFontHeight(fontSize: 18, lineHeight: 32.4),
-              letterSpacing: calcLetterSpacing(letter: 4),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 26,
-        ),
-        Container(
-          height: 67,
           alignment: Alignment.center,
           child: Text(
             data.description,
@@ -251,7 +265,7 @@ class Slide extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 109,
+          height: 41,
         ),
       ],
     );
