@@ -44,11 +44,13 @@ dependencies:
   bot_toast: ^4.0.1
   after_layout: ^1.1.0
 
-  firebase_core_platform_interface: ^2.0.0
-  firebase_core: ^0.5.3
-  firebase_remote_config: ^0.4.3
-  firebase_analytics: ^6.3.0
-  firebase_crashlytics: ^0.1.4+1
+  firebase_core_platform_interface: ^4.0.1
+  firebase_core: ^1.4.0
+  firebase_remote_config: ^0.10.0+3
+  firebase_analytics: ^8.2.0
+  firebase_crashlytics: ^2.1.1
+  firebase_messaging: ^10.0.4
+
   flutter_svg: ^0.22.0
 
   # 状態管理（providerの後継）
@@ -61,14 +63,14 @@ dependencies:
 
   logger: ^1.0.0
 
-  image_picker: ^0.6.7+12
+  image_picker: ^0.8.2
   image_cropper: ^1.4.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  plugin_platform_interface: ^1.0.0
+  plugin_platform_interface: ^2.0.1
 
 flutter:
   # The following line ensures that the Material Icons font is

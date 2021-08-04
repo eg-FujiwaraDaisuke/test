@@ -17,13 +17,13 @@ void main() async {
   Config.setEnvironment(env);
   await di.init();
 
-  Crashlytics.instance.enableInDevMode = true;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   if (kReleaseMode) {
     runZonedGuarded(() async {
       runApp(wrapApplication());
-    }, (e, s) async => await Crashlytics.instance.recordError(e, s));
+    }, (e, s) async => await FirebaseCrashlytics.instance.recordError(e, s));
   } else {
     runApp(wrapApplication());
   }
