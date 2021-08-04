@@ -51,6 +51,7 @@ dependencies:
   firebase_crashlytics: ^2.1.1
   firebase_messaging: ^10.0.4
 
+  flutter_local_notifications: ^8.0.0
   flutter_svg: ^0.22.0
 
   # 状態管理（providerの後継）

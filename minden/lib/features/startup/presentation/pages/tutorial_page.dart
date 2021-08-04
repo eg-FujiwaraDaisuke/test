@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/startup/presentation/pages/push_notification_permission_dialog.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../injection_container.dart';
 
 enum PositionAlign { left, right }
 
@@ -33,6 +35,49 @@ class _TutorialPageState extends State<TutorialPage> {
   final CarouselController _controller = CarouselController();
   int _currentIndex = 0;
 
+  late bool _fetching = false;
+  late NotificationSettings _settings;
+  late String _token;
+  late Stream<String> _tokenStream;
+
+  Future<void> requestPermissions() async {
+    setState(() {
+      _fetching = true;
+    });
+
+    final settings = await si<FirebaseMessaging>().requestPermission(
+      announcement: true,
+      carPlay: true,
+      criticalAlert: true,
+    );
+
+    setState(() {
+      _fetching = false;
+      _settings = settings;
+    });
+
+    print(_settings.alert);
+  }
+
+  void setToken(String? token) {
+    print(token);
+    if (token == null) return;
+    setState(() {
+      _token = token;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    si<FirebaseMessaging>().getToken().then((String? token) {
+      setToken(token);
+    });
+    //TODO トークンの変更を検知したらサーバにトークンを送信して常に最新の FCM トークンを使う
+    _tokenStream = si<FirebaseMessaging>().onTokenRefresh;
+    _tokenStream.listen(setToken);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Tutorial> _tutorialData = [
@@ -61,6 +106,10 @@ class _TutorialPageState extends State<TutorialPage> {
         positionAlign: PositionAlign.right,
       ),
     ];
+
+    if (_fetching) {
+      return const CircularProgressIndicator();
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -102,8 +151,8 @@ class _TutorialPageState extends State<TutorialPage> {
                       child: GestureDetector(
                         onTap: () async {
                           // ここでプッシュ通知許可ダイアログを出す
-                          PushNotificationPermissionDialog(context: context)
-                              .showPermissionDialog();
+                          // PushNotificationPermissionDialog(context: context).showPermissionDialog();
+                          await requestPermissions();
                           await setHasTutorial();
                         },
                         child: Opacity(
@@ -163,9 +212,10 @@ class _TutorialPageState extends State<TutorialPage> {
                           : GestureDetector(
                               onTap: () async {
                                 // ここでプッシュ通知許可ダイアログを出す
-                                PushNotificationPermissionDialog(
-                                        context: context)
-                                    .showPermissionDialog();
+                                // PushNotificationPermissionDialog(
+                                //         context: context)
+                                //     .showPermissionDialog();
+                                await requestPermissions();
                                 await setHasTutorial();
                               },
                               child: Text(
