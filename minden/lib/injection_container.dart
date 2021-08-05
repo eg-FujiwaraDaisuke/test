@@ -50,6 +50,7 @@ Future<void> init() async {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   if (!kIsWeb) {
+    // TODO Importance.highにしてもバックグランド時にhandsupが表示されない問題が現状ある
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
@@ -77,10 +78,10 @@ Future<void> init() async {
     // フォアグラウンド状態の通知
     // Android ではアプリがフォアグラウンド状態で画面上部にプッシュ通知メッセージを表示することができない為、ローカル通知で擬似的に通知メッセージを表示
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("フォアグラウンドでメッセージを受け取りました");
+      print(message);
       final notification = message.notification;
       final android = message.notification?.android;
-
-      print(message);
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
@@ -92,9 +93,6 @@ Future<void> init() async {
                 channel.id,
                 channel.name,
                 channel.description,
-                // ignore: flutter_style_todos
-                // TODO add a proper drawable resource to android, for now using
-                //      one that already exists in example app.
                 icon: 'launch_background',
               ),
             ));
@@ -114,5 +112,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
+  print("バックグラウンドでメッセージを受け取りました");
   print('Handling a background message ${message.messageId}');
 }

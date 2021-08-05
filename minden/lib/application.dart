@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,32 +20,12 @@ import 'package:minden/features/user/presentation/pages/user_profile_edit_page.d
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
 import 'core/ui/tab_indicator.dart';
+
+import 'features/debug/debug_push_message_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
-class Application extends StatefulWidget {
-  @override
-  _ApplicationState createState() => _ApplicationState();
-}
-
-class _ApplicationState extends State<Application> {
-  @override
-  void initState() {
-    super.initState();
-    //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
-      if (message != null) {
-        Navigator.pushNamed(context, '/tutorial');
-      }
-    });
-
-    // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      Navigator.pushNamed(context, '/tutorial');
-    });
-  }
-
+class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -118,6 +97,7 @@ class _ApplicationState extends State<Application> {
       "/user": (_) => UserPage(),
       "/user/profile": (_) => UserProfilePage(),
       "/user/profile/edit": (_) => UserProfileEditPage(),
+      '/message': (_) => MessageView(),
     };
   }
 }
