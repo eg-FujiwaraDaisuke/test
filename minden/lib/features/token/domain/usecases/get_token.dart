@@ -11,7 +11,7 @@ class GetToken extends UseCase<Token, Params> {
   final TokenRepository tokenRepository;
 
   @override
-  Future<Either<TokenFailure, Token>> call(Params params) async {
+  Future<Either<RenewTokenFailure, Token>> call(Params params) async {
     return tokenRepository.getToken(params.refreshToken);
   }
 }

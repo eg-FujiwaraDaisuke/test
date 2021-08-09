@@ -11,12 +11,12 @@ class TokenRepositoryImpl implements TokenRepository {
   final TokenDataSource tokenDataSource;
 
   @override
-  Future<Either<TokenFailure, Token>> getToken(String refreshToken) async {
+  Future<Either<RenewTokenFailure, Token>> getToken(String refreshToken) async {
     try {
       final token = await tokenDataSource.getToken(refreshToken);
       return Right(token);
     } on ServerException {
-      return left(TokenFailure());
+      return left(RenewTokenFailure());
     }
   }
 }

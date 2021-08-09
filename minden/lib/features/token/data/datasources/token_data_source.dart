@@ -21,9 +21,12 @@ class TokenDataSourceImpl implements TokenDataSource {
     final body = json.encode({'refreshToken': refreshToken});
     final env = ApiConfig.apiEndpoint();
 
+    final defaultHeaders = env['headers']! as Map<String, String>;
+    final headers = {'refreshToken': refreshToken, ...defaultHeaders};
+
     final response = await client.post(
-      Uri.parse((env['url'] as String) + _authPath),
-      headers: env['headers'] as Map<String, String>,
+      Uri.parse((env['url']! as String) + _authPath),
+      headers: headers,
       body: body,
     );
 
