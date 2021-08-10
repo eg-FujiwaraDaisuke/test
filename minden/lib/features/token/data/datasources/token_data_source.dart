@@ -18,7 +18,7 @@ class TokenDataSourceImpl implements TokenDataSource {
 
   @override
   Future<TokenModel> getToken(String refreshToken) async {
-    final body = json.encode({'refreshToken': refreshToken});
+    final body = json.encode({});
     final env = ApiConfig.apiEndpoint();
 
     final defaultHeaders = env['headers']! as Map<String, String>;
