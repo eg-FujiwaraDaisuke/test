@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,42 @@ import 'features/debug/debug_push_message_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
-class Application extends StatelessWidget {
+class Application extends StatefulWidget {
+  @override
+  _ApplicationState createState() => _ApplicationState();
+}
+
+class _ApplicationState extends State<Application> {
+  @override
+  void initState() {
+    super.initState();
+    // プッシュ通知初期化
+    //TODO 通知をタップしたらメッセージページに遷移させたい
+    //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
+    si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
+      print('===========================ターミネイト状態');
+      print(message);
+      if (message != null) {
+        Navigator.pushNamed(
+          context,
+          '/message',
+          arguments: MessageArguments(message, openedApplication: true),
+        );
+      }
+    });
+
+    // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print(message);
+      print('=========================== バックグラウンド状態');
+      Navigator.pushNamed(
+        context,
+        '/message',
+        arguments: MessageArguments(message, openedApplication: true),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
