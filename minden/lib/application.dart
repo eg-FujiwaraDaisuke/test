@@ -36,30 +36,40 @@ class _ApplicationState extends State<Application> {
   void initState() {
     super.initState();
     // プッシュ通知初期化
-    //TODO 通知をタップしたらメッセージページに遷移させたい
-    //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
-      print('===========================ターミネイト状態');
-      print(message);
-      if (message != null) {
-        Navigator.pushNamed(
-          context,
-          '/message',
-          arguments: MessageArguments(message, openedApplication: true),
-        );
-      }
-    });
+    // //TODO 通知をタップしたらメッセージページに遷移させたい
+    // //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
+    // si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
+    //   print('===========================ターミネイト状態');
+    //   print(message);
+    //   if (message != null) {
+    //     Navigator.of(context).push(
+    //       MaterialPageRoute(
+    //         settings: RouteSettings(
+    //             name: "/message",
+    //             arguments: MessageArguments(message, openedApplication: true)),
+    //         builder: (BuildContext context) {
+    //           return MessageView();
+    //         },
+    //       ),
+    //     );
+    //   }
+    // });
 
-    // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print(message);
-      print('=========================== バックグラウンド状態');
-      Navigator.pushNamed(
-        context,
-        '/message',
-        arguments: MessageArguments(message, openedApplication: true),
-      );
-    });
+    // // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   print(message);
+    //   print('=========================== バックグラウンド状態');
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(
+    //       settings: RouteSettings(
+    //           name: "/message",
+    //           arguments: MessageArguments(message, openedApplication: true)),
+    //       builder: (BuildContext context) {
+    //         return MessageView();
+    //       },
+    //     ),
+    //   );
+    // });
   }
 
   @override

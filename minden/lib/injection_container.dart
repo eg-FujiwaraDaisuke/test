@@ -41,7 +41,12 @@ Future<void> init() async {
   await flutterI18nDelegate.load(Locale('ja'));
 
   /// Create a [AndroidNotificationChannel] for heads up notifications
-  final AndroidNotificationChannel channel;
+  final AndroidNotificationChannel channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
 
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -50,14 +55,6 @@ Future<void> init() async {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   if (!kIsWeb) {
-    // TODO Importance.highにしてもバックグランド時にhandsupが表示されない問題が現状ある
-    channel = const AndroidNotificationChannel(
-      'high_importance_channel', // id
-      'High Importance Notifications', // title
-      'This channel is used for important notifications.', // description
-      importance: Importance.high,
-    );
-
     /// Create an Android Notification Channel.
     ///
     /// We use this channel in the `AndroidManifest.xml` file to override the
@@ -79,11 +76,11 @@ Future<void> init() async {
     // Android ではアプリがフォアグラウンド状態で画面上部にプッシュ通知メッセージを表示することができない為、ローカル通知で擬似的に通知メッセージを表示
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("フォアグラウンドでメッセージを受け取りました");
-      print(message);
       final notification = message.notification;
       final android = message.notification?.android;
 
       if (notification != null && android != null) {
+        print('表示');
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
