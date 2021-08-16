@@ -8,6 +8,7 @@ import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 
 import '../../../../injection_container.dart';
 
+// FCMプッシュ通知の遷移周りの初期化を行っています。
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
