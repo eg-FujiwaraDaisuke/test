@@ -80,17 +80,21 @@ class Application extends StatelessWidget {
           const Locale('en'),
         ],
         routes: _buildRoutes(),
-        initialRoute: '/home',
       ),
     );
   }
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      '/home': (_) => HomePage(),
-      '/init': (_) => InitialPage(),
-      '/debug': (_) => DebugPage(),
+      '/': (_) {
+        if (kReleaseMode) {
+          return InitialPage();
+        } else {
+          return DebugPage();
+        }
+      },
       '/tutorial': (_) => TutorialPage(),
+      '/home': (_) => HomePage(),
       '/login': (_) => LoginPage(),
       '/home/top': (_) => HomeTopPage(),
       '/my_page/matching': (_) => MatchingPage(),

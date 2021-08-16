@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -151,9 +153,13 @@ class _TutorialPageState extends State<TutorialPage> {
                       child: GestureDetector(
                         onTap: () async {
                           // ここでプッシュ通知許可ダイアログを出す
-                          // PushNotificationPermissionDialog(context: context).showPermissionDialog();
                           await requestPermissions();
                           await setHasTutorial();
+                          final route = NoAnimationMaterialPageRoute(
+                            builder: (context) => HomePage(),
+                            settings: RouteSettings(name: '/home'),
+                          );
+                          Navigator.pushReplacement(context, route);
                         },
                         child: Opacity(
                           opacity: _currentIndex != _tutorialData.length - 1
@@ -212,11 +218,13 @@ class _TutorialPageState extends State<TutorialPage> {
                           : GestureDetector(
                               onTap: () async {
                                 // ここでプッシュ通知許可ダイアログを出す
-                                // PushNotificationPermissionDialog(
-                                //         context: context)
-                                //     .showPermissionDialog();
                                 await requestPermissions();
                                 await setHasTutorial();
+                                final route = NoAnimationMaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                  settings: RouteSettings(name: '/home'),
+                                );
+                                Navigator.pushReplacement(context, route);
                               },
                               child: Text(
                                 i18nTranslate(context, "start"),

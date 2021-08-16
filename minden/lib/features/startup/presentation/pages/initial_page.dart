@@ -9,6 +9,7 @@ import 'package:minden/core/env/config.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
@@ -174,8 +175,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     }
 
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginPage(),
-      settings: RouteSettings(name: "/login"),
+      builder: (context) => HomePage(),
+      settings: RouteSettings(name: "/home"),
     );
     Navigator.pushReplacement(context, route);
   }
