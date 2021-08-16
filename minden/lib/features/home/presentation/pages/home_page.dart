@@ -5,6 +5,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/debug/debug_push_message_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 
 import '../../../../injection_container.dart';
@@ -54,20 +55,10 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     });
-
-    Future(_nextPage);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-
-  void _nextPage() {
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginPage(),
-      settings: RouteSettings(name: "/login"),
-    );
-    Navigator.push(context, route);
+    return HomeTopPage();
   }
 }

@@ -166,6 +166,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   void _nextPage(bool hasTutorial) {
+    // 新規ユーザー
     if (!hasTutorial) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => TutorialPage(),
@@ -173,12 +174,19 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       );
       Navigator.pushReplacement(context, route);
     }
-
+    // チュートリアルはみたが、ログインしないユーザー
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => HomePage(),
-      settings: RouteSettings(name: "/home"),
+      builder: (context) => LoginPage(),
+      settings: RouteSettings(name: "/login"),
     );
     Navigator.pushReplacement(context, route);
+
+    //TODO ログインしてて、チュートリアルもみたユーザー
+    // final route = NoAnimationMaterialPageRoute(
+    //   builder: (context) => HomePage(),
+    //   settings: RouteSettings(name: "/home"),
+    // );
+    // Navigator.pushReplacement(context, route);
   }
 
   @override
