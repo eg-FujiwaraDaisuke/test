@@ -21,56 +21,13 @@ import 'package:minden/features/user/presentation/pages/user_profile_edit_page.d
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
 import 'core/ui/tab_indicator.dart';
-
 import 'features/debug/debug_push_message_page.dart';
+import 'features/home/presentation/pages/home_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
-class Application extends StatefulWidget {
-  @override
-  _ApplicationState createState() => _ApplicationState();
-}
-
-class _ApplicationState extends State<Application> {
-  @override
-  void initState() {
-    super.initState();
-    // プッシュ通知初期化
-    // //TODO 通知をタップしたらメッセージページに遷移させたい
-    // //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    // si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
-    //   print('===========================ターミネイト状態');
-    //   print(message);
-    //   if (message != null) {
-    //     Navigator.of(context).push(
-    //       MaterialPageRoute(
-    //         settings: RouteSettings(
-    //             name: "/message",
-    //             arguments: MessageArguments(message, openedApplication: true)),
-    //         builder: (BuildContext context) {
-    //           return MessageView();
-    //         },
-    //       ),
-    //     );
-    //   }
-    // });
-
-    // // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   print(message);
-    //   print('=========================== バックグラウンド状態');
-    //   Navigator.of(context).push(
-    //     MaterialPageRoute(
-    //       settings: RouteSettings(
-    //           name: "/message",
-    //           arguments: MessageArguments(message, openedApplication: true)),
-    //       builder: (BuildContext context) {
-    //         return MessageView();
-    //       },
-    //     ),
-    //   );
-    // });
-  }
+class Application extends StatelessWidget {
+  const Application({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,26 +80,23 @@ class _ApplicationState extends State<Application> {
           const Locale('en'),
         ],
         routes: _buildRoutes(),
+        initialRoute: '/home',
       ),
     );
   }
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      "/": (_) {
-        if (kReleaseMode) {
-          return InitialPage();
-        } else {
-          return DebugPage();
-        }
-      },
-      "/tutorial": (_) => TutorialPage(),
-      "/login": (_) => LoginPage(),
-      "/home/top": (_) => HomeTopPage(),
-      "/my_page/matching": (_) => MatchingPage(),
-      "/user": (_) => UserPage(),
-      "/user/profile": (_) => UserProfilePage(),
-      "/user/profile/edit": (_) => UserProfileEditPage(),
+      '/home': (_) => HomePage(),
+      '/init': (_) => InitialPage(),
+      '/debug': (_) => DebugPage(),
+      '/tutorial': (_) => TutorialPage(),
+      '/login': (_) => LoginPage(),
+      '/home/top': (_) => HomeTopPage(),
+      '/my_page/matching': (_) => MatchingPage(),
+      '/user': (_) => UserPage(),
+      '/user/profile': (_) => UserProfilePage(),
+      '/user/profile/edit': (_) => UserProfileEditPage(),
       '/message': (_) => MessageView(),
     };
   }
