@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/search_mypage_bottom_navigation.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
@@ -28,7 +29,7 @@ class UserPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _Footer(),
+      bottomNavigationBar: SearchMypageBottomNavigation(),
       body: Container(
         color: Colors.white,
         child: Column(
@@ -293,30 +294,6 @@ class _MenuItem extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _Footer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.white,
-      elevation: 0.0,
-      items: [
-        BottomNavigationBarItem(
-          label: '',
-          icon: SvgPicture.asset(
-            'assets/images/user/search.svg',
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: '',
-          icon: SvgPicture.asset(
-            'assets/images/user/person_black.svg',
-          ),
-        ),
-      ],
     );
   }
 }
