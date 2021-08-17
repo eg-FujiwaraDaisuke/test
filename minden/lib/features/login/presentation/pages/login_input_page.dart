@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
 import 'package:minden/utile.dart';
@@ -242,8 +243,12 @@ class _LoginInputPageState extends State<LoginInputPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // TODO どこかのページに飛ばす
                                   print('ログインせずに利用する');
+                                  final route = NoAnimationMaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                    settings: RouteSettings(name: "/home"),
+                                  );
+                                  Navigator.pushReplacement(context, route);
                                 },
                                 child: Text(
                                   i18nTranslate(context, 'login_not_login_use'),

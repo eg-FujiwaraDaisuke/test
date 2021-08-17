@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-enum TabItem { home, mypage }
+import 'home_mypage_tab.dart';
 
-const tabTitle = <TabItem, String>{
-  TabItem.home: 'Home',
-  TabItem.mypage: 'Mypage',
-};
-const tabIcon = <TabItem, String>{
-  TabItem.home: 'home',
-  TabItem.mypage: 'mypage',
-};
+class HomeMypageTabNavigation extends StatelessWidget {
+  final TabItem currentTab;
+  final ValueChanged<TabItem> onSelectTab;
 
-class SearchMypageBottomNavigation extends StatelessWidget {
-  final TabItem currentTab = TabItem.mypage;
-  // final ValueChanged<Tab> onSelect;
-
-  SearchMypageBottomNavigation(
-      // this.currentTab,
-      // this.onSelect,
-      )
-      : super();
+  HomeMypageTabNavigation({
+    required this.currentTab,
+    required this.onSelectTab,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +22,24 @@ class SearchMypageBottomNavigation extends StatelessWidget {
         bottomItem(context, tabItem: TabItem.mypage, isNewNotification: true)
       ],
       type: BottomNavigationBarType.fixed,
-      onTap: (index) => {print(index)},
       selectedLabelStyle: const TextStyle(
         fontSize: 12,
         fontFamily: 'NotoSansJP',
         fontWeight: FontWeight.w500,
       ),
       selectedItemColor: Color(0xFFFF8C00),
-      currentIndex: 1,
+      onTap: (index) => onSelectTab(
+        TabItem.values[index],
+      ),
+      currentIndex: currentTab.index,
     );
   }
 
-  BottomNavigationBarItem bottomItem(BuildContext context,
-      {TabItem? tabItem, bool isNewNotification = false}) {
+  BottomNavigationBarItem bottomItem(
+    BuildContext context, {
+    TabItem? tabItem,
+    bool isNewNotification = false,
+  }) {
     final color = currentTab == tabItem ? Color(0xFFFF8C00) : Color(0xFFA7A7A7);
     return BottomNavigationBarItem(
       icon: Stack(
@@ -60,6 +55,7 @@ class SearchMypageBottomNavigation extends StatelessWidget {
             right: -6,
             top: -7,
             child: Opacity(
+              // TODO プッシュ通知の未読が存在するか確認する方法がわからない
               opacity: isNewNotification ? 1 : 0,
               child: Container(
                 width: 14,

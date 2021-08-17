@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/search_mypage_bottom_navigation.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
@@ -29,7 +29,6 @@ class UserPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: SearchMypageBottomNavigation(),
       body: Container(
         color: Colors.white,
         child: Column(
@@ -242,6 +241,7 @@ class _MenuItem extends StatelessWidget {
                         right: -6,
                         top: -3,
                         child: Opacity(
+                          // TODO プッシュ通知の未読が存在するか確認する方法がわからない
                           opacity: isNewNotification ? 1 : 0,
                           child: Container(
                             width: 14,
@@ -272,6 +272,7 @@ class _MenuItem extends StatelessWidget {
                   ),
                   SizedBox(width: 22),
                   isAccordion ? Icon(Icons.keyboard_arrow_right) : Container(),
+                  // TODO プッシュ通知の最新未読を取得する方法がわからない
                   isNewNotification
                       ? Flexible(
                           child: Text(
