@@ -173,6 +173,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
         settings: RouteSettings(name: "/tutorial"),
       );
       Navigator.pushReplacement(context, route);
+      return;
     }
     // チュートリアルはみたが、ログインしないユーザー
     final route = NoAnimationMaterialPageRoute(
