@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/no_animation_router.dart';
@@ -8,6 +9,7 @@ import 'package:minden/features/login/presentation/pages/login_reset_password_pa
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
+import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
@@ -15,6 +17,7 @@ import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 /// デバッグビルド時のみ遷移可能で、各画面への遷移や機能呼び出しを提供する
 /// NOTE: 本画面を利用する場合、通常と異なる遷移となるため、
 /// Navigator関係の不具合が疑われる際は、本画面実装に起因するものか切り分けした上で調査されたし
+
 class DebugPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -27,9 +30,11 @@ class DebugPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _generateNavigatorPush(
-                    context, '通常遷移', (context) => InitialPage(), '/'),
+                    context, '通常遷移', (context) => InitialPage(), '/init'),
                 _generateNavigatorPush(
                     context, 'ログイン', (context) => LoginPage(), '/login'),
+                _generateNavigatorPush(context, 'チュートリアル',
+                    (context) => TutorialPage(), '/tutorial'),
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',

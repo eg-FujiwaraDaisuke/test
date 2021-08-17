@@ -1,19 +1,31 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Tutorial {
-  late final String title;
-  late final String description;
-  late final String imagePath;
+import '../../../../injection_container.dart';
 
-  Tutorial({
-    required this.title,
-    required this.description,
-    required this.imagePath,
-  });
+enum PositionAlign { left, right }
+
+class Tutorial {
+  final String title;
+  final String description;
+  final String imagePath;
+  final Map<String, double> tittlePosition;
+  final TextAlign titleTextAlign;
+  final PositionAlign positionAlign;
+
+  Tutorial(
+      {required this.title,
+      required this.description,
+      required this.imagePath,
+      required this.tittlePosition,
+      required this.titleTextAlign,
+      required this.positionAlign});
 }
 
 class TutorialPage extends StatefulWidget {
@@ -25,6 +37,49 @@ class _TutorialPageState extends State<TutorialPage> {
   final CarouselController _controller = CarouselController();
   int _currentIndex = 0;
 
+  late bool _fetching = false;
+  late NotificationSettings _settings;
+  late String _token;
+  late Stream<String> _tokenStream;
+
+  Future<void> requestPermissions() async {
+    setState(() {
+      _fetching = true;
+    });
+
+    final settings = await si<FirebaseMessaging>().requestPermission(
+      announcement: true,
+      carPlay: true,
+      criticalAlert: true,
+    );
+
+    setState(() {
+      _fetching = false;
+      _settings = settings;
+    });
+
+    print(_settings.alert);
+  }
+
+  void setToken(String? token) {
+    print(token);
+    if (token == null) return;
+    setState(() {
+      _token = token;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    si<FirebaseMessaging>().getToken().then((String? token) {
+      setToken(token);
+    });
+    //TODO トークンの変更を検知したらサーバにトークンを送信して常に最新の FCM トークンを使う
+    _tokenStream = si<FirebaseMessaging>().onTokenRefresh;
+    _tokenStream.listen(setToken);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Tutorial> _tutorialData = [
@@ -32,18 +87,31 @@ class _TutorialPageState extends State<TutorialPage> {
         imagePath: 'tutorial-1.png',
         title: i18nTranslate(context, 'tutorial_step_1_title'),
         description: i18nTranslate(context, 'tutorial_step_1_description'),
+        titleTextAlign: TextAlign.left,
+        tittlePosition: {'left': 39, 'right': 0, 'top': 227},
+        positionAlign: PositionAlign.left,
       ),
       Tutorial(
         imagePath: 'tutorial-2.png',
         title: i18nTranslate(context, 'tutorial_step_2_title'),
         description: i18nTranslate(context, 'tutorial_step_2_description'),
+        titleTextAlign: TextAlign.right,
+        tittlePosition: {'right': 18, 'left': 0, 'top': 201},
+        positionAlign: PositionAlign.right,
       ),
       Tutorial(
         imagePath: 'tutorial-3.png',
         title: i18nTranslate(context, 'tutorial_step_3_title'),
         description: i18nTranslate(context, 'tutorial_step_3_description'),
+        titleTextAlign: TextAlign.right,
+        tittlePosition: {'right': 32, 'left': 0, 'top': 74},
+        positionAlign: PositionAlign.right,
       ),
     ];
+
+    if (_fetching) {
+      return const CircularProgressIndicator();
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -84,9 +152,14 @@ class _TutorialPageState extends State<TutorialPage> {
                       height: 17,
                       child: GestureDetector(
                         onTap: () async {
-                          // ここで別ページに飛ばす
+                          // ここでプッシュ通知許可ダイアログを出す
+                          await requestPermissions();
                           await setHasTutorial();
-                          print('skip');
+                          final route = NoAnimationMaterialPageRoute(
+                            builder: (context) => HomePage(),
+                            settings: RouteSettings(name: '/home'),
+                          );
+                          Navigator.pushReplacement(context, route);
                         },
                         child: Opacity(
                           opacity: _currentIndex != _tutorialData.length - 1
@@ -144,8 +217,14 @@ class _TutorialPageState extends State<TutorialPage> {
                             )
                           : GestureDetector(
                               onTap: () async {
-                                print('Start');
+                                // ここでプッシュ通知許可ダイアログを出す
+                                await requestPermissions();
                                 await setHasTutorial();
+                                final route = NoAnimationMaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                  settings: RouteSettings(name: '/home'),
+                                );
+                                Navigator.pushReplacement(context, route);
                               },
                               child: Text(
                                 i18nTranslate(context, "start"),
@@ -187,7 +266,7 @@ class Slide extends StatelessWidget {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 328,
+              height: 484,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
@@ -197,7 +276,7 @@ class Slide extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 328,
+              height: 484,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: FractionalOffset.center,
@@ -213,31 +292,29 @@ class Slide extends StatelessWidget {
                 ),
               ),
             ),
+            Positioned(
+              top: data.tittlePosition['top'],
+              left: data.tittlePosition['left'],
+              right: data.tittlePosition['right'],
+              child: Text(
+                data.title,
+                textAlign: data.titleTextAlign,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  height: calcFontHeight(fontSize: 18, lineHeight: 32.4),
+                  letterSpacing: calcLetterSpacing(letter: 4),
+                ),
+              ),
+            ),
           ],
         ),
         SizedBox(
-          height: 48,
+          height: 50,
         ),
         Container(
-          height: 65,
-          alignment: Alignment.center,
-          child: Text(
-            data.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-              height: calcFontHeight(fontSize: 18, lineHeight: 32.4),
-              letterSpacing: calcLetterSpacing(letter: 4),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 26,
-        ),
-        Container(
-          height: 67,
           alignment: Alignment.center,
           child: Text(
             data.description,
@@ -251,7 +328,7 @@ class Slide extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 109,
+          height: 41,
         ),
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,10 +21,14 @@ import 'package:minden/features/user/presentation/pages/user_profile_edit_page.d
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
 import 'core/ui/tab_indicator.dart';
+import 'features/debug/debug_push_message_page.dart';
+import 'features/home/presentation/pages/home_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
 
 class Application extends StatelessWidget {
+  const Application({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -81,20 +86,22 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      "/": (_) {
+      '/': (_) {
         if (kReleaseMode) {
           return InitialPage();
         } else {
           return DebugPage();
         }
       },
-      "/tutorial": (_) => TutorialPage(),
-      "/login": (_) => LoginPage(),
-      "/home/top": (_) => HomeTopPage(),
-      "/my_page/matching": (_) => MatchingPage(),
-      "/user": (_) => UserPage(),
-      "/user/profile": (_) => UserProfilePage(),
-      "/user/profile/edit": (_) => UserProfileEditPage(),
+      '/tutorial': (_) => TutorialPage(),
+      '/home': (_) => HomePage(),
+      '/login': (_) => LoginPage(),
+      '/home/top': (_) => HomeTopPage(),
+      '/my_page/matching': (_) => MatchingPage(),
+      '/user': (_) => UserPage(),
+      '/user/profile': (_) => UserProfilePage(),
+      '/user/profile/edit': (_) => UserProfileEditPage(),
+      '/message': (_) => MessageView(),
     };
   }
 }
