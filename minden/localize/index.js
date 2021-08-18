@@ -1,102 +1,88 @@
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
-
 var async = require('async');
-var SheetLoader = require('sheet-loader');
 
+const {google} = require('googleapis');
+const {oAuth2ClientGen} = require('google-auth-token-generator');
 
-var UNDEFINED_KEY = '【Undefined】';
-var SHEET_KEY = '1q-Rj5CO6Da-NZAjeSJWpvuwzKWwZXEtVM65NlhBo_nk';
-var SHEET_NAME = 'Localization';
-var COLUMN_KEYS_LOCALIZE = ['jp', 'en'];
+(async () => {
+  var config = loadConfig('config.json');
+  var files = config.files;
+  var placeHolders = {
+      '{num}' : '%d',
+      '{str}' : '%s'
+  };
 
-(function () {
-    var config = loadConfig('config.json');
-    var files = config.files;
-    var placeHolders = {
-        '{num}' : '%d',
-        '{str}' : '%s'
-    };
-
-    var sheetLoader = new SheetLoader({
-        sheetKey: SHEET_KEY,
-        sheetTitle: SHEET_NAME,
-        columns: {
-            key: 'key',
-            jp: 'jp',
-            en: 'en'
-        }
+  const auth = oAuth2ClientGen({library: google});
+  const sheets = google.sheets({version: 'v4', auth});
+  var rows;
+  try {
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: '1q-Rj5CO6Da-NZAjeSJWpvuwzKWwZXEtVM65NlhBo_nk',
+      range: 'Localization!A2:C',
     });
+    rows = res.data.values;
+  } catch (error) {
+    console.log('The API returned an error: ' + error);
+  }
 
-    var book, bookInfo, worksheet, rows;
+  async.series([function (next) {
+      var filtered = [];
+      rows.forEach(function (row) {
+          if (!row[0]) {
+              return;
+          }
+          filtered.push(row);
+      });
+      rows = filtered;
+      return next();
 
-    async.series([function (next) {
-        // load sheet
-        sheetLoader.load({ usePrompt: true }, function (err, result) {
-            if (err) {
-                console.log(err);
-                next(err);
-                return;
-            }
-            rows = result;
-            next();
-        });
+  }, function (next) {
+      rows = rows.sort(function (a, b) {
+          return a[0] > b[0] ? 1 : -1;
+      });
+      return next();
 
-    }, function (next) {
-        // reduce empty row
-        var filtered = [];
-        rows.forEach(function (row) {
-            if (!row.key) {
-                return;
-            }
-            filtered.push(row);
-        });
-        rows = filtered;
-        return next();
+  }, function (next) {
+      // search duplicated
+      var duplicated = searchDuplicated(rows);
 
-    }, function (next) {
-        // sort
-        rows = rows.sort(function (a, b) {
-            return a.key > b.key ? 1 : -1;
-        });
-        return next();
+      if (duplicated.length) {
+          return next('found duplicated words.\n - ' + duplicated.join('\n - '));
+      }
+      return next();
 
-    }, function (next) {
-        // search duplicated
-        var duplicated = searchDuplicated(rows);
-
-        if (duplicated.length) {
-            return next('found duplicated words.\n - ' + duplicated.join('\n - '));
-        }
-        return next();
-
-    }, function (next) {
-        var writeTasks = files
-            .filter(param => param.column_key)
-            .map(param => function (callback) {
-                writeFile({
-                    filename: filePath(param.path),
-                    columnKey: param.column_key,
-                    rows: rows,
-                    placeHolders: placeHolders,
-                    formatter: jsonFormat,
-                    delimiter: ',\n',
-                    header: '{\n',
-                    footer: '\n}\n'
-                }, callback);
-            });
-        async.parallel(writeTasks, next);
-    }], function (err) {
-        if (err) {
-            console.error([
-                '****** error ******',
-                err.toString()
-            ].join('\n').error);
-            return;
-        }
-        console.log('done.');
-    });
+  }, function (next) {
+      var writeTasks = files
+          .filter(param => param.column_key)
+          .map(param => function (callback) {
+              writeFile({
+                  filename: filePath(param.path),
+                  columnKey: param.column_key,
+                  rows: rows,
+                  placeHolders: placeHolders,
+                  formatter: jsonFormat,
+                  delimiter: ',\n',
+                  header: '{\n',
+                  footer: '\n}\n'
+              }, callback);
+          });
+      async.parallel(writeTasks, next);
+  }], function (err) {
+      if (err) {
+          console.error([
+              '****** error ******',
+              err.toString()
+          ].join('\n').error);
+          return;
+      }
+      console.log('done.');
+  });
 })();
+
+
 
 function filePath (filename) {
     if (/^\//.test(filename)) {
@@ -112,17 +98,15 @@ function loadConfig (filename) {
 }
 
 function searchDuplicated (rows) {
-    console.log("searchDuplicated");
-    // 重複するrow.keyがあれば、そのキーのリストを返す
+    // 重複するrowがあれば、そのキーのリストを返す
     var duplicated = [];
     var map = {};
     rows.forEach(function (row) {
-        if (map[row.key]) {
-            duplicated.push(row.key);
+        if (map[row[0]]) {
+            duplicated.push(row[0]);
         }
-        map[row.key] = true;
+        map[row[0]] = true;
     });
-    console.log(duplicated);
     return duplicated;
 }
 
@@ -178,18 +162,23 @@ function writeFile (opts, callback) {
     }, function (next) {
         // write body
         async.eachSeries(rows, function (row, nextItem) {
-            if (!row[columnKey] || !row.key) {
+            if (!row[0]) {
                 nextItem();
                 return;
             }
 
-            var value = row[columnKey];
+            var value;
+            if (columnKey=="jp") {
+              value = row[1];
+            } else {
+              value = row[2];
+            }
 
             for (var exp in placeHolders) {
                 value = value.replace(new RegExp(exp, 'g'), placeHolders[exp]);
             }
 
-            var line = formatter(row.key, value);
+            var line = formatter(row[0], value);
             formattedRows.push(line);
             nextItem();
         }, next);
