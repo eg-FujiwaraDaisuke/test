@@ -13,6 +13,9 @@ class ConnectionFailure extends Failure {}
 
 class LoginFailure extends Failure {}
 
+/// RefreshTokenの新規払い出しエラー
+class RenewTokenFailure extends Failure {}
+
 class SupportVersionFailure extends Failure {
   SupportVersionFailure({
     required this.actionUrl,
