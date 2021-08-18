@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/string_util.dart';
 
 import 'home_mypage_tab.dart';
 
@@ -46,6 +47,15 @@ class HomeMypageTabNavigation extends StatelessWidget {
     bool hasUnreadNotice = false,
   }) {
     final color = currentTab == tabItem ? Color(0xFFFF8C00) : Color(0xFFA7A7A7);
+    final tabTitle = <TabItem, String>{
+      TabItem.home: i18nTranslate(context, 'tab_navigation_home'),
+      TabItem.mypage: i18nTranslate(context, 'tab_navigation_mypage'),
+    };
+    const tabIcon = <TabItem, String>{
+      TabItem.home: 'home',
+      TabItem.mypage: 'mypage',
+    };
+
     return BottomNavigationBarItem(
       icon: Stack(
         clipBehavior: Clip.none,
