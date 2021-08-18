@@ -33,11 +33,11 @@ void main() {
     const Token tToken = tTokenModel;
 
     test('should return remote data', () async {
-      when(mockTokenDataSource.getToken(tRefreshToken))
+      when(mockTokenDataSource.requestRefreshToken(tRefreshToken))
           .thenAnswer((_) async => tTokenModel);
 
       final result = await tokenRepositoryImpl.getToken(tRefreshToken);
-      verify(mockTokenDataSource.getToken(tRefreshToken));
+      verify(mockTokenDataSource.requestRefreshToken(tRefreshToken));
       expect(result, equals(const Right(tToken)));
     });
 
@@ -46,7 +46,7 @@ void main() {
           .thenThrow(ServerException());
 
       final result = await tokenRepositoryImpl.getToken(tRefreshToken);
-      verify(mockTokenDataSource.getToken(tRefreshToken));
+      verify(mockTokenDataSource.requestRefreshToken(tRefreshToken));
       expect(result, equals(Left(RenewTokenFailure())));
     });
   });
