@@ -19,10 +19,15 @@ class HomeMypageTabNavigation extends StatelessWidget {
       elevation: 0,
       items: [
         bottomItem(context, tabItem: TabItem.home),
-        bottomItem(context, tabItem: TabItem.mypage, isNewNotification: true)
+        bottomItem(context, tabItem: TabItem.mypage, hasUnreadNotice: true)
       ],
       type: BottomNavigationBarType.fixed,
       selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontFamily: 'NotoSansJP',
+        fontWeight: FontWeight.w500,
+      ),
+      unselectedLabelStyle: const TextStyle(
         fontSize: 12,
         fontFamily: 'NotoSansJP',
         fontWeight: FontWeight.w500,
@@ -38,7 +43,7 @@ class HomeMypageTabNavigation extends StatelessWidget {
   BottomNavigationBarItem bottomItem(
     BuildContext context, {
     TabItem? tabItem,
-    bool isNewNotification = false,
+    bool hasUnreadNotice = false,
   }) {
     final color = currentTab == tabItem ? Color(0xFFFF8C00) : Color(0xFFA7A7A7);
     return BottomNavigationBarItem(
@@ -55,8 +60,9 @@ class HomeMypageTabNavigation extends StatelessWidget {
             right: -6,
             top: -7,
             child: Opacity(
-              // TODO プッシュ通知の未読が存在するか確認する方法がわからない
-              opacity: isNewNotification ? 1 : 0,
+              //アプリがforegroundになった際に、応援メッセージ履歴取得APIにて既読メッセージの有無を取得する。
+              //既読メッセージが存在している場合、マイページタブ、メッセージラベルに未読バッジを表示する。
+              opacity: hasUnreadNotice ? 1 : 0,
               child: Container(
                 width: 14,
                 height: 14,

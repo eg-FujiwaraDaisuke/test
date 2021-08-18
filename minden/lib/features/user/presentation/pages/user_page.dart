@@ -112,13 +112,13 @@ class _Menu {
   final String title;
   final String icon;
   final NoAnimationMaterialPageRoute? route;
-  final bool isNewNotification;
+  final bool hasUnreadNotice;
   final bool isAccordion;
   _Menu({
     required this.title,
     required this.icon,
     this.route,
-    this.isNewNotification = false,
+    this.hasUnreadNotice = false,
     this.isAccordion = false,
   });
 }
@@ -153,7 +153,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
         title: i18nTranslate(context, 'user_menu_thanks_message'),
         icon: 'message',
-        isNewNotification: true,
+        hasUnreadNotice: true,
         route: NoAnimationMaterialPageRoute(
           builder: (context) => UserThanksMessagePage(),
           settings: RouteSettings(name: "/user/thanksMessage"),
@@ -186,7 +186,7 @@ class _MenuListView extends StatelessWidget {
                 title: e.title,
                 icon: e.icon,
                 route: e.route,
-                isNewNotification: e.isNewNotification,
+                hasUnreadNotice: e.hasUnreadNotice,
                 isAccordion: e.isAccordion,
               ),
             )
@@ -200,13 +200,13 @@ class _MenuItem extends StatelessWidget {
   final title;
   final icon;
   final route;
-  final bool isNewNotification;
+  final bool hasUnreadNotice;
   final bool isAccordion;
   const _MenuItem({
     required this.title,
     required this.icon,
     required this.route,
-    this.isNewNotification = false,
+    this.hasUnreadNotice = false,
     this.isAccordion = false,
   }) : super();
 
@@ -241,8 +241,9 @@ class _MenuItem extends StatelessWidget {
                         right: -6,
                         top: -3,
                         child: Opacity(
-                          // TODO プッシュ通知の未読が存在するか確認する方法がわからない
-                          opacity: isNewNotification ? 1 : 0,
+                          //アプリがforegroundになった際に、応援メッセージ履歴取得APIにて既読メッセージの有無を取得する。
+                          //既読メッセージが存在している場合、マイページタブ、メッセージラベルに未読バッジを表示する。
+                          opacity: hasUnreadNotice ? 1 : 0,
                           child: Container(
                             width: 14,
                             height: 14,
@@ -272,8 +273,9 @@ class _MenuItem extends StatelessWidget {
                   ),
                   SizedBox(width: 22),
                   isAccordion ? Icon(Icons.keyboard_arrow_right) : Container(),
-                  // TODO プッシュ通知の最新未読を取得する方法がわからない
-                  isNewNotification
+                  //アプリがforegroundになった際に、応援メッセージ履歴取得APIにて既読メッセージの有無を取得する。
+                  //既読メッセージが存在している場合、マイページタブ、メッセージラベルに未読バッジを表示する。
+                  hasUnreadNotice
                       ? Flexible(
                           child: Text(
                             'XXX発電所' +
