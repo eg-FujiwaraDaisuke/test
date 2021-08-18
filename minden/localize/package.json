@@ -8,7 +8,7 @@
   "dependencies": {
     "async": "0.*",
     "colors": "0.*",
-    "google-auth-library": "0.9.6",
-    "sheet-loader": "0.*"
+    "google-auth-token-generator": "^0.1.4",
+    "googleapis": "^84.0.0"
   }
 }
