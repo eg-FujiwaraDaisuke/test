@@ -24,7 +24,8 @@ void main() {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tBody = json.encode({'loginId': tId, 'password': tPassword});
-    final tUrl = 'https://www.dev.minapp.minden.co.jp/api/v1/auth';
+    final Uri tUrl =
+        Uri.https('https://www.dev.minapp.minden.co.jp', 'api/v1/auth');
     final tUserModel =
         UserModel.fromJson(json.decode(fixture('login_data.json')));
 

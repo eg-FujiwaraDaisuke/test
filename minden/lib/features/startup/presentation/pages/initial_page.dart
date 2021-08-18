@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -8,6 +9,8 @@ import 'package:minden/core/env/config.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
+
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
@@ -163,19 +166,28 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   }
 
   void _nextPage(bool hasTutorial) {
+    // 新規ユーザー
     if (!hasTutorial) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => TutorialPage(),
         settings: RouteSettings(name: "/tutorial"),
       );
       Navigator.pushReplacement(context, route);
+      return;
     }
-
+    // チュートリアルはみたが、ログインしないユーザー
     final route = NoAnimationMaterialPageRoute(
       builder: (context) => LoginPage(),
       settings: RouteSettings(name: "/login"),
     );
     Navigator.pushReplacement(context, route);
+
+    //TODO ログインしてて、チュートリアルもみたユーザー
+    // final route = NoAnimationMaterialPageRoute(
+    //   builder: (context) => HomePage(),
+    //   settings: RouteSettings(name: "/home"),
+    // );
+    // Navigator.pushReplacement(context, route);
   }
 
   @override
