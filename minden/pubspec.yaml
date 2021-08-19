@@ -67,9 +67,18 @@ dependencies:
   image_picker: ^0.8.2
   image_cropper: ^1.4.1
 
+  # ピュアdartのkey-valueストア
+  # https://pub.dev/packages/hive
+  hive: ^2.0.4
+  # 暗号化鍵の保存用（Android: KeyStore, iOS: Keychainに保存する）
+  # https://pub.dev/packages/flutter_secure_storage
+  flutter_secure_storage: ^4.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner: 1.12.2
 
   plugin_platform_interface: ^2.0.1
 

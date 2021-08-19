@@ -13,7 +13,7 @@ class TokenRepositoryImpl implements TokenRepository {
   @override
   Future<Either<RenewTokenFailure, Token>> getToken(String refreshToken) async {
     try {
-      final token = await tokenDataSource.getToken(refreshToken);
+      final token = await tokenDataSource.requestRefreshToken(refreshToken);
       return Right(token);
     } on ServerException {
       return left(RenewTokenFailure());
