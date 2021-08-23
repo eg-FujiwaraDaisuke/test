@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import '../../../../utile.dart';
 
@@ -23,7 +25,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9E5),
+      backgroundColor: Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -57,8 +59,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -75,37 +76,10 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
                 SizedBox(height: 38),
                 _NameInput(onChanged: _onInputChangedName),
                 SizedBox(height: 182),
-                GestureDetector(
-                  onTap: () {
-                    // TODO 設定を完了する
-                    final route = NoAnimationMaterialPageRoute(
-                      builder: (context) => LoginProfilePhotoSetting(),
-                      settings:
-                          RouteSettings(name: "/login/profilePhotoSetting"),
-                    );
-                    Navigator.pushReplacement(context, route);
-                  },
-                  child: Container(
-                    width: 180,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFF8C00),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(27),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        i18nTranslate(context, 'profile_setting_next'),
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                      ),
-                    ),
-                  ),
+                Botton(
+                  onTap: _next,
+                  text: i18nTranslate(context, 'profile_setting_next'),
+                  size: BottonSize.S,
                 ),
               ],
             ),
@@ -113,6 +87,14 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
         ),
       ),
     );
+  }
+
+  void _next() {
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => LoginProfilePhotoSetting(),
+      settings: RouteSettings(name: "/login/profilePhotoSetting"),
+    );
+    Navigator.pushReplacement(context, route);
   }
 }
 
