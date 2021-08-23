@@ -7,6 +7,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_bio_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
 
@@ -48,42 +50,44 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9E5),
+      backgroundColor: Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => LoginProfileNameSetting(),
-                    settings: RouteSettings(name: "/login/profileNameSetting"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
+        leading: GestureDetector(
+          onTap: () => _prev(),
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
+            ),
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: _next,
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Center(
+                child: Text(
+                  "スキップ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -105,36 +109,10 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
                   child: _buildImage(),
                 ),
                 SizedBox(height: 182),
-                GestureDetector(
-                  onTap: () {
-                    // TODO 設定を完了する
-                    final route = NoAnimationMaterialPageRoute(
-                      builder: (context) => LoginProfileBioSetting(),
-                      settings: RouteSettings(name: "/login/profileBioSetting"),
-                    );
-                    Navigator.pushReplacement(context, route);
-                  },
-                  child: Container(
-                    width: 180,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFF8C00),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(27),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        i18nTranslate(context, 'profile_setting_next'),
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                      ),
-                    ),
-                  ),
+                Botton(
+                  onTap: _next,
+                  text: i18nTranslate(context, 'profile_setting_next'),
+                  size: BottonSize.S,
                 ),
               ],
             ),
@@ -144,20 +122,38 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
     );
   }
 
+  void _next() {
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => LoginProfileBioSetting(),
+      settings: RouteSettings(name: "/login/profileBioSetting"),
+    );
+    Navigator.pushReplacement(context, route);
+  }
+
+  void _prev() {
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => LoginProfileNameSetting(),
+      settings: RouteSettings(name: "/login/profileNameSetting"),
+    );
+    Navigator.pushReplacement(context, route);
+  }
+
   Widget _buildImage() {
     return _image == null
         ? Container(
             width: 150,
             height: 150,
             decoration: BoxDecoration(
-              color: Color(0xFFFEFF92),
+              color: Color(0xFFFFFFFF),
               shape: BoxShape.circle,
             ),
-            child: SvgPicture.asset('assets/images/common/camera.svg',
-                color: Colors.white,
-                width: 27,
-                height: 24,
-                fit: BoxFit.scaleDown),
+            child: Center(
+              child: SvgPicture.asset(
+                'assets/images/common/camera.svg',
+                width: 32,
+                height: 28,
+              ),
+            ),
           )
         : Container(
             width: 150,
