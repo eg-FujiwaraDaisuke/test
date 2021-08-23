@@ -1,22 +1,31 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:minden/core/util/no_animation_router.dart';
-import 'package:minden/features/debug/debug_page.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
 import 'package:minden/features/debug/debug_push_message_page.dart';
-import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/power_plant/pages/power_plant_page.dart';
-import 'package:minden/features/startup/presentation/pages/initial_page.dart';
-
-import '../../../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 // FCMプッシュ通知の遷移周りの初期化を行っています。
+//bottomNavigationBarの出し分けを行います
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  TabItem _currentTab = TabItem.home;
+
+  final _navigatorKeys = {
+    TabItem.home: GlobalKey<NavigatorState>(),
+    TabItem.mypage: GlobalKey<NavigatorState>(),
+  };
+
+  void _selectTab(TabItem tabItem) {
+    setState(() => _currentTab = tabItem);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +68,31 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeTopPage();
+    return WillPopScope(
+      onWillPop: () async =>
+          !await _navigatorKeys[_currentTab]!.currentState!.maybePop(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _buildOffstageNavigator(TabItem.home),
+            _buildOffstageNavigator(TabItem.mypage)
+          ],
+        ),
+        bottomNavigationBar: HomeMypageTabNavigation(
+          currentTab: _currentTab,
+          onSelectTab: _selectTab,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOffstageNavigator(TabItem tabItem) {
+    return Offstage(
+      offstage: _currentTab != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem],
+        tabItem: tabItem,
+      ),
+    );
   }
 }
