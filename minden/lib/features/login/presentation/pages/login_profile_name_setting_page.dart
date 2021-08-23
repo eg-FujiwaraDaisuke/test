@@ -29,32 +29,16 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => LoginProfileNameSetting(),
-                    settings: RouteSettings(name: "/login/profileNameSetting"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
-                  ),
-                ),
-              ),
+        leading: GestureDetector(
+          onTap: () => _prev(),
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
             ),
-          ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -93,6 +77,14 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
     final route = NoAnimationMaterialPageRoute(
       builder: (context) => LoginProfilePhotoSetting(),
       settings: RouteSettings(name: "/login/profilePhotoSetting"),
+    );
+    Navigator.pushReplacement(context, route);
+  }
+
+  void _prev() {
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => LoginProfileNameSetting(),
+      settings: RouteSettings(name: "/login/profileNameSetting"),
     );
     Navigator.pushReplacement(context, route);
   }
