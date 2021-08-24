@@ -9,6 +9,7 @@ class Botton extends StatelessWidget {
   final Function onTap;
   final String text;
   final BottonSize size;
+  bool _isActive = true;
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +20,24 @@ class Botton extends StatelessWidget {
           width: bottonStyle[size]!.width,
           height: bottonStyle[size]!.height,
           decoration: BoxDecoration(
-            color: Color(0xFFFF8C00),
             borderRadius: BorderRadius.all(
               Radius.circular(bottonStyle[size]!.height * 0.5),
             ),
-            gradient: LinearGradient(
-              begin: FractionalOffset.topLeft,
-              end: FractionalOffset.bottomLeft,
-              colors: [
-                Color(0xFFFF8C00),
-                Color(0xFFFFC277),
-              ],
-              stops: [
-                0.0,
-                1.0,
-              ],
-            ),
+            color: _isActive ? null : Color(0xFFE0E0E0),
+            gradient: _isActive
+                ? LinearGradient(
+                    begin: FractionalOffset.topLeft,
+                    end: FractionalOffset.bottomLeft,
+                    colors: [
+                      Color(0xFFFF8C00),
+                      Color(0xFFFFC277),
+                    ],
+                    stops: [
+                      0.0,
+                      1.0,
+                    ],
+                  )
+                : null,
           ),
           child: Center(
             child: Text(
