@@ -7,12 +7,14 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_tags_setting_page.dart';
 
-class LoginProfileBioSetting extends StatefulWidget {
+class LoginProfileBioSettingPage extends StatefulWidget {
   @override
-  _LoginProfileBioSettingState createState() => _LoginProfileBioSettingState();
+  _LoginProfileBioSettingPageState createState() =>
+      _LoginProfileBioSettingPageState();
 }
 
-class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
+class _LoginProfileBioSettingPageState
+    extends State<LoginProfileBioSettingPage> {
   String _inputBio = '';
 
   void _onInputChangedBio(value) {
@@ -74,7 +76,7 @@ class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
 
   void _next() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfileTagsSetting(),
+      builder: (context) => LoginProfileTagsSettingPage(),
       settings: RouteSettings(name: "/login/profileTagsSetting"),
     );
     Navigator.pushReplacement(context, route);
@@ -82,7 +84,7 @@ class _LoginProfileBioSettingState extends State<LoginProfileBioSetting> {
 
   void _prev() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfilePhotoSetting(),
+      builder: (context) => LoginProfilePhotoSettingPage(),
       settings: RouteSettings(name: "/login/profilePhotoSetting"),
     );
     Navigator.pushReplacement(context, route);

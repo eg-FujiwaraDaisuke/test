@@ -37,10 +37,13 @@ class DebugPage extends StatelessWidget {
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',
-                    (context) => LoginProfileNameSetting(),
+                    (context) => LoginProfileNameSettingPage(),
                     '/login/profileNameSetting'),
-                _generateNavigatorPush(context, 'ログイン パスワードリセット',
-                    (context) => LoginResetPassword(), '/login/resetPassword'),
+                _generateNavigatorPush(
+                    context,
+                    'ログイン パスワードリセット',
+                    (context) => LoginResetPasswordPage(),
+                    '/login/resetPassword'),
                 _generateNavigatorPush(context, 'ホーム - トップ',
                     (context) => HomeTopPage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',

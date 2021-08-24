@@ -12,13 +12,14 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_bio_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
 
-class LoginProfilePhotoSetting extends StatefulWidget {
+class LoginProfilePhotoSettingPage extends StatefulWidget {
   @override
-  _LoginProfilePhotoSettingState createState() =>
-      _LoginProfilePhotoSettingState();
+  _LoginProfilePhotoSettingPageState createState() =>
+      _LoginProfilePhotoSettingPageState();
 }
 
-class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
+class _LoginProfilePhotoSettingPageState
+    extends State<LoginProfilePhotoSettingPage> {
   File? _image;
   final _picker = ImagePicker();
 
@@ -124,7 +125,7 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
 
   void _next() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfileBioSetting(),
+      builder: (context) => LoginProfileBioSettingPage(),
       settings: RouteSettings(name: "/login/profileBioSetting"),
     );
     Navigator.pushReplacement(context, route);
@@ -132,7 +133,7 @@ class _LoginProfilePhotoSettingState extends State<LoginProfilePhotoSetting> {
 
   void _prev() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfileNameSetting(),
+      builder: (context) => LoginProfileNameSettingPage(),
       settings: RouteSettings(name: "/login/profileNameSetting"),
     );
     Navigator.pushReplacement(context, route);

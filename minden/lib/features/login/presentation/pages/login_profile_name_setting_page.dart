@@ -7,13 +7,14 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import '../../../../utile.dart';
 
-class LoginProfileNameSetting extends StatefulWidget {
+class LoginProfileNameSettingPage extends StatefulWidget {
   @override
-  _LoginProfileNameSettingState createState() =>
-      _LoginProfileNameSettingState();
+  _LoginProfileNameSettingPageState createState() =>
+      _LoginProfileNameSettingPageState();
 }
 
-class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
+class _LoginProfileNameSettingPageState
+    extends State<LoginProfileNameSettingPage> {
   String _inputName = '';
 
   void _onInputChangedName(value) {
@@ -75,7 +76,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
 
   void _next() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfilePhotoSetting(),
+      builder: (context) => LoginProfilePhotoSettingPage(),
       settings: RouteSettings(name: "/login/profilePhotoSetting"),
     );
     Navigator.pushReplacement(context, route);
@@ -83,7 +84,7 @@ class _LoginProfileNameSettingState extends State<LoginProfileNameSetting> {
 
   void _prev() {
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfileNameSetting(),
+      builder: (context) => LoginProfileNameSettingPage(),
       settings: RouteSettings(name: "/login/profileNameSetting"),
     );
     Navigator.pushReplacement(context, route);
