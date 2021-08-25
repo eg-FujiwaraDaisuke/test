@@ -185,20 +185,18 @@ class __ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AbsorbPointer(
-          child: Container(
-            width: 561,
-            height: 561,
-            decoration: BoxDecoration(
-              color: Color(0xFFFFFB92),
-              shape: BoxShape.circle,
-              image: _image == null
-                  ? null
-                  : DecorationImage(
-                      fit: BoxFit.cover,
-                      image: FileImage(_image!),
-                    ),
-            ),
+        Container(
+          width: 561,
+          height: 561,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFFB92),
+            shape: BoxShape.circle,
+            image: _image == null
+                ? null
+                : DecorationImage(
+                    fit: BoxFit.cover,
+                    image: FileImage(_image!),
+                  ),
           ),
         ),
         Positioned(
@@ -252,32 +250,30 @@ class __ProfileImageEditState extends State<_ProfileImageEdit> {
     return Stack(
       children: [
         Positioned(
-          child: AbsorbPointer(
-            child: Container(
-              width: 99,
-              height: 99,
-              decoration: BoxDecoration(
-                color: Color(0xFFFF8C00),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Container(
-                  width: 93,
-                  height: 93,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFB92),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 3,
-                      color: Colors.white,
-                    ),
-                    image: _image == null
-                        ? null
-                        : DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(_image!),
-                          ),
+          child: Container(
+            width: 99,
+            height: 99,
+            decoration: BoxDecoration(
+              color: Color(0xFFFF8C00),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Container(
+                width: 93,
+                height: 93,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFB92),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 3,
+                    color: Colors.white,
                   ),
+                  image: _image == null
+                      ? null
+                      : DecorationImage(
+                          fit: BoxFit.cover,
+                          image: FileImage(_image!),
+                        ),
                 ),
               ),
             ),
