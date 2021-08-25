@@ -56,14 +56,14 @@ class UserPage extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 43,
+                height: 33,
               ),
               Stack(
                 clipBehavior: Clip.none,
+                alignment: Alignment.center,
                 children: [
                   Positioned(
                     top: -500,
-                    left: -70,
                     child: Container(
                       width: 561,
                       height: 561,
@@ -95,7 +95,6 @@ class UserPage extends StatelessWidget {
 
 class _UserProfile extends StatelessWidget {
   final String name;
-
   final String icon;
   _UserProfile({
     required this.name,
@@ -130,7 +129,7 @@ class _UserProfile extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 16,
+            height: 16,
           ),
           Text(
             name,

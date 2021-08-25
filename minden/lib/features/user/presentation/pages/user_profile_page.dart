@@ -20,6 +20,23 @@ class UserProfilePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            final route = NoAnimationMaterialPageRoute(
+              builder: (context) => UserPage(),
+              settings: RouteSettings(name: "/user"),
+            );
+            Navigator.pushReplacement(context, route);
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
+            ),
+          ),
+        ),
         actions: [
           GestureDetector(
             onTap: () {
@@ -58,66 +75,51 @@ class UserProfilePage extends StatelessWidget {
             ),
           ),
         ],
-        leading: GestureDetector(
-          onTap: () {
-            final route = NoAnimationMaterialPageRoute(
-              builder: (context) => UserPage(),
-              settings: RouteSettings(name: "/user"),
-            );
-            Navigator.pushReplacement(context, route);
-          },
-          child: Center(
-            child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
-              fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
-            ),
-          ),
-        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 33,
-              ),
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned(
-                    top: -500,
-                    left: -70,
-                    child: Container(
-                      width: 561,
-                      height: 561,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFFB92),
-                        shape: BoxShape.circle,
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 33,
+                ),
+                Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned(
+                      top: -500,
+                      child: Container(
+                        width: 561,
+                        height: 561,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFFB92),
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
-                  ),
-                  _ProfileInfo(
-                    icon: data.icon,
-                    bio: data.bio,
-                    name: data.name,
-                    wallPaper: data.wallPaper,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 43,
-              ),
-              _TagsList(
-                tagsList: data.tags,
-              ),
-              SizedBox(
-                height: 37,
-              ),
-              // // あとで共通Componentを組み込む
-              _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
-            ],
+                    _ProfileInfo(
+                      icon: data.icon,
+                      bio: data.bio,
+                      name: data.name,
+                      wallPaper: data.wallPaper,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 43,
+                ),
+                _TagsList(
+                  tagsList: data.tags,
+                ),
+                SizedBox(
+                  height: 37,
+                ),
+                // // あとで共通Componentを組み込む
+                _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
+              ],
+            ),
           ),
         ),
       ),
@@ -139,66 +141,60 @@ class _ProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 99,
-                height: 99,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFF8C00),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Container(
-                    width: 93,
-                    height: 93,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFB92),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 3,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Text(
-                name,
-                style: TextStyle(
-                  color: Color(0xFF575292),
-                  fontSize: 18,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              Container(
-                width: 338,
-                child: Text(
-                  bio,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: calcLetterSpacing(letter: 0.5),
-                    height: calcFontHeight(lineHeight: 22, fontSize: 12),
-                  ),
-                ),
-              )
-            ],
+    return Column(
+      children: [
+        Container(
+          width: 99,
+          height: 99,
+          decoration: BoxDecoration(
+            color: Color(0xFFFF8C00),
+            shape: BoxShape.circle,
           ),
-        ],
-      ),
+          child: Center(
+            child: Container(
+              width: 93,
+              height: 93,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFB92),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 3,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        Text(
+          name,
+          style: TextStyle(
+            color: Color(0xFF575292),
+            fontSize: 18,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SizedBox(
+          height: 35,
+        ),
+        Container(
+          width: 338,
+          child: Text(
+            bio,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w400,
+              letterSpacing: calcLetterSpacing(letter: 0.5),
+              height: calcFontHeight(lineHeight: 22, fontSize: 12),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
