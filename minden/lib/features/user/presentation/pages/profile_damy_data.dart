@@ -10,12 +10,9 @@ class ProfileDamyData {
     bio: 'ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。',
     wallPaper: '',
     tags: [
-      Tag(tagId: 'タグID', tagName: '使い捨てしません'),
-      Tag(tagId: 'タグID', tagName: '大切'),
-      Tag(tagId: 'タグID', tagName: '大切'),
-      Tag(tagId: 'タグID', tagName: '大切'),
-      Tag(tagId: 'タグID', tagName: '無農薬野菜好き'),
-      Tag(tagId: 'タグID', tagName: '大切'),
+      Tag(tagId: 'タグID', tagName: '地産地消'),
+      Tag(tagId: 'タグID', tagName: 'フェアトレード'),
+      Tag(tagId: 'タグID', tagName: 'エコ'),
     ],
     selectedPowerPlant: SelectPowerPlant(
       plantId: '生産者ID',
