@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
@@ -120,8 +121,6 @@ class UserProfileEditPage extends StatelessWidget {
   }
 
   void _prev(BuildContext context) {
-    print('_prev');
-
     showDialog(
       context: context,
       builder: (context) {
@@ -154,7 +153,10 @@ class UserProfileEditPage extends StatelessWidget {
                   ),
                   TextButton(
                     child: Text("破棄"),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => {
+                      // TODO　プロフィール画面に戻る
+                      Navigator.pop(context)
+                    },
                   ),
                 ],
               );
@@ -162,22 +164,41 @@ class UserProfileEditPage extends StatelessWidget {
     );
   }
 
-  void _complete(BuildContext context) {
-    Navigator.pop(context);
-  }
+  void _complete(BuildContext context) {}
 }
 
-class _ProfileWallPaperEdit extends StatelessWidget {
+class _ProfileWallPaperEdit extends StatefulWidget {
+  @override
+  __ProfileWallPaperEditState createState() => __ProfileWallPaperEditState();
+}
+
+class __ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
+  File? _image;
+
+  void _setImage(File cropedImage) {
+    setState(() {
+      _image = cropedImage == null ? _image : cropedImage;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          width: 561,
-          height: 561,
-          decoration: BoxDecoration(
-            color: Color(0xFFFFFB92),
-            shape: BoxShape.circle,
+        AbsorbPointer(
+          child: Container(
+            width: 561,
+            height: 561,
+            decoration: BoxDecoration(
+              color: Color(0xFFFFFB92),
+              shape: BoxShape.circle,
+              image: _image == null
+                  ? null
+                  : DecorationImage(
+                      fit: BoxFit.cover,
+                      image: FileImage(_image!),
+                    ),
+            ),
           ),
         ),
         Positioned(
@@ -186,9 +207,10 @@ class _ProfileWallPaperEdit extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              // TODO 写真選択or撮影
-              // TODO onTapが動作しない
-              print('写真選択or撮影');
+              // TODO なぜか反応しない
+              print('aaa');
+              ImagePickerBottomSheet.show(
+                  context: context, imageHandler: _setImage);
             },
             child: Center(
               child: SvgPicture.asset(
@@ -204,7 +226,7 @@ class _ProfileWallPaperEdit extends StatelessWidget {
   }
 }
 
-class _ProfileImageEdit extends StatelessWidget {
+class _ProfileImageEdit extends StatefulWidget {
   final String icon;
   final String wallPaper;
   _ProfileImageEdit({
@@ -213,27 +235,48 @@ class _ProfileImageEdit extends StatelessWidget {
   }) : super();
 
   @override
+  __ProfileImageEditState createState() => __ProfileImageEditState();
+}
+
+class __ProfileImageEditState extends State<_ProfileImageEdit> {
+  File? _image;
+
+  void _setImage(File cropedImage) {
+    setState(() {
+      _image = cropedImage == null ? _image : cropedImage;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Positioned(
-          child: Container(
-            width: 99,
-            height: 99,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF8C00),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Container(
-                width: 93,
-                height: 93,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFB92),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 3,
-                    color: Colors.white,
+          child: AbsorbPointer(
+            child: Container(
+              width: 99,
+              height: 99,
+              decoration: BoxDecoration(
+                color: Color(0xFFFF8C00),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Container(
+                  width: 93,
+                  height: 93,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFB92),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      width: 3,
+                      color: Colors.white,
+                    ),
+                    image: _image == null
+                        ? null
+                        : DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(_image!),
+                          ),
                   ),
                 ),
               ),
@@ -245,8 +288,8 @@ class _ProfileImageEdit extends StatelessWidget {
           right: 0,
           child: GestureDetector(
             onTap: () {
-              // TODO 写真選択or撮影
-              print('写真選択or撮影');
+              ImagePickerBottomSheet.show(
+                  context: context, imageHandler: _setImage);
             },
             child: Container(
               width: 30,
