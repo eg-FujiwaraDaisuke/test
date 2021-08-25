@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
@@ -18,93 +19,103 @@ class UserProfilePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => UserPage(),
-                    settings: RouteSettings(name: "/user"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
+        centerTitle: true,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              final route = NoAnimationMaterialPageRoute(
+                builder: (context) => UserProfileEditPage(),
+                settings: RouteSettings(name: "/user/profile/edit"),
+              );
+              Navigator.pushReplacement(context, route);
+            },
+            child: Container(
+              width: 90,
+              height: 44,
+              margin: EdgeInsets.only(right: 18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/images/user/edit.svg'),
+                  SizedBox(
+                    width: 9,
                   ),
-                ),
+                  Text(
+                    i18nTranslate(context, 'user_edit'),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => UserProfileEditPage(),
-                    settings: RouteSettings(name: "/user/profile/edit"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 90,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset('assets/images/user/edit.svg'),
-                      SizedBox(
-                        width: 9,
-                      ),
-                      Text(
-                        i18nTranslate(context, 'user_edit'),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
+          ),
+        ],
+        leading: GestureDetector(
+          onTap: () {
+            final route = NoAnimationMaterialPageRoute(
+              builder: (context) => UserPage(),
+              settings: RouteSettings(name: "/user"),
+            );
+            Navigator.pushReplacement(context, route);
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
+            ),
+          ),
         ),
       ),
-      extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Container(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              _ProfileInfo(
-                  icon: data.icon,
-                  bio: data.bio,
-                  contractor: data.contractor,
-                  name: data.name,
-                  wallPaper: data.wallPaper),
               SizedBox(
-                height: 45,
+                height: 33,
+              ),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: -500,
+                    left: -70,
+                    child: Container(
+                      width: 561,
+                      height: 561,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFB92),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                  _ProfileInfo(
+                    icon: data.icon,
+                    bio: data.bio,
+                    name: data.name,
+                    wallPaper: data.wallPaper,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 43,
               ),
               _TagsList(
                 tagsList: data.tags,
               ),
               SizedBox(
-                height: 30,
+                height: 37,
               ),
-              // あとで共通Componentを組み込む
+              // // あとで共通Componentを組み込む
               _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
             ],
           ),
@@ -116,13 +127,11 @@ class UserProfilePage extends StatelessWidget {
 
 class _ProfileInfo extends StatelessWidget {
   final String icon;
-  final String contractor;
   final String name;
   final String bio;
   final String wallPaper;
   _ProfileInfo({
     required this.icon,
-    required this.contractor,
     required this.name,
     required this.bio,
     required this.wallPaper,
@@ -130,79 +139,63 @@ class _ProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 365,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.topCenter,
+    return Center(
+      child: Column(
         children: [
-          Positioned(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 168,
-              color: Color(0xFFFFFB92),
-            ),
-          ),
-          Positioned(
-            top: 118,
-            child: Column(
-              children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFB92),
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
+          Column(
+            children: [
+              Container(
+                width: 99,
+                height: 99,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF8C00),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    width: 93,
+                    height: 93,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFFB92),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 3,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 19,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  color: Color(0xFF575292),
+                  fontSize: 18,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
                 ),
-                Text(
-                  contractor,
+              ),
+              SizedBox(
+                height: 35,
+              ),
+              Container(
+                width: 338,
+                child: Text(
+                  bio,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: 12,
                     fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
+                    height: calcFontHeight(lineHeight: 22, fontSize: 12),
                   ),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: Color(0xFF7C7C7C),
-                    fontSize: 14,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  height: 22,
-                ),
-                Container(
-                  width: 338,
-                  child: Text(
-                    bio,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: calcLetterSpacing(letter: 0.5),
-                      height: calcFontHeight(lineHeight: 22, fontSize: 12),
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ],
       ),
@@ -217,7 +210,7 @@ class _TagsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330,
+      width: 338,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -227,49 +220,28 @@ class _TagsList extends StatelessWidget {
               color: Colors.black,
               fontSize: 14,
               fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
               letterSpacing: calcLetterSpacing(letter: 4),
             ),
           ),
           SizedBox(
-            height: 25,
+            height: 4,
           ),
           Container(
             child: Wrap(
               alignment: WrapAlignment.start,
-              spacing: 10,
-              runSpacing: 13,
+              spacing: 5,
+              runSpacing: 10,
               children: tagsList
-                  .map((tag) => _TagsListItem(tag: tag.tagName))
+                  .map((tag) => ImportantTagListItem(
+                        tag: tag,
+                        onSelect: () {},
+                        isSelected: true,
+                      ))
                   .toList(),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TagsListItem extends StatelessWidget {
-  final tag;
-  const _TagsListItem({required this.tag}) : super();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      decoration: BoxDecoration(
-        color: Color(0xFFFFFB92),
-        borderRadius: BorderRadius.circular(17),
-      ),
-      child: Text(
-        '#$tag',
-        style: TextStyle(
-          color: Color(0xFF487254),
-          fontSize: 12,
-          fontFamily: 'NotoSansJP',
-          fontWeight: FontWeight.w500,
-        ),
       ),
     );
   }
@@ -291,12 +263,12 @@ class _SelectedPlantList extends StatelessWidget {
               color: Colors.black,
               fontSize: 14,
               fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w700,
               letterSpacing: calcLetterSpacing(letter: 4),
             ),
           ),
           SizedBox(
-            height: 25,
+            height: 7,
           ),
           Container(
             child: Column(
