@@ -1,11 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import '../../../../utile.dart';
 
 class UserProfileEditPage extends StatelessWidget {
@@ -21,11 +22,7 @@ class UserProfileEditPage extends StatelessWidget {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            final route = NoAnimationMaterialPageRoute(
-              builder: (context) => UserProfilePage(),
-              settings: RouteSettings(name: "/user/profile"),
-            );
-            Navigator.pushReplacement(context, route);
+            _prev(context);
           },
           child: Center(
             child: SvgPicture.asset(
@@ -38,14 +35,8 @@ class UserProfileEditPage extends StatelessWidget {
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              // TODO ここでデータの保存をする
-              final route = NoAnimationMaterialPageRoute(
-                builder: (context) => UserProfilePage(),
-                settings: RouteSettings(name: "/user/profile"),
-              );
-              Navigator.pushReplacement(context, route);
-            },
+            // TODO ここで更新データ保存
+            onTap: () => _complete(context),
             child: Container(
               width: 90,
               height: 44,
@@ -116,7 +107,7 @@ class UserProfileEditPage extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  _TagsList(
+                  _ImportantTagsList(
                     tagsList: data.tags,
                   ),
                 ],
@@ -126,6 +117,53 @@ class UserProfileEditPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _prev(BuildContext context) {
+    print('_prev');
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Platform.isIOS
+            ? CupertinoAlertDialog(
+                title: Text("編集内容が破棄されます。"),
+                content: Text("これまでの編集内容が破棄されます。よろしいですか？"),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text("キャンセル"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text("破棄"),
+                    isDestructiveAction: true,
+                    onPressed: () => {
+                      // TODO　プロフィール画面に戻る
+                      Navigator.pop(context)
+                    },
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title: Text("編集内容が破棄されます。"),
+                content: Text("これまでの編集内容が破棄されます。よろしいですか？"),
+                actions: [
+                  TextButton(
+                    child: Text("キャンセル"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: Text("破棄"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
+      },
+    );
+  }
+
+  void _complete(BuildContext context) {
+    Navigator.pop(context);
   }
 }
 
@@ -330,33 +368,28 @@ class _ProfileBioEditForm extends StatelessWidget {
   }
 }
 
-class _TagsList extends StatelessWidget {
+class _ImportantTagsList extends StatelessWidget {
   final List<Tag> tagsList;
-  const _TagsList({required this.tagsList}) : super();
+  const _ImportantTagsList({required this.tagsList}) : super();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330,
+      width: 338,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  // TODO tagの追加
-                },
-                child: Text(
-                  i18nTranslate(context, 'user_important'),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: calcLetterSpacing(letter: 4),
-                  ),
+              Text(
+                i18nTranslate(context, 'user_important'),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: calcLetterSpacing(letter: 4),
                 ),
               ),
               GestureDetector(
