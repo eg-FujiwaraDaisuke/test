@@ -53,41 +53,39 @@ class UserPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 43,
-                ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      top: -500,
-                      left: -70,
-                      child: Container(
-                        width: 561,
-                        height: 561,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFB92),
-                          shape: BoxShape.circle,
-                        ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 43,
+              ),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: -500,
+                    left: -70,
+                    child: Container(
+                      width: 561,
+                      height: 561,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFB92),
+                        shape: BoxShape.circle,
                       ),
                     ),
-                    Positioned(
-                      child: _UserProfile(
-                        icon: data.icon,
-                        name: data.name,
-                      ),
+                  ),
+                  Positioned(
+                    child: _UserProfile(
+                      icon: data.icon,
+                      name: data.name,
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 61,
-                ),
-                _MenuListView(),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 61,
+              ),
+              _MenuListView(),
+            ],
           ),
         ),
       ),
