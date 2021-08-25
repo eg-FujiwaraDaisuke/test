@@ -79,7 +79,6 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
                         (tag) => ImportantTagListItem(
                           tag: tag,
                           onSelect: () {},
-                          selectedColor: _getColor(tag),
                           isSelected: true,
                         ),
                       )
@@ -126,14 +125,5 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
       settings: RouteSettings(name: "/home"),
     );
     Navigator.pushReplacement(context, route);
-  }
-
-  Color _getColor(Tag tag) {
-    ImportantTag? contain;
-    importantTags.forEach((importantTag) {
-      bool isExist = importantTag.tags.contains(tag);
-      if (isExist) contain = importantTag;
-    });
-    return contain!.color;
   }
 }

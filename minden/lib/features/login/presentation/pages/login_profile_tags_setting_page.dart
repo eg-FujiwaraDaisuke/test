@@ -240,7 +240,6 @@ class _TagsListState extends State<_TagsList> {
                     (tag) => ImportantTagListItem(
                       tag: tag,
                       onSelect: widget.onSelect,
-                      selectedColor: widget.color,
                       isSelected: widget.selectedTags.contains(tag),
                     ),
                   )

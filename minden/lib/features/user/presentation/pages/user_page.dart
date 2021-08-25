@@ -15,6 +15,19 @@ enum MenuType {
   message,
 }
 
+class _Menu {
+  final String title;
+  final String icon;
+  final NoAnimationMaterialPageRoute? route;
+  final MenuType type;
+  _Menu({
+    required this.title,
+    required this.icon,
+    required this.route,
+    required this.type,
+  });
+}
+
 class UserPage extends StatelessWidget {
 // 確認用仮データ
   final data = ProfileDamyData().damyData;
@@ -100,11 +113,21 @@ class _UserProfile extends StatelessWidget {
             width: 99,
             height: 99,
             decoration: BoxDecoration(
-              color: Color(0xFFFFFB92),
+              color: Color(0xFFFF8C00),
               shape: BoxShape.circle,
-              border: Border.all(
-                width: 3,
-                color: Color(0xFFFF8C00),
+            ),
+            child: Center(
+              child: Container(
+                width: 93,
+                height: 93,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFB92),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 3,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
@@ -124,19 +147,6 @@ class _UserProfile extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Menu {
-  final String title;
-  final String icon;
-  final NoAnimationMaterialPageRoute? route;
-  final MenuType type;
-  _Menu({
-    required this.title,
-    required this.icon,
-    required this.route,
-    required this.type,
-  });
 }
 
 class _MenuListView extends StatelessWidget {
