@@ -5,13 +5,11 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/common/widget/tag/important_tags.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_tags_setting_page.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 
 class LoginProfileTagsDecisionPage extends StatelessWidget {
-  List<Tag> _selectedTags = [
+  final List<Tag> _selectedTags = [
     Tag(tagId: 'タグID', tagName: 'エコ'),
     Tag(tagId: 'タグID', tagName: 'サステナブルコーヒー'),
     Tag(tagId: 'タグID', tagName: '地方創生'),

@@ -46,6 +46,7 @@ class WallPaperPainter extends CustomPainter {
     if (wallPaperimage == null) {
       canvas.drawPath(path, paint);
     } else {
+      // TODO 第一引数でエラーが起きる
       // canvas.drawImage(wallPaperimage, const Offset(0, 0), paint);
     }
   }

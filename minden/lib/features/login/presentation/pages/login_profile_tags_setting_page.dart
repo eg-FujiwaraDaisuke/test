@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
 import 'package:minden/features/common/widget/tag/important_tags.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_tags_decision_page.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
