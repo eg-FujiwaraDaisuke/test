@@ -156,7 +156,6 @@ class _LoginInputPageState extends State<LoginInputPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  print('パスワードをお忘れですか？');
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => LoginForgotPassword(),
                                     settings: RouteSettings(

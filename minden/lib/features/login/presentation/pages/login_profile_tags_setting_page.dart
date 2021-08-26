@@ -147,11 +147,18 @@ class _LoginProfileTagsSettingPageState
                       .toList(),
                 ),
                 SizedBox(height: 28),
-                Botton(
-                  onTap: () => {_next()},
-                  text: i18nTranslate(context, 'profile_setting_next'),
-                  size: BottonSize.S,
-                ),
+                _selectedTags.length == 0
+                    ? Botton(
+                        onTap: () => {},
+                        text: i18nTranslate(context, 'profile_setting_next'),
+                        size: BottonSize.S,
+                        isActive: false,
+                      )
+                    : Botton(
+                        onTap: () => {_next()},
+                        text: i18nTranslate(context, 'profile_setting_next'),
+                        size: BottonSize.S,
+                      ),
                 SizedBox(height: 32),
               ],
             ),

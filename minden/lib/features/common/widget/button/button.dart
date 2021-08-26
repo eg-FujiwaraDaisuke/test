@@ -3,19 +3,25 @@ import 'package:minden/features/common/widget/button/botton_style.dart';
 import 'botton_size.dart';
 
 class Botton extends StatelessWidget {
-  Botton({required this.onTap, required this.text, required this.size})
+  Botton(
+      {required this.onTap,
+      required this.text,
+      required this.size,
+      this.isActive = true})
       : super();
 
   final Function onTap;
   final String text;
   final BottonSize size;
-  bool _isActive = true;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () => onTap(),
+        onTap: () => {
+          if (isActive) {onTap()}
+        },
         child: Container(
           width: bottonStyle[size]!.width,
           height: bottonStyle[size]!.height,
@@ -23,8 +29,8 @@ class Botton extends StatelessWidget {
             borderRadius: BorderRadius.all(
               Radius.circular(bottonStyle[size]!.height * 0.5),
             ),
-            color: _isActive ? null : Color(0xFFE0E0E0),
-            gradient: _isActive
+            color: isActive ? null : Color(0xFFE0E0E0),
+            gradient: isActive
                 ? LinearGradient(
                     begin: FractionalOffset.topLeft,
                     end: FractionalOffset.bottomLeft,
