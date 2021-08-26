@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
@@ -28,7 +29,6 @@ class UserPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _Footer(),
       body: Container(
         color: Colors.white,
         child: Column(
@@ -112,13 +112,13 @@ class _Menu {
   final String title;
   final String icon;
   final NoAnimationMaterialPageRoute? route;
-  final bool isNewNotification;
+  final bool hasUnreadNotice;
   final bool isAccordion;
   _Menu({
     required this.title,
     required this.icon,
     this.route,
-    this.isNewNotification = false,
+    this.hasUnreadNotice = false,
     this.isAccordion = false,
   });
 }
@@ -153,7 +153,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
         title: i18nTranslate(context, 'user_menu_thanks_message'),
         icon: 'message',
-        isNewNotification: true,
+        hasUnreadNotice: true,
         route: NoAnimationMaterialPageRoute(
           builder: (context) => UserThanksMessagePage(),
           settings: RouteSettings(name: "/user/thanksMessage"),
@@ -186,7 +186,7 @@ class _MenuListView extends StatelessWidget {
                 title: e.title,
                 icon: e.icon,
                 route: e.route,
-                isNewNotification: e.isNewNotification,
+                hasUnreadNotice: e.hasUnreadNotice,
                 isAccordion: e.isAccordion,
               ),
             )
@@ -200,13 +200,13 @@ class _MenuItem extends StatelessWidget {
   final title;
   final icon;
   final route;
-  final bool isNewNotification;
+  final bool hasUnreadNotice;
   final bool isAccordion;
   const _MenuItem({
     required this.title,
     required this.icon,
     required this.route,
-    this.isNewNotification = false,
+    this.hasUnreadNotice = false,
     this.isAccordion = false,
   }) : super();
 
@@ -241,7 +241,9 @@ class _MenuItem extends StatelessWidget {
                         right: -6,
                         top: -3,
                         child: Opacity(
-                          opacity: isNewNotification ? 1 : 0,
+                          //アプリがforegroundになった際に、応援メッセージ履歴取得APIにて既読メッセージの有無を取得する。
+                          //既読メッセージが存在している場合、マイページタブ、メッセージラベルに未読バッジを表示する。
+                          opacity: hasUnreadNotice ? 1 : 0,
                           child: Container(
                             width: 14,
                             height: 14,
@@ -271,7 +273,9 @@ class _MenuItem extends StatelessWidget {
                   ),
                   SizedBox(width: 22),
                   isAccordion ? Icon(Icons.keyboard_arrow_right) : Container(),
-                  isNewNotification
+                  //アプリがforegroundになった際に、応援メッセージ履歴取得APIにて既読メッセージの有無を取得する。
+                  //既読メッセージが存在している場合、マイページタブ、メッセージラベルに未読バッジを表示する。
+                  hasUnreadNotice
                       ? Flexible(
                           child: Text(
                             'XXX発電所' +
@@ -293,30 +297,6 @@ class _MenuItem extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _Footer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.white,
-      elevation: 0.0,
-      items: [
-        BottomNavigationBarItem(
-          label: '',
-          icon: SvgPicture.asset(
-            'assets/images/user/search.svg',
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: '',
-          icon: SvgPicture.asset(
-            'assets/images/user/person_black.svg',
-          ),
-        ),
-      ],
     );
   }
 }

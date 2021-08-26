@@ -25,7 +25,7 @@ class UserDataSourceImpl implements UserDataSource {
       body: body,
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return UserModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException();

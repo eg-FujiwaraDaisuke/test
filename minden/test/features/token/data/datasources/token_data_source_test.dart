@@ -24,7 +24,7 @@ void main() {
   MockEncryptionTokenDataSource mockEncryptionTokenDataSource;
 
   setUpAll(() {
-    Config.setEnvironment(Config.kDevFlavor);
+    Config.setEnvironment(Config.kStagingFlavor);
   });
 
   setUp(() {
