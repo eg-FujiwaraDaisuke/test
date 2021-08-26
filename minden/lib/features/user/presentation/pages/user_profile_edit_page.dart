@@ -209,14 +209,15 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         CustomPaint(
           size: Size(MediaQuery.of(context).size.width, 168),
           painter: WallPaperPainter(wallPaperimage: null),
         ),
         Positioned(
-          bottom: 43,
-          right: 65,
+          bottom: 26,
+          right: 55,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
@@ -225,11 +226,14 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
               ImagePickerBottomSheet.show(
                   context: context, imageHandler: _setImage);
             },
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/images/user/camera.svg',
-                width: 15,
-                height: 14,
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/user/camera.svg',
+                  width: 15,
+                  height: 14,
+                ),
               ),
             ),
           ),
