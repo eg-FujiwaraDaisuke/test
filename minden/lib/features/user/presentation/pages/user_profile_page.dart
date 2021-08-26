@@ -23,11 +23,7 @@ class UserProfilePage extends StatelessWidget {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            final route = NoAnimationMaterialPageRoute(
-              builder: (context) => UserPage(),
-              settings: RouteSettings(name: "/user"),
-            );
-            Navigator.pushReplacement(context, route);
+            Navigator.pop(context);
           },
           child: Center(
             child: SvgPicture.asset(
@@ -41,11 +37,11 @@ class UserProfilePage extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              final route = NoAnimationMaterialPageRoute(
+              final route = MaterialPageRoute(
                 builder: (context) => UserProfileEditPage(),
                 settings: RouteSettings(name: "/user/profile/edit"),
               );
-              Navigator.pushReplacement(context, route);
+              Navigator.push(context, route);
             },
             child: Container(
               width: 90,

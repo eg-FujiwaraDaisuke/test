@@ -113,11 +113,7 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
   }
 
   void _prev(BuildContext context) {
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfileTagsSettingPage(),
-      settings: RouteSettings(name: "/login/profileTagsSetting"),
-    );
-    Navigator.pushReplacement(context, route);
+    Navigator.pop(context);
   }
 
   void _decide(BuildContext context) {

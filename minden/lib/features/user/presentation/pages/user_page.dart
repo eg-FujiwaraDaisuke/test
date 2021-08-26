@@ -19,7 +19,7 @@ enum MenuType {
 class _Menu {
   final String title;
   final String icon;
-  final NoAnimationMaterialPageRoute? route;
+  final MaterialPageRoute? route;
   final MenuType type;
   _Menu({
     required this.title,
@@ -151,7 +151,7 @@ class _MenuListView extends StatelessWidget {
           title: i18nTranslate(context, 'user_menu_select_plant'),
           icon: 'select_plant',
           // TODO routeは仮
-          route: NoAnimationMaterialPageRoute(
+          route: MaterialPageRoute(
             builder: (context) => UserProfilePage(),
             settings: RouteSettings(name: "/user/profile"),
           ),
@@ -159,7 +159,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
           title: i18nTranslate(context, 'user_menu_profile'),
           icon: 'person',
-          route: NoAnimationMaterialPageRoute(
+          route: MaterialPageRoute(
             builder: (context) => UserProfilePage(),
             settings: RouteSettings(name: "/user/profile"),
           ),
@@ -167,7 +167,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
           title: i18nTranslate(context, 'user_menu_thanks_message'),
           icon: 'message',
-          route: NoAnimationMaterialPageRoute(
+          route: MaterialPageRoute(
             builder: (context) => UserThanksMessagePage(),
             settings: RouteSettings(name: "/user/thanksMessage"),
           ),
@@ -176,7 +176,7 @@ class _MenuListView extends StatelessWidget {
           title: i18nTranslate(context, 'user_menu_contact'),
           icon: 'contact',
           // TODO routeは仮
-          route: NoAnimationMaterialPageRoute(
+          route: MaterialPageRoute(
             builder: (context) => UserProfilePage(),
             settings: RouteSettings(name: "/user/profile"),
           ),
@@ -185,7 +185,7 @@ class _MenuListView extends StatelessWidget {
           title: i18nTranslate(context, 'user_menu_logout'),
           icon: 'logout',
           // TODO routeは仮
-          route: NoAnimationMaterialPageRoute(
+          route: MaterialPageRoute(
             builder: (context) => UserProfilePage(),
             settings: RouteSettings(name: "/user/profile"),
           ),
@@ -215,7 +215,7 @@ class _MenuListView extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final String title;
   final String icon;
-  final NoAnimationMaterialPageRoute? route;
+  final MaterialPageRoute? route;
 
   const _MenuItem({
     required this.title,
@@ -229,7 +229,7 @@ class _MenuItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (route != null) {
-          Navigator.pushReplacement(context, route!);
+          Navigator.push(context, route!);
         }
       },
       child: Container(
@@ -271,7 +271,7 @@ class _MenuItem extends StatelessWidget {
 class _MenuMessageItem extends StatelessWidget {
   final String title;
   final String icon;
-  final NoAnimationMaterialPageRoute? route;
+  final MaterialPageRoute? route;
   final bool hasUnreadNotice = true;
 
   const _MenuMessageItem({
@@ -286,7 +286,7 @@ class _MenuMessageItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (route != null) {
-          Navigator.pushReplacement(context, route!);
+          Navigator.push(context, route!);
         }
       },
       child: Container(

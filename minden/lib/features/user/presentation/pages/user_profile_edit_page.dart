@@ -86,10 +86,7 @@ class UserProfileEditPage extends StatelessWidget {
                     children: [
                       Positioned(
                         top: -113,
-                        child: CustomPaint(
-                          size: Size(MediaQuery.of(context).size.width, 168),
-                          painter: WallPaperPainter(wallPaperimage: null),
-                        ),
+                        child: _ProfileWallPaperEdit(),
                       ),
                       _ProfileImageEdit(
                         icon: data.icon,
@@ -177,10 +174,10 @@ class UserProfileEditPage extends StatelessWidget {
 
 class _ProfileWallPaperEdit extends StatefulWidget {
   @override
-  __ProfileWallPaperEditState createState() => __ProfileWallPaperEditState();
+  _ProfileWallPaperEditState createState() => _ProfileWallPaperEditState();
 }
 
-class __ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
+class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   File? _image;
 
   void _setImage(File cropedImage) {
@@ -193,25 +190,15 @@ class __ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          width: 561,
-          height: 561,
-          decoration: BoxDecoration(
-            color: Color(0xFFFFFB92),
-            shape: BoxShape.circle,
-            image: _image == null
-                ? null
-                : DecorationImage(
-                    fit: BoxFit.cover,
-                    image: FileImage(_image!),
-                  ),
-          ),
+        CustomPaint(
+          size: Size(MediaQuery.of(context).size.width, 168),
+          painter: WallPaperPainter(wallPaperimage: null),
         ),
         Positioned(
           bottom: 43,
-          right: 140,
+          right: 65,
           child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               // TODO なぜか反応しない
               print('aaa');
@@ -241,10 +228,10 @@ class _ProfileImageEdit extends StatefulWidget {
   }) : super();
 
   @override
-  __ProfileImageEditState createState() => __ProfileImageEditState();
+  _ProfileImageEditState createState() => _ProfileImageEditState();
 }
 
-class __ProfileImageEditState extends State<_ProfileImageEdit> {
+class _ProfileImageEditState extends State<_ProfileImageEdit> {
   File? _image;
 
   void _setImage(File cropedImage) {

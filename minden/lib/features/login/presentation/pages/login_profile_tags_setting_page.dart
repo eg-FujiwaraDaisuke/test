@@ -169,19 +169,15 @@ class _LoginProfileTagsSettingPageState
   }
 
   void _prev() {
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginProfilePhotoSettingPage(),
-      settings: RouteSettings(name: "/login/profilePhotoSetting"),
-    );
-    Navigator.pushReplacement(context, route);
+    Navigator.pop(context);
   }
 
   void _next() {
-    final route = NoAnimationMaterialPageRoute(
+    final route = MaterialPageRoute(
       builder: (context) => LoginProfileTagsDecisionPage(),
       settings: RouteSettings(name: "/login/profileTagsDecision"),
     );
-    Navigator.pushReplacement(context, route);
+    Navigator.push(context, route);
   }
 }
 
