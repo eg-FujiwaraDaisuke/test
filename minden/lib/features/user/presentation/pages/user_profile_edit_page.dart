@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 import '../../../../utile.dart';
 
@@ -37,7 +39,6 @@ class UserProfileEditPage extends StatelessWidget {
         ),
         actions: [
           GestureDetector(
-            // TODO ここで更新データ保存
             onTap: () => _complete(context),
             child: Container(
               width: 90,
@@ -73,6 +74,7 @@ class UserProfileEditPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
+            height: MediaQuery.of(context).size.height,
             color: Color(0xFFF6F5EF),
             child: Center(
               child: Column(
@@ -139,9 +141,15 @@ class UserProfileEditPage extends StatelessWidget {
                   CupertinoDialogAction(
                     child: Text(i18nTranslate(context, 'discard')),
                     isDestructiveAction: true,
-                    onPressed: () => {
+                    onPressed: () async {
                       // TODO　プロフィール画面に戻る
-                      Navigator.pop(context)
+                      Navigator.pop(context);
+
+                      final route = NoAnimationMaterialPageRoute(
+                        builder: (context) => UserProfilePage(),
+                        settings: RouteSettings(name: "/user/profile"),
+                      );
+                      Navigator.pushReplacement(context, route);
                     },
                   ),
                 ],
@@ -158,9 +166,14 @@ class UserProfileEditPage extends StatelessWidget {
                   ),
                   TextButton(
                     child: Text(i18nTranslate(context, 'discard')),
-                    onPressed: () => {
+                    onPressed: () {
                       // TODO　プロフィール画面に戻る
-                      Navigator.pop(context)
+                      Navigator.pop(context);
+                      final route = NoAnimationMaterialPageRoute(
+                        builder: (context) => UserProfilePage(),
+                        settings: RouteSettings(name: "/user/profile"),
+                      );
+                      Navigator.pushReplacement(context, route);
                     },
                   ),
                 ],
@@ -169,7 +182,14 @@ class UserProfileEditPage extends StatelessWidget {
     );
   }
 
-  void _complete(BuildContext context) {}
+  void _complete(BuildContext context) {
+    // TODO ここで更新データ保存
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => UserProfilePage(),
+      settings: RouteSettings(name: "/user/profile"),
+    );
+    Navigator.pushReplacement(context, route);
+  }
 }
 
 class _ProfileWallPaperEdit extends StatefulWidget {
