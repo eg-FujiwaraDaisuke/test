@@ -8,6 +8,7 @@ import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_pi
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 import '../../../../utile.dart';
 
 class UserProfileEditPage extends StatelessWidget {
@@ -84,8 +85,11 @@ class UserProfileEditPage extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       Positioned(
-                        top: -500,
-                        child: _ProfileWallPaperEdit(),
+                        top: -113,
+                        child: CustomPaint(
+                          size: Size(MediaQuery.of(context).size.width, 168),
+                          painter: WallPaperPainter(wallPaperimage: null),
+                        ),
                       ),
                       _ProfileImageEdit(
                         icon: data.icon,

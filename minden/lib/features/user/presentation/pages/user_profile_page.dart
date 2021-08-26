@@ -7,6 +7,7 @@ import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 import '../../../../utile.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -89,14 +90,10 @@ class UserProfilePage extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     Positioned(
-                      top: -500,
-                      child: Container(
-                        width: 561,
-                        height: 561,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFB92),
-                          shape: BoxShape.circle,
-                        ),
+                      top: -113,
+                      child: CustomPaint(
+                        size: Size(MediaQuery.of(context).size.width, 168),
+                        painter: WallPaperPainter(wallPaperimage: null),
                       ),
                     ),
                     _ProfileInfo(
