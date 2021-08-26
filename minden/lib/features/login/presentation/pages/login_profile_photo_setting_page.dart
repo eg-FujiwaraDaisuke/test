@@ -51,7 +51,7 @@ class _LoginProfilePhotoSettingPageState
               margin: EdgeInsets.only(right: 20),
               child: Center(
                 child: Text(
-                  "スキップ",
+                  i18nTranslate(context, 'skip_katakana'),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12,
@@ -72,7 +72,7 @@ class _LoginProfilePhotoSettingPageState
               children: [
                 SizedBox(height: 38),
                 Text(
-                  'プロフィール写真を設定',
+                  i18nTranslate(context, 'profile_setting_photo'),
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',

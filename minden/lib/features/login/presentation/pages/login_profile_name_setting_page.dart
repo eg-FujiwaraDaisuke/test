@@ -50,7 +50,7 @@ class _LoginProfileNameSettingPageState
               children: [
                 SizedBox(height: 38),
                 Text(
-                  'ユーザーネームを入力',
+                  i18nTranslate(context, 'profile_setting_input_name'),
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',

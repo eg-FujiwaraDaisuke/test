@@ -130,15 +130,17 @@ class UserProfileEditPage extends StatelessWidget {
       builder: (context) {
         return Platform.isIOS
             ? CupertinoAlertDialog(
-                title: Text("編集内容が破棄されます。"),
-                content: Text("これまでの編集内容が破棄されます。よろしいですか？"),
+                title:
+                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
+                content: Text(i18nTranslate(
+                    context, 'profile_edit_alert_discard_confirm')),
                 actions: <Widget>[
                   CupertinoDialogAction(
-                    child: Text("キャンセル"),
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                     onPressed: () => Navigator.pop(context),
                   ),
                   CupertinoDialogAction(
-                    child: Text("破棄"),
+                    child: Text(i18nTranslate(context, 'discard')),
                     isDestructiveAction: true,
                     onPressed: () => {
                       // TODO　プロフィール画面に戻る
@@ -148,15 +150,17 @@ class UserProfileEditPage extends StatelessWidget {
                 ],
               )
             : AlertDialog(
-                title: Text("編集内容が破棄されます。"),
-                content: Text("これまでの編集内容が破棄されます。よろしいですか？"),
+                title:
+                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
+                content: Text(i18nTranslate(
+                    context, 'profile_edit_alert_discard_confirm')),
                 actions: [
                   TextButton(
-                    child: Text("キャンセル"),
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                    child: Text("破棄"),
+                    child: Text(i18nTranslate(context, 'discard')),
                     onPressed: () => {
                       // TODO　プロフィール画面に戻る
                       Navigator.pop(context)
@@ -366,7 +370,7 @@ class _ProfileBioEditForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '自己紹介',
+          i18nTranslate(context, 'profile_edit_salf_intro'),
           style: TextStyle(
             color: Colors.black,
             fontSize: 14,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
@@ -42,7 +43,7 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
             children: [
               SizedBox(height: 38),
               Text(
-                'タグを設定',
+                i18nTranslate(context, 'profile_decision_tag'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -53,7 +54,7 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
               ),
               SizedBox(height: 43),
               Text(
-                'このタグをプロフィールに設定します',
+                i18nTranslate(context, 'profile_decision_tag_set'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -88,14 +89,14 @@ class LoginProfileTagsDecisionPage extends StatelessWidget {
               SizedBox(height: 112),
               Botton(
                 onTap: () => {_decide(context)},
-                text: '決定する',
+                text: i18nTranslate(context, 'decide'),
                 size: BottonSize.S,
               ),
               SizedBox(height: 19),
               GestureDetector(
                 onTap: () => _prev(context),
                 child: Text(
-                  'キャンセル',
+                  i18nTranslate(context, 'cancel_katakana'),
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'NotoSansJP',

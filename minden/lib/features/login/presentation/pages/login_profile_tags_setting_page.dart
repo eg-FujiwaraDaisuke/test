@@ -60,7 +60,7 @@ class _LoginProfileTagsSettingPageState
               children: [
                 SizedBox(height: 38),
                 Text(
-                  'タグを選択',
+                  i18nTranslate(context, 'profile_setting_select_tag'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -74,7 +74,8 @@ class _LoginProfileTagsSettingPageState
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'あなたが',
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_you'),
                         style: TextStyle(
                           fontSize: 13,
                           fontFamily: 'NotoSansJP',
@@ -84,7 +85,8 @@ class _LoginProfileTagsSettingPageState
                         ),
                       ),
                       TextSpan(
-                        text: '大切にしていること',
+                        text: i18nTranslate(context,
+                            'profile_setting_tag_description_important'),
                         style: TextStyle(
                           fontSize: 13,
                           fontFamily: 'NotoSansJP',
@@ -94,7 +96,8 @@ class _LoginProfileTagsSettingPageState
                         ),
                       ),
                       TextSpan(
-                        text: 'を\n',
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_wo'),
                         style: TextStyle(
                           fontSize: 13,
                           fontFamily: 'NotoSansJP',
@@ -104,7 +107,8 @@ class _LoginProfileTagsSettingPageState
                         ),
                       ),
                       TextSpan(
-                        text: '選択してください（何個でも選択タグ可）',
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_select'),
                         style: TextStyle(
                           fontSize: 13,
                           fontFamily: 'NotoSansJP',
@@ -119,7 +123,8 @@ class _LoginProfileTagsSettingPageState
                 ),
                 SizedBox(height: 7),
                 Text(
-                  '大切にしていることのタグを設定すると\nあなたと似たユーザーを見つけやすくなります',
+                  i18nTranslate(
+                      context, 'profile_setting_important_tag_find_user'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,

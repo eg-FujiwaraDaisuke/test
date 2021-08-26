@@ -68,7 +68,7 @@ class _LoginResetPasswordPageState extends State<LoginResetPasswordPage> {
                 height: 34,
               ),
               PasswordInput(
-                hintText: '新しいパスワード（8文字以上32文字以下　英字、数字から2種類以上）',
+                hintText: i18nTranslate(context, 'reset_password_hint_text'),
                 isShowPassword: _isShowInputPassword,
                 onChanged: _onInputChangedPassword,
                 onShowPassword: _onShowInputPassword,
@@ -77,7 +77,7 @@ class _LoginResetPasswordPageState extends State<LoginResetPasswordPage> {
                 height: 20,
               ),
               PasswordInput(
-                hintText: 'パスワード再入力',
+                hintText: i18nTranslate(context, 'reset_password_re_input'),
                 isShowPassword: _isShowReinputPassword,
                 onChanged: _onReInputChangedPassword,
                 onShowPassword: _onShowReinputPassword,
