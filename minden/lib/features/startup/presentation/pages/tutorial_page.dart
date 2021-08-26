@@ -12,13 +12,6 @@ import '../../../../injection_container.dart';
 enum PositionAlign { left, right }
 
 class Tutorial {
-  final String title;
-  final String description;
-  final String imagePath;
-  final Map<String, double> tittlePosition;
-  final TextAlign titleTextAlign;
-  final PositionAlign positionAlign;
-
   Tutorial(
       {required this.title,
       required this.description,
@@ -26,6 +19,13 @@ class Tutorial {
       required this.tittlePosition,
       required this.titleTextAlign,
       required this.positionAlign});
+
+  final String title;
+  final String description;
+  final String imagePath;
+  final Map<String, double> tittlePosition;
+  final TextAlign titleTextAlign;
+  final PositionAlign positionAlign;
 }
 
 class TutorialPage extends StatefulWidget {
@@ -37,52 +37,18 @@ class _TutorialPageState extends State<TutorialPage> {
   final CarouselController _controller = CarouselController();
   int _currentIndex = 0;
 
-  late bool _fetching = false;
-  late NotificationSettings _settings;
-  late String _token;
-  late Stream<String> _tokenStream;
-
-  Future<void> requestPermissions() async {
-    setState(() {
-      _fetching = true;
-    });
-
-    final settings = await si<FirebaseMessaging>().requestPermission(
-      announcement: true,
-      carPlay: true,
-      criticalAlert: true,
-    );
-
-    setState(() {
-      _fetching = false;
-      _settings = settings;
-    });
-
-    print(_settings.alert);
-  }
-
-  void setToken(String? token) {
-    print(token);
-    if (token == null) return;
-    setState(() {
-      _token = token;
-    });
+  Future<void> _requestPermissions() async {
+    await si<FirebaseMessaging>().requestPermission();
   }
 
   @override
   void initState() {
     super.initState();
-    si<FirebaseMessaging>().getToken().then((String? token) {
-      setToken(token);
-    });
-    //TODO トークンの変更を検知したらサーバにトークンを送信して常に最新の FCM トークンを使う
-    _tokenStream = si<FirebaseMessaging>().onTokenRefresh;
-    _tokenStream.listen(setToken);
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Tutorial> _tutorialData = [
+    final tutorialData = <Tutorial>[
       Tutorial(
         imagePath: 'tutorial-1.png',
         title: i18nTranslate(context, 'tutorial_step_1_title'),
@@ -109,20 +75,15 @@ class _TutorialPageState extends State<TutorialPage> {
       ),
     ];
 
-    if (_fetching) {
-      return const CircularProgressIndicator();
-    }
-
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: Color(0xFFf5f3ed),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          color: const Color(0xFFf5f3ed),
+          child: Stack(
             children: [
               CarouselSlider(
                 options: CarouselOptions(
-                    height: 690,
+                    height: MediaQuery.of(context).size.height,
                     enableInfiniteScroll: false,
                     enlargeCenterPage: false,
                     viewportFraction: 1,
@@ -133,7 +94,7 @@ class _TutorialPageState extends State<TutorialPage> {
                       });
                     }),
                 carouselController: _controller,
-                items: _tutorialData.map((Tutorial data) {
+                items: tutorialData.map((Tutorial data) {
                   return Builder(
                     builder: (BuildContext context) {
                       return Slide(data: data);
@@ -141,106 +102,91 @@ class _TutorialPageState extends State<TutorialPage> {
                   );
                 }).toList(),
               ),
-              Container(
-                width: 291,
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                      width: 47,
-                      height: 17,
-                      child: GestureDetector(
-                        onTap: () async {
-                          // ここでプッシュ通知許可ダイアログを出す
-                          await requestPermissions();
-                          await setHasTutorial();
-                          final route = NoAnimationMaterialPageRoute(
-                            builder: (context) => HomePage(),
-                            settings: RouteSettings(name: '/home'),
-                          );
-                          Navigator.pushReplacement(context, route);
-                        },
-                        child: Opacity(
-                          opacity: _currentIndex != _tutorialData.length - 1
-                              ? 1.0
-                              : 0.0,
-                          child: Text(
-                            i18nTranslate(context, "skip"),
-                            style: TextStyle(
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Color(0xFFABAAAB),
-                              letterSpacing: calcLetterSpacing(letter: 4),
-                            ),
+                    GestureDetector(
+                      onTap: () async {
+                        await _toHome();
+                      },
+                      child: Opacity(
+                        opacity: _currentIndex != tutorialData.length - 1
+                            ? 1.0
+                            : 0.0,
+                        child: Text(
+                          i18nTranslate(context, 'skip'),
+                          style: TextStyle(
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: const Color(0xFFABAAAB),
+                            letterSpacing: calcLetterSpacing(letter: 4),
                           ),
                         ),
                       ),
                     ),
-                    Row(
-                      children: _tutorialData.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        return Container(
-                          width: 7,
-                          height: 7,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 0.0, horizontal: 4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _currentIndex == index
-                                  ? Color(0xFF000000)
-                                  : Color(0xFFCCCCCC)),
-                        );
-                      }).toList(),
-                    ),
-                    Container(
-                      width: 47,
-                      height: 17,
-                      child: _currentIndex != _tutorialData.length - 1
-                          ? GestureDetector(
-                              onTap: () {
-                                _controller.nextPage(
-                                    duration: Duration(milliseconds: 250),
-                                    curve: Curves.easeOut);
-                              },
-                              child: Text(
-                                i18nTranslate(context, "next"),
-                                style: TextStyle(
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                  letterSpacing: calcLetterSpacing(letter: 4),
-                                ),
-                              ),
-                            )
-                          : GestureDetector(
-                              onTap: () async {
-                                // ここでプッシュ通知許可ダイアログを出す
-                                await requestPermissions();
-                                await setHasTutorial();
-                                final route = NoAnimationMaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                  settings: RouteSettings(name: '/home'),
-                                );
-                                Navigator.pushReplacement(context, route);
-                              },
-                              child: Text(
-                                i18nTranslate(context, "start"),
-                                style: TextStyle(
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                  letterSpacing: calcLetterSpacing(letter: 4),
-                                ),
-                              ),
-                            ),
-                    ),
+                    if (_currentIndex != tutorialData.length - 1)
+                      GestureDetector(
+                        onTap: () {
+                          _controller.nextPage(
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeOut);
+                        },
+                        child: Text(
+                          i18nTranslate(context, 'next'),
+                          style: TextStyle(
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: const Color(0xFF000000),
+                            letterSpacing: calcLetterSpacing(letter: 4),
+                          ),
+                        ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () async {
+                          await _toHome();
+                        },
+                        child: Text(
+                          i18nTranslate(context, 'start'),
+                          style: TextStyle(
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: const Color(0xFF000000),
+                            letterSpacing: calcLetterSpacing(letter: 4),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 20,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: tutorialData.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    return Container(
+                      width: 8,
+                      height: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentIndex == index
+                              ? const Color(0xFF000000)
+                              : const Color(0xFFCCCCCC)),
+                    );
+                  }).toList(),
+                ),
+              )
             ],
           ),
         ),
@@ -248,15 +194,26 @@ class _TutorialPageState extends State<TutorialPage> {
     );
   }
 
-  Future<void> setHasTutorial() async {
+  Future<void> _toHome() async {
+    await _requestPermissions();
+    await _doneTutorial();
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => HomePage(),
+      settings: const RouteSettings(name: '/home'),
+    );
+    Navigator.pushReplacement(context, route);
+  }
+
+  Future<void> _doneTutorial() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool("has_tutorial", true);
+    await sharedPreferences.setBool('has_tutorial', true);
   }
 }
 
 class Slide extends StatelessWidget {
-  final Tutorial data;
   const Slide({required this.data});
+
+  final Tutorial data;
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +268,7 @@ class Slide extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 50,
         ),
         Container(
@@ -327,7 +284,7 @@ class Slide extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 41,
         ),
       ],
