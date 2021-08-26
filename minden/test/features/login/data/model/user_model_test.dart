@@ -26,7 +26,7 @@ void main() {
       final Map<String, dynamic> jsonMap =
           json.decode(fixture('login_data.json'));
       final result = UserModel.fromJson(jsonMap);
-      expect(result, tUserModel);
+      expect(result.loginId, tUserModel.loginId);
     });
   });
 
