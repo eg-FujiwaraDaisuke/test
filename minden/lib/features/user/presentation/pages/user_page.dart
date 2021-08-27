@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
@@ -18,12 +19,12 @@ enum MenuType {
 class _Menu {
   final String title;
   final String icon;
-  final MaterialPageRoute? route;
+  final String? routeName;
   final MenuType type;
   _Menu({
     required this.title,
     required this.icon,
-    required this.route,
+    required this.routeName,
     required this.type,
   });
 }
@@ -55,27 +56,25 @@ class UserPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 33,
-              ),
               Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
                 children: [
-                  Positioned(
-                    top: -113,
-                    child: CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 168),
-                      painter: WallPaperPainter(wallPaperimage: null),
-                    ),
+                  CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 168),
+                    painter: WallPaperPainter(wallPaperimage: null),
                   ),
                   Positioned(
-                    child: _UserProfile(
-                      icon: data.icon,
-                      name: data.name,
-                    ),
-                  ),
+                    bottom: -44,
+                    child: _ProfileIcon(icon: data.icon),
+                  )
                 ],
+              ),
+              SizedBox(
+                height: 66,
+              ),
+              _ProfileName(
+                name: data.name,
               ),
               SizedBox(
                 height: 61,
@@ -89,54 +88,52 @@ class UserPage extends StatelessWidget {
   }
 }
 
-class _UserProfile extends StatelessWidget {
-  final String name;
+class _ProfileIcon extends StatelessWidget {
   final String icon;
-  _UserProfile({
-    required this.name,
-    required this.icon,
-  }) : super();
+  const _ProfileIcon({required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            width: 99,
-            height: 99,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF8C00),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Container(
-                width: 93,
-                height: 93,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFB92),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 3,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+    return Container(
+      width: 99,
+      height: 99,
+      decoration: BoxDecoration(
+        color: Color(0xFFFF8C00),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Container(
+          width: 93,
+          height: 93,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFFB92),
+            shape: BoxShape.circle,
+            border: Border.all(
+              width: 3,
+              color: Colors.white,
             ),
           ),
-          SizedBox(
-            height: 16,
-          ),
-          Text(
-            name,
-            style: TextStyle(
-              color: Color(0xFF575292),
-              fontSize: 18,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-            ),
-          )
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileName extends StatelessWidget {
+  final String name;
+  const _ProfileName({
+    required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name,
+      style: TextStyle(
+        color: Color(0xFF575292),
+        fontSize: 18,
+        fontFamily: 'NotoSansJP',
+        fontWeight: FontWeight.w700,
       ),
     );
   }
@@ -150,44 +147,30 @@ class _MenuListView extends StatelessWidget {
           title: i18nTranslate(context, 'user_menu_select_plant'),
           icon: 'select_plant',
           // TODO routeは仮
-          route: MaterialPageRoute(
-            builder: (context) => UserProfilePage(),
-            settings: RouteSettings(name: "/user/profile"),
-          ),
+          routeName: '/user/profile',
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_profile'),
           icon: 'person',
-          route: MaterialPageRoute(
-            builder: (context) => UserProfilePage(),
-            settings: RouteSettings(name: "/user/profile"),
-          ),
+          routeName: '/user/profile',
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_thanks_message'),
           icon: 'message',
-          route: MaterialPageRoute(
-            builder: (context) => UserThanksMessagePage(),
-            settings: RouteSettings(name: "/user/thanksMessage"),
-          ),
+          routeName: '/user/thanksMessage',
           type: MenuType.message),
       _Menu(
-          title: i18nTranslate(context, 'user_menu_contact'),
-          icon: 'contact',
-          // TODO routeは仮
-          route: MaterialPageRoute(
-            builder: (context) => UserProfilePage(),
-            settings: RouteSettings(name: "/user/profile"),
-          ),
-          type: MenuType.common),
+        title: i18nTranslate(context, 'user_menu_contact'),
+        icon: 'contact',
+        // TODO routeは仮
+        routeName: '/user/profile',
+        type: MenuType.common,
+      ),
       _Menu(
           title: i18nTranslate(context, 'user_menu_logout'),
           icon: 'logout',
           // TODO routeは仮
-          route: MaterialPageRoute(
-            builder: (context) => UserProfilePage(),
-            settings: RouteSettings(name: "/user/profile"),
-          ),
+          routeName: '/user/profile',
           type: MenuType.common),
     ];
     return Container(
@@ -197,13 +180,13 @@ class _MenuListView extends StatelessWidget {
             return _MenuMessageItem(
               title: menu.title,
               icon: menu.icon,
-              route: menu.route,
+              routeName: menu.routeName,
             );
           }
           return _MenuItem(
             title: menu.title,
             icon: menu.icon,
-            route: menu.route,
+            routeName: menu.routeName,
           );
         }).toList(),
       ),
@@ -214,12 +197,12 @@ class _MenuListView extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final String title;
   final String icon;
-  final MaterialPageRoute? route;
+  final String? routeName;
 
   const _MenuItem({
     required this.title,
     required this.icon,
-    required this.route,
+    required this.routeName,
   }) : super();
 
   @override
@@ -227,8 +210,16 @@ class _MenuItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (route != null) {
-          Navigator.push(context, route!);
+        switch (routeName) {
+          case '/user/profile':
+            final route = MaterialPageRoute(
+              builder: (context) => UserProfilePage(),
+              settings: RouteSettings(name: routeName),
+            );
+            Navigator.push(context, route);
+            break;
+
+          default:
         }
       },
       child: Container(
@@ -270,13 +261,13 @@ class _MenuItem extends StatelessWidget {
 class _MenuMessageItem extends StatelessWidget {
   final String title;
   final String icon;
-  final MaterialPageRoute? route;
+  final String? routeName;
   final bool hasUnreadNotice = true;
 
   const _MenuMessageItem({
     required this.title,
     required this.icon,
-    required this.route,
+    required this.routeName,
   }) : super();
 
   @override
@@ -284,9 +275,12 @@ class _MenuMessageItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        if (route != null) {
-          Navigator.push(context, route!);
-        }
+        final route = MaterialPageRoute(
+          builder: (context) => UserThanksMessagePage(),
+          settings: RouteSettings(name: "/user/message"),
+        );
+
+        Navigator.push(context, route);
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 22),
