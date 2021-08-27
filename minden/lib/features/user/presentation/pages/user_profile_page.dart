@@ -23,12 +23,6 @@ class UserProfilePage extends StatelessWidget {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            // final route = MaterialPageRoute(
-            //   builder: (context) => UserPage(),
-            //   settings: RouteSettings(name: "/user"),
-            // );
-            // Navigator.pushReplacement(context, route);
-
             // user<->profileはpush/pop
             // ただ、編集画面を経由するとnoanimationでポップされてしまう。
             Navigator.pop(context);
