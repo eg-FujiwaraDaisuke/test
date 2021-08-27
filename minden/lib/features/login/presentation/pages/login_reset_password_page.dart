@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import '../../../../utile.dart';
 
-class LoginResetPassword extends StatefulWidget {
+class LoginResetPasswordPage extends StatefulWidget {
   @override
-  _LoginResetPasswordState createState() => _LoginResetPasswordState();
+  _LoginResetPasswordPageState createState() => _LoginResetPasswordPageState();
 }
 
-class _LoginResetPasswordState extends State<LoginResetPassword> {
+class _LoginResetPasswordPageState extends State<LoginResetPasswordPage> {
   String _inputPassword = '';
   String _reinputPassword = '';
 
@@ -68,7 +68,7 @@ class _LoginResetPasswordState extends State<LoginResetPassword> {
                 height: 34,
               ),
               PasswordInput(
-                hintText: '新しいパスワード（8文字以上32文字以下　英字、数字から2種類以上）',
+                hintText: i18nTranslate(context, 'reset_password_hint_text'),
                 isShowPassword: _isShowInputPassword,
                 onChanged: _onInputChangedPassword,
                 onShowPassword: _onShowInputPassword,
@@ -77,7 +77,7 @@ class _LoginResetPasswordState extends State<LoginResetPassword> {
                 height: 20,
               ),
               PasswordInput(
-                hintText: 'パスワード再入力',
+                hintText: i18nTranslate(context, 'reset_password_re_input'),
                 isShowPassword: _isShowReinputPassword,
                 onChanged: _onReInputChangedPassword,
                 onShowPassword: _onShowReinputPassword,

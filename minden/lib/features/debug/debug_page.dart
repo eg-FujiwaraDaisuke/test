@@ -2,7 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/no_animation_router.dart';
-import 'package:minden/features/camera/pages/camera_mock_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_reset_password_page.dart';
@@ -38,10 +37,13 @@ class DebugPage extends StatelessWidget {
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',
-                    (context) => LoginProfileNameSetting(),
+                    (context) => LoginProfileNameSettingPage(),
                     '/login/profileNameSetting'),
-                _generateNavigatorPush(context, 'ログイン パスワードリセット',
-                    (context) => LoginResetPassword(), '/login/resetPassword'),
+                _generateNavigatorPush(
+                    context,
+                    'ログイン パスワードリセット',
+                    (context) => LoginResetPasswordPage(),
+                    '/login/resetPassword'),
                 _generateNavigatorPush(context, 'ホーム - トップ',
                     (context) => HomeTopPage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',
@@ -50,8 +52,6 @@ class DebugPage extends StatelessWidget {
                     (context) => UserProfilePage(), '/user/profile'),
                 _generateNavigatorPush(context, 'マイページ - マッチング',
                     (context) => MatchingPage(), '/my_page/matching'),
-                _generateNavigatorPush(context, '画像選択Camera or Gallery',
-                    (context) => CameraMock(), '/camera_mock'),
               ],
             ),
           ),

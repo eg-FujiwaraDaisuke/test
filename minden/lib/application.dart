@@ -58,6 +58,12 @@ class Application extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate, // This is required
         ],
         theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
+            ),
             tabBarTheme: TabBarTheme().copyWith(
                 indicator: TabIndicator(),
                 labelPadding: EdgeInsets.symmetric(vertical: 12.0),
