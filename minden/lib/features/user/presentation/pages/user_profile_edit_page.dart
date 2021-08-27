@@ -209,8 +209,6 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              // TODO なぜか反応しない
-              print('aaa');
               ImagePickerBottomSheet.show(
                   context: context, imageHandler: _setImage);
             },
