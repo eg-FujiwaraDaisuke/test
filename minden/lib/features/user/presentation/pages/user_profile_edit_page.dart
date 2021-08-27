@@ -71,45 +71,44 @@ class UserProfileEditPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.none,
-                  children: [
-                    _ProfileWallPaperEdit(),
-                    Positioned(
-                      bottom: -44,
-                      child: _ProfileImageEdit(
-                        icon: data.icon,
-                        wallPaper: data.wallPaper,
-                      ),
+      extendBodyBehindAppBar: true,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  _ProfileWallPaperEdit(),
+                  Positioned(
+                    bottom: -44,
+                    child: _ProfileImageEdit(
+                      icon: data.icon,
+                      wallPaper: data.wallPaper,
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 63,
-                ),
-                _ProfileNameEditForm(
-                  name: data.name,
-                ),
-                SizedBox(
-                  height: 33,
-                ),
-                _ProfileBioEditForm(
-                  bio: data.bio,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                _ImportantTagsList(
-                  tagsList: data.tags,
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 63,
+              ),
+              _ProfileNameEditForm(
+                name: data.name,
+              ),
+              SizedBox(
+                height: 33,
+              ),
+              _ProfileBioEditForm(
+                bio: data.bio,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              _ImportantTagsList(
+                tagsList: data.tags,
+              ),
+            ],
           ),
         ),
       ),

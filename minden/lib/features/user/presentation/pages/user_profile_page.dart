@@ -76,52 +76,51 @@ class UserProfilePage extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.none,
-                  children: [
-                    CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 168),
-                      painter: WallPaperPainter(wallPaperimage: null),
-                    ),
-                    Positioned(
-                      bottom: -44,
-                      child: _ProfileIcon(icon: data.icon),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 66,
-                ),
-                _ProfileName(
-                  name: data.name,
-                ),
+      extendBodyBehindAppBar: true,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 168),
+                    painter: WallPaperPainter(wallPaperimage: null),
+                  ),
+                  Positioned(
+                    bottom: -44,
+                    child: _ProfileIcon(icon: data.icon),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 66,
+              ),
+              _ProfileName(
+                name: data.name,
+              ),
 
-                SizedBox(
-                  height: 43,
-                ),
+              SizedBox(
+                height: 43,
+              ),
 
-                _ProfileBio(bio: data.bio),
+              _ProfileBio(bio: data.bio),
 
-                SizedBox(
-                  height: 37,
-                ),
+              SizedBox(
+                height: 37,
+              ),
 
-                _TagsList(
-                  tagsList: data.tags,
-                ),
-                SizedBox(
-                  height: 37,
-                ),
-                // // あとで共通Componentを組み込む
-                _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
-              ],
-            ),
+              _TagsList(
+                tagsList: data.tags,
+              ),
+              SizedBox(
+                height: 37,
+              ),
+              // // あとで共通Componentを組み込む
+              _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
+            ],
           ),
         ),
       ),
