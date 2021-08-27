@@ -164,22 +164,12 @@ class UserProfileEditPage extends StatelessWidget {
     );
 
     if (isdiscard) {
-      // final route = NoAnimationMaterialPageRoute(
-      //   builder: (context) => UserProfilePage(),
-      //   settings: RouteSettings(name: "/user/profile"),
-      // );
-      // Navigator.pushReplacement(context, route);
       Navigator.pop(context);
     }
   }
 
   void _complete(BuildContext context) {
     // TODO ここで更新データ保存
-    // final route = NoAnimationMaterialPageRoute(
-    //   builder: (context) => UserProfilePage(),
-    //   settings: RouteSettings(name: "/user/profile"),
-    // );
-    // Navigator.pushReplacement(context, route);
     Navigator.pop(context);
   }
 }
