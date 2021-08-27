@@ -53,34 +53,37 @@ class UserPage extends StatelessWidget {
         ),
       ),
       extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                CustomPaint(
-                  size: Size(MediaQuery.of(context).size.width, 168),
-                  painter: WallPaperPainter(wallPaperimage: null),
-                ),
-                Positioned(
-                  bottom: -44,
-                  child: _ProfileIcon(icon: data.icon),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 66,
-            ),
-            _ProfileName(
-              name: data.name,
-            ),
-            SizedBox(
-              height: 61,
-            ),
-            _MenuListView(),
-          ],
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 168),
+                    painter: WallPaperPainter(wallPaperimage: null),
+                  ),
+                  Positioned(
+                    bottom: -44,
+                    child: _ProfileIcon(icon: data.icon),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 66,
+              ),
+              _ProfileName(
+                name: data.name,
+              ),
+              SizedBox(
+                height: 61,
+              ),
+              _MenuListView(),
+            ],
+          ),
         ),
       ),
     );
