@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
+import 'package:minden/features/login/presentation/pages/login_profile_icon_setting_page.dart';
 import '../../../../utile.dart';
 
 class LoginProfileNameSettingPage extends StatefulWidget {
@@ -75,8 +75,8 @@ class _LoginProfileNameSettingPageState
 
   void _next() {
     final route = MaterialPageRoute(
-      builder: (context) => LoginProfilePhotoSettingPage(),
-      settings: RouteSettings(name: "/login/profilePhotoSetting"),
+      builder: (context) => LoginProfileIconSettingPage(),
+      settings: RouteSettings(name: "/login/profileIconSetting"),
     );
     Navigator.push(context, route);
   }

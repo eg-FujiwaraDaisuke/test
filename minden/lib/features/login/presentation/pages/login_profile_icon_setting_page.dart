@@ -10,14 +10,14 @@ import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_pi
 import 'package:minden/features/login/presentation/pages/login_profile_bio_setting_page.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
 
-class LoginProfilePhotoSettingPage extends StatefulWidget {
+class LoginProfileIconSettingPage extends StatefulWidget {
   @override
-  _LoginProfilePhotoSettingPageState createState() =>
-      _LoginProfilePhotoSettingPageState();
+  _LoginProfileIconSettingPageState createState() =>
+      _LoginProfileIconSettingPageState();
 }
 
-class _LoginProfilePhotoSettingPageState
-    extends State<LoginProfilePhotoSettingPage> {
+class _LoginProfileIconSettingPageState
+    extends State<LoginProfileIconSettingPage> {
   File? _image;
 
   void _setImage(File cropedImage) {
@@ -72,7 +72,7 @@ class _LoginProfilePhotoSettingPageState
               children: [
                 SizedBox(height: 38),
                 Text(
-                  i18nTranslate(context, 'profile_setting_photo'),
+                  i18nTranslate(context, 'profile_setting_icon'),
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
