@@ -76,31 +76,37 @@ class UserProfilePage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                SizedBox(
-                  height: 33,
-                ),
                 Stack(
-                  clipBehavior: Clip.none,
                   alignment: Alignment.center,
+                  clipBehavior: Clip.none,
                   children: [
-                    Positioned(
-                      top: -113,
-                      child: CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width, 168),
-                        painter: WallPaperPainter(wallPaperimage: null),
-                      ),
+                    CustomPaint(
+                      size: Size(MediaQuery.of(context).size.width, 168),
+                      painter: WallPaperPainter(wallPaperimage: null),
                     ),
-                    _ProfileInfo(
-                      icon: data.icon,
-                      bio: data.bio,
-                      name: data.name,
-                      wallPaper: data.wallPaper,
+                    Positioned(
+                      bottom: -44,
+                      child: _ProfileIcon(icon: data.icon),
                     )
                   ],
                 ),
                 SizedBox(
+                  height: 66,
+                ),
+                _ProfileName(
+                  name: data.name,
+                ),
+
+                SizedBox(
                   height: 43,
                 ),
+
+                _ProfileBio(bio: data.bio),
+
+                SizedBox(
+                  height: 37,
+                ),
+
                 _TagsList(
                   tagsList: data.tags,
                 ),
@@ -118,74 +124,79 @@ class UserProfilePage extends StatelessWidget {
   }
 }
 
-class _ProfileInfo extends StatelessWidget {
+class _ProfileIcon extends StatelessWidget {
   final String icon;
+  const _ProfileIcon({required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 99,
+      height: 99,
+      decoration: BoxDecoration(
+        color: Color(0xFFFF8C00),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Container(
+          width: 93,
+          height: 93,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFFB92),
+            shape: BoxShape.circle,
+            border: Border.all(
+              width: 3,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileName extends StatelessWidget {
   final String name;
-  final String bio;
-  final String wallPaper;
-  _ProfileInfo({
-    required this.icon,
+  const _ProfileName({
     required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name,
+      style: TextStyle(
+        color: Color(0xFF575292),
+        fontSize: 18,
+        fontFamily: 'NotoSansJP',
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+class _ProfileBio extends StatelessWidget {
+  final String bio;
+
+  _ProfileBio({
     required this.bio,
-    required this.wallPaper,
   }) : super();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 99,
-          height: 99,
-          decoration: BoxDecoration(
-            color: Color(0xFFFF8C00),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Container(
-              width: 93,
-              height: 93,
-              decoration: BoxDecoration(
-                color: Color(0xFFFFFB92),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 3,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+    return Container(
+      width: 338,
+      child: Text(
+        bio,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 12,
+          fontFamily: 'NotoSansJP',
+          fontWeight: FontWeight.w400,
+          letterSpacing: calcLetterSpacing(letter: 0.5),
+          height: calcFontHeight(lineHeight: 22, fontSize: 12),
         ),
-        SizedBox(
-          height: 16,
-        ),
-        Text(
-          name,
-          style: TextStyle(
-            color: Color(0xFF575292),
-            fontSize: 18,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        SizedBox(
-          height: 35,
-        ),
-        Container(
-          width: 338,
-          child: Text(
-            bio,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w400,
-              letterSpacing: calcLetterSpacing(letter: 0.5),
-              height: calcFontHeight(lineHeight: 22, fontSize: 12),
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

@@ -20,9 +20,10 @@ class UserProfileEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF6F5EF),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
@@ -70,52 +71,44 @@ class UserProfileEditPage extends StatelessWidget {
           ),
         ],
       ),
-      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Color(0xFFF6F5EF),
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 33,
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        top: -113,
-                        child: _ProfileWallPaperEdit(),
-                      ),
-                      _ProfileImageEdit(
+          child: Center(
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    _ProfileWallPaperEdit(),
+                    Positioned(
+                      bottom: -44,
+                      child: _ProfileImageEdit(
                         icon: data.icon,
                         wallPaper: data.wallPaper,
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 17,
-                  ),
-                  _ProfileNameEditForm(
-                    name: data.name,
-                  ),
-                  SizedBox(
-                    height: 33,
-                  ),
-                  _ProfileBioEditForm(
-                    bio: data.bio,
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  _ImportantTagsList(
-                    tagsList: data.tags,
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 63,
+                ),
+                _ProfileNameEditForm(
+                  name: data.name,
+                ),
+                SizedBox(
+                  height: 33,
+                ),
+                _ProfileBioEditForm(
+                  bio: data.bio,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                _ImportantTagsList(
+                  tagsList: data.tags,
+                ),
+              ],
             ),
           ),
         ),
@@ -123,8 +116,8 @@ class UserProfileEditPage extends StatelessWidget {
     );
   }
 
-  void _prev(BuildContext context) {
-    showDialog(
+  void _prev(BuildContext context) async {
+    final isdiscard = await showDialog(
       context: context,
       builder: (context) {
         return Platform.isIOS
@@ -136,20 +129,13 @@ class UserProfileEditPage extends StatelessWidget {
                 actions: <Widget>[
                   CupertinoDialogAction(
                     child: Text(i18nTranslate(context, 'cancel_katakana')),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(context, false),
                   ),
                   CupertinoDialogAction(
                     child: Text(i18nTranslate(context, 'discard')),
                     isDestructiveAction: true,
-                    onPressed: () async {
-                      // TODO　プロフィール画面に戻る
-                      Navigator.pop(context);
-
-                      final route = NoAnimationMaterialPageRoute(
-                        builder: (context) => UserProfilePage(),
-                        settings: RouteSettings(name: "/user/profile"),
-                      );
-                      Navigator.pushReplacement(context, route);
+                    onPressed: () {
+                      Navigator.pop(context, true);
                     },
                   ),
                 ],
@@ -162,24 +148,26 @@ class UserProfileEditPage extends StatelessWidget {
                 actions: [
                   TextButton(
                     child: Text(i18nTranslate(context, 'cancel_katakana')),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => Navigator.pop(context, false),
                   ),
                   TextButton(
                     child: Text(i18nTranslate(context, 'discard')),
                     onPressed: () {
-                      // TODO　プロフィール画面に戻る
-                      Navigator.pop(context);
-                      final route = NoAnimationMaterialPageRoute(
-                        builder: (context) => UserProfilePage(),
-                        settings: RouteSettings(name: "/user/profile"),
-                      );
-                      Navigator.pushReplacement(context, route);
+                      Navigator.pop(context, true);
                     },
                   ),
                 ],
               );
       },
     );
+
+    if (isdiscard) {
+      final route = MaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      );
+      Navigator.pushReplacement(context, route);
+    }
   }
 
   void _complete(BuildContext context) {
