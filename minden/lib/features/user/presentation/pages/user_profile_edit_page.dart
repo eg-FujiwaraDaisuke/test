@@ -164,7 +164,7 @@ class UserProfileEditPage extends StatelessWidget {
     );
 
     if (isdiscard) {
-      final route = MaterialPageRoute(
+      final route = NoAnimationMaterialPageRoute(
         builder: (context) => UserProfilePage(),
         settings: RouteSettings(name: "/user/profile"),
       );
