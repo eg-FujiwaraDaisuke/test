@@ -103,10 +103,10 @@ class ImagePickerBottomSheet {
         maxHeight: clipHeight,
         compressFormat: ImageCompressFormat.jpg,
         androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.deepOrange,
-          toolbarTitle: 'crop',
-          statusBarColor: Colors.deepOrange.shade900,
-          backgroundColor: Colors.white,
+          toolbarColor: Colors.white,
+          statusBarColor: Colors.black,
+          toolbarTitle: '画像を編集',
+          backgroundColor: Colors.black,
         ),
         iosUiSettings: IOSUiSettings(minimumAspectRatio: 1.0),
       );
