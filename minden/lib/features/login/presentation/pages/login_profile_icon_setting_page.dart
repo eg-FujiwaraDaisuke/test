@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
@@ -84,7 +85,9 @@ class _LoginProfileIconSettingPageState
                 GestureDetector(
                   onTap: () {
                     ImagePickerBottomSheet.show(
-                        context: context, imageHandler: _setImage);
+                        context: context,
+                        imageHandler: _setImage,
+                        cropStyle: CropStyle.circle);
                   },
                   child: _buildImage(),
                 ),

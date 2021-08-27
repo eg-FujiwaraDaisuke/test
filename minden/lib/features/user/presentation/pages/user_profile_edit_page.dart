@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
@@ -119,7 +120,7 @@ class UserProfileEditPage extends StatelessWidget {
   }
 
   void _prev(BuildContext context) async {
-    final isdiscard = await showDialog(
+    final isDiscard = await showDialog(
       context: context,
       builder: (context) {
         return Platform.isIOS
@@ -163,7 +164,7 @@ class UserProfileEditPage extends StatelessWidget {
       },
     );
 
-    if (isdiscard) {
+    if (isDiscard) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => UserProfilePage(),
         settings: RouteSettings(name: "/user/profile"),
@@ -292,7 +293,9 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
           child: GestureDetector(
             onTap: () {
               ImagePickerBottomSheet.show(
-                  context: context, imageHandler: _setImage);
+                  context: context,
+                  imageHandler: _setImage,
+                  cropStyle: CropStyle.circle);
             },
             child: Container(
               width: 30,
