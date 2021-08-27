@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
@@ -22,11 +23,15 @@ class UserProfilePage extends StatelessWidget {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            final route = MaterialPageRoute(
-              builder: (context) => UserPage(),
-              settings: RouteSettings(name: "/user"),
-            );
-            Navigator.pushReplacement(context, route);
+            // final route = MaterialPageRoute(
+            //   builder: (context) => UserPage(),
+            //   settings: RouteSettings(name: "/user"),
+            // );
+            // Navigator.pushReplacement(context, route);
+
+            // user<->profileはpush/pop
+            // ただ、編集画面を経由するとnoanimationでポップされてしまう。
+            Navigator.pop(context);
           },
           child: Center(
             child: SvgPicture.asset(
@@ -40,7 +45,8 @@ class UserProfilePage extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              final route = MaterialPageRoute(
+              // profile<->editはトグルなのでpushReplaceでアニメーションなし
+              final route = NoAnimationMaterialPageRoute(
                 builder: (context) => UserProfileEditPage(),
                 settings: RouteSettings(name: "/user/profile/edit"),
               );
