@@ -26,9 +26,18 @@ class _HomePageState extends State<HomePage> {
     setState(() => _currentTab = tabItem);
   }
 
+  void _postToken(String? token) {
+    debugPrint("FCM token : ${token}");
+    if (token == null) return;
+  }
+
   @override
   void initState() {
     super.initState();
+
+    si<FirebaseMessaging>().getToken().then(_postToken);
+    si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
+
     // プッシュ通知初期化
     //TODO 通知をタップしたらメッセージページに遷移させたい
     //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
