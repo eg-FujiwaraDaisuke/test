@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
+import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 import '../../../../utile.dart';
 
 class UserProfileEditPage extends StatelessWidget {
@@ -14,115 +20,218 @@ class UserProfileEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF6F5EF),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => UserProfilePage(),
-                    settings: RouteSettings(name: "/user/profile"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
+        elevation: 0,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            _prev(context);
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
+            ),
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () => _complete(context),
+            child: Container(
+              width: 90,
+              height: 44,
+              margin: EdgeInsets.only(right: 18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/images/user/check.svg'),
+                  SizedBox(
+                    width: 10.5,
                   ),
-                ),
+                  Text(
+                    i18nTranslate(context, 'user_edit_complete'),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  // TODO ここでデータの保存をする
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => UserProfilePage(),
-                    settings: RouteSettings(name: "/user/profile"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 90,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset('assets/images/user/check.svg'),
-                      SizedBox(
-                        width: 10.5,
-                      ),
-                      Text(
-                        i18nTranslate(context, 'user_edit_complete'),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          color: Color(0xFFF6F5EF),
-          child: Column(
-            children: [
-              _ProfileImageEdit(
-                icon: data.icon,
-                wallPaper: data.wallPaper,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _ProfileNameEditForm(
-                name: data.name,
-                contractor: data.contractor,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _ProfileBioEditForm(
-                bio: data.bio,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _TagsList(
-                tagsList: data.tags,
-              ),
-            ],
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    _ProfileWallPaperEdit(),
+                    Positioned(
+                      bottom: -44,
+                      child: _ProfileImageEdit(
+                        icon: data.icon,
+                        wallPaper: data.wallPaper,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 63,
+                ),
+                _ProfileNameEditForm(
+                  name: data.name,
+                ),
+                SizedBox(
+                  height: 33,
+                ),
+                _ProfileBioEditForm(
+                  bio: data.bio,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                _ImportantTagsList(
+                  tagsList: data.tags,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  void _prev(BuildContext context) async {
+    final isdiscard = await showDialog(
+      context: context,
+      builder: (context) {
+        return Platform.isIOS
+            ? CupertinoAlertDialog(
+                title:
+                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
+                content: Text(i18nTranslate(
+                    context, 'profile_edit_alert_discard_confirm')),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(i18nTranslate(context, 'discard')),
+                    isDestructiveAction: true,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title:
+                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
+                content: Text(i18nTranslate(
+                    context, 'profile_edit_alert_discard_confirm')),
+                actions: [
+                  TextButton(
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
+                  TextButton(
+                    child: Text(i18nTranslate(context, 'discard')),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                ],
+              );
+      },
+    );
+
+    if (isdiscard) {
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      );
+      Navigator.pushReplacement(context, route);
+    }
+  }
+
+  void _complete(BuildContext context) {
+    // TODO ここで更新データ保存
+    final route = NoAnimationMaterialPageRoute(
+      builder: (context) => UserProfilePage(),
+      settings: RouteSettings(name: "/user/profile"),
+    );
+    Navigator.pushReplacement(context, route);
+  }
 }
 
-class _ProfileImageEdit extends StatelessWidget {
+class _ProfileWallPaperEdit extends StatefulWidget {
+  @override
+  _ProfileWallPaperEditState createState() => _ProfileWallPaperEditState();
+}
+
+class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
+  File? _image;
+
+  void _setImage(File cropedImage) {
+    setState(() {
+      _image = cropedImage == null ? _image : cropedImage;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        CustomPaint(
+          size: Size(MediaQuery.of(context).size.width, 168),
+          painter: WallPaperPainter(wallPaperimage: null),
+        ),
+        Positioned(
+          bottom: 26,
+          right: 55,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              ImagePickerBottomSheet.show(
+                  context: context, imageHandler: _setImage);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/user/camera.svg',
+                  width: 15,
+                  height: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProfileImageEdit extends StatefulWidget {
   final String icon;
   final String wallPaper;
   _ProfileImageEdit({
@@ -131,96 +240,92 @@ class _ProfileImageEdit extends StatelessWidget {
   }) : super();
 
   @override
+  _ProfileImageEditState createState() => _ProfileImageEditState();
+}
+
+class _ProfileImageEditState extends State<_ProfileImageEdit> {
+  File? _image;
+
+  void _setImage(File cropedImage) {
+    setState(() {
+      _image = cropedImage == null ? _image : cropedImage;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 218,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.topCenter,
-        children: [
-          Positioned(
-            child: Stack(children: [
-              Positioned(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 168,
+    return Stack(
+      children: [
+        Positioned(
+          child: Container(
+            width: 99,
+            height: 99,
+            decoration: BoxDecoration(
+              color: Color(0xFFFF8C00),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Container(
+                width: 93,
+                height: 93,
+                decoration: BoxDecoration(
                   color: Color(0xFFFFFB92),
-                ),
-              ),
-              Positioned(
-                bottom: 9,
-                right: 28,
-                child: GestureDetector(
-                  onTap: () {
-                    // TODO 写真選択or撮影
-                  },
-                  child: Container(
-                    child: SvgPicture.asset('assets/images/user/camera.svg'),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 3,
+                    color: Colors.white,
                   ),
-                ),
-              ),
-            ]),
-          ),
-          Positioned(
-            top: 118,
-            child: Stack(
-              children: [
-                Positioned(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFB92),
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      // TODO 写真選択or撮影
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFFB92),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
+                  image: _image == null
+                      ? null
+                      : DecorationImage(
+                          fit: BoxFit.cover,
+                          image: FileImage(_image!),
                         ),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/images/user/camera.svg',
-                        width: 15.87,
-                        height: 14,
-                        fit: BoxFit.none,
-                      ),
-                    ),
-                  ),
-                )
-              ],
+                ),
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: GestureDetector(
+            onTap: () {
+              ImagePickerBottomSheet.show(
+                  context: context, imageHandler: _setImage);
+            },
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFB92),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 3,
+                ),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/user/camera.svg',
+                  width: 15,
+                  height: 14,
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
 
 class _ProfileNameEditForm extends StatelessWidget {
-  final String contractor;
   final String name;
 
-  const _ProfileNameEditForm({required this.name, required this.contractor})
-      : super();
+  const _ProfileNameEditForm({
+    required this.name,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -242,41 +347,9 @@ class _ProfileNameEditForm extends StatelessWidget {
               ),
               style: TextStyle(
                 color: Color(0xFF7C7C7C),
-                fontSize: 14,
+                fontSize: 18,
                 fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20, right: 6),
-            height: 54,
-            width: 339,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            child: TextFormField(
-              initialValue: contractor,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                suffixIcon: IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/images/user/clear.svg',
-                  ),
-                  onPressed: () {
-                    // TODO  入力のリセット
-                  },
-                ),
-              ),
-              style: TextStyle(
-                color: Color(0xFF7C7C7C),
-                fontSize: 14,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -292,145 +365,121 @@ class _ProfileBioEditForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-        height: 110,
-        width: 339,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-        ),
-        child: TextFormField(
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.newline,
-          initialValue: bio,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          i18nTranslate(context, 'profile_edit_salf_intro'),
           style: TextStyle(
-            color: Color(0xFF7C7C7C),
-            fontSize: 12,
+            color: Colors.black,
+            fontSize: 14,
             fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w400,
-            letterSpacing: calcLetterSpacing(letter: 0.5),
-            height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+            fontWeight: FontWeight.w700,
+            letterSpacing: calcLetterSpacing(letter: 4),
           ),
         ),
-      ),
+        SizedBox(
+          height: 8,
+        ),
+        Form(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+            height: 110,
+            width: 339,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+            ),
+            child: TextFormField(
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              initialValue: bio,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+              ),
+              style: TextStyle(
+                color: Color(0xFF7C7C7C),
+                fontSize: 12,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w400,
+                letterSpacing: calcLetterSpacing(letter: 0.5),
+                height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _TagsList extends StatelessWidget {
+class _ImportantTagsList extends StatelessWidget {
   final List<Tag> tagsList;
-  const _TagsList({required this.tagsList}) : super();
+  const _ImportantTagsList({required this.tagsList}) : super();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 330,
+      width: 338,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  // TODO tagの追加
-                },
-                child: Text(
-                  i18nTranslate(context, 'user_important'),
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: calcLetterSpacing(letter: 4),
-                  ),
+              Text(
+                i18nTranslate(context, 'user_important'),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: calcLetterSpacing(letter: 4),
                 ),
               ),
               GestureDetector(
+                onTap: () {},
                 child: Container(
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: Color(0xFFEDCB50),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: Colors.white,
+                      color: Color(0xFFFF8C00),
                       width: 2,
                     ),
                   ),
-                  child: SvgPicture.asset(
-                    'assets/images/user/add.svg',
-                    fit: BoxFit.none,
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/images/user/add.svg',
+                      color: Color(0xFFFF8C00),
+                      width: 7,
+                      height: 7,
+                    ),
                   ),
                 ),
               )
             ],
           ),
           SizedBox(
-            height: 25,
+            height: 12,
           ),
           Container(
             child: Wrap(
               alignment: WrapAlignment.start,
-              spacing: 10,
-              runSpacing: 13,
+              spacing: 5,
+              runSpacing: 10,
               children: tagsList
-                  .map((tag) => _TagsListItem(tag: tag.tagName))
+                  .map((tag) => ImportantTagListItem(
+                        tag: tag,
+                        onSelect: () {},
+                        isSelected: true,
+                      ))
                   .toList(),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TagsListItem extends StatelessWidget {
-  final tag;
-  const _TagsListItem({required this.tag}) : super();
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // TODO tagの削除
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFB92),
-          borderRadius: BorderRadius.circular(17),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Text(
-                '#$tag',
-                style: TextStyle(
-                  color: Color(0xFF487254),
-                  fontSize: 12,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            GestureDetector(
-              child: SvgPicture.asset(
-                'assets/images/user/close.svg',
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

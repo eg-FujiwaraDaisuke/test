@@ -24,7 +24,7 @@ void main() {
   MockFlutterSecureStorage mockSecureStorage;
 
   setUpAll(() {
-    Config.setEnvironment(Config.kDevFlavor);
+    Config.setEnvironment(Config.kStagingFlavor);
   });
 
   setUp(() {

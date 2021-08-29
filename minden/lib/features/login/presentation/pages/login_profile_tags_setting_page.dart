@@ -1,41 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_photo_setting_page.dart';
+import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/important_tags.dart';
+import 'package:minden/features/login/presentation/pages/login_profile_tags_decision_page.dart';
 import 'package:minden/features/user/presentation/pages/profile.dart';
 import 'package:minden/utile.dart';
 
-class LoginProfileTagsSetting extends StatefulWidget {
+class LoginProfileTagsSettingPage extends StatefulWidget {
   @override
-  _LoginProfileTagsSettingState createState() =>
-      _LoginProfileTagsSettingState();
+  _LoginProfileTagsSettingPageState createState() =>
+      _LoginProfileTagsSettingPageState();
 }
 
-class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
-  //TODO あとで差し替える
-  final List<Tag> _tagsDamyData = [
-    Tag(tagId: 'タグID', tagName: '使い捨てしません'),
-    Tag(tagId: 'タグID', tagName: '環境負荷ゼロ'),
-    Tag(tagId: 'タグID', tagName: '地産地消'),
-    Tag(tagId: 'タグID', tagName: 'フェアトレード'),
-    Tag(tagId: 'タグID', tagName: 'エコ'),
-    Tag(tagId: 'タグID', tagName: 'プラスチックフリー'),
-    Tag(tagId: 'タグID', tagName: 'シェアリングエコノミー'),
-    Tag(tagId: 'タグID', tagName: '無農薬野菜好き'),
-    Tag(tagId: 'タグID', tagName: 'サステイナブルコーヒー好き'),
-    Tag(tagId: 'タグID', tagName: 'フードロスを減らす'),
-    Tag(tagId: 'タグID', tagName: 'リサイクルしよう'),
-    Tag(tagId: 'タグID', tagName: '環境を守れる経済活動'),
-    Tag(tagId: 'タグID', tagName: '子供たちの未来のために'),
-    Tag(tagId: 'タグID', tagName: '生物多様性'),
-    Tag(tagId: 'タグID', tagName: 'バリアフリー'),
-    Tag(tagId: 'タグID', tagName: 'ロハス'),
-    Tag(tagId: 'タグID', tagName: '地元を愛する'),
-    Tag(tagId: 'タグID', tagName: '持続可能な開発'),
-    Tag(tagId: 'タグID', tagName: '地方創生'),
-  ];
-
+class _LoginProfileTagsSettingPageState
+    extends State<LoginProfileTagsSettingPage> {
   List<Tag> _selectedTags = [];
 
   void _onSelectTag(Tag tag) {
@@ -53,101 +34,130 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9E5),
+      backgroundColor: Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => LoginProfilePhotoSetting(),
-                    settings: RouteSettings(name: "/login/profilePhotoSetting"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
-                  ),
-                ),
-              ),
+        leading: GestureDetector(
+          onTap: () => _prev(),
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
             ),
-          ],
+          ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 38),
                 Text(
-                  i18nTranslate(context, 'profile_setting_select_tags'),
+                  i18nTranslate(context, 'profile_setting_select_tag'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF787877),
-                    height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF575292),
                   ),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  i18nTranslate(context, 'profile_setting_select_tags_any_num'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF787877),
-                  ),
-                ),
-                SizedBox(height: 31),
-                _TagsList(
-                  tagsList: _tagsDamyData,
-                  onSelect: _onSelectTag,
-                  selectedTags: _selectedTags,
-                ),
-                SizedBox(height: 78),
-                GestureDetector(
-                  onTap: () {
-                    // TODO 設定を完了する
-                  },
-                  child: Container(
-                    width: 180,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFF8C00),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(27),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        i18nTranslate(context, 'profile_setting_complete'),
+                SizedBox(height: 19),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_you'),
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 13,
                           fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
                         ),
                       ),
-                    ),
+                      TextSpan(
+                        text: i18nTranslate(context,
+                            'profile_setting_tag_description_important'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFFFF8C00),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      ),
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_wo'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      ),
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_select'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 7),
+                Text(
+                  i18nTranslate(
+                      context, 'profile_setting_important_tag_find_user'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF787877),
+                    height: calcFontHeight(fontSize: 12, lineHeight: 17.38),
                   ),
                 ),
+                SizedBox(height: 15),
+                Column(
+                  children: importantTags
+                      .map((e) => _TagsList(
+                            tagsList: e.tags,
+                            onSelect: _onSelectTag,
+                            selectedTags: _selectedTags,
+                            color: e.color,
+                            title: e.title,
+                          ))
+                      .toList(),
+                ),
+                SizedBox(height: 28),
+                _selectedTags.length == 0
+                    ? Botton(
+                        onTap: () => {},
+                        text: i18nTranslate(context, 'profile_setting_next'),
+                        size: BottonSize.S,
+                        isActive: false,
+                      )
+                    : Botton(
+                        onTap: () => {_next()},
+                        text: i18nTranslate(context, 'profile_setting_next'),
+                        size: BottonSize.S,
+                      ),
+                SizedBox(height: 32),
               ],
             ),
           ),
@@ -155,16 +165,32 @@ class _LoginProfileTagsSettingState extends State<LoginProfileTagsSetting> {
       ),
     );
   }
+
+  void _prev() {
+    Navigator.pop(context);
+  }
+
+  void _next() {
+    final route = MaterialPageRoute(
+      builder: (context) => LoginProfileTagsDecisionPage(),
+      settings: RouteSettings(name: "/login/profileTagsDecision"),
+    );
+    Navigator.push(context, route);
+  }
 }
 
 class _TagsList extends StatefulWidget {
   final List<Tag> tagsList;
   final List<Tag> selectedTags;
   final Function onSelect;
+  final Color color;
+  final String title;
   const _TagsList(
       {required this.tagsList,
       required this.onSelect,
-      required this.selectedTags})
+      required this.selectedTags,
+      required this.color,
+      required this.title})
       : super();
 
   @override
@@ -175,71 +201,58 @@ class _TagsListState extends State<_TagsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 340,
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 35),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(13),
-        color: Colors.white,
-      ),
+      margin: EdgeInsets.only(top: 5),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            width: 88,
+            height: 24,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(13), topRight: Radius.circular(13)),
+              color: widget.color,
+            ),
+            child: Center(
+              child: Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF787877),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 329,
+            height: 2,
+            color: widget.color,
+          ),
+          Container(
+            width: 338,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              color: Colors.white,
+            ),
             child: Wrap(
               alignment: WrapAlignment.center,
-              spacing: 8,
+              spacing: 5,
               runSpacing: 10,
               children: widget.tagsList
-                  .map((tag) => _TagsListItem(
+                  .map(
+                    (tag) => ImportantTagListItem(
                       tag: tag,
                       onSelect: widget.onSelect,
-                      isSelected: widget.selectedTags.contains(tag)))
+                      isSelected: widget.selectedTags.contains(tag),
+                    ),
+                  )
                   .toList(),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TagsListItem extends StatefulWidget {
-  final Tag tag;
-  final Function onSelect;
-  final bool isSelected;
-  const _TagsListItem(
-      {required this.tag, required this.onSelect, required this.isSelected})
-      : super();
-
-  @override
-  _TagsListItemState createState() => _TagsListItemState();
-}
-
-class _TagsListItemState extends State<_TagsListItem> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.onSelect(widget.tag);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17),
-            border: Border.all(
-              color: Color(0xFFE2E2E2),
-              width: 1,
-            ),
-            color: widget.isSelected ? Colors.yellow : Color(0xFFF6F5EF)),
-        child: Text(
-          '#${widget.tag.tagName}',
-          style: TextStyle(
-            color: Color(0xFF4F4F4F),
-            fontSize: 14,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
       ),
     );
   }
