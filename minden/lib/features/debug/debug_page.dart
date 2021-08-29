@@ -7,6 +7,7 @@ import 'package:minden/features/login/presentation/pages/login_profile_name_sett
 import 'package:minden/features/login/presentation/pages/login_reset_password_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/pages/power_plant_page.dart';
+import 'package:minden/features/startup/presentation/pages/fcm_debug_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
@@ -52,6 +53,8 @@ class DebugPage extends StatelessWidget {
                     (context) => UserProfilePage(), '/user/profile'),
                 _generateNavigatorPush(context, 'マイページ - マッチング',
                     (context) => MatchingPage(), '/my_page/matching'),
+                _generateNavigatorPush(context, 'push通知FCM取得',
+                    (context) => FCMDebugPage(), '/fcm_debug'),
               ],
             ),
           ),
@@ -69,7 +72,7 @@ class DebugPage extends StatelessWidget {
           builder: builder,
           settings: RouteSettings(name: routeName),
         );
-        Navigator.pushReplacement(context, route);
+        Navigator.push(context, route);
       },
     );
   }
