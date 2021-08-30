@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class Profile {
   final String accountId;
   final String name;
@@ -20,13 +22,16 @@ class Profile {
   });
 }
 
-class Tag {
+class Tag extends Equatable {
   final String tagId;
   final String tagName;
   Tag({
     required this.tagId,
     required this.tagName,
   });
+
+  @override
+  List<Object> get props => [tagId, tagName];
 }
 
 class SelectPowerPlant {

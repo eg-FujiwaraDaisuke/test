@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
@@ -154,7 +156,6 @@ class _LoginInputPageState extends State<LoginInputPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  print('パスワードをお忘れですか？');
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => LoginForgotPassword(),
                                     settings: RouteSettings(
@@ -190,31 +191,10 @@ class _LoginInputPageState extends State<LoginInputPage> {
                         SizedBox(
                           height: 32,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            _login();
-                          },
-                          child: Container(
-                            width: 399,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFF8C00),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(25),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                i18nTranslate(context, 'login_login'),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFFFFFFFF),
-                                ),
-                              ),
-                            ),
-                          ),
+                        Botton(
+                          onTap: _login,
+                          text: i18nTranslate(context, 'login_login'),
+                          size: BottonSize.L,
                         ),
                         SizedBox(
                           height: 27,
