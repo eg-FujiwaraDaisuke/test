@@ -67,9 +67,7 @@ void main() {
         (_) async => http.Response(fixture('login_data.json'), 200),
       );
       final result = await dataSource.getLoginUser(tId, tPassword);
-      print('------------------');
-      print(result);
-      print('------------------');
+
       expect(result, equals(tUserModel));
     });
 

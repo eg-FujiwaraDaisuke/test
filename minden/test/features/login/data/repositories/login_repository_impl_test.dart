@@ -29,16 +29,16 @@ void main() {
       wallPaper:
           "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
       loginId: "nakajo@minden.co.jp",
-      name: "<b>a</b>",
+      name: "huyen",
       icon:
           "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-      limitedPlantId: "MP2021080805",
+      limitedPlantId: "limitedPlantIdxxx",
       bio: "<html> <b>a</b></html>",
-      supports: null,
+      supports:
+          Supports(yearMonth: "2021-08", plantId: "plantIdxxx", status: "3"),
       contracts: Contracts(contractId: "契約プランID", name: "契約プラン名称"),
       userId: "20190707085551963zhayz",
     );
-
     final User tUser = tUserModel;
 
     test('should return remote data', () async {

@@ -10,7 +10,7 @@ class UserModel extends User {
     required String icon,
     required String limitedPlantId,
     required String bio,
-    required dynamic supports,
+    required Supports supports,
     required Contracts contracts,
     required String userId,
   }) : super(
@@ -37,7 +37,11 @@ class UserModel extends User {
       icon: json['user']['icon'],
       limitedPlantId: json['user']['limitedPlantId'],
       bio: json['user']['bio'],
-      supports: json['user']['supports'],
+      supports: Supports(
+        yearMonth: json['user']['supports']['yearMonth'],
+        plantId: json['user']['supports']['plantId'],
+        status: json['user']['supports']['status'],
+      ),
       contracts: Contracts(
         contractId: json['user']['contracts']['contract_id'],
         name: json['user']['contracts']['name'],
@@ -56,7 +60,11 @@ class UserModel extends User {
       'icon': icon,
       'limitedPlantId': limitedPlantId,
       'bio': bio,
-      'supports': supports,
+      'supports': {
+        'yearMonth': supports.yearMonth,
+        'plantId': supports.plantId,
+        'status': supports.status
+      },
       'contracts': {
         'name': contracts.name,
         'contract_id': contracts.contractId

@@ -9,7 +9,7 @@ class User extends Equatable {
   String icon;
   String limitedPlantId;
   String bio;
-  dynamic supports;
+  Supports supports;
   Contracts contracts;
   String userId;
 
@@ -57,4 +57,19 @@ class Contracts extends Equatable {
         contractId,
         name,
       ];
+}
+
+class Supports extends Equatable {
+  String yearMonth;
+  String plantId;
+  String status;
+
+  Supports({
+    required this.yearMonth,
+    required this.plantId,
+    required this.status,
+  });
+
+  @override
+  List<Object> get props => [yearMonth, plantId, status];
 }
