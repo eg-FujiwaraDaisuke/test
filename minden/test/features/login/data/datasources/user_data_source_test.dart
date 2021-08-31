@@ -31,6 +31,7 @@ void main() {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tBody = json.encode({'loginId': tId, 'password': tPassword});
+
     final Uri tUrl =
         Uri.parse('https://www.stg.minapp.minden.co.jp/api/v1/auth');
     final tUserModel =
@@ -55,7 +56,6 @@ void main() {
           body: tBody,
         ),
       );
-
     });
 
     test('response code is 200', () async {
@@ -67,6 +67,9 @@ void main() {
         (_) async => http.Response(fixture('login_data.json'), 200),
       );
       final result = await dataSource.getLoginUser(tId, tPassword);
+      print('------------------');
+      print(result);
+      print('------------------');
       expect(result, equals(tUserModel));
     });
 

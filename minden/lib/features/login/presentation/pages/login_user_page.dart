@@ -16,13 +16,13 @@ class LoginUserPage extends StatelessWidget {
         child: Container(
           child: ListView(
             children: [
-              Text('key : ${user.key}'),
+              Text('accountId : ${user.accountId}'),
               Text('loginId : ${user.loginId}'),
               Text('name : ${user.name}'),
-              Text('secret : ${user.secret}'),
-              Text('provider : ${user.provider}'),
-              Text('service : ${user.service}'),
-              Text('email : ${user.email}'),
+              Text('bio : ${user.bio}'),
+              Text('icon : ${user.icon}'),
+              Text('wallPaper : ${user.wallPaper}'),
+              Text('userId : ${user.userId}'),
             ],
           ),
         ),

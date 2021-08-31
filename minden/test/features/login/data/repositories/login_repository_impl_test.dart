@@ -24,13 +24,19 @@ void main() {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tUserModel = UserModel(
-      key: "20190707085551963zhayz",
+      contractor: "�݂�ȁ@�d��",
+      accountId: "20190707085551963zhayz",
+      wallPaper:
+          "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
       loginId: "nakajo@minden.co.jp",
-      name: "�݂�ȁ@�d��",
-      secret: "20000102",
-      provider: "MINDEN",
-      service: "portal",
-      email: "nakajo@minden.co.jp",
+      name: "<b>a</b>",
+      icon:
+          "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
+      limitedPlantId: "MP2021080805",
+      bio: "<html> <b>a</b></html>",
+      supports: null,
+      contracts: Contracts(contractId: "契約プランID", name: "契約プラン名称"),
+      userId: "20190707085551963zhayz",
     );
 
     final User tUser = tUserModel;

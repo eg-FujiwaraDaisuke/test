@@ -1,32 +1,60 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  final String key;
-  final String loginId;
-  final String name;
-  final String secret;
-  final String provider;
-  final String service;
-  final String email;
+  String contractor;
+  String accountId;
+  String wallPaper;
+  String loginId;
+  String name;
+  String icon;
+  String limitedPlantId;
+  String bio;
+  dynamic supports;
+  Contracts contracts;
+  String userId;
 
   User({
-    required this.key,
+    required this.contractor,
+    required this.accountId,
+    required this.wallPaper,
     required this.loginId,
     required this.name,
-    required this.secret,
-    required this.provider,
-    required this.service,
-    required this.email,
+    required this.icon,
+    required this.limitedPlantId,
+    required this.bio,
+    required this.supports,
+    required this.contracts,
+    required this.userId,
   });
 
   @override
   List<Object> get props => [
-        key,
+        contractor,
+        accountId,
+        wallPaper,
         loginId,
         name,
-        secret,
-        provider,
-        service,
-        email,
+        icon,
+        limitedPlantId,
+        bio,
+        supports,
+        contracts,
+        userId
+      ];
+}
+
+class Contracts extends Equatable {
+  String contractId;
+  String name;
+
+  Contracts({
+    required this.contractId,
+    required this.name,
+  });
+
+  @override
+  List<Object> get props => [
+        contractId,
+        name,
       ];
 }

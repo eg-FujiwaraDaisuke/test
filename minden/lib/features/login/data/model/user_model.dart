@@ -2,44 +2,66 @@ import 'package:minden/features/login/domain/entities/user.dart';
 
 class UserModel extends User {
   UserModel({
-    required String key,
+    required String contractor,
+    required String accountId,
+    required String wallPaper,
     required String loginId,
     required String name,
-    required String secret,
-    required String provider,
-    required String service,
-    required String email,
+    required String icon,
+    required String limitedPlantId,
+    required String bio,
+    required dynamic supports,
+    required Contracts contracts,
+    required String userId,
   }) : super(
-          key: key,
+          contractor: contractor,
+          accountId: accountId,
+          wallPaper: wallPaper,
           loginId: loginId,
           name: name,
-          secret: secret,
-          provider: provider,
-          service: service,
-          email: email,
+          icon: icon,
+          limitedPlantId: limitedPlantId,
+          bio: bio,
+          supports: supports,
+          contracts: contracts,
+          userId: userId,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      key: json['user']['key'],
+      contractor: json['user']['contractor'],
+      accountId: json['user']['accountId'],
+      wallPaper: json['user']['wallPaper'],
       loginId: json['user']['loginId'],
       name: json['user']['name'],
-      secret: json['user']['secret'],
-      provider: json['user']['provider'],
-      service: json['user']['service'],
-      email: json['user']['email'],
+      icon: json['user']['icon'],
+      limitedPlantId: json['user']['limitedPlantId'],
+      bio: json['user']['bio'],
+      supports: json['user']['supports'],
+      contracts: Contracts(
+        contractId: json['user']['contracts']['contract_id'],
+        name: json['user']['contracts']['name'],
+      ),
+      userId: json['user']['userId'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'key': key,
+      'contractor': contractor,
+      'accountId': accountId,
+      'wallPaper': wallPaper,
       'loginId': loginId,
       'name': name,
-      'secret': secret,
-      'provider': provider,
-      'service': service,
-      'email': email,
+      'icon': icon,
+      'limitedPlantId': limitedPlantId,
+      'bio': bio,
+      'supports': supports,
+      'contracts': {
+        'name': contracts.name,
+        'contract_id': contracts.contractId
+      },
+      'userId': userId,
     };
   }
 }
