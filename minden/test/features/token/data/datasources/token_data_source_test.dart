@@ -32,7 +32,7 @@ void main() {
     mockEncryptionTokenDataSource = MockEncryptionTokenDataSource();
     dataSource = TokenDataSourceImpl(
       client: mockHttpClient,
-      encrypztionTokenDataSource: mockEncryptionTokenDataSource,
+      encryptionTokenDataSource: mockEncryptionTokenDataSource,
     );
   });
 
