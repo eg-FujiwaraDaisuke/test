@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/datasources/token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
 import 'package:mockito/annotations.dart';
@@ -17,11 +17,11 @@ import 'token_data_source_test.mocks.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
-@GenerateMocks([FlutterSecureStorage])
+@GenerateMocks([EncryptionTokenDataSource])
 void main() {
   TokenDataSourceImpl dataSource;
   MockHttpClient mockHttpClient;
-  MockFlutterSecureStorage mockSecureStorage;
+  MockEncryptionTokenDataSource mockEncryptionTokenDataSource;
 
   setUpAll(() {
     Config.setEnvironment(Config.kStagingFlavor);
@@ -29,10 +29,10 @@ void main() {
 
   setUp(() {
     mockHttpClient = MockHttpClient();
-    mockSecureStorage = MockFlutterSecureStorage();
+    mockEncryptionTokenDataSource = MockEncryptionTokenDataSource();
     dataSource = TokenDataSourceImpl(
       client: mockHttpClient,
-      secureStorage: mockSecureStorage,
+      encryptionTokenDataSource: mockEncryptionTokenDataSource,
     );
   });
 
