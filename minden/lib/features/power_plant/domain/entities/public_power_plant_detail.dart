@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-/// 顔の見える発電所情報
-class PublicPowerPlant extends Equatable {
-  const PublicPowerPlant({
+/// 顔の見える発電所情報（詳細）
+class PublicPowerPlantDetail extends Equatable {
+  const PublicPowerPlantDetail({
     required this.id,
     required this.areaCode,
     required this.name,
@@ -16,8 +16,25 @@ class PublicPowerPlant extends Equatable {
     required this.ownerName,
     required this.startDate,
     required this.endDate,
+    this.projectName,
+    this.url,
+    this.ownerMessage,
+    this.aboutPlant,
+    this.prospect,
+    this.twitter,
+    this.facebook,
     required this.plantImage1,
+    this.plantImage2,
+    this.plantImage3,
+    this.plantImage4,
+    this.limitedIntroducerId,
     this.supportGiftName,
+    this.explanation,
+    this.image1,
+    this.image2,
+    this.image3,
+    this.image4,
+    this.image5,
   });
 
   /// MP番号
@@ -73,12 +90,72 @@ class PublicPowerPlant extends Equatable {
   /// 設定されていない場合は 2999-12-31 をセット"
   final DateTime endDate;
 
+  /// プロジェクト名
+  final String? projectName;
+
+  /// 公式URL
+  final String? url;
+
+  /// OWNERの思い
+  final String? ownerMessage;
+
+  /// 説明
+  final String? aboutPlant;
+
+  /// 展望
+  final String? prospect;
+
+  /// Twitterアカウント
+  final String? twitter;
+
+  /// Facebookアカウント
+  final String? facebook;
+
   /// 発電所写真1
   /// S3のURL
   final String plantImage1;
 
+  /// 発電所写真2
+  /// S3のURL
+  final String? plantImage2;
+
+  /// 発電所写真3
+  /// S3のURL
+  final String? plantImage3;
+
+  /// 発電所写真4
+  /// S3のURL
+  final String? plantImage4;
+
+  /// 紹介元指定
+  /// ARTIST or 空文字('')
+  final String? limitedIntroducerId;
+
   /// 特典名
   final String? supportGiftName;
+
+  /// 特典説明
+  final String? explanation;
+
+  /// 特典写真1
+  /// S3のURL
+  final String? image1;
+
+  /// 特典写真2
+  /// S3のURL
+  final String? image2;
+
+  /// 特典写真3
+  /// S3のURL
+  final String? image3;
+
+  /// 特典写真4
+  /// S3のURL
+  final String? image4;
+
+  /// 特典写真5
+  /// S3のURL
+  final String? image5;
 
   @override
   List<Object> get props => [
