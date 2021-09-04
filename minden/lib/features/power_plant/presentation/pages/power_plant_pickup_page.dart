@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
+import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
 class PowerPlantPickup extends ConsumerWidget {
