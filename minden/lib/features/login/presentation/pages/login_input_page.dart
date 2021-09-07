@@ -5,7 +5,6 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
 import 'package:minden/utile.dart';
@@ -22,9 +21,7 @@ class LoginInputPage extends StatefulWidget {
 }
 
 class _LoginInputPageState extends State<LoginInputPage> {
-  bool _isAutoLogin = false;
   bool _isShowPassword = false;
-
   String _userLoginId = '';
   String _userLoginPassword = '';
 

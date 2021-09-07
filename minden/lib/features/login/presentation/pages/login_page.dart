@@ -11,33 +11,16 @@ import 'package:minden/features/login/presentation/pages/login_user_page.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
-  LoginPage() : super();
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _bloc = LoginBloc(
-    LoginInitial(),
-    GetLoginUser(
-      LoginRepositoryImpl(
-        userDataSource: UserDataSourceImpl(client: http.Client()),
-      ),
-    ),
-  );
-
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.close();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocProvider.value(
-      value: _bloc,
+      value: BlocProvider.of<LoginBloc>(context),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginLoading) {
@@ -48,9 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
           if (state is LoginLoaded) {
             final route = NoAnimationMaterialPageRoute(
-              builder: (context) => LoginUserPage(
-                user: state.user,
-              ),
+              builder: (context) => LoginUserPage(),
               settings: RouteSettings(name: "/login/user"),
             );
             Navigator.push(context, route);

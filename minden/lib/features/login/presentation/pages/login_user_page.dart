@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 
 class LoginUserPage extends StatelessWidget {
-  final User user;
-  const LoginUserPage({required this.user}) : super();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('login_user_page'),
+      appBar: AppBar(
+        title: Text('login_user_page'),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Container(
-          child: ListView(
-            children: [
-              Text('accountId : ${user.accountId}'),
-              Text('loginId : ${user.loginId}'),
-              Text('name : ${user.name}'),
-              Text('bio : ${user.bio}'),
-              Text('icon : ${user.icon}'),
-              Text('wallPaper : ${user.wallPaper}'),
-              Text('userId : ${user.userId}'),
-            ],
-          ),
-        ),
+        child: BlocProvider.value(
+            value: BlocProvider.of<LoginBloc>(context),
+            child: BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                if (state is LoginLoaded) {
+                  return ListView(
+                    children: [
+                      Text('accountId : ${state.user.accountId}'),
+                      Text('loginId : ${state.user.loginId}'),
+                      Text('name : ${state.user.name}'),
+                      Text('bio : ${state.user.bio}'),
+                      Text('icon : ${state.user.icon}'),
+                      Text('wallPaper : ${state.user.wallPaper}'),
+                      Text('userId : ${state.user.userId}'),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            )),
       ),
     );
   }
