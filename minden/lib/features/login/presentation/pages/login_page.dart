@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _bloc = LoginBloc(
-    LoginInitial(),
+    const LoginInitial(),
     GetLoginUser(
       LoginRepositoryImpl(
         userDataSource: UserDataSourceImpl(client: http.Client()),
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => LoginUserPage(
                 user: state.user,
               ),
-              settings: RouteSettings(name: "/login/user"),
+              settings: const RouteSettings(name: '/login/user'),
             );
             Navigator.push(context, route);
             return;
