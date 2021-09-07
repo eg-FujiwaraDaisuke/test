@@ -1,29 +1,18 @@
-import 'package:minden/features/user/presentation/pages/profile.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
 import 'package:minden/features/user/presentation/pages/thanks_message.dart';
 
 class ProfileDamyData {
-  final Profile damyData = Profile(
-    accountId: 'アカウントID',
+  final ProfileModel damyData = ProfileModel(
+    userId: '',
     name: 'ユーザーニックネーム',
-    contractor: '契約者名',
     icon: '',
     bio: 'ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。',
     wallPaper: '',
     tags: [
-      Tag(tagId: 'タグID', tagName: '地産地消'),
-      Tag(tagId: 'タグID', tagName: 'フェアトレード'),
-      Tag(tagId: 'タグID', tagName: 'エコ'),
+      TagModel(tagId: 'タグID', tagName: '地産地消'),
+      TagModel(tagId: 'タグID', tagName: 'フェアトレード'),
+      TagModel(tagId: 'タグID', tagName: 'エコ'),
     ],
-    selectedPowerPlant: SelectPowerPlant(
-      plantId: '生産者ID',
-      name: '生産者名称',
-      images: [''],
-      catchphrase: 'キャッチフレーズ',
-      location: 0,
-      capacity: {},
-      powerGenerationMethods: '発電方法',
-      isNewArrivals: true,
-    ),
   );
 }
 

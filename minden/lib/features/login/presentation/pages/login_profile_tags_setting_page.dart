@@ -6,7 +6,7 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/common/widget/tag/important_tags.dart';
 import 'package:minden/features/login/presentation/pages/login_profile_tags_decision_page.dart';
-import 'package:minden/features/user/presentation/pages/profile.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/utile.dart';
 
 class LoginProfileTagsSettingPage extends StatefulWidget {
@@ -185,6 +185,7 @@ class _TagsList extends StatefulWidget {
   final Function onSelect;
   final Color color;
   final String title;
+
   const _TagsList(
       {required this.tagsList,
       required this.onSelect,
