@@ -7,6 +7,7 @@ class User extends Equatable {
     required this.accountId,
     required this.contractor,
     required this.limitedPlantId,
+    required this.supportableNumber,
     required this.profile,
   });
 
@@ -16,6 +17,7 @@ class User extends Equatable {
         accountId: json['accountId'],
         contractor: json['contractor'],
         limitedPlantId: json['limitedPlantId'],
+        supportableNumber: json['supportableNumber'],
         profile: Profile.fromJson(json));
   }
 
@@ -25,6 +27,7 @@ class User extends Equatable {
       'accountId': accountId,
       'contractor': contractor,
       'limitedPlantId': limitedPlantId,
+      'supportableNumber' : supportableNumber,
       'profile': profile.toJson(),
     };
   }
@@ -33,6 +36,7 @@ class User extends Equatable {
   final String accountId;
   final String contractor;
   final String limitedPlantId;
+  final int supportableNumber;
   final Profile profile;
 
   @override

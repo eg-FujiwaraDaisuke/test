@@ -14,6 +14,7 @@ void main() {
     loginId: "nakajo@minden.co.jp",
     accountId: "",
     limitedPlantId: "",
+    supportableNumber : 1,
     contractor: "",
     // userId: "",
     // name: "�݂�ȁ@�d��",

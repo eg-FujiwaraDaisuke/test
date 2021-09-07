@@ -29,6 +29,7 @@ void main() {
       loginId: "nakajo@minden.co.jp",
       accountId: "",
       limitedPlantId: "",
+      supportableNumber : 1,
       contractor: "",
       profile: ProfileModel.fromJson({}),
 
