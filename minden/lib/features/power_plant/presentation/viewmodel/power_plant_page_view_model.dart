@@ -1,18 +1,30 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:minden/features/power_plant/data/repositories/public_power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/power_plant.dart';
+import 'package:minden/features/power_plant/domain/repositories/public_power_plant_repository.dart';
+import 'package:minden/features/token/data/repositories/token_repository_impl.dart';
+import 'package:minden/features/token/domain/repositories/token_repository.dart';
 
 final powerPlantPageViewModelProvider =
     StateNotifierProvider<PowerPlantPageViewModel, PowerPlantPageState>(
-        (ref) => PowerPlantPageViewModel());
+        (ref) => PowerPlantPageViewModel(
+              ref.read(tokenRepositoryProvider),
+              ref.read(publicPowerPlantRepositoryProvider),
+            ));
 
 /// マイページ - マッチングのViewModel
 /// 本画面のタブも共用とする
 class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
-  PowerPlantPageViewModel()
-      : super(PowerPlantPageState(
+  PowerPlantPageViewModel(
+    this.tokenRepository,
+    this.publicPowerPlantRepository,
+  ) : super(PowerPlantPageState(
           value: [],
           selectedCompanyIndex: 0,
         ));
+
+  final TokenRepository tokenRepository;
+  final PublicPowerPlantRepository publicPowerPlantRepository;
 
   PowerPlantPageState matchingData() => state;
 
