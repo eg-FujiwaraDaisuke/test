@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -7,10 +8,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_i18n/loaders/file_translation_loader.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
+import 'package:path_provider/path_provider.dart';
 
 // singleton instance
 final si = GetIt.instance;
@@ -97,12 +102,21 @@ Future<void> init() async {
     });
   }
 
-  si.registerLazySingleton(() => firebaseApp);
-  si.registerLazySingleton(() => remoteConfig);
-  si.registerLazySingleton(() => firebaseAnalyticsObserver);
-  si.registerLazySingleton(() => botToastNavigatorObserver);
-  si.registerLazySingleton(() => flutterI18nDelegate);
-  si.registerLazySingleton(() => firebaseMessaging);
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+
+  // 暗号化して保存しているTokenを提供するDataSource実装
+  const encryptionTokenDataSource =
+      EncryptionTokenDataSourceImpl(secureStorage: FlutterSecureStorage());
+
+  si
+    ..registerLazySingleton(() => firebaseApp)
+    ..registerLazySingleton(() => remoteConfig)
+    ..registerLazySingleton(() => firebaseAnalyticsObserver)
+    ..registerLazySingleton(() => botToastNavigatorObserver)
+    ..registerLazySingleton(() => flutterI18nDelegate)
+    ..registerLazySingleton(() => firebaseMessaging)
+    ..registerLazySingleton(() => encryptionTokenDataSource);
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

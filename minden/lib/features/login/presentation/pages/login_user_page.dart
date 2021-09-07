@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 
 class LoginUserPage extends StatelessWidget {
@@ -19,13 +18,7 @@ class LoginUserPage extends StatelessWidget {
                 if (state is LoginLoaded) {
                   return ListView(
                     children: [
-                      Text('accountId : ${state.user.accountId}'),
-                      Text('loginId : ${state.user.loginId}'),
-                      Text('name : ${state.user.name}'),
-                      Text('bio : ${state.user.bio}'),
-                      Text('icon : ${state.user.icon}'),
-                      Text('wallPaper : ${state.user.wallPaper}'),
-                      Text('userId : ${state.user.userId}'),
+                      Text('userId : ${state.user.profile.userId}'),
                     ],
                   );
                 }

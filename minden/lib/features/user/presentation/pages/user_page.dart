@@ -1,10 +1,7 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
@@ -17,16 +14,17 @@ enum MenuType {
 }
 
 class _Menu {
-  final String title;
-  final String icon;
-  final String? routeName;
-  final MenuType type;
   _Menu({
     required this.title,
     required this.icon,
     required this.routeName,
     required this.type,
   });
+
+  final String title;
+  final String icon;
+  final String? routeName;
+  final MenuType type;
 }
 
 class UserPage extends StatelessWidget {
@@ -72,13 +70,13 @@ class UserPage extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 66,
               ),
               _ProfileName(
                 name: data.name,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 61,
               ),
               _MenuListView(),
@@ -92,6 +90,7 @@ class UserPage extends StatelessWidget {
 
 class _ProfileIcon extends StatelessWidget {
   final String icon;
+
   const _ProfileIcon({required this.icon});
 
   @override
@@ -99,8 +98,8 @@ class _ProfileIcon extends StatelessWidget {
     return Container(
       width: 99,
       height: 99,
-      decoration: BoxDecoration(
-        color: Color(0xFFFF8C00),
+      decoration: const BoxDecoration(
+        color: const Color(0xFFFF8C00),
         shape: BoxShape.circle,
       ),
       child: Center(
@@ -108,7 +107,7 @@ class _ProfileIcon extends StatelessWidget {
           width: 93,
           height: 93,
           decoration: BoxDecoration(
-            color: Color(0xFFFFFB92),
+            color: const Color(0xFFFFFB92),
             shape: BoxShape.circle,
             border: Border.all(
               width: 3,
@@ -123,6 +122,7 @@ class _ProfileIcon extends StatelessWidget {
 
 class _ProfileName extends StatelessWidget {
   final String name;
+
   const _ProfileName({
     required this.name,
   });
@@ -131,7 +131,7 @@ class _ProfileName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       name,
-      style: TextStyle(
+      style: const TextStyle(
         color: Color(0xFF575292),
         fontSize: 18,
         fontFamily: 'NotoSansJP',
@@ -175,23 +175,21 @@ class _MenuListView extends StatelessWidget {
           routeName: '/user/profile',
           type: MenuType.common),
     ];
-    return Container(
-      child: Column(
-        children: _menuList.map((menu) {
-          if (menu.type == MenuType.message) {
-            return _MenuMessageItem(
-              title: menu.title,
-              icon: menu.icon,
-              routeName: menu.routeName,
-            );
-          }
-          return _MenuItem(
+    return Column(
+      children: _menuList.map((menu) {
+        if (menu.type == MenuType.message) {
+          return _MenuMessageItem(
             title: menu.title,
             icon: menu.icon,
             routeName: menu.routeName,
           );
-        }).toList(),
-      ),
+        }
+        return _MenuItem(
+          title: menu.title,
+          icon: menu.icon,
+          routeName: menu.routeName,
+        );
+      }).toList(),
     );
   }
 }
@@ -225,33 +223,30 @@ class _MenuItem extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 22),
+        padding: const EdgeInsets.symmetric(horizontal: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/user/$icon.svg',
-                    color: Color(0xFF575292),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/images/user/$icon.svg',
+                  color: const Color(0xFF575292),
+                ),
+                const SizedBox(width: 17.5),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF575292),
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
                   ),
-                  const SizedBox(width: 17.5),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Color(0xFF575292),
-                      fontSize: 12,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: calcLetterSpacing(letter: 0.5),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -279,82 +274,79 @@ class _MenuMessageItem extends StatelessWidget {
       onTap: () {
         final route = MaterialPageRoute(
           builder: (context) => UserThanksMessagePage(),
-          settings: RouteSettings(name: "/user/message"),
+          settings: const RouteSettings(name: '/user/message'),
         );
 
         Navigator.push(context, route);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 22),
+        padding: const EdgeInsets.symmetric(horizontal: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              child: Row(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        child: SvgPicture.asset(
-                          'assets/images/user/$icon.svg',
-                          color: Color(0xFF575292),
+            Row(
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      child: SvgPicture.asset(
+                        'assets/images/user/$icon.svg',
+                        color: const Color(0xFF575292),
+                      ),
+                    ),
+                    Positioned(
+                      right: -6,
+                      top: -3,
+                      child: Opacity(
+                        opacity: hasUnreadNotice ? 1 : 0,
+                        child: Container(
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF8C00),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 3,
+                              color: const Color(0xFFFFFFFF),
+                            ),
+                          ),
                         ),
                       ),
-                      Positioned(
-                        right: -6,
-                        top: -3,
-                        child: Opacity(
-                          opacity: hasUnreadNotice ? 1 : 0,
-                          child: Container(
-                            width: 14,
-                            height: 14,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFF8C00),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                width: 3,
-                                color: Color(0xFFFFFFFF),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                    )
+                  ],
+                ),
+                const SizedBox(width: 17.5),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF575292),
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
                   ),
-                  SizedBox(width: 17.5),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Color(0xFF575292),
-                      fontSize: 12,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: calcLetterSpacing(letter: 0.5),
+                ),
+                const SizedBox(width: 22),
+                if (hasUnreadNotice)
+                  Flexible(
+                    child: Text(
+                      'XXX発電所' +
+                          i18nTranslate(context, 'thanks_message_notification'),
+                      style: TextStyle(
+                        color: const Color(0xFFFF8C00),
+                        fontSize: 9,
+                        fontFamily: 'NotoSansJP',
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: calcLetterSpacing(letter: 0.5),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 22),
-                  hasUnreadNotice
-                      ? Flexible(
-                          child: Text(
-                            'XXX発電所' +
-                                i18nTranslate(
-                                    context, 'thanks_message_notification'),
-                            style: TextStyle(
-                              color: Color(0xFFFF8C00),
-                              fontSize: 9,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: calcLetterSpacing(letter: 0.5),
-                            ),
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
+                  )
+                else
+                  Container()
+              ],
             ),
           ],
         ),

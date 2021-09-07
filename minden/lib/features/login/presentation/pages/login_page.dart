@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
-import 'package:minden/features/login/data/datasources/user_data_source.dart';
-import 'package:minden/features/login/data/repositories/login_repository_impl.dart';
-import 'package:minden/features/login/domain/usecases/get_login_user.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
 import 'package:minden/features/login/presentation/pages/login_user_page.dart';
-import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -32,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
           if (state is LoginLoaded) {
             final route = NoAnimationMaterialPageRoute(
               builder: (context) => LoginUserPage(),
-              settings: RouteSettings(name: "/login/user"),
+              settings: const RouteSettings(name: '/login/user'),
             );
             Navigator.push(context, route);
             return;

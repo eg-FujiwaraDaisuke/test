@@ -3,25 +3,25 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/features/login/data/model/user_model.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final tUserModel = UserModel(
-    contractor: "�݂�ȁ@�d��",
-    accountId: "20190707085551963zhayz",
-    wallPaper:
-        "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-    loginId: "nakajo@minden.co.jp",
-    name: "huyen",
-    icon:
-        "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-    limitedPlantId: "limitedPlantIdxxx",
-    bio: "<html> <b>a</b></html>",
-    supports:
-        Supports(yearMonth: "2021-08", plantId: "plantIdxxx", status: "3"),
-    contracts: Contracts(contractId: "契約プランID", name: "契約プラン名称"),
-    userId: "20190707085551963zhayz",
+    // key: '20190707085551963zhayz',
+    loginId: 'nakajo@minden.co.jp',
+    accountId: '',
+    limitedPlantId: '',
+    supportableNumber: 1,
+    contractor: '',
+    // userId: '',
+    // name: '�݂�ȁ@�d��',
+    // secret: '20000102',
+    // provider: 'MINDEN',
+    // service: 'portal',
+    // email: 'nakajo@minden.co.jp',
+    profile: ProfileModel.fromJson({}),
   );
 
   test('should be a subclass', () async {
@@ -41,23 +41,17 @@ void main() {
     test('toJson', () async {
       final result = tUserModel.toJson();
       final expectedJsonMap = {
-        "contractor": "�݂�ȁ@�d��",
-        "accountId": "20190707085551963zhayz",
-        "wallPaper":
-            "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-        "loginId": "nakajo@minden.co.jp",
-        "name": "huyen",
-        "icon":
-            "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-        "limitedPlantId": "limitedPlantIdxxx",
-        "bio": "<html> <b>a</b></html>",
-        "supports": {
-          "yearMonth": "2021-08",
-          "plantId": "plantIdxxx",
-          "status": "3"
-        },
-        "contracts": {"contract_id": "契約プランID", "name": "契約プラン名称"},
-        "userId": "20190707085551963zhayz"
+        'contractor': '�݂�ȁ@�d��',
+        'accountId': '20190707085551963zhayz',
+        'wallPaper':
+            'https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png',
+        'loginId': 'nakajo@minden.co.jp',
+        'userId': '',
+        'name': '�݂�ȁ@�d��',
+        'secret': '20000102',
+        'provider': 'MINDEN',
+        'service': 'portal',
+        'email': 'nakajo@minden.co.jp',
       };
       expect(result, expectedJsonMap);
     });

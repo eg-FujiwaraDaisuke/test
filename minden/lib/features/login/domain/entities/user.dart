@@ -1,75 +1,44 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 class User extends Equatable {
-  String contractor;
-  String accountId;
-  String wallPaper;
-  String loginId;
-  String name;
-  String icon;
-  String limitedPlantId;
-  String bio;
-  Supports supports;
-  Contracts contracts;
-  String userId;
-
-  User({
-    required this.contractor,
-    required this.accountId,
-    required this.wallPaper,
+  const User({
     required this.loginId,
-    required this.name,
-    required this.icon,
+    required this.accountId,
+    required this.contractor,
     required this.limitedPlantId,
-    required this.bio,
-    required this.supports,
-    required this.contracts,
-    required this.userId,
+    required this.supportableNumber,
+    required this.profile,
   });
 
-  @override
-  List<Object> get props => [
-        contractor,
-        accountId,
-        wallPaper,
-        loginId,
-        name,
-        icon,
-        limitedPlantId,
-        bio,
-        supports,
-        contracts,
-        userId
-      ];
-}
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        loginId: json['loginId'],
+        accountId: json['accountId'],
+        contractor: json['contractor'],
+        limitedPlantId: json['limitedPlantId'],
+        supportableNumber: json['supportableNumber'],
+        profile: Profile.fromJson(json));
+  }
 
-class Contracts extends Equatable {
-  String contractId;
-  String name;
+  Map<String, dynamic> toJson() {
+    return {
+      'loginId': loginId,
+      'accountId': accountId,
+      'contractor': contractor,
+      'limitedPlantId': limitedPlantId,
+      'supportableNumber': supportableNumber,
+      'profile': profile.toJson(),
+    };
+  }
 
-  Contracts({
-    required this.contractId,
-    required this.name,
-  });
-
-  @override
-  List<Object> get props => [
-        contractId,
-        name,
-      ];
-}
-
-class Supports extends Equatable {
-  String yearMonth;
-  String plantId;
-  String status;
-
-  Supports({
-    required this.yearMonth,
-    required this.plantId,
-    required this.status,
-  });
+  final String loginId;
+  final String accountId;
+  final String contractor;
+  final String limitedPlantId;
+  final int supportableNumber;
+  final Profile profile;
 
   @override
-  List<Object> get props => [yearMonth, plantId, status];
+  List<Object> get props => [loginId];
 }

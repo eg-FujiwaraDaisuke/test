@@ -1,6 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,29 +72,31 @@ class Application extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate, // This is required
         ],
         theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: <TargetPlatform, PageTransitionsBuilder>{
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: <TargetPlatform, PageTransitionsBuilder>{
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+          tabBarTheme: const TabBarTheme().copyWith(
+            indicator: const TabIndicator(),
+            labelPadding: const EdgeInsets.symmetric(vertical: 12.0),
+            labelColor: Colors.black,
+            labelStyle: const TextStyle(
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              letterSpacing: 0.2,
             ),
-            tabBarTheme: TabBarTheme().copyWith(
-                indicator: TabIndicator(),
-                labelPadding: EdgeInsets.symmetric(vertical: 12.0),
-                labelColor: Colors.black,
-                labelStyle: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  letterSpacing: 0.2,
-                ),
-                unselectedLabelColor: Colors.black.withOpacity(0.7),
-                unselectedLabelStyle: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  letterSpacing: 0.2,
-                ))),
+            unselectedLabelColor: Colors.black.withOpacity(0.7),
+            unselectedLabelStyle: const TextStyle(
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ),
         supportedLocales: [
           const Locale('ja'),
           const Locale('en'),

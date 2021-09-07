@@ -6,6 +6,7 @@ import 'package:minden/features/login/data/datasources/user_data_source.dart';
 import 'package:minden/features/login/data/model/user_model.dart';
 import 'package:minden/features/login/data/repositories/login_repository_impl.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
 import 'package:mockito/mockito.dart';
 
 class MockUserDataSource extends Mock implements UserDataSource {}
@@ -24,20 +25,20 @@ void main() {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tUserModel = UserModel(
-      contractor: "�݂�ȁ@�d��",
-      accountId: "20190707085551963zhayz",
-      wallPaper:
-          "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
+      // key: "20190707085551963zhayz",
       loginId: "nakajo@minden.co.jp",
-      name: "huyen",
-      icon:
-          "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-      limitedPlantId: "limitedPlantIdxxx",
-      bio: "<html> <b>a</b></html>",
-      supports:
-          Supports(yearMonth: "2021-08", plantId: "plantIdxxx", status: "3"),
-      contracts: Contracts(contractId: "契約プランID", name: "契約プラン名称"),
-      userId: "20190707085551963zhayz",
+      accountId: "",
+      limitedPlantId: "",
+      supportableNumber: 1,
+      contractor: "",
+      profile: ProfileModel.fromJson({}),
+      // userId: "",
+      // name: "�݂�ȁ@�d��",
+      // secret: "20000102",
+      // provider: "MINDEN",
+      // service: "portal",
+      // email: "nakajo@minden.co.jp",
+      // profile: Profile.fromJson({}),
     );
     final User tUser = tUserModel;
 

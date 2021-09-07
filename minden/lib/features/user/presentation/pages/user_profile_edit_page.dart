@@ -7,10 +7,11 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/user/presentation/pages/profile.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
+
 import '../../../../utile.dart';
 
 class UserProfileEditPage extends StatelessWidget {
@@ -234,6 +235,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
 class _ProfileImageEdit extends StatefulWidget {
   final String icon;
   final String wallPaper;
+
   _ProfileImageEdit({
     required this.icon,
     required this.wallPaper,
@@ -361,6 +363,7 @@ class _ProfileNameEditForm extends StatelessWidget {
 
 class _ProfileBioEditForm extends StatelessWidget {
   final bio;
+
   const _ProfileBioEditForm({required this.bio}) : super();
 
   @override
@@ -416,6 +419,7 @@ class _ProfileBioEditForm extends StatelessWidget {
 
 class _ImportantTagsList extends StatelessWidget {
   final List<Tag> tagsList;
+
   const _ImportantTagsList({required this.tagsList}) : super();
 
   @override

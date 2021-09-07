@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/repositories/login_repository.dart';
 import 'package:minden/features/login/domain/usecases/get_login_user.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:mockito/mockito.dart';
 
 class MockLoginRepository extends Mock implements LoginRepository {}
@@ -19,21 +20,27 @@ void main() {
   final tId = 'nakajo@minden.co.jp';
   final tPassword = '1234qwer';
   final tUser = User(
-    contractor: "�݂�ȁ@�d��",
-    accountId: "20190707085551963zhayz",
-    wallPaper:
-        "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-    loginId: "nakajo@minden.co.jp",
-    name: "huyen",
-    icon:
-        "https://dq2i58msgjbtb.cloudfront.net/media/1629388524511-nakajo@minden.co.jp-Screenshot_(5).png",
-    limitedPlantId: "limitedPlantIdxxx",
-    bio: "<html> <b>a</b></html>",
-    supports:
-        Supports(yearMonth: "2021-08", plantId: "plantIdxxx", status: "3"),
-    contracts: Contracts(contractId: "契約プランID", name: "契約プラン名称"),
-    userId: "20190707085551963zhayz",
-  );
+      // key: "20190707085551963zhayz",
+      loginId: "nakajo@minden.co.jp",
+      accountId: "",
+      limitedPlantId: "",
+      supportableNumber: 1,
+      contractor: "",
+      profile: const Profile(
+        bio: '',
+        name: '',
+        userId: '',
+        wallPaper: '',
+        tags: [],
+        icon: '',
+      )
+      // userId : "",
+      // name: "�݂�ȁ@�d��",
+      // secret: "20000102",
+      // provider: "MINDEN",
+      // service: "portal",
+      // email: "nakajo@minden.co.jp",
+      );
 
   test('should get user', () async {
     when(mockLoginRepository.getLoginUser(tId, tPassword))
