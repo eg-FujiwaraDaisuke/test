@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/repositories/login_repository.dart';
 import 'package:minden/features/login/domain/usecases/get_login_user.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:mockito/mockito.dart';
 
 class MockLoginRepository extends Mock implements LoginRepository {}
@@ -19,14 +20,26 @@ void main() {
   final tId = 'nakajo@minden.co.jp';
   final tPassword = '1234qwer';
   final tUser = User(
-    key: "20190707085551963zhayz",
-    loginId: "nakajo@minden.co.jp",
-    name: "�݂�ȁ@�d��",
-    secret: "20000102",
-    provider: "MINDEN",
-    service: "portal",
-    email: "nakajo@minden.co.jp",
-  );
+      // key: "20190707085551963zhayz",
+      loginId: "nakajo@minden.co.jp",
+      accountId: "",
+      limitedPlantId: "",
+      contractor: "",
+      profile: const Profile(
+        bio: '',
+        name: '',
+        userId: '',
+        wallPaper: '',
+        tags: [],
+        icon: '',
+      )
+      // userId : "",
+      // name: "�݂�ȁ@�d��",
+      // secret: "20000102",
+      // provider: "MINDEN",
+      // service: "portal",
+      // email: "nakajo@minden.co.jp",
+      );
 
   test('should get user', () async {
     when(mockLoginRepository.getLoginUser(tId, tPassword))

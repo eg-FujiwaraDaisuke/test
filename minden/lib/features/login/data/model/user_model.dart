@@ -1,45 +1,32 @@
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 class UserModel extends User {
-  UserModel({
-    required String key,
+  const UserModel({
     required String loginId,
-    required String name,
-    required String secret,
-    required String provider,
-    required String service,
-    required String email,
+    required String accountId,
+    required String contractor,
+    required String limitedPlantId,
+    required Profile profile,
   }) : super(
-          key: key,
-          loginId: loginId,
-          name: name,
-          secret: secret,
-          provider: provider,
-          service: service,
-          email: email,
-        );
+            loginId: loginId,
+            accountId: accountId,
+            contractor: contractor,
+            limitedPlantId: limitedPlantId,
+            profile: profile);
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromUser(User user) {
     return UserModel(
-      key: json['user']['key'],
-      loginId: json['user']['loginId'],
-      name: json['user']['name'],
-      secret: json['user']['secret'],
-      provider: json['user']['provider'],
-      service: json['user']['service'],
-      email: json['user']['email'],
-    );
+        loginId: user.loginId,
+        accountId: user.accountId,
+        contractor: user.contractor,
+        limitedPlantId: user.limitedPlantId,
+        profile: user.profile);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'key': key,
-      'loginId': loginId,
-      'name': name,
-      'secret': secret,
-      'provider': provider,
-      'service': service,
-      'email': email,
-    };
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    final user = User.fromJson(json['user']);
+    return UserModel.fromUser(user);
   }
 }

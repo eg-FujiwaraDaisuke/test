@@ -3,11 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/user/presentation/pages/profile.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
+
 import '../../../../utile.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -121,7 +121,7 @@ class UserProfilePage extends StatelessWidget {
                   height: 37,
                 ),
                 // // あとで共通Componentを組み込む
-                _SelectedPlantList(selectedPlantList: data.selectedPowerPlant)
+                _SelectedPlantList(selectedPlantList: [])
               ],
             ),
           ),
@@ -133,6 +133,7 @@ class UserProfilePage extends StatelessWidget {
 
 class _ProfileIcon extends StatelessWidget {
   final String icon;
+
   const _ProfileIcon({required this.icon});
 
   @override
@@ -164,6 +165,7 @@ class _ProfileIcon extends StatelessWidget {
 
 class _ProfileName extends StatelessWidget {
   final String name;
+
   const _ProfileName({
     required this.name,
   });
@@ -210,6 +212,7 @@ class _ProfileBio extends StatelessWidget {
 
 class _TagsList extends StatelessWidget {
   final List<Tag> tagsList;
+
   const _TagsList({required this.tagsList}) : super();
 
   @override
@@ -254,6 +257,7 @@ class _TagsList extends StatelessWidget {
 
 class _SelectedPlantList extends StatelessWidget {
   final selectedPlantList;
+
   const _SelectedPlantList({required this.selectedPlantList}) : super();
 
   @override
