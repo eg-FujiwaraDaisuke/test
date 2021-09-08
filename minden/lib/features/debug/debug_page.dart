@@ -1,12 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_name_page.dart';
-import 'package:minden/features/reset_password/pages/login_reset_password_page.dart';
+
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/pages/power_plant_page.dart';
+import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/fcm_debug_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
@@ -40,11 +40,8 @@ class DebugPage extends StatelessWidget {
                     'プロフィール設定',
                     (context) => ProfileSettingNamePage(),
                     '/profileSetting/name'),
-                _generateNavigatorPush(
-                    context,
-                    'ログイン パスワードリセット',
-                    (context) => LoginResetPasswordPage(),
-                    '/login/resetPassword'),
+                _generateNavigatorPush(context, 'ログイン パスワードリセット',
+                    (context) => ResetPasswordPage(), '/login/resetPassword'),
                 _generateNavigatorPush(context, 'ホーム - トップ',
                     (context) => HomeTopPage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',
