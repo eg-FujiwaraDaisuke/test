@@ -5,6 +5,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
 import 'package:minden/features/login/presentation/pages/login_user_page.dart';
+import 'package:minden/features/profile_setting/pages/profile_setting_name_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,9 +27,10 @@ class _LoginPageState extends State<LoginPage> {
           Loading.hide();
 
           if (state is LoginLoaded) {
+            // TODO ユーザー情報の設定が完了してるかのフラグをみて遷移先を変更する
             final route = NoAnimationMaterialPageRoute(
-              builder: (context) => LoginUserPage(),
-              settings: const RouteSettings(name: '/login/user'),
+              builder: (context) => ProfileSettingNamePage(),
+              settings: const RouteSettings(name: '/profileSetting/name'),
             );
             Navigator.push(context, route);
             return;

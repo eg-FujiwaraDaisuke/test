@@ -7,17 +7,14 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_bio_setting_page.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_name_setting_page.dart';
+import 'package:minden/features/profile_setting/pages/profile_setting_bio_page.dart';
 
-class LoginProfileIconSettingPage extends StatefulWidget {
+class ProfileSettingIconPage extends StatefulWidget {
   @override
-  _LoginProfileIconSettingPageState createState() =>
-      _LoginProfileIconSettingPageState();
+  _ProfileSettingIconPageState createState() => _ProfileSettingIconPageState();
 }
 
-class _LoginProfileIconSettingPageState
-    extends State<LoginProfileIconSettingPage> {
+class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   File? _image;
 
   void _setImage(File cropedImage) {
@@ -104,8 +101,8 @@ class _LoginProfileIconSettingPageState
 
   void _next() {
     final route = MaterialPageRoute(
-      builder: (context) => LoginProfileBioSettingPage(),
-      settings: RouteSettings(name: "/login/profileBioSetting"),
+      builder: (context) => ProfileSettingBioPage(),
+      settings: RouteSettings(name: "/profileSetting/bio"),
     );
     Navigator.push(context, route);
   }

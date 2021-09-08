@@ -11,6 +11,7 @@ class Profile extends Equatable {
   });
 
   factory Profile.fromJson(Map<String, dynamic> elem) {
+    print('Profile.fromJson');
     final List<Tag> tags = elem['tags']?.map<Tag>((e) {
           return Tag.fromJson(e);
         }).toList() ??

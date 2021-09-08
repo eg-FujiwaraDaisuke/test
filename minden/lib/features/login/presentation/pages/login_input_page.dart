@@ -5,8 +5,9 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
-import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
+
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
@@ -121,9 +122,9 @@ class _LoginInputPageState extends State<LoginInputPage> {
                               GestureDetector(
                                 onTap: () {
                                   final route = NoAnimationMaterialPageRoute(
-                                    builder: (context) => LoginForgotPassword(),
-                                    settings: RouteSettings(
-                                        name: "/login/forgotPassword"),
+                                    builder: (context) => ForgotPasswordPage(),
+                                    settings:
+                                        RouteSettings(name: "/forgotPassword"),
                                   );
                                   Navigator.pushReplacement(context, route);
                                 },

@@ -19,6 +19,9 @@ class LoginUserPage extends StatelessWidget {
                   return ListView(
                     children: [
                       Text('userId : ${state.user.profile.userId}'),
+                      Text('bio : ${state.user.profile.bio}'),
+                      Text('name : ${state.user.profile.name}'),
+                      Text('icon : ${state.user.profile.icon}'),
                     ],
                   );
                 }

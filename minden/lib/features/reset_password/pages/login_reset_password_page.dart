@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
-import '../../../../utile.dart';
+import '../../../utile.dart';
 
 class LoginResetPasswordPage extends StatefulWidget {
   @override
