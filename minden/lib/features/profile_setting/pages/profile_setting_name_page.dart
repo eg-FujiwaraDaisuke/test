@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_icon_page.dart';
-
 import '../../../../utile.dart';
 
 class ProfileSettingNamePage extends StatefulWidget {
@@ -28,17 +26,6 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: GestureDetector(
-          onTap: () => _prev(),
-          child: Center(
-            child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
-              fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
-            ),
-          ),
-        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

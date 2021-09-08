@@ -126,7 +126,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                                     settings:
                                         RouteSettings(name: "/forgotPassword"),
                                   );
-                                  Navigator.pushReplacement(context, route);
+                                  Navigator.push(context, route);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
