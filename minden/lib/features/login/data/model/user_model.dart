@@ -18,6 +18,7 @@ class UserModel extends User {
             profile: profile);
 
   factory UserModel.fromUser(User user) {
+    // print(user.profile);
     return UserModel(
         loginId: user.loginId,
         accountId: user.accountId,

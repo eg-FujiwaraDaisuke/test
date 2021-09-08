@@ -29,10 +29,9 @@ void main() {
       loginId: "nakajo@minden.co.jp",
       accountId: "",
       limitedPlantId: "",
-      supportableNumber : 1,
+      supportableNumber: 1,
       contractor: "",
       profile: ProfileModel.fromJson({}),
-
       // userId: "",
       // name: "�݂�ȁ@�d��",
       // secret: "20000102",
@@ -41,7 +40,6 @@ void main() {
       // email: "nakajo@minden.co.jp",
       // profile: Profile.fromJson({}),
     );
-
     final User tUser = tUserModel;
 
     test('should return remote data', () async {

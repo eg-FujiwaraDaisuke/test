@@ -27,7 +27,7 @@ class User extends Equatable {
       'accountId': accountId,
       'contractor': contractor,
       'limitedPlantId': limitedPlantId,
-      'supportableNumber' : supportableNumber,
+      'supportableNumber': supportableNumber,
       'profile': profile.toJson(),
     };
   }

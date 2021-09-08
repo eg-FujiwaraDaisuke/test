@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/utile.dart';
 
-class LoginForgotPasswordMessage extends StatelessWidget {
+class ForgotPasswordMessagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

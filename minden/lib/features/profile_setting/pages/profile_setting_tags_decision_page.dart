@@ -8,7 +8,7 @@ import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
-class LoginProfileTagsDecisionPage extends StatelessWidget {
+class ProfileSettingTagsDecisionPage extends StatelessWidget {
   final List<Tag> _selectedTags = [
     Tag(tagId: 1, tagName: 'エコ'),
     Tag(tagId: 2, tagName: 'サステナブルコーヒー'),

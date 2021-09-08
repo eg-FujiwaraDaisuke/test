@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/login/presentation/pages/login_forgot_password_message_page.dart';
+
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import '../../../../utile.dart';
 
-class LoginForgotPassword extends StatefulWidget {
+class ForgotPasswordPage extends StatefulWidget {
   @override
-  _LoginForgotPasswordState createState() => _LoginForgotPasswordState();
+  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
 
-class _LoginForgotPasswordState extends State<LoginForgotPassword> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String _userLoginId = '';
 
   void _onInputChangedId(value) {
@@ -29,36 +29,21 @@ class _LoginForgotPasswordState extends State<LoginForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                    settings: RouteSettings(name: "/login"),
-                  );
-                  Navigator.pushReplacement(context, route);
-                },
-                child: Container(
-                  width: 44.0,
-                  height: 44.0,
-                  child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
-                    fit: BoxFit.fill,
-                    width: 44.0,
-                    height: 44.0,
-                  ),
-                ),
-              ),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44.0,
+              height: 44.0,
             ),
-          ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -93,7 +78,7 @@ class _LoginForgotPasswordState extends State<LoginForgotPassword> {
                 onTap: () {
                   // TODO リセットリンクを送る
                   final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => LoginForgotPasswordMessage(),
+                    builder: (context) => ForgotPasswordPage(),
                     settings:
                         RouteSettings(name: "/login/forgotPasswordMessage"),
                   );

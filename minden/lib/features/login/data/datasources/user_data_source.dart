@@ -31,7 +31,6 @@ class UserDataSourceImpl implements UserDataSource {
     );
 
     if (response.statusCode == 200) {
-
       final tokenElement = json.decode(response.body);
       await si<EncryptionTokenDataSourceImpl>()
           .setAppToken(tokenElement["appToken"]);
