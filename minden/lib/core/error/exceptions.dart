@@ -1,5 +1,7 @@
 class ServerException implements Exception {}
 
+class TokenExpiredException implements Exception {}
+
 class LocalCacheException implements Exception {}
 
 class SupportVersionException implements Exception {

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -108,6 +107,7 @@ Future<void> init() async {
   // 暗号化して保存しているTokenを提供するDataSource実装
   const encryptionTokenDataSource =
       EncryptionTokenDataSourceImpl(secureStorage: FlutterSecureStorage());
+
 
   si
     ..registerLazySingleton(() => firebaseApp)

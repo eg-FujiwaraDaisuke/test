@@ -122,7 +122,9 @@ class ImagePickerBottomSheet {
         iosUiSettings: IOSUiSettings(minimumAspectRatio: 1.0),
       );
 
-      fileHandler(cropped!);
+      if (cropped != null) {
+        fileHandler(cropped);
+      }
     }
   }
 }

@@ -4,7 +4,6 @@ import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
-import 'package:minden/features/login/presentation/pages/login_user_page.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_name_page.dart';
 
 class LoginPage extends StatefulWidget {
