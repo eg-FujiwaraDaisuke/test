@@ -29,19 +29,16 @@ class ApiConfig {
     return _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
   }
 
-  static Future<Map<String, Object>> apiEndpointWithToken() async {
-    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
-    // final refreshToken =
-    //     await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+  static Future<Map<String, String>> tokenHeader() async {
     final env = _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
-    final Map<String, Object> defaultHeaders =
-        env['headers'] as Map<String, Object>;
-    final headers = {
+    final defaultHeaders = env['headers']! as Map<String, String>;
+    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
+    final refreshToken =
+        await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+    return {
       'appToken': appToken,
-      // 'refreshToken': refreshToken,
+      'refreshToken': refreshToken,
       ...defaultHeaders
     };
-    env['headers'] = headers;
-    return env;
   }
 }

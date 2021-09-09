@@ -26,8 +26,8 @@ class MediaRepositoryImpl
       final Media =
           await retryRequest(() => dataSource.upload(bytes: bytes));
       return Right(Media);
-    } on LocalCacheException {
-      return Left(LocalCacheFailure());
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 }

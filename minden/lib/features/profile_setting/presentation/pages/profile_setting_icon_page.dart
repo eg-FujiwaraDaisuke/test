@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
@@ -13,6 +14,12 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/update_profile.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 
 class ProfileSettingIconPage extends StatefulWidget {
   @override
@@ -20,15 +27,45 @@ class ProfileSettingIconPage extends StatefulWidget {
 }
 
 class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
-  File? _image;
+  late UpdateProfileBloc _bloc;
 
   void _setImage(File croppedImage) {
     BlocProvider.of<UploadBloc>(context).add(UploadMediaInfo(croppedImage));
   }
 
   @override
+  void initState() {
+    super.initState();
+    _bloc = UpdateProfileBloc(
+      const ProfileStateInitial(),
+      UpdateProfile(
+        ProfileRepositoryImpl(
+          dataSource: ProfileDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _bloc.stream.listen((event) {
+      if (event is ProfileUpdating) {
+        Loading.show(context);
+      }
+      if (event is ProfileUpdated) {
+        Loading.hide();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -70,7 +107,12 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
             return;
           }
           Loading.hide();
-          if (state is Uploaded) {}
+          if (state is Uploaded) {
+            _bloc.add(
+              UpdateProfileInfo(
+                  name: '', icon: state.media.url, bio: '', wallPaper: ''),
+            );
+          }
         },
         child: BlocBuilder<UploadBloc, UploadState>(
           builder: (context, state) {
@@ -96,7 +138,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
                           ImagePickerBottomSheet.show(
                               context: context, imageHandler: _setImage);
                         },
-                        child: _buildImage(),
+                        child: _buildImage(state),
                       ),
                       const SizedBox(height: 182),
                       Botton(
@@ -127,33 +169,32 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
     Navigator.pop(context);
   }
 
-  Widget _buildImage() {
-    if (_image == null) {
+  Widget _buildImage(UploadState state) {
+    if (state is Uploaded) {
       return Container(
         width: 150,
         height: 150,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFFFFF),
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: SvgPicture.asset(
-            'assets/images/common/camera.svg',
-            width: 32,
-            height: 28,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(state.media.url),
           ),
         ),
       );
     }
-
     return Container(
       width: 150,
       height: 150,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
+        color: Color(0xFFFFFFFF),
         shape: BoxShape.circle,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: FileImage(_image!),
+      ),
+      child: Center(
+        child: SvgPicture.asset(
+          'assets/images/common/camera.svg',
+          width: 32,
+          height: 28,
         ),
       ),
     );

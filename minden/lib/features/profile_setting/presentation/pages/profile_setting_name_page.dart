@@ -3,7 +3,6 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_icon_page.dart';
-import '../../../../utile.dart';
 
 class ProfileSettingNamePage extends StatefulWidget {
   @override
@@ -85,6 +84,7 @@ class _NameInput extends StatefulWidget {
 
 class _NameInputState extends State<_NameInput> {
   final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
