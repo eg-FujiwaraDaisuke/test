@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_icon_setting_page.dart';
+import 'package:minden/features/profile_setting/pages/profile_setting_icon_page.dart';
 import '../../../../utile.dart';
 
-class LoginProfileNameSettingPage extends StatefulWidget {
+class ProfileSettingNamePage extends StatefulWidget {
   @override
-  _LoginProfileNameSettingPageState createState() =>
-      _LoginProfileNameSettingPageState();
+  _ProfileSettingNamePageState createState() => _ProfileSettingNamePageState();
 }
 
-class _LoginProfileNameSettingPageState
-    extends State<LoginProfileNameSettingPage> {
+class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   String _inputName = '';
 
   void _onInputChangedName(value) {
@@ -29,17 +26,6 @@ class _LoginProfileNameSettingPageState
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: GestureDetector(
-          onTap: () => _prev(),
-          child: Center(
-            child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
-              fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
-            ),
-          ),
-        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -75,8 +61,8 @@ class _LoginProfileNameSettingPageState
 
   void _next() {
     final route = MaterialPageRoute(
-      builder: (context) => LoginProfileIconSettingPage(),
-      settings: RouteSettings(name: "/login/profileIconSetting"),
+      builder: (context) => ProfileSettingIconPage(),
+      settings: RouteSettings(name: "/profileSetting/icon"),
     );
     Navigator.push(context, route);
   }

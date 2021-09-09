@@ -3,16 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_tags_setting_page.dart';
+import 'package:minden/features/profile_setting/pages/profile_setting_tags_page.dart';
 
-class LoginProfileBioSettingPage extends StatefulWidget {
+class ProfileSettingBioPage extends StatefulWidget {
   @override
-  _LoginProfileBioSettingPageState createState() =>
-      _LoginProfileBioSettingPageState();
+  _ProfileSettingBioPageState createState() => _ProfileSettingBioPageState();
 }
 
-class _LoginProfileBioSettingPageState
-    extends State<LoginProfileBioSettingPage> {
+class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   String _inputBio = '';
 
   void _onInputChangedBio(value) {
@@ -74,8 +72,8 @@ class _LoginProfileBioSettingPageState
 
   void _next() {
     final route = MaterialPageRoute(
-      builder: (context) => LoginProfileTagsSettingPage(),
-      settings: RouteSettings(name: "/login/profileTagsSetting"),
+      builder: (context) => ProfileSettingTagsPage(),
+      settings: RouteSettings(name: "/profileSetting/tag"),
     );
     Navigator.push(context, route);
   }

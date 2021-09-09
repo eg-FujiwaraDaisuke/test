@@ -1,6 +1,7 @@
 // @dart=2.9
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,7 @@ void main() {
     final tId = 'nakajo@minden.co.jp';
     final tPassword = '1234qwer';
     final tBody = json.encode({'loginId': tId, 'password': tPassword});
+
     final Uri tUrl =
         Uri.parse('https://www.stg.minapp.minden.co.jp/api/v1/auth');
     final tUserModel =
@@ -44,7 +46,9 @@ void main() {
           body: tBody,
         ),
       ).thenAnswer((_) async {
-        return http.Response(fixture('login_data.json'), 200);
+        return http.Response(fixture('login_data.json'), 200, headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+        });
       });
 
       await dataSource.getLoginUser(tId, tPassword);
@@ -55,7 +59,6 @@ void main() {
           body: tBody,
         ),
       );
-
     });
 
     test('response code is 200', () async {
@@ -64,9 +67,12 @@ void main() {
         headers: anyNamed('headers'),
         body: tBody,
       )).thenAnswer(
-        (_) async => http.Response(fixture('login_data.json'), 200),
+        (_) async => http.Response(fixture('login_data.json'), 200, headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+        }),
       );
       final result = await dataSource.getLoginUser(tId, tPassword);
+
       expect(result, equals(tUserModel));
     });
 
@@ -76,7 +82,9 @@ void main() {
         headers: anyNamed('headers'),
         body: tBody,
       )).thenAnswer(
-        (_) async => http.Response('Something went wrong', 404),
+        (_) async => http.Response('Something went wrong', 404, headers: {
+          HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+        }),
       );
 
       final call = dataSource.getLoginUser;

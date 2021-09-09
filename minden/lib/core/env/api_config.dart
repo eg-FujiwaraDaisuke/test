@@ -14,7 +14,7 @@ class ApiConfig {
         'content-type': 'application/json',
       }
     },
-    Config.isProduct: {
+    Config.kProdFlavor: {
       'url': 'https://www.minapp.minden.co.jp',
       'headers': {
         'content-type': 'application/json',
