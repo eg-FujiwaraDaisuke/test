@@ -5,7 +5,7 @@ import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/common/widget/tag/important_tags.dart';
-import 'package:minden/features/profile_setting/pages/profile_setting_tags_decision_page.dart';
+import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
 
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/utile.dart';

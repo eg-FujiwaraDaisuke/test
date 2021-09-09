@@ -9,7 +9,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
-import 'package:minden/features/profile_setting/pages/profile_setting_bio_page.dart';
+import 'package:minden/features/profile_setting/presentation/pages/profile_setting_bio_page.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
@@ -51,7 +51,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
               child: Center(
                 child: Text(
                   i18nTranslate(context, 'skip_katakana'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 12,
                     fontFamily: 'NotoSansJP',

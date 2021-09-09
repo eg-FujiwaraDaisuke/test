@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/profile_setting/pages/profile_setting_tags_page.dart';
+import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
 
 class ProfileSettingBioPage extends StatefulWidget {
   @override
