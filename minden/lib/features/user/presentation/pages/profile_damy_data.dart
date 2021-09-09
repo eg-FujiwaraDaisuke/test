@@ -1,17 +1,17 @@
-import 'package:minden/features/user/data/model/profile_model.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/presentation/pages/thanks_message.dart';
 
 class ProfileDamyData {
-  final ProfileModel damyData = ProfileModel(
+  final Profile damyData = const Profile(
     userId: '',
     name: 'ユーザーニックネーム',
     icon: '',
     bio: 'ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。',
     wallPaper: '',
     tags: [
-      TagModel(tagId: 'タグID', tagName: '地産地消'),
-      TagModel(tagId: 'タグID', tagName: 'フェアトレード'),
-      TagModel(tagId: 'タグID', tagName: 'エコ'),
+      Tag(tagId: 1, tagName: '地産地消'),
+      Tag(tagId: 2, tagName: 'フェアトレード'),
+      Tag(tagId: 3, tagName: 'エコ'),
     ],
   );
 }
