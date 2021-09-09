@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
-import '../../../../utile.dart';
+import '../../../utile.dart';
 
-class LoginResetPasswordPage extends StatefulWidget {
+class ResetPasswordPage extends StatefulWidget {
   @override
-  _LoginResetPasswordPageState createState() => _LoginResetPasswordPageState();
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _LoginResetPasswordPageState extends State<LoginResetPasswordPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
   String _inputPassword = '';
   String _reinputPassword = '';
 

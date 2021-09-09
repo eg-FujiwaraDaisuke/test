@@ -7,6 +7,7 @@ import 'package:minden/features/login/domain/repositories/login_repository.dart'
 
 class LoginRepositoryImpl implements LoginRepository {
   final UserDataSource userDataSource;
+
   LoginRepositoryImpl({required this.userDataSource});
 
   @override
@@ -16,6 +17,7 @@ class LoginRepositoryImpl implements LoginRepository {
   ) async {
     try {
       final user = await userDataSource.getLoginUser(id, password);
+      print("login model : ${user.toJson()}");
       return Right(user);
     } on ServerException {
       return left(LoginFailure());

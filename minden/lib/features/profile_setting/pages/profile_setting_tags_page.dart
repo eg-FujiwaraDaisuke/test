@@ -5,18 +5,17 @@ import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/common/widget/tag/important_tags.dart';
-import 'package:minden/features/login/presentation/pages/login_profile_tags_decision_page.dart';
-import 'package:minden/features/user/presentation/pages/profile.dart';
+import 'package:minden/features/profile_setting/pages/profile_setting_tags_decision_page.dart';
+
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/utile.dart';
 
-class LoginProfileTagsSettingPage extends StatefulWidget {
+class ProfileSettingTagsPage extends StatefulWidget {
   @override
-  _LoginProfileTagsSettingPageState createState() =>
-      _LoginProfileTagsSettingPageState();
+  _ProfileSettingTagsPageState createState() => _ProfileSettingTagsPageState();
 }
 
-class _LoginProfileTagsSettingPageState
-    extends State<LoginProfileTagsSettingPage> {
+class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   List<Tag> _selectedTags = [];
 
   void _onSelectTag(Tag tag) {
@@ -172,8 +171,8 @@ class _LoginProfileTagsSettingPageState
 
   void _next() {
     final route = MaterialPageRoute(
-      builder: (context) => LoginProfileTagsDecisionPage(),
-      settings: RouteSettings(name: "/login/profileTagsDecision"),
+      builder: (context) => ProfileSettingTagsDecisionPage(),
+      settings: RouteSettings(name: "/profileSetting/tagsDecision"),
     );
     Navigator.push(context, route);
   }
@@ -185,6 +184,7 @@ class _TagsList extends StatefulWidget {
   final Function onSelect;
   final Color color;
   final String title;
+
   const _TagsList(
       {required this.tagsList,
       required this.onSelect,

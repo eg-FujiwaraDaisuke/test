@@ -11,16 +11,21 @@ import 'package:minden/features/localize/data/repositories/localized_info_reposi
 import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
+import 'package:minden/features/login/data/datasources/user_data_source.dart';
+import 'package:minden/features/login/data/repositories/login_repository_impl.dart';
+import 'package:minden/features/login/domain/usecases/get_login_user.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:http/http.dart' as http;
 
 import 'core/ui/tab_indicator.dart';
 import 'features/debug/debug_push_message_page.dart';
 import 'features/home/presentation/pages/home_page.dart';
+import 'features/login/presentation/bloc/login_bloc.dart';
 import 'features/power_plant/presentation/pages/power_plant_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'injection_container.dart';
@@ -42,6 +47,16 @@ class Application extends StatelessWidget {
             ),
           ),
         ),
+        BlocProvider<LoginBloc>(
+          create: (BuildContext context) => LoginBloc(
+            LoginInitial(),
+            GetLoginUser(
+              LoginRepositoryImpl(
+                userDataSource: UserDataSourceImpl(client: http.Client()),
+              ),
+            ),
+          ),
+        ),
       ],
       child: MaterialApp(
         builder: BotToastInit(),
@@ -57,29 +72,31 @@ class Application extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate, // This is required
         ],
         theme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: <TargetPlatform, PageTransitionsBuilder>{
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: <TargetPlatform, PageTransitionsBuilder>{
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+          tabBarTheme: const TabBarTheme().copyWith(
+            indicator: const TabIndicator(),
+            labelPadding: const EdgeInsets.symmetric(vertical: 12.0),
+            labelColor: Colors.black,
+            labelStyle: const TextStyle(
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              letterSpacing: 0.2,
             ),
-            tabBarTheme: TabBarTheme().copyWith(
-                indicator: TabIndicator(),
-                labelPadding: EdgeInsets.symmetric(vertical: 12.0),
-                labelColor: Colors.black,
-                labelStyle: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  letterSpacing: 0.2,
-                ),
-                unselectedLabelColor: Colors.black.withOpacity(0.7),
-                unselectedLabelStyle: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  letterSpacing: 0.2,
-                ))),
+            unselectedLabelColor: Colors.black.withOpacity(0.7),
+            unselectedLabelStyle: const TextStyle(
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ),
         supportedLocales: [
           const Locale('ja'),
           const Locale('en'),
