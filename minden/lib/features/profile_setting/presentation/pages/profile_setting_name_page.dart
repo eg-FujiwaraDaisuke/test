@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_icon_page.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/update_profile.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 
 class ProfileSettingNamePage extends StatefulWidget {
   @override
@@ -11,10 +19,36 @@ class ProfileSettingNamePage extends StatefulWidget {
 
 class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   String _inputName = '';
+  late UpdateProfileBloc _bloc;
 
-  void _onInputChangedName(value) {
-    setState(() {
-      _inputName = value;
+  @override
+  void initState() {
+    super.initState();
+
+    _bloc = UpdateProfileBloc(
+      const ProfileStateInitial(),
+      UpdateProfile(
+        ProfileRepositoryImpl(
+          dataSource: ProfileDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _bloc.stream.listen((event) {
+      if (event is ProfileUpdating) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is ProfileUpdated) {
+        final route = MaterialPageRoute(
+          builder: (context) => ProfileSettingIconPage(),
+          settings: RouteSettings(name: "/profileSetting/icon"),
+        );
+        Navigator.push(context, route);
+      }
     });
   }
 
@@ -25,6 +59,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -32,19 +67,21 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 38),
+                const SizedBox(height: 38),
                 Text(
                   i18nTranslate(context, 'profile_setting_input_name'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF787877),
+                    color: const Color(0xFF787877),
                   ),
                 ),
-                SizedBox(height: 38),
-                _NameInput(onChanged: _onInputChangedName),
-                SizedBox(height: 182),
+                const SizedBox(height: 38),
+                _NameInput(onChanged: (value) {
+                  _inputName = value;
+                }),
+                const SizedBox(height: 182),
                 Botton(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
@@ -59,15 +96,14 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   }
 
   void _next() {
-    final route = MaterialPageRoute(
-      builder: (context) => ProfileSettingIconPage(),
-      settings: RouteSettings(name: "/profileSetting/icon"),
+    _bloc.add(
+      UpdateProfileInfo(
+        name: _inputName,
+        icon: '',
+        bio: '',
+        wallPaper: '',
+      ),
     );
-    Navigator.push(context, route);
-  }
-
-  void _prev() {
-    Navigator.pop(context);
   }
 }
 
@@ -104,12 +140,12 @@ class _NameInputState extends State<_NameInput> {
               ),
               fillColor: Colors.white,
               isDense: true,
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 vertical: 18,
                 horizontal: 15,
               ),
             ),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 17.0,
               color: Color(0xFF000000),
               fontFamily: 'NotoSansJP',

@@ -49,10 +49,9 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
     _bloc.stream.listen((event) {
       if (event is ProfileUpdating) {
         Loading.show(context);
+        return;
       }
-      if (event is ProfileUpdated) {
-        Loading.hide();
-      }
+      Loading.hide();
     });
   }
 
@@ -110,7 +109,11 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
           if (state is Uploaded) {
             _bloc.add(
               UpdateProfileInfo(
-                  name: '', icon: state.media.url, bio: '', wallPaper: ''),
+                name: '',
+                icon: state.media.url,
+                bio: '',
+                wallPaper: '',
+              ),
             );
           }
         },
