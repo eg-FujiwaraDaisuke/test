@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
-import 'package:minden/core/repository/retry_prpcess_mixin.dart';
+import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/domain/repositories/profile_repository.dart';

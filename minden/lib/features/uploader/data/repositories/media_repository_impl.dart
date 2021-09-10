@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
-import 'package:minden/core/repository/retry_prpcess_mixin.dart';
+import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/domain/entities/media.dart';
 import 'package:minden/features/uploader/domain/repositories/media_repository.dart';

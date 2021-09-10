@@ -17,16 +17,11 @@ mixin RetryProcessMixin {
         () => function(),
         retryIf: (e) async {
           if (e is TokenExpiredException) {
-            try {
-              final dataSource = TokenDataSourceImpl(
-                client: http.Client(),
-                encryptionTokenDataSource: si<EncryptionTokenDataSourceImpl>(),
-              );
-              final appToken = await dataSource.getAppToken(true);
-              print(appToken);
-            } catch (e) {
-              print(e);
-            };
+            final dataSource = TokenDataSourceImpl(
+              client: http.Client(),
+              encryptionTokenDataSource: si<EncryptionTokenDataSourceImpl>(),
+            );
+            await dataSource.getAppToken(true);
             return true;
           }
           return false;

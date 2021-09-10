@@ -40,7 +40,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     if (bio.isNotEmpty) {
       param['bio'] = bio;
     }
-    if (name.isNotEmpty) {
+    if (wallPaper.isNotEmpty) {
       param['wallPaper'] = wallPaper;
     }
 
