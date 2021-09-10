@@ -46,7 +46,7 @@ class Application extends StatelessWidget {
         BlocProvider<LocalizedBloc>(
           create: (BuildContext context) => LocalizedBloc(
             LocalizedStateEmpty(),
-            GetLocalizedInfo(
+            GetLocalizedEvent(
               LocalizedInfoRepositoryImpl(
                 dataSource: LocalizedInfoDataSourceImpl(),
               ),

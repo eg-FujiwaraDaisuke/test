@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/common/widget/tag/important_tags.dart';
+import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
+import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
+import 'package:minden/features/profile_setting/domain/usecases/update_tag.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/utile.dart';
@@ -16,6 +24,31 @@ class ProfileSettingTagsPage extends StatefulWidget {
 
 class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   final List<Tag> _selectedTags = [];
+  late GetAllTagsBloc _allTagBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _allTagBloc = GetAllTagsBloc(
+      const TagStateInitial(),
+      GetAllTags(
+        TagRepositoryImpl(
+          dataSource: TagDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _allTagBloc.add(const GetTagEvent());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _allTagBloc.close();
+  }
 
   void _onSelectTag(Tag tag) {
     if (_selectedTags.contains(tag)) {
@@ -136,16 +169,35 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                Column(
-                  children: importantTags
-                      .map((e) => _TagsList(
-                            tagsList: e.tags,
-                            onSelect: _onSelectTag,
-                            selectedTags: _selectedTags,
-                            color: e.color,
-                            title: e.title,
-                          ))
-                      .toList(),
+                BlocProvider.value(
+                  value: _allTagBloc,
+                  child: BlocListener<GetAllTagsBloc, TagState>(
+                    listener: (context, state) {
+                      if (state is TagLoading) {
+                        Loading.show(context);
+                        return;
+                      }
+                      Loading.hide();
+                    },
+                    child: BlocBuilder<GetAllTagsBloc, TagState>(
+                      builder: (context, state) {
+                        if (state is TagGetSucceed) {
+                          return Column(
+                            children: state.tags
+                                .map((e) => _TagsList(
+                                      tagsList: e.tags,
+                                      onSelect: _onSelectTag,
+                                      selectedTags: _selectedTags,
+                                      color: const Color(0xFFFFC2BE),
+                                      title: e.categoryName,
+                                    ))
+                                .toList(),
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 28),
                 if (_selectedTags.isEmpty)

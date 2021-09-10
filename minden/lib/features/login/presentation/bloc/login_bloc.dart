@@ -16,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
-    if (event is GetLoginUserInfo) {
+    if (event is GetLoginUserEvent) {
       try {
         yield LoginLoading();
         final failureOrUser = await usecase(Params(

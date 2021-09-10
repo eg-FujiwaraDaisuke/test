@@ -6,8 +6,8 @@ abstract class UploadEvent extends Equatable {
   const UploadEvent();
 }
 
-class UploadMediaInfo extends UploadEvent {
-  const UploadMediaInfo(this.file);
+class UploadMediaEvent extends UploadEvent {
+  const UploadMediaEvent(this.file);
 
   final File file;
 

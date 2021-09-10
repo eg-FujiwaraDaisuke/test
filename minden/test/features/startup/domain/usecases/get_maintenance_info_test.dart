@@ -3,7 +3,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/usecase/usecase.dart';
-import 'package:minden/features/startup/domain/entities/startup_info.dart';
+import 'package:minden/features/startup/domain/entities/startup.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';
 import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
 import 'package:mockito/mockito.dart';
@@ -19,7 +19,7 @@ void main() {
     usecase = GetStartupInfo(mockStartupRepository);
   });
 
-  final maintenanceInfo = StartupInfo(
+  final maintenanceInfo = Startup(
       storeUrl: "",
       hasLatestVersion: false,
       latestVersion: "1.0.0",
