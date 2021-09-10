@@ -1,3 +1,6 @@
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
+import 'package:minden/injection_container.dart';
+
 import 'config.dart';
 
 class ApiConfig {
@@ -24,5 +27,18 @@ class ApiConfig {
 
   static Map<String, Object> apiEndpoint() {
     return _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
+  }
+
+  static Future<Map<String, String>> tokenHeader() async {
+    final env = _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
+    final defaultHeaders = env['headers']! as Map<String, String>;
+    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
+    final refreshToken =
+        await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+    return {
+      'appToken': appToken,
+      'refreshToken': refreshToken,
+      ...defaultHeaders
+    };
   }
 }
