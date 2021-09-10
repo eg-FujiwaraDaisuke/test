@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_bio_page.dart';
@@ -86,10 +86,10 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
                   child: _buildImage(),
                 ),
                 SizedBox(height: 182),
-                Botton(
+                Button(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
-                  size: BottonSize.S,
+                  size: ButtonSize.S,
                 ),
               ],
             ),

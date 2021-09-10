@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
@@ -85,10 +85,10 @@ class ProfileSettingTagsDecisionPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 112),
-              Botton(
+              Button(
                 onTap: () => {_decide(context)},
                 text: i18nTranslate(context, 'decide'),
-                size: BottonSize.S,
+                size: ButtonSize.S,
               ),
               SizedBox(height: 19),
               GestureDetector(

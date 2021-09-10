@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/common/widget/tag/important_tags.dart';
@@ -145,16 +145,16 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 ),
                 SizedBox(height: 28),
                 _selectedTags.length == 0
-                    ? Botton(
+                    ? Button(
                         onTap: () => {},
                         text: i18nTranslate(context, 'profile_setting_next'),
-                        size: BottonSize.S,
+                        size: ButtonSize.S,
                         isActive: false,
                       )
-                    : Botton(
+                    : Button(
                         onTap: () => {_next()},
                         text: i18nTranslate(context, 'profile_setting_next'),
-                        size: BottonSize.S,
+                        size: ButtonSize.S,
                       ),
                 SizedBox(height: 32),
               ],

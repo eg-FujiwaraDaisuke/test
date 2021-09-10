@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_icon_page.dart';
 import '../../../../utile.dart';
@@ -46,10 +46,10 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
                 SizedBox(height: 38),
                 _NameInput(onChanged: _onInputChangedName),
                 SizedBox(height: 182),
-                Botton(
+                Button(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
-                  size: BottonSize.S,
+                  size: ButtonSize.S,
                 ),
               ],
             ),

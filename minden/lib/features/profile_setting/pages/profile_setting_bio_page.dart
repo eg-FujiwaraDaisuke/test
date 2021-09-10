@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/pages/profile_setting_tags_page.dart';
 
@@ -57,10 +57,10 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
                 SizedBox(height: 38),
                 BioInput(onChanged: _onInputChangedBio),
                 SizedBox(height: 126),
-                Botton(
+                Button(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
-                  size: BottonSize.S,
+                  size: ButtonSize.S,
                 ),
               ],
             ),
