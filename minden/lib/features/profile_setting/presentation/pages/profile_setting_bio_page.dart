@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/update_profile.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 
 class ProfileSettingBioPage extends StatefulWidget {
   @override
@@ -12,28 +20,61 @@ class ProfileSettingBioPage extends StatefulWidget {
 
 class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   String _inputBio = '';
+  late UpdateProfileBloc _bloc;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void _onInputChangedBio(value) {
-    setState(() {
-      _inputBio = value;
+  @override
+  void initState() {
+    super.initState();
+
+    _bloc = UpdateProfileBloc(
+      const ProfileStateInitial(),
+      UpdateProfile(
+        ProfileRepositoryImpl(
+          dataSource: ProfileDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _bloc.stream.listen((event) {
+      if (event is ProfileUpdating) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is ProfileUpdated) {
+        final route = MaterialPageRoute(
+          builder: (context) => ProfileSettingTagsPage(),
+          settings: const RouteSettings(name: '/profileSetting/tag'),
+        );
+        Navigator.push(context, route);
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9F2),
+      backgroundColor: const Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: GestureDetector(
-          onTap: () => _prev(),
+          onTap: _prev,
           child: Center(
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
@@ -44,19 +85,23 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 38),
+                const SizedBox(height: 38),
                 Text(
                   i18nTranslate(context, 'profile_setting_bio'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF787877),
                   ),
                 ),
-                SizedBox(height: 38),
-                BioInput(onChanged: _onInputChangedBio),
-                SizedBox(height: 126),
+                const SizedBox(height: 38),
+                _BioInput(
+                    formKey: _formKey,
+                    onSaved: (value) {
+                      _inputBio = value;
+                    }),
+                const SizedBox(height: 126),
                 Botton(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
@@ -71,11 +116,17 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   }
 
   void _next() {
-    final route = MaterialPageRoute(
-      builder: (context) => ProfileSettingTagsPage(),
-      settings: RouteSettings(name: "/profileSetting/tag"),
-    );
-    Navigator.push(context, route);
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      _bloc.add(
+        UpdateProfileInfo(
+          name: '',
+          icon: '',
+          bio: _inputBio,
+          wallPaper: '',
+        ),
+      );
+    }
   }
 
   void _prev() {
@@ -83,22 +134,24 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   }
 }
 
-class BioInput extends StatefulWidget {
-  final Function onChanged;
+class _BioInput extends StatefulWidget {
+  const _BioInput({
+    required this.formKey,
+    required this.onSaved,
+  });
 
-  const BioInput({
-    required this.onChanged,
-  }) : super();
+  final GlobalKey formKey;
+  final Function onSaved;
 
   @override
   _BioInputState createState() => _BioInputState();
 }
 
-class _BioInputState extends State<BioInput> {
-  final _controller = TextEditingController();
+class _BioInputState extends State<_BioInput> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: widget.formKey,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
         height: 110,
@@ -111,13 +164,13 @@ class _BioInputState extends State<BioInput> {
           maxLines: null,
           keyboardType: TextInputType.multiline,
           textInputAction: TextInputAction.newline,
-          initialValue: '',
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: InputBorder.none,
           ),
-          style: TextStyle(
+          onSaved: (value) => widget.onSaved(value),
+          style: const TextStyle(
             color: Color(0xFF7C7C7C),
-            fontSize: 12,
+            fontSize: 18,
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
           ),

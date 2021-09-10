@@ -54,6 +54,12 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _bloc.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF9F2),
@@ -119,17 +125,14 @@ class _NameInput extends StatefulWidget {
     required this.onSaved,
   });
 
-  final Function onSaved;
-
   final GlobalKey formKey;
+  final Function onSaved;
 
   @override
   _NameInputState createState() => _NameInputState();
 }
 
 class _NameInputState extends State<_NameInput> {
-  final _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -139,10 +142,7 @@ class _NameInputState extends State<_NameInput> {
           Form(
             key: widget.formKey,
             child: TextFormField(
-              controller: _controller,
-              onSaved: (value) {
-                widget.onSaved(value);
-              },
+              onSaved: (value) => widget.onSaved(value),
               maxLength: 20,
               validator: (value) {
                 if ((value?.length ?? 0) < 3) {

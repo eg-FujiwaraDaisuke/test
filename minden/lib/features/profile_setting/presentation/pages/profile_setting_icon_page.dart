@@ -64,18 +64,18 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9F2),
+      backgroundColor: const Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: GestureDetector(
-          onTap: () => _prev(),
+          onTap: _prev,
           child: Center(
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
@@ -83,7 +83,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
           GestureDetector(
             onTap: _next,
             child: Container(
-              margin: EdgeInsets.only(right: 20),
+              margin: const EdgeInsets.only(right: 20),
               child: Center(
                 child: Text(
                   i18nTranslate(context, 'skip_katakana'),
@@ -163,7 +163,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   void _next() {
     final route = MaterialPageRoute(
       builder: (context) => ProfileSettingBioPage(),
-      settings: RouteSettings(name: "/profileSetting/bio"),
+      settings: const RouteSettings(name: '/profileSetting/bio'),
     );
     Navigator.push(context, route);
   }
