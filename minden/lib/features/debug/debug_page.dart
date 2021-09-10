@@ -10,6 +10,7 @@ import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/fcm_debug_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 
@@ -52,6 +53,11 @@ class DebugPage extends StatelessWidget {
                     (context) => MatchingPage(), '/my_page/matching'),
                 _generateNavigatorPush(context, 'push通知FCM取得',
                     (context) => FCMDebugPage(), '/fcm_debug'),
+                _generateNavigatorPush(
+                    context,
+                    '応援ダイアログ',
+                    (context) => SupportPlantDialogDebugPage(),
+                    '/supportPlantDialogDebugPage'),
               ],
             ),
           ),
@@ -60,8 +66,12 @@ class DebugPage extends StatelessWidget {
     );
   }
 
-  ElevatedButton _generateNavigatorPush(BuildContext context,
-      String buttonLabel, WidgetBuilder builder, String routeName) {
+  ElevatedButton _generateNavigatorPush(
+    BuildContext context,
+    String buttonLabel,
+    WidgetBuilder builder,
+    String routeName,
+  ) {
     return ElevatedButton(
       child: Text(buttonLabel),
       onPressed: () {
