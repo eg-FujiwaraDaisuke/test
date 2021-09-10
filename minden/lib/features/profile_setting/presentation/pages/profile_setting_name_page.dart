@@ -46,7 +46,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       if (event is ProfileUpdated) {
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingIconPage(),
-          settings: const RouteSettings(name: "/profileSetting/icon"),
+          settings: const RouteSettings(name: '/profileSetting/icon'),
         );
         Navigator.push(context, route);
       }
@@ -56,7 +56,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9F2),
+      backgroundColor: const Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -132,7 +132,7 @@ class _NameInputState extends State<_NameInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 339,
       child: Column(
         children: [
