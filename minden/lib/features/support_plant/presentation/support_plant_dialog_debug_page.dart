@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/support_plant/domain/entities/participant.dart';
-import 'package:minden/features/support_plant/presentation/support_participants_dialog.dart';
+import 'package:minden/features/support_participant/domain/entities/participant.dart';
+import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
+
 import 'package:minden/features/support_plant/presentation/support_plant_decide_dialog.dart';
 
 class SupportPlantDialogDebugPage extends StatelessWidget {

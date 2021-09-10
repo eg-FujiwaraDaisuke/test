@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/support_plant/domain/entities/participant.dart';
+import 'package:minden/features/support_participant/domain/entities/participant.dart';
 
 class SupportParticipantsDialog {
   SupportParticipantsDialog({required this.context, required this.participants})

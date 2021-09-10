@@ -69,33 +69,7 @@ class SupportPlantDialog {
                           )
                         ],
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            color: Colors.red,
-                          ),
-                          const SizedBox(
-                            width: 27,
-                          ),
-                          SizedBox(
-                            width: 157,
-                            //TODO ここに発電所の名前が入ります。
-                            child: Text(
-                              'みつばち発電所みつばち発電所みつばち発電所',
-                              style: TextStyle(
-                                color: Color(0xFF575292),
-                                fontSize: 13,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                height: calcFontHeight(
-                                    fontSize: 13, lineHeight: 19.5),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                      child: _buildSelectedPlantListItem(),
                     ),
                     const SizedBox(
                       height: 25,
@@ -134,6 +108,35 @@ class SupportPlantDialog {
         ),
         isAndroidBackEnable: false,
       ),
+    );
+  }
+
+  Widget _buildSelectedPlantListItem() {
+    return Row(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          color: Colors.red,
+        ),
+        const SizedBox(
+          width: 27,
+        ),
+        SizedBox(
+          width: 157,
+          //TODO ここに発電所の名前が入ります。
+          child: Text(
+            'みつばち発電所みつばち発電所みつばち発電所',
+            style: TextStyle(
+              color: Color(0xFF575292),
+              fontSize: 13,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w700,
+              height: calcFontHeight(fontSize: 13, lineHeight: 19.5),
+            ),
+          ),
+        )
+      ],
     );
   }
 
