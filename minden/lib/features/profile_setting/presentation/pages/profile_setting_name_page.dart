@@ -55,8 +55,8 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override

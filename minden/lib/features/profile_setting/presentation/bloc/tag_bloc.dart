@@ -46,8 +46,8 @@ class GetAllTagsBloc extends Bloc<TagEvent, TagState> {
 
         final failureOrUser = await usecase(NoParams());
 
-        yield failureOrUser.fold<TagState>(
-            (failure) => throw ServerFailure(), (tags) => TagGetSucceed(tags));
+        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
+            (category) => CategoryGetSucceed(category));
       } catch (e) {
         yield TagUpdateError(e.toString());
       }

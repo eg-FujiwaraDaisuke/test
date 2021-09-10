@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 abstract class TagState extends Equatable {
   const TagState();
@@ -15,10 +16,19 @@ class TagStateInitial extends TagState {
 class TagGetSucceed extends TagState {
   const TagGetSucceed(this.tags);
 
-  final List<TagCategory> tags;
+  final List<Tag> tags;
 
   @override
   List<Object> get props => [tags];
+}
+
+class CategoryGetSucceed extends TagState {
+  const CategoryGetSucceed(this.category);
+
+  final List<TagCategory> category;
+
+  @override
+  List<Object> get props => [category];
 }
 
 class TagLoading extends TagState {

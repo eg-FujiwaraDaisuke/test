@@ -67,9 +67,9 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _allTagBloc.close();
     _updateTagBloc.close();
+    super.dispose();
   }
 
   void _onSelectTag(Tag tag) {
@@ -203,9 +203,9 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                     },
                     child: BlocBuilder<GetAllTagsBloc, TagState>(
                       builder: (context, state) {
-                        if (state is TagGetSucceed) {
+                        if (state is CategoryGetSucceed) {
                           return Column(
-                            children: state.tags
+                            children: state.category
                                 .map((e) => _TagsList(
                                       tagsList: e.tags,
                                       onSelect: _onSelectTag,

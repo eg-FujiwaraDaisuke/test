@@ -5,6 +5,7 @@ import 'package:minden/core/success/success.dart';
 import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/profile_setting/domain/repositories/tag_repository.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 // domain - usecase
 class UpdateTags extends UseCase<Success, UpdateTagParams> {
@@ -27,12 +28,12 @@ class GetAllTags extends UseCase<List<TagCategory>, NoParams> {
   }
 }
 
-class GetTags extends UseCase<List<TagCategory>, NoParams> {
+class GetTags extends UseCase<List<Tag>, NoParams> {
   GetTags(this.repository);
 
   final TagRepository repository;
 
-  Future<Either<Failure, List<TagCategory>>> call(NoParams params) async {
+  Future<Either<Failure, List<Tag>>> call(NoParams params) async {
     return await repository.getTags();
   }
 }

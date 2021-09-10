@@ -57,8 +57,8 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override

@@ -55,6 +55,6 @@ class _ImportantTagListItemState extends State<ImportantTagListItem> {
       bool isExist = importantTag.tags.contains(tag);
       if (isExist) contain = importantTag;
     });
-    return contain!.color;
+    return contain?.color ?? Color(0xFFFFC2BE);
   }
 }

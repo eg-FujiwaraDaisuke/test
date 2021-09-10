@@ -8,17 +8,19 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/profile_setting/data/models/tag_category_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 abstract class TagDataSource {
   Future<Success> updateTags({required List<int> tags});
 
   Future<List<TagCategory>> getAllTags();
 
-  Future<List<TagCategory>> getTags();
+  Future<List<Tag>> getTags();
 
-  Future<List<TagCategory>> getPlantTags(String plantId);
+  Future<List<Tag>> getPlantTags(String plantId);
 
-  Future<List<TagCategory>> getPlantsTags();
+  Future<List<Tag>> getPlantsTags();
 }
 
 class TagDataSourceImpl implements TagDataSource {
@@ -40,7 +42,8 @@ class TagDataSourceImpl implements TagDataSource {
   Future<Success> updateTags({required List<int> tags}) async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
-    final body = json.encode({"tags": tags.map<String>((e) => e.toString()).toList()});
+    final body =
+        json.encode({"tags": tags.map<String>((e) => e.toString()).toList()});
 
     final response = await client.post(
         Uri.parse((env['url']! as String) + _updateTagsPath),
@@ -80,7 +83,7 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<TagCategory>> getTags() async {
+  Future<List<Tag>> getTags() async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
     final response = await client.get(
@@ -88,8 +91,15 @@ class TagDataSourceImpl implements TagDataSource {
       headers: headers,
     );
 
+    final map = json.decode(response.body);
+    final list = map['tags'] ?? [];
+    final tags = list.map<Tag>((e) {
+      return TagModel.fromJson(e);
+    }).toList();
+
     if (response.statusCode == 200) {
-      return [TagCategoryModel.fromJson({})];
+      print("${tags}");
+      return tags;
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {
@@ -98,7 +108,7 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<TagCategory>> getPlantTags(String plantId) async {
+  Future<List<Tag>> getPlantTags(String plantId) async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
     final response = await client.get(
@@ -107,7 +117,7 @@ class TagDataSourceImpl implements TagDataSource {
     );
 
     if (response.statusCode == 200) {
-      return [TagCategoryModel.fromJson({})];
+      return [TagModel.fromJson({})];
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {
@@ -116,7 +126,7 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<TagCategory>> getPlantsTags() async {
+  Future<List<Tag>> getPlantsTags() async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
     final response = await client.get(
@@ -125,7 +135,7 @@ class TagDataSourceImpl implements TagDataSource {
     );
 
     if (response.statusCode == 200) {
-      return [TagCategoryModel.fromJson({})];
+      return [TagModel.fromJson({})];
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {

@@ -6,6 +6,7 @@ import 'package:minden/core/success/success.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/profile_setting/domain/repositories/tag_repository.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 // data - repository
 
@@ -27,10 +28,10 @@ class TagRepositoryImpl with RetryProcessMixin implements TagRepository {
   }
 
   @override
-  Future<Either<Failure, List<TagCategory>>> getTags() async {
+  Future<Either<Failure, List<Tag>>> getTags() async {
     try {
-      final categories = await retryRequest(dataSource.getTags);
-      return Right(categories);
+      final tags = await retryRequest(dataSource.getTags);
+      return Right(tags);
     } on ServerException {
       return Left(ServerFailure());
     }
@@ -48,22 +49,22 @@ class TagRepositoryImpl with RetryProcessMixin implements TagRepository {
   }
 
   @override
-  Future<Either<Failure, List<TagCategory>>> getPlantTags(
+  Future<Either<Failure, List<Tag>>> getPlantTags(
       {required String plantId}) async {
     try {
-      final categories =
+      final tags =
           await retryRequest(() => dataSource.getPlantTags(plantId));
-      return Right(categories);
+      return Right(tags);
     } on ServerException {
       return Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, List<TagCategory>>> getPlantsTags() async {
+  Future<Either<Failure, List<Tag>>> getPlantsTags() async {
     try {
-      final categories = await retryRequest(dataSource.getPlantsTags);
-      return Right(categories);
+      final tags = await retryRequest(dataSource.getPlantsTags);
+      return Right(tags);
     } on ServerException {
       return Left(ServerFailure());
     }

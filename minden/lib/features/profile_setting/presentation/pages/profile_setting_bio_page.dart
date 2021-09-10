@@ -56,8 +56,8 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override

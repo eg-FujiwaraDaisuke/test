@@ -1,35 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
+import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
+import 'package:minden/features/profile_setting/domain/usecases/update_tag.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 
-class ProfileSettingTagsDecisionPage extends StatelessWidget {
-  final List<Tag> _selectedTags = [
-    Tag(tagId: 1, tagName: 'エコ'),
-    Tag(tagId: 2, tagName: 'サステナブルコーヒー'),
-    Tag(tagId: 3, tagName: '地方創生'),
-  ];
+class ProfileSettingTagsDecisionPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _ProfileSettingTagsDecisionPageState();
+}
+
+class _ProfileSettingTagsDecisionPageState
+    extends State<ProfileSettingTagsDecisionPage> {
+  late GetTagsBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bloc = GetTagsBloc(
+      const TagStateInitial(),
+      GetTags(
+        TagRepositoryImpl(
+          dataSource: TagDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _bloc.add(const GetTagEvent());
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAF9F2),
+      backgroundColor: const Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: GestureDetector(
           onTap: () => _prev(context),
           child: Center(
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
@@ -39,63 +72,82 @@ class ProfileSettingTagsDecisionPage extends StatelessWidget {
           child: Center(
               child: Column(
             children: [
-              SizedBox(height: 38),
+              const SizedBox(height: 38),
               Text(
                 i18nTranslate(context, 'profile_decision_tag'),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF575292),
                 ),
               ),
-              SizedBox(height: 43),
+              const SizedBox(height: 43),
               Text(
                 i18nTranslate(context, 'profile_decision_tag_set'),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF787877),
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
-                width: 338,
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13),
-                  color: Colors.white,
-                ),
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  spacing: 5,
-                  runSpacing: 10,
-                  children: _selectedTags
-                      .map(
-                        (tag) => ImportantTagListItem(
-                          tag: tag,
-                          onSelect: () {},
-                          isSelected: true,
-                        ),
-                      )
-                      .toList(),
+              const SizedBox(height: 20),
+              BlocProvider.value(
+                value: _bloc,
+                child: BlocListener<GetTagsBloc, TagState>(
+                  listener: (context, state) {
+                    if (state is TagLoading) {
+                      Loading.show(context);
+                      return;
+                    }
+                    Loading.hide();
+                  },
+                  child: BlocBuilder<GetTagsBloc, TagState>(
+                    builder: (context, state) {
+                      if (state is TagGetSucceed) {
+                        return Container(
+                          width: 338,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13),
+                            color: Colors.white,
+                          ),
+                          child: Wrap(
+                            spacing: 5,
+                            runSpacing: 10,
+                            children: state.tags
+                                .map(
+                                  (tag) => ImportantTagListItem(
+                                    tag: tag,
+                                    onSelect: () {},
+                                    isSelected: true,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                 ),
               ),
-              SizedBox(height: 112),
+              const SizedBox(height: 112),
               Botton(
                 onTap: () => {_decide(context)},
                 text: i18nTranslate(context, 'decide'),
                 size: BottonSize.S,
               ),
-              SizedBox(height: 19),
+              const SizedBox(height: 19),
               GestureDetector(
                 onTap: () => _prev(context),
                 child: Text(
                   i18nTranslate(context, 'cancel_katakana'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w500,
@@ -117,7 +169,7 @@ class ProfileSettingTagsDecisionPage extends StatelessWidget {
   void _decide(BuildContext context) {
     final route = NoAnimationMaterialPageRoute(
       builder: (context) => HomePage(),
-      settings: RouteSettings(name: "/home"),
+      settings: RouteSettings(name: '/home'),
     );
     Navigator.pushReplacement(context, route);
   }
