@@ -10,9 +10,7 @@ import 'package:minden/features/uploader/domain/repositories/media_repository.da
 
 // data - repository
 
-class MediaRepositoryImpl
-    with RetryProcessMixin
-    implements MediaRepository {
+class MediaRepositoryImpl with RetryProcessMixin implements MediaRepository {
   const MediaRepositoryImpl({
     required this.dataSource,
   });
@@ -23,9 +21,8 @@ class MediaRepositoryImpl
   Future<Either<Failure, Media>> upload(File file) async {
     try {
       final bytes = await file.readAsBytes();
-      final Media =
-          await retryRequest(() => dataSource.upload(bytes: bytes));
-      return Right(Media);
+      final media = await retryRequest(() => dataSource.upload(bytes: bytes));
+      return Right(media);
     } on ServerException {
       return Left(ServerFailure());
     }
