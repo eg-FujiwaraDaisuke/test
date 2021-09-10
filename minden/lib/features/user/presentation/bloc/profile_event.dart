@@ -4,8 +4,8 @@ abstract class ProfileEvent extends Equatable {
   const ProfileEvent();
 }
 
-class UpdateProfileInfo extends ProfileEvent {
-  const UpdateProfileInfo(
+class UpdateProfileEvent extends ProfileEvent {
+  const UpdateProfileEvent(
       {required this.name,
       required this.icon,
       required this.bio,

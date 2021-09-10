@@ -8,11 +8,12 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/user/data/model/profile_model.dart';
 
 abstract class ProfileDataSource {
-  Future<ProfileModel> update(
-      {required String name,
-      required String icon,
-      required String bio,
-      required String wallPaper});
+  Future<ProfileModel> update({
+    required String name,
+    required String icon,
+    required String bio,
+    required String wallPaper,
+  });
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -23,14 +24,15 @@ class ProfileDataSourceImpl implements ProfileDataSource {
   String get _v1Path => '/api/v1/profile/edit';
 
   @override
-  Future<ProfileModel> update(
-      {required String name,
-      required String icon,
-      required String bio,
-      required String wallPaper}) async {
+  Future<ProfileModel> update({
+    required String name,
+    required String icon,
+    required String bio,
+    required String wallPaper,
+  }) async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
-    var param = Map<String, String>();
+    final param = {};
     if (name.isNotEmpty) {
       param['name'] = name;
     }

@@ -56,8 +56,8 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override
@@ -119,7 +119,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _bloc.add(
-        UpdateProfileInfo(
+        UpdateProfileEvent(
           name: '',
           icon: '',
           bio: _inputBio,

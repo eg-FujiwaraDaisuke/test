@@ -13,7 +13,7 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
   Stream<UploadState> mapEventToState(
     UploadEvent event,
   ) async* {
-    if (event is UploadMediaInfo) {
+    if (event is UploadMediaEvent) {
       try {
         yield const Uploading();
 

@@ -14,8 +14,8 @@ import 'package:equatable/equatable.dart';
 // storeUrl : 各OSのストアURL
 // supportVersion : アプリのサポートバージョン
 // latestVersion : サービスの最新バージョン
-class StartupInfo extends Equatable {
-  StartupInfo({
+class Startup extends Equatable {
+  Startup({
     required this.storeUrl,
     required this.hasLatestVersion,
     required this.latestVersion,

@@ -15,7 +15,7 @@ class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(
     ProfileEvent event,
   ) async* {
-    if (event is UpdateProfileInfo) {
+    if (event is UpdateProfileEvent) {
       try {
         yield const ProfileUpdating();
 

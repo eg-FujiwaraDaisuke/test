@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 // domain - entity
 
-class LocalizedInfo extends Equatable {
-  LocalizedInfo({
+class Localized extends Equatable {
+  Localized({
     required this.languageCode,
   });
 

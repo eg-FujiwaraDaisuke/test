@@ -30,7 +30,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   late UpdateProfileBloc _bloc;
 
   void _setImage(File croppedImage) {
-    BlocProvider.of<UploadBloc>(context).add(UploadMediaInfo(croppedImage));
+    BlocProvider.of<UploadBloc>(context).add(UploadMediaEvent(croppedImage));
   }
 
   @override
@@ -57,8 +57,8 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override
@@ -108,7 +108,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
           Loading.hide();
           if (state is Uploaded) {
             _bloc.add(
-              UpdateProfileInfo(
+              UpdateProfileEvent(
                 name: '',
                 icon: state.media.url,
                 bio: '',
