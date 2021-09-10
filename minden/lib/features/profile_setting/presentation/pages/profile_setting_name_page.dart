@@ -20,6 +20,7 @@ class ProfileSettingNamePage extends StatefulWidget {
 class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   String _inputName = '';
   late UpdateProfileBloc _bloc;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       if (event is ProfileUpdated) {
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingIconPage(),
-          settings: RouteSettings(name: "/profileSetting/icon"),
+          settings: const RouteSettings(name: "/profileSetting/icon"),
         );
         Navigator.push(context, route);
       }
@@ -58,7 +59,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       backgroundColor: Color(0xFFFAF9F2),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -74,13 +75,15 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
                     fontSize: 18,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF787877),
+                    color: Color(0xFF787877),
                   ),
                 ),
                 const SizedBox(height: 38),
-                _NameInput(onChanged: (value) {
-                  _inputName = value;
-                }),
+                _NameInput(
+                    formKey: _formKey,
+                    onSaved: (value) {
+                      _inputName = value;
+                    }),
                 const SizedBox(height: 182),
                 Botton(
                   onTap: _next,
@@ -96,23 +99,29 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   }
 
   void _next() {
-    _bloc.add(
-      UpdateProfileInfo(
-        name: _inputName,
-        icon: '',
-        bio: '',
-        wallPaper: '',
-      ),
-    );
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      _bloc.add(
+        UpdateProfileInfo(
+          name: _inputName,
+          icon: '',
+          bio: '',
+          wallPaper: '',
+        ),
+      );
+    }
   }
 }
 
 class _NameInput extends StatefulWidget {
-  final Function onChanged;
-
   const _NameInput({
-    required this.onChanged,
-  }) : super();
+    required this.formKey,
+    required this.onSaved,
+  });
+
+  final Function onSaved;
+
+  final GlobalKey formKey;
 
   @override
   _NameInputState createState() => _NameInputState();
@@ -127,29 +136,38 @@ class _NameInputState extends State<_NameInput> {
       width: 339,
       child: Column(
         children: [
-          TextFormField(
-            controller: _controller,
-            onChanged: (value) {
-              widget.onChanged(value);
-            },
-            decoration: InputDecoration(
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                borderSide: BorderSide.none,
+          Form(
+            key: widget.formKey,
+            child: TextFormField(
+              controller: _controller,
+              onSaved: (value) {
+                widget.onSaved(value);
+              },
+              maxLength: 20,
+              validator: (value) {
+                if ((value?.length ?? 0) < 3) {
+                  return i18nTranslate(context, 'ユーザーネームは2文字以上で入力してください');
+                }
+              },
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                fillColor: Colors.white,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 15,
+                ),
               ),
-              fillColor: Colors.white,
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 18,
-                horizontal: 15,
+              style: const TextStyle(
+                fontSize: 17,
+                color: Color(0xFF000000),
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w500,
               ),
-            ),
-            style: const TextStyle(
-              fontSize: 17.0,
-              color: Color(0xFF000000),
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
