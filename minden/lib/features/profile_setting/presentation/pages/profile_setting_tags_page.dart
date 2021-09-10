@@ -25,10 +25,32 @@ class ProfileSettingTagsPage extends StatefulWidget {
 class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   final List<Tag> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
+  late UpdateTagBloc _updateTagBloc;
 
   @override
   void initState() {
     super.initState();
+
+    _updateTagBloc = UpdateTagBloc(
+      const TagStateInitial(),
+      UpdateTags(
+        TagRepositoryImpl(
+          dataSource: TagDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _updateTagBloc.stream.listen((event) {
+      if (event is TagUpdated) {
+        final route = MaterialPageRoute(
+          builder: (context) => ProfileSettingTagsDecisionPage(),
+          settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
+        );
+        Navigator.push(context, route);
+      }
+    });
 
     _allTagBloc = GetAllTagsBloc(
       const TagStateInitial(),
@@ -40,7 +62,6 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
         ),
       ),
     );
-
     _allTagBloc.add(const GetTagEvent());
   }
 
@@ -48,6 +69,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   void dispose() {
     super.dispose();
     _allTagBloc.close();
+    _updateTagBloc.close();
   }
 
   void _onSelectTag(Tag tag) {
@@ -227,11 +249,9 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _next() {
-    final route = MaterialPageRoute(
-      builder: (context) => ProfileSettingTagsDecisionPage(),
-      settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
-    );
-    Navigator.push(context, route);
+    print("${_selectedTags.map((e) => e.tagId).toList()}");
+    _updateTagBloc
+        .add(UpdateTagEvent(tags: _selectedTags.map((e) => e.tagId).toList()));
   }
 }
 

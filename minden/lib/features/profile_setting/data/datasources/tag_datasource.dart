@@ -40,12 +40,14 @@ class TagDataSourceImpl implements TagDataSource {
   Future<Success> updateTags({required List<int> tags}) async {
     final env = ApiConfig.apiEndpoint();
     final headers = await ApiConfig.tokenHeader();
-    final body = json.encode(tags.map((e) => e.toString()).toList());
+    final body = json.encode({"tags": tags.map<String>((e) => e.toString()).toList()});
+
     final response = await client.post(
         Uri.parse((env['url']! as String) + _updateTagsPath),
         headers: headers,
         body: body);
 
+    print("${response.body}");
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 401) {
