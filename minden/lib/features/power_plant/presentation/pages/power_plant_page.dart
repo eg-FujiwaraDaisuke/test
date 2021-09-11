@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/power_plant/domain/power_plant.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
@@ -76,7 +76,7 @@ class _PowerPlantList extends ConsumerWidget {
     );
   }
 
-  Widget _generateListItem(PowerPlant powerPlant) {
+  Widget _generateListItem(PowerPlantModel powerPlant) {
     return Container(
       height: 134,
       child: Row(
@@ -131,7 +131,7 @@ class _PowerPlantSummaryImage extends StatelessWidget {
 
 /// 電力会社詳細
 class _PowerPlantInfo extends StatelessWidget {
-  final PowerPlant powerPlant;
+  final PowerPlantModel powerPlant;
 
   const _PowerPlantInfo({
     Key? key,
@@ -155,7 +155,7 @@ class _PowerPlantInfo extends StatelessWidget {
           Row(
             children: [
               Text(
-                powerPlant.powerGenerationMethods,
+                powerPlant.powerGenerationMethod,
                 style: _generateTextStyle(9, FontWeight.w500),
               ),
               SizedBox(width: 24),
@@ -168,7 +168,7 @@ class _PowerPlantInfo extends StatelessWidget {
                   ),
                   SizedBox(width: 2),
                   Text(
-                    '${powerPlant.capacity}kWh',
+                    '${powerPlant.generationCapacity}kWh',
                     style: _generateTextStyle(9, FontWeight.w500),
                   ),
                 ],
@@ -183,7 +183,7 @@ class _PowerPlantInfo extends StatelessWidget {
                   ),
                   SizedBox(width: 2),
                   Text(
-                    '所在地 ${powerPlant.location}',
+                    '所在地 ${powerPlant.viewAddress}',
                     style: _generateTextStyle(9, FontWeight.w500),
                   ),
                 ],
