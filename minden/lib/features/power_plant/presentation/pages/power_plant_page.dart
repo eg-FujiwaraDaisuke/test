@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
@@ -76,7 +76,7 @@ class _PowerPlantList extends ConsumerWidget {
     );
   }
 
-  Widget _generateListItem(PowerPlantModel powerPlant) {
+  Widget _generateListItem(PowerPlant powerPlant) {
     return Container(
       height: 134,
       child: Row(
@@ -131,7 +131,7 @@ class _PowerPlantSummaryImage extends StatelessWidget {
 
 /// 電力会社詳細
 class _PowerPlantInfo extends StatelessWidget {
-  final PowerPlantModel powerPlant;
+  final PowerPlant powerPlant;
 
   const _PowerPlantInfo({
     Key? key,

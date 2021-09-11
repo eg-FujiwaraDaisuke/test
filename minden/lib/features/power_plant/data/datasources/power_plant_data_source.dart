@@ -11,7 +11,7 @@ final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
     (ref) => PowerPlantDataSourceImpl(client: http.Client()));
 
 abstract class PowerPlantDataSource {
-  Future<PowerPlantsResponseModel> getPowerPlant(String tagId);
+  Future<PowerPlantsResponseModel> getPowerPlant(String? tagId);
 
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId);
 }
@@ -26,8 +26,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   final _powerPlantPath = '/api/v1/power_plant';
 
   @override
-  Future<PowerPlantsResponseModel> getPowerPlant(String tagId) async {
-    final body = json.encode({'tagId': tagId});
+  Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
+    final body = (tagId != null) ? json.encode({'tagId': tagId}) : '';
     final env = ApiConfig.apiEndpoint();
 
     final response = await client.post(
