@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
-import 'package:minden/features/startup/data/models/startup_info_model.dart';
+import 'package:minden/features/startup/data/models/startup_model.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
 import 'package:mockito/mockito.dart';
 
 class MockMaintenanceInfoDataSource extends Mock
     implements StartupInfoDataSource {
   @override
-  Future<StartupInfoModel> getStartupInfo() async {
-    return StartupInfoModel(
+  Future<StartupModel> getStartupInfo() async {
+    return StartupModel(
       storeUrl: "",
       hasLatestVersion: false,
       latestVersion: "",
@@ -47,7 +47,7 @@ void main() {
       info?.fold(
         (failure) {},
         (model) {
-          expect(model, isA<StartupInfoModel>());
+          expect(model, isA<StartupModel>());
         },
       );
     });

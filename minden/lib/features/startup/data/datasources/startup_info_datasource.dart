@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
-import 'package:minden/features/startup/data/models/startup_info_model.dart';
+import 'package:minden/features/startup/data/models/startup_model.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
@@ -13,13 +13,13 @@ import '../../../../injection_container.dart';
 // dataの取得や保存などの制御する実装をここで行います。
 // ビジネスロジックや何かを表示するための実装はここには書きません。
 abstract class StartupInfoDataSource {
-  Future<StartupInfoModel> getStartupInfo();
+  Future<StartupModel> getStartupInfo();
 }
 
 // データ層は、datasourceはModelを返すことと、エラー発生時はexceptionを投げるようにします。
 class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   @override
-  Future<StartupInfoModel> getStartupInfo() async {
+  Future<StartupModel> getStartupInfo() async {
     await si<RemoteConfig>().fetch();
     await si<RemoteConfig>().fetchAndActivate();
 
@@ -54,7 +54,7 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
       );
     }
 
-    return StartupInfoModel(
+    return StartupModel(
       storeUrl: storeUrl,
       hasLatestVersion: appVersion.compareTo(supportVersion) < 0,
       latestVersion: supportVersion.toString(),
