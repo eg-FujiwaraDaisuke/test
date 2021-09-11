@@ -52,7 +52,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
 
   void _login() {
     final bloc = BlocProvider.of<LoginBloc>(context);
-    bloc.add(GetLoginUserInfo(_userLoginId, _userLoginPassword));
+    bloc.add(GetLoginUserEvent(_userLoginId, _userLoginPassword));
   }
 
   @override

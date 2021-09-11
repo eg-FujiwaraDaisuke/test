@@ -1,5 +1,6 @@
 import 'package:minden/features/power_plant/domain/power_plant.dart';
 
+@Deprecated('UI側で利用するモデル変更されたら削除')
 class PowerPlantModel extends PowerPlant {
   PowerPlantModel(
       {required plantId,

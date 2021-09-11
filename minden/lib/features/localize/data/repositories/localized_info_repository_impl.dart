@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
-import 'package:minden/features/localize/domain/entities/localized_info.dart';
+import 'package:minden/features/localize/domain/entities/localized.dart';
 import 'package:minden/features/localize/domain/repositories/localized_repository.dart';
 
 // data - repository
@@ -15,7 +15,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
   });
 
   @override
-  Future<Either<Failure, LocalizedInfo>> getLocalizedInfo(
+  Future<Either<Failure, Localized>> getLocalizedInfo(
       String languageCode) async {
     try {
       final localizedInfo =
@@ -28,7 +28,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
   }
 
   @override
-  Future<Either<Failure, LocalizedInfo>> updateLocalizedInfo(
+  Future<Either<Failure, Localized>> updateLocalizedInfo(
       String languageCode) async {
     try {
       final localizedInfo = await dataSource.updateLocalizedInfo(languageCode);

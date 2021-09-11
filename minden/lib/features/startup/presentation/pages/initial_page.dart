@@ -189,8 +189,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override

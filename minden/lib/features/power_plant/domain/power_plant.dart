@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// 生産者情報
+@Deprecated('UI側で利用するモデル変更されたら削除')
 class PowerPlant extends Equatable {
   /// 生産者ID
   final String plantId;
