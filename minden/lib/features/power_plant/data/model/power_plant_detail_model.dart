@@ -1,8 +1,8 @@
-import 'package:minden/features/power_plant/domain/entities/public_power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 
-class PublicPowerPlantDetailModel extends PublicPowerPlantDetail {
-  const PublicPowerPlantDetailModel({
-    required String id,
+class PowerPlantDetailModel extends PowerPlantDetail {
+  const PowerPlantDetailModel({
+    required String plantId,
     required String areaCode,
     required String name,
     required String viewAddress,
@@ -34,8 +34,12 @@ class PublicPowerPlantDetailModel extends PublicPowerPlantDetail {
     String? image3,
     String? image4,
     String? image5,
+    String? shortCatchphrase,
+    String? catchphrase,
+    String? thankYouMessage,
+    String? thankYouImage,
   }) : super(
-          id: id,
+          plantId: plantId,
           areaCode: areaCode,
           name: name,
           viewAddress: viewAddress,
@@ -67,11 +71,15 @@ class PublicPowerPlantDetailModel extends PublicPowerPlantDetail {
           image3: image3,
           image4: image4,
           image5: image5,
+          shortCatchphrase: shortCatchphrase,
+          catchphrase: catchphrase,
+          thankYouMessage: thankYouMessage,
+          thankYouImage: thankYouImage,
         );
 
-  factory PublicPowerPlantDetailModel.fromJson(Map<String, dynamic> json) {
-    return PublicPowerPlantDetailModel(
-      id: json['id'],
+  factory PowerPlantDetailModel.fromJson(Map<String, dynamic> json) {
+    return PowerPlantDetailModel(
+      plantId: json['plantId'],
       areaCode: json['areaCode'],
       name: json['name'],
       viewAddress: json['viewAddress'],
@@ -103,6 +111,10 @@ class PublicPowerPlantDetailModel extends PublicPowerPlantDetail {
       image3: json['image3'],
       image4: json['image4'],
       image5: json['image5'],
+      shortCatchphrase: json['shortCatchphrase'],
+      catchphrase: json['catchphrase'],
+      thankYouMessage: json['thankYouMessage'],
+      thankYouImage: json['thankYouImage'],
     );
   }
 }

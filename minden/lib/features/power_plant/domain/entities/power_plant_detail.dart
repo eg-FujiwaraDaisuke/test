@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 /// 顔の見える発電所情報（詳細）
-class PublicPowerPlantDetail extends Equatable {
-  const PublicPowerPlantDetail({
-    required this.id,
+class PowerPlantDetail extends Equatable {
+  const PowerPlantDetail({
+    required this.plantId,
     required this.areaCode,
     required this.name,
     required this.viewAddress,
@@ -35,10 +35,14 @@ class PublicPowerPlantDetail extends Equatable {
     this.image3,
     this.image4,
     this.image5,
+    this.shortCatchphrase,
+    this.catchphrase,
+    this.thankYouMessage,
+    this.thankYouImage,
   });
 
   /// MP番号
-  final String id;
+  final String plantId;
 
   /// 電力会社エリアコード
   /// "01" 〜 "10"
@@ -157,8 +161,20 @@ class PublicPowerPlantDetail extends Equatable {
   /// S3のURL
   final String? image5;
 
+  /// 短いキャッチフレーズ
+  final String? shortCatchphrase;
+
+  /// キャッチコピー
+  final String? catchphrase;
+
+  /// 応援のお礼メッセージ
+  final String? thankYouMessage;
+
+  /// 応援のお礼イメージ
+  final String? thankYouImage;
+
   @override
   List<Object> get props => [
-        id,
+        plantId,
       ];
 }
