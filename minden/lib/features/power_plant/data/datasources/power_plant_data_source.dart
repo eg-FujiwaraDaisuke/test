@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
+
+final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
+    (ref) => PowerPlantDataSourceImpl(client: http.Client()));
 
 abstract class PowerPlantDataSource {
   Future<PowerPlantsResponseModel> getPowerPlant(String tagId);
