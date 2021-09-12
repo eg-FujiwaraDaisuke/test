@@ -42,7 +42,7 @@ class DebugPage extends StatelessWidget {
                 _generateNavigatorPush(context, 'ログイン パスワードリセット',
                     (context) => ResetPasswordPage(), '/login/resetPassword'),
                 _generateNavigatorPush(context, 'ホーム - トップ',
-                    (context) => HomeTopPage(), '/home/top'),
+                    (context) => PowerPlantHomePage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',
                     (context) => UserPage(), '/user/matching'),
                 _generateNavigatorPush(context, 'マイページ - プロフィール',

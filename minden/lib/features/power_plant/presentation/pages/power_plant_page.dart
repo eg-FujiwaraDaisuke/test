@@ -3,63 +3,115 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
+class PowerPlantHomeTabData {
+  PowerPlantHomeTabData({
+    required this.tabName,
+    required this.tabPage,
+  });
+
+  late final String tabName;
+  late final WidgetBuilder tabPage;
+}
+
 /// ホーム - トップ
-class HomeTopPage extends StatelessWidget {
+class PowerPlantHomePage extends StatelessWidget {
+  PowerPlantHomePage({Key? key}) : super(key: key);
+
+  final tabs = [
+    PowerPlantHomeTabData(
+        tabName: '発電所一覧', tabPage: (_) => const PowerPlantList()),
+    PowerPlantHomeTabData(
+        tabName: '発電所を探す', tabPage: (_) => const SearchPowerPlant()),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    // TODO 初期データ取得
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context.read(powerPlantPageViewModelProvider.notifier).fetch();
     });
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: tabs.length,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // 電力会社一覧
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
-                child: Text(
-                  i18nTranslate(context, 'plant_list'),
-                  style: TextStyle(
-                    fontSize: 18,
-                    letterSpacing: 0.04,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF000000),
-                    height: 1.45,
-                  ),
-                ),
+              TabBar(
+                tabs: tabs
+                    .map((tab) => Text(
+                          tab.tabName,
+                          textAlign: TextAlign.center,
+                        ))
+                    .toList(),
               ),
-              _PowerPlantList(),
-              // ピックアップ
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
-                child: Text(
-                  i18nTranslate(context, 'pickup'),
-                  style: TextStyle(
-                    fontSize: 18,
-                    letterSpacing: 0.04,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF000000),
-                    height: 1.45,
-                  ),
-                ),
-              ),
-              PowerPlantPickup(),
-              // 大切にしていることから探す
-              // 電力会社一覧
             ],
           ),
+          backgroundColor: Colors.white,
         ),
+        body: SafeArea(
+          child: TabBarView(
+            children: tabs.map((tab) => tab.tabPage(context)).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchPowerPlant extends ConsumerWidget {
+  const SearchPowerPlant({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final data = watch(powerPlantPageViewModelProvider);
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 電力会社一覧（旧）
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            child: Text(
+              i18nTranslate(context, 'plant_list'),
+              style: const TextStyle(
+                fontSize: 18,
+                letterSpacing: 0.04,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF000000),
+                height: 1.45,
+              ),
+            ),
+          ),
+          _PowerPlantList(),
+          // ピックアップ
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            child: Text(
+              i18nTranslate(context, 'pickup'),
+              style: const TextStyle(
+                fontSize: 18,
+                letterSpacing: 0.04,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF000000),
+                height: 1.45,
+              ),
+            ),
+          ),
+          PowerPlantPickup(),
+          // 大切にしていることから探す
+          // 電力会社一覧
+        ],
       ),
     );
   }
@@ -72,7 +124,7 @@ class _PowerPlantList extends ConsumerWidget {
     final data = watch(powerPlantPageViewModelProvider);
 
     return Column(
-      children: data.value.map((p) => _generateListItem(p)).toList(),
+      children: data.value.map(_generateListItem).toList(),
     );
   }
 
@@ -81,10 +133,9 @@ class _PowerPlantList extends ConsumerWidget {
       height: 134,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
         children: [
           // 画像
-          Flexible(
+          const Flexible(
             flex: 5,
             child: _PowerPlantSummaryImage(),
           ),
@@ -102,14 +153,14 @@ class _PowerPlantList extends ConsumerWidget {
 /// 電力会社画像
 /// 画像左上にNEWマークを表示するスタイル
 class _PowerPlantSummaryImage extends StatelessWidget {
-  final String imageUrl;
-  final bool isNew;
-
   const _PowerPlantSummaryImage({
     Key? key,
     this.imageUrl = 'assets/images/sample/power_plant_sample.png',
     this.isNew = true,
   }) : super(key: key);
+
+  final String imageUrl;
+  final bool isNew;
 
   @override
   Widget build(BuildContext context) {
@@ -131,17 +182,17 @@ class _PowerPlantSummaryImage extends StatelessWidget {
 
 /// 電力会社詳細
 class _PowerPlantInfo extends StatelessWidget {
-  final PowerPlant powerPlant;
-
   const _PowerPlantInfo({
     Key? key,
     required this.powerPlant,
   }) : super(key: key);
 
+  final PowerPlant powerPlant;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 2, bottom: 2, left: 8),
+      padding: const EdgeInsets.only(top: 2, bottom: 2, left: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -150,7 +201,7 @@ class _PowerPlantInfo extends StatelessWidget {
             powerPlant.name,
             style: _generateTextStyle(14, FontWeight.w500),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // 発電所スペック
           Row(
             children: [
@@ -158,7 +209,7 @@ class _PowerPlantInfo extends StatelessWidget {
                 powerPlant.powerGenerationMethod,
                 style: _generateTextStyle(9, FontWeight.w500),
               ),
-              SizedBox(width: 24),
+              const SizedBox(width: 24),
               Row(
                 children: [
                   SvgPicture.asset(
@@ -166,14 +217,14 @@ class _PowerPlantInfo extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                     width: 10,
                   ),
-                  SizedBox(width: 2),
+                  const SizedBox(width: 2),
                   Text(
                     '${powerPlant.generationCapacity}kWh',
                     style: _generateTextStyle(9, FontWeight.w500),
                   ),
                 ],
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Row(
                 children: [
                   SvgPicture.asset(
@@ -181,7 +232,7 @@ class _PowerPlantInfo extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                     width: 7,
                   ),
-                  SizedBox(width: 2),
+                  const SizedBox(width: 2),
                   Text(
                     '所在地 ${powerPlant.viewAddress}',
                     style: _generateTextStyle(9, FontWeight.w500),
@@ -190,7 +241,7 @@ class _PowerPlantInfo extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // 発電所説明
           Text(
             '米沢米の田んぼの上にソーラーパネルを設置した発電所。農薬を減らしておいしいお米をつくっている。',
@@ -198,10 +249,9 @@ class _PowerPlantInfo extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: _generateTextStyle(12, FontWeight.w500),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // ユーザーレビュー
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // TODO: svgにユーザー名を含まない形でassetを用意する必要がある
               Stack(alignment: AlignmentDirectional.bottomCenter, children: [
@@ -213,7 +263,7 @@ class _PowerPlantInfo extends StatelessWidget {
                   style: _generateTextStyle(5, FontWeight.w400),
                 )
               ]),
-              SizedBox(width: 2),
+              const SizedBox(width: 2),
               Flexible(
                 child: Text(
                   'お客様の声お客様の声お客様の声お客様の声お客様の声お客様の声'
@@ -236,7 +286,7 @@ class _PowerPlantInfo extends StatelessWidget {
       letterSpacing: 0.04,
       fontFamily: 'NotoSansJP',
       fontWeight: fontWeight,
-      color: Color(0xFF828282),
+      color: const Color(0xFF828282),
       // NOTE: デザイン通りの指定だと、高さが134pxを超えてしまうため、要調整
       height: 1.22,
     );
