@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
@@ -38,106 +39,161 @@ class PowerPlantDetailPage extends ConsumerWidget {
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              if (data.value == null) Container(),
-              if (data.value != null) _generateDetail(data.value!)
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (data.value == null) Container(),
+                  if (data.value != null) _generateDetail(data.value!),
+                ],
+              ),
+            ),
+            // この発電所を応援する
+            Container(
+              height: 82,
+              padding: const EdgeInsets.only(bottom: 20),
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                begin: FractionalOffset.topCenter,
+                end: FractionalOffset.bottomCenter,
+                colors: [
+                  Color(0xFFFF8C00),
+                  Color(0xFFFFC277),
+                ],
+                stops: [
+                  0.0,
+                  1.0,
+                ],
+              )),
+              child: Center(
+                child: InkWell(
+                  child: OutlinedButton(
+                    onPressed: () => {logD('この発電所を応援する')},
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(42),
+                      ),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+                      child: Text(
+                        'この発電所を応援する',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          height: 1.48,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _generateDetail(PowerPlantDetail detail) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Divider(
-            height: 1,
-            color: Color(0xFFE2E2E2),
-          ),
-          const SizedBox(height: 15),
-          // 発電所名
-          Text(
-            detail.name,
-            style: const TextStyle(
-              fontSize: 17,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF575292),
-              height: 1.43,
-            ),
-          ),
-          // 所在地
-          const SizedBox(height: 20),
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                'assets/images/power_plant/location.svg',
-                width: 13,
-                height: 15,
+              const Divider(
+                height: 1,
+                color: Color(0xFFE2E2E2),
               ),
-              const SizedBox(width: 3),
+              const SizedBox(height: 15),
+              // 発電所名
               Text(
-                detail.viewAddress,
+                detail.name,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 17,
                   fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFA7A7A7),
-                  height: 1.48,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF575292),
+                  height: 1.43,
                 ),
               ),
-            ],
-          ),
-          // 発電方法
-          const SizedBox(height: 14),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  detail.powerGenerationMethod,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF7D7E7F),
-                    height: 1.48,
+              // 所在地
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/power_plant/location.svg',
+                    width: 13,
+                    height: 15,
                   ),
-                ),
+                  const SizedBox(width: 3),
+                  Text(
+                    detail.viewAddress,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFA7A7A7),
+                      height: 1.48,
+                    ),
+                  ),
+                ],
               ),
-              const Text(
-                '発電出力 / ',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF7D7E7F),
-                  height: 1.48,
-                ),
+              // 発電方法
+              const SizedBox(height: 14),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      detail.powerGenerationMethod,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'NotoSansJP',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF7D7E7F),
+                        height: 1.48,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    '発電出力 / ',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF7D7E7F),
+                      height: 1.48,
+                    ),
+                  ),
+                  Text(
+                    '${detail.generationCapacity}kWh',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF7D7E7F),
+                      height: 1.48,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                '${detail.generationCapacity}kWh',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF7D7E7F),
-                  height: 1.48,
-                ),
-              ),
+              const SizedBox(height: 45),
+              _generateDetailTags(),
+              _generateDetailMessages(detail),
+              const SizedBox(height: 47),
             ],
           ),
-          const SizedBox(height: 45),
-          _generateDetailTags(),
-          _generateDetailMessages(detail),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
