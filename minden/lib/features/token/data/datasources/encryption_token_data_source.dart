@@ -1,8 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+
+final encryptionTokenDataSourceProvider = Provider<EncryptionTokenDataSource>(
+    (ref) => const EncryptionTokenDataSourceImpl(
+        secureStorage: FlutterSecureStorage()));
 
 /// 暗号化して保存しているTokenを提供するDataSource
 abstract class EncryptionTokenDataSource {
