@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
@@ -30,69 +31,99 @@ class PowerPlantDetailPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [],
-        ),
-        backgroundColor: Colors.white,
-      ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              flexibleSpace: FlexibleSpaceBar(
+                background: PowerPlantPickup(),
+              ),
+              expandedHeight: 282,
+              backgroundColor: Colors.transparent,
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                <Widget>[
+                  Stack(
+                    children: [
+                      // 画像
+                      SizedBox(
+                        height: 140,
+                        width: double.infinity,
+                        child: Image.asset(
+                          'assets/images/power_plant/power_plant_header_bg.png',
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                      // メッセージ
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 28,
+                          top: 24,
+                          right: 24,
+                          bottom: 56,
+                        ),
+                        child: Text(
+                          data.value!.catchphrase!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF575292),
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   if (data.value == null) Container(),
                   if (data.value != null) _generateDetail(data.value!),
-                ],
-              ),
-            ),
-            // この発電所を応援する
-            Container(
-              height: 82,
-              padding: const EdgeInsets.only(bottom: 20),
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter,
-                colors: [
-                  Color(0xFFFF8C00),
-                  Color(0xFFFFC277),
-                ],
-                stops: [
-                  0.0,
-                  1.0,
-                ],
-              )),
-              child: Center(
-                child: InkWell(
-                  child: OutlinedButton(
-                    onPressed: () => {logD('この発電所を応援する')},
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(42),
-                      ),
-                      side: const BorderSide(color: Colors.white),
-                    ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 48, vertical: 12),
-                      child: Text(
-                        'この発電所を応援する',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          height: 1.48,
+                  // この発電所を応援する
+                  Container(
+                    height: 82,
+                    padding: const EdgeInsets.only(bottom: 20),
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                      begin: FractionalOffset.topCenter,
+                      end: FractionalOffset.bottomCenter,
+                      colors: [
+                        Color(0xFFFF8C00),
+                        Color(0xFFFFC277),
+                      ],
+                      stops: [
+                        0.0,
+                        1.0,
+                      ],
+                    )),
+                    child: Center(
+                      child: InkWell(
+                        child: OutlinedButton(
+                          onPressed: () => {logD('この発電所を応援する')},
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(42),
+                            ),
+                            side: const BorderSide(color: Colors.white),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 48, vertical: 12),
+                            child: Text(
+                              'この発電所を応援する',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                height: 1.48,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -109,11 +140,6 @@ class PowerPlantDetailPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(
-                height: 1,
-                color: Color(0xFFE2E2E2),
-              ),
-              const SizedBox(height: 15),
               // 発電所名
               Text(
                 detail.name,
