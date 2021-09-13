@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
@@ -36,11 +35,26 @@ class ProfilePage extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              final route = NoAnimationMaterialPageRoute(
-                builder: (context) => ProfileEditPage(),
-                settings: const RouteSettings(name: '/user/profile/edit'),
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      ProfileEditPage(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return const FadeUpwardsPageTransitionsBuilder()
+                        .buildTransitions(
+                            MaterialPageRoute(
+                                builder: (context) => ProfileEditPage(),
+                                settings: const RouteSettings(
+                                    name: '/user/profile/edit')),
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child);
+                  },
+                ),
               );
-              Navigator.push(context, route);
             },
             child: Container(
               width: 90,
