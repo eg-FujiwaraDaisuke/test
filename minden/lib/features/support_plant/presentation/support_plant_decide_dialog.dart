@@ -4,10 +4,10 @@ import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/utile.dart';
 
-class SupportPlantDialog {
+class SupportPlantDecideDialog {
   final BuildContext context;
 
-  SupportPlantDialog({
+  SupportPlantDecideDialog({
     required this.context,
   }) : super();
 
@@ -54,23 +54,7 @@ class SupportPlantDialog {
                     const SizedBox(
                       height: 12,
                     ),
-                    Container(
-                      width: 286,
-                      height: 80,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            blurRadius: 4,
-                            offset: const Offset(0, 1),
-                          )
-                        ],
-                      ),
-                      child: _buildSelectedPlantListItem(),
-                    ),
+                    _buildSelectedPlantListItem(),
                     const SizedBox(
                       height: 25,
                     ),
@@ -112,31 +96,50 @@ class SupportPlantDialog {
   }
 
   Widget _buildSelectedPlantListItem() {
-    return Row(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          color: Colors.red,
-        ),
-        const SizedBox(
-          width: 27,
-        ),
-        SizedBox(
-          width: 157,
-          //TODO ここに発電所の名前が入ります。
-          child: Text(
-            'みつばち発電所みつばち発電所みつばち発電所',
-            style: TextStyle(
-              color: Color(0xFF575292),
-              fontSize: 13,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              height: calcFontHeight(fontSize: 13, lineHeight: 19.5),
+    return Container(
+      width: 286,
+      height: 80,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.25),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            child: Image.network(
+              'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
+              fit: BoxFit.cover,
             ),
           ),
-        )
-      ],
+          const SizedBox(
+            width: 27,
+          ),
+          SizedBox(
+            width: 157,
+            //TODO ここに発電所の名前が入ります。
+            child: Text(
+              'みつばち発電所みつばち発電所みつばち発電所',
+              style: TextStyle(
+                color: Color(0xFF575292),
+                fontSize: 13,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                height: calcFontHeight(fontSize: 13, lineHeight: 19.5),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 

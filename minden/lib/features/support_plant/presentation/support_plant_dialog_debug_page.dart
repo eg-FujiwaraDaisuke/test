@@ -3,6 +3,7 @@ import 'package:minden/features/support_participant/domain/entities/participant.
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 
 import 'package:minden/features/support_plant/presentation/support_plant_decide_dialog.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
 
 class SupportPlantDialogDebugPage extends StatelessWidget {
   const SupportPlantDialogDebugPage({Key? key}) : super(key: key);
@@ -16,19 +17,19 @@ class SupportPlantDialogDebugPage extends StatelessWidget {
             ElevatedButton(
               child: Text('契約件数1/応援0の場合'),
               onPressed: () {
-                SupportPlantDialog(context: context).showDialog();
+                SupportPlantDecideDialog(context: context).showDialog();
               },
             ),
             ElevatedButton(
               child: Text('契約件数1/応援1の場合'),
               onPressed: () {
-                SupportPlantDialog(context: context).showDialog();
+                SupportPlantSelectDialog(context: context).showDialog();
               },
             ),
             ElevatedButton(
               child: Text('契約件数2/応援2の場合'),
               onPressed: () {
-                SupportPlantDialog(context: context).showDialog();
+                SupportPlantSelectDialog(context: context).showDialog();
               },
             ),
             SizedBox(
