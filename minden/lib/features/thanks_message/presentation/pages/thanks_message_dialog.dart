@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:minden/features/thanks_message/domain/entities/thanks_message.dart';
 import 'package:minden/features/user/presentation/pages/custom_dialog_overlay.dart';
-import 'package:minden/features/user/presentation/pages/thanks_message.dart';
 
 class ThanksMessageDialog {
   final BuildContext context;

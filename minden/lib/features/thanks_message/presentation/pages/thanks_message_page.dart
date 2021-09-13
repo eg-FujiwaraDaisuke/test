@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/thanks_message/domain/entities/thanks_message.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/thanks_message.dart';
-import 'package:minden/features/user/presentation/pages/thanks_message_dialog.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 import '../../../../utile.dart';
+import '../thanks_message_dialog.dart';
 
-class UserThanksMessagePage extends StatelessWidget {
+class ThanksMessagePage extends StatelessWidget {
   final data = ThanksMessageDamyData().damyData;
 
   @override
@@ -17,7 +17,7 @@ class UserThanksMessagePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0.0,
+        elevation: 0,
         leading: _buildBackLeadingButton(context),
         title: Text(
           i18nTranslate(context, 'user_menu_thanks_message'),

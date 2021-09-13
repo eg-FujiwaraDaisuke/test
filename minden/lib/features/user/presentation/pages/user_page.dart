@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/thanks_message/presentation/pages/thanks_message_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
-import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
+
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
 import '../../../../utile.dart';
@@ -273,7 +274,7 @@ class _MenuMessageItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         final route = MaterialPageRoute(
-          builder: (context) => UserThanksMessagePage(),
+          builder: (context) => ThanksMessagePage(),
           settings: const RouteSettings(name: '/user/message'),
         );
 
