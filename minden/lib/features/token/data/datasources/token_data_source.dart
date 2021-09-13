@@ -1,10 +1,17 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
+
+final tokenDataSourceProvider = Provider<TokenDataSource>((ref) =>
+    TokenDataSourceImpl(
+        client: http.Client(),
+        encryptionTokenDataSource:
+            ref.read(encryptionTokenDataSourceProvider)));
 
 abstract class TokenDataSource {
   /// appTokenを取得する

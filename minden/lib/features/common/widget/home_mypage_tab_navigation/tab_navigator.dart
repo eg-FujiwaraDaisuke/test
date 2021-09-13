@@ -15,7 +15,7 @@ class TabNavigator extends StatelessWidget {
 
   Map<TabItem, WidgetBuilder> _routeBuliders(BuildContext context) {
     return {
-      TabItem.home: (context) => HomeTopPage(),
+      TabItem.home: (context) => PowerPlantHomePage(),
       TabItem.mypage: (context) => UserPage(),
     };
   }

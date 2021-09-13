@@ -17,7 +17,7 @@ class LoginFailure extends Failure {}
 class RenewTokenFailure extends Failure {}
 
 /// 顔の見える発電性情報取得エラー
-class PublicPowerPlantFailure extends Failure {}
+class PowerPlantFailure extends Failure {}
 
 class SupportVersionFailure extends Failure {
   SupportVersionFailure({

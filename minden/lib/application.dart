@@ -134,7 +134,7 @@ class Application extends StatelessWidget {
       '/tutorial': (_) => TutorialPage(),
       '/home': (_) => HomePage(),
       '/login': (_) => LoginPage(),
-      '/home/top': (_) => HomeTopPage(),
+      '/home/top': (_) => PowerPlantHomePage(),
       '/my_page/matching': (_) => MatchingPage(),
       '/user': (_) => UserPage(),
       '/user/profile': (_) => UserProfilePage(),
