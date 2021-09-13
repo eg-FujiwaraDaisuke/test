@@ -1,12 +1,12 @@
-import 'package:minden/features/startup/domain/entities/startup_info.dart';
+import 'package:minden/features/startup/domain/entities/startup.dart';
 
 // data - model
 
 // 実装ガイド
 // entityとmodelを定義するのは「扱う層が異なるため」と考えるのが良さそうです。
 // （ドメイン層でmodelは扱わないし、データ層でentityを扱わないようにするため）
-class StartupInfoModel extends StartupInfo {
-  StartupInfoModel({
+class StartupModel extends Startup {
+  StartupModel({
     required String storeUrl,
     required bool hasLatestVersion,
     required String latestVersion,
@@ -17,8 +17,8 @@ class StartupInfoModel extends StartupInfo {
             latestVersion: latestVersion,
             hasTutorial: hasTutorial);
 
-  factory StartupInfoModel.fromJson(Map<String, dynamic> json) {
-    return StartupInfoModel(
+  factory StartupModel.fromJson(Map<String, dynamic> json) {
+    return StartupModel(
         storeUrl: json["store_url"],
         hasLatestVersion: json["has_latest_version"],
         latestVersion: json["latest_version"],

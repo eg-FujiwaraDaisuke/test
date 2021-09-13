@@ -29,9 +29,6 @@ class ProfileModel extends Profile {
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel.fromProfile(Profile.fromJson(json));
   }
-
-// final List<SelectPowerPlantModel> supports;
-
 }
 
 class TagModel extends Tag {
@@ -48,37 +45,3 @@ class TagModel extends Tag {
     return TagModel(tagId: tag["tagId"], tagName: tag["tagName"]);
   }
 }
-
-// class SelectPowerPlantModel extends SelectPowerPlant {
-//   const SelectPowerPlantModel({
-//     required plantId,
-//     required name,
-//     required images,
-//     required catchphrase,
-//     required location,
-//     required capacity,
-//     required powerGenerationMethods,
-//     required isNewArrivals,
-//   }) : super(
-//       plantId: plantId,
-//       name: name,
-//       images: images,
-//       catchphrase: catchphrase,
-//       location: location,
-//       capacity: capacity,
-//       powerGenerationMethods: powerGenerationMethods,
-//       isNewArrivals: isNewArrivals);
-//
-//   factory SelectPowerPlantModel.fromJson(Map<String, dynamic> user) {
-//     return SelectPowerPlantModel(
-//         plantId: "",
-//         images: [],
-//         catchphrase: "",
-//         location: "",
-//         capacity: "",
-//         powerGenerationMethods: "",
-//         isNewArrivals: "", name: "null");
-//     )
-//   }
-//
-// }

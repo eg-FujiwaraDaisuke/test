@@ -44,7 +44,7 @@ class UserProfilePage extends StatelessWidget {
                 builder: (context) => UserProfileEditPage(),
                 settings: RouteSettings(name: "/user/profile/edit"),
               );
-              Navigator.pushReplacement(context, route);
+              Navigator.push(context, route);
             },
             child: Container(
               width: 90,

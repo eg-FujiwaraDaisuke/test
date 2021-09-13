@@ -10,6 +10,7 @@ class ImagePickerBottomSheet {
   static void show({
     required BuildContext context,
     required Function(File file) imageHandler,
+    CropStyle cropStyle = CropStyle.rectangle,
     int clipWidth = 700,
     int clipHeight = 700,
   }) {
@@ -22,26 +23,16 @@ class ImagePickerBottomSheet {
                   child: Text(i18nTranslate(context, 'image_select_gallery')),
                   onPressed: () {
                     Navigator.pop(context);
-                    _pickImage(
-                      context,
-                      ImageSource.gallery,
-                      imageHandler,
-                      clipWidth,
-                      clipHeight,
-                    );
+                    _pickImage(context, ImageSource.gallery, imageHandler,
+                        clipWidth, clipHeight, cropStyle);
                   },
                 ),
                 CupertinoActionSheetAction(
                   child: Text(i18nTranslate(context, 'image_select_camera')),
                   onPressed: () {
                     Navigator.pop(context);
-                    _pickImage(
-                      context,
-                      ImageSource.camera,
-                      imageHandler,
-                      clipWidth,
-                      clipHeight,
-                    );
+                    _pickImage(context, ImageSource.camera, imageHandler,
+                        clipWidth, clipHeight, cropStyle);
                   },
                 )
               ],
@@ -62,13 +53,8 @@ class ImagePickerBottomSheet {
                   title: Text(i18nTranslate(context, 'image_select_gallery')),
                   onTap: () {
                     Navigator.pop(context);
-                    _pickImage(
-                      context,
-                      ImageSource.gallery,
-                      imageHandler,
-                      clipWidth,
-                      clipHeight,
-                    );
+                    _pickImage(context, ImageSource.gallery, imageHandler,
+                        clipWidth, clipHeight, cropStyle);
                   },
                 ),
                 ListTile(
@@ -81,6 +67,7 @@ class ImagePickerBottomSheet {
                       imageHandler,
                       clipWidth,
                       clipHeight,
+                      cropStyle,
                     );
                   },
                 ),
@@ -101,12 +88,14 @@ class ImagePickerBottomSheet {
     Function(File file) fileHandler,
     int clipWidth,
     int clipHeight,
+    CropStyle cropStyle,
   ) async {
     final mediaFile = await ImagePicker.platform.getImage(source: source);
     if (mediaFile == null) {
       return;
     } else {
       final File? cropped = await ImageCropper.cropImage(
+        cropStyle: cropStyle,
         sourcePath: mediaFile.path,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         compressQuality: 100,
@@ -114,15 +103,17 @@ class ImagePickerBottomSheet {
         maxHeight: clipHeight,
         compressFormat: ImageCompressFormat.jpg,
         androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.deepOrange,
-          toolbarTitle: 'crop',
-          statusBarColor: Colors.deepOrange.shade900,
-          backgroundColor: Colors.white,
+          toolbarColor: Colors.white,
+          statusBarColor: Colors.black,
+          toolbarTitle: '画像を編集',
+          backgroundColor: Colors.black,
         ),
         iosUiSettings: IOSUiSettings(minimumAspectRatio: 1.0),
       );
 
-      fileHandler(cropped!);
+      if (cropped != null) {
+        fileHandler(cropped);
+      }
     }
   }
 }

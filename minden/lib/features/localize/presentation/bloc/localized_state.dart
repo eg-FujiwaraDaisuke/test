@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:minden/features/localize/domain/entities/localized_info.dart';
+import 'package:minden/features/localize/domain/entities/localized.dart';
 
 @immutable
 abstract class LocalizedState extends Equatable {
@@ -14,7 +14,7 @@ class LocalizedStateEmpty extends LocalizedState {}
 class LocalizedStateLoading extends LocalizedState {}
 
 class LocalizedStateLoaded extends LocalizedState {
-  final LocalizedInfo info;
+  final Localized info;
 
   LocalizedStateLoaded({required this.info});
 
