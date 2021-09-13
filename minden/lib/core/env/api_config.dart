@@ -1,4 +1,6 @@
-import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
+import 'dart:io';
+
+import 'package:minden/core/success/account.dart';
 import 'package:minden/injection_container.dart';
 
 import 'config.dart';
@@ -8,19 +10,19 @@ class ApiConfig {
     Config.kDevFlavor: {
       'url': 'https://www.dev.minapp.minden.co.jp',
       'headers': {
-        'content-type': 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
       }
     },
     Config.kStagingFlavor: {
       'url': 'https://www.stg.minapp.minden.co.jp',
       'headers': {
-        'content-type': 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
       }
     },
     Config.kProdFlavor: {
       'url': 'https://www.minapp.minden.co.jp',
       'headers': {
-        'content-type': 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
       }
     }
   };
@@ -29,12 +31,11 @@ class ApiConfig {
     return _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
   }
 
-  static Future<Map<String, String>> tokenHeader() async {
+  static Map<String, String> tokenHeader() {
     final env = _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
     final defaultHeaders = env['headers']! as Map<String, String>;
-    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
-    final refreshToken =
-        await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+    final appToken = si<Account>().appToken;
+    final refreshToken = si<Account>().refreshToken;
     return {
       'appToken': appToken,
       'refreshToken': refreshToken,

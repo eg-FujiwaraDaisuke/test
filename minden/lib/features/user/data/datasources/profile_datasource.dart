@@ -14,6 +14,10 @@ abstract class ProfileDataSource {
     required String bio,
     required String wallPaper,
   });
+
+  Future<ProfileModel> get({
+    required String userId,
+  });
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -21,7 +25,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   final http.Client client;
 
-  String get _v1Path => '/api/v1/profile/edit';
+  String get _updatePath => '/api/v1/profile/edit';
+
+  String get _getPath => '/api/v1/profile';
 
   @override
   Future<ProfileModel> update({
@@ -31,7 +37,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     required String wallPaper,
   }) async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final param = {};
     if (name.isNotEmpty) {
       param['name'] = name;
@@ -48,10 +54,35 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
     final body = json.encode(param);
     final response = await client.post(
-        Uri.parse((env['url']! as String) + _v1Path),
+        Uri.parse((env['url']! as String) + _updatePath),
         headers: headers,
         body: body);
 
+    if (response.statusCode == 200) {
+      return ProfileModel.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ProfileModel> get({required String userId}) async {
+    final env = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+
+    final queryParameters = {
+      'userId': userId,
+    };
+    var url = Uri.parse((env['url']! as String) + _getPath);
+    url = url.replace(queryParameters: queryParameters);
+    final response = await client.get(
+      url,
+      headers: headers,
+    );
+
+    print("${response.body}");
     if (response.statusCode == 200) {
       return ProfileModel.fromJson(json.decode(response.body));
     } else if (response.statusCode == 401) {

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/repositories/login_repository.dart';
-import 'package:minden/features/login/domain/usecases/get_login_user.dart';
+import 'package:minden/features/login/domain/usecases/login_usecase.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:mockito/mockito.dart';
 

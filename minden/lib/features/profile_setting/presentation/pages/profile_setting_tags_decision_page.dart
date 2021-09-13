@@ -11,7 +11,7 @@ import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
-import 'package:minden/features/profile_setting/domain/usecases/update_tag.dart';
+import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';

@@ -8,7 +8,7 @@ import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecase/usecase.dart';
 import '../../domain/entities/startup.dart';
-import '../../domain/usecases/get_startup_info.dart';
+import '../../domain/usecases/startup_usecase.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
   final GetStartupInfo usecase;

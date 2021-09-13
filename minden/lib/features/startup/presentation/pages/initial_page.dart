@@ -14,7 +14,7 @@ import 'package:minden/features/localize/presentation/bloc/localized_state.dart'
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
-import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
+import 'package:minden/features/startup/domain/usecases/startup_usecase.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_bloc.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';

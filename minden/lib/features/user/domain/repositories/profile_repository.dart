@@ -9,4 +9,8 @@ abstract class ProfileRepository {
     required String bio,
     required String wallPaper,
   });
+
+  Future<Either<Failure, Profile>> get({
+    required String userId,
+  });
 }

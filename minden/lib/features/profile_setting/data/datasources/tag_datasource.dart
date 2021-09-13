@@ -41,7 +41,7 @@ class TagDataSourceImpl implements TagDataSource {
   @override
   Future<Success> updateTags({required List<int> tags}) async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final body =
         json.encode({"tags": tags.map<String>((e) => e.toString()).toList()});
 
@@ -63,7 +63,7 @@ class TagDataSourceImpl implements TagDataSource {
   @override
   Future<List<TagCategory>> getAllTags() async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final response = await client.get(
       Uri.parse((env['url']! as String) + _getAllTagsPath),
       headers: headers,
@@ -85,7 +85,7 @@ class TagDataSourceImpl implements TagDataSource {
   @override
   Future<List<Tag>> getTags() async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final response = await client.get(
       Uri.parse((env['url']! as String) + _getTagsPath),
       headers: headers,
@@ -110,7 +110,7 @@ class TagDataSourceImpl implements TagDataSource {
   @override
   Future<List<Tag>> getPlantTags(String plantId) async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final response = await client.get(
       Uri.parse((env['url']! as String) + _getPlantTagsPath),
       headers: headers,
@@ -128,7 +128,7 @@ class TagDataSourceImpl implements TagDataSource {
   @override
   Future<List<Tag>> getPlantsTags() async {
     final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+    final headers = ApiConfig.tokenHeader();
     final response = await client.get(
       Uri.parse((env['url']! as String) + _getPlantsTagsPath),
       headers: headers,

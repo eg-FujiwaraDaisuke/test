@@ -39,7 +39,7 @@ class Profile extends Equatable {
       'icon': icon,
       'bio': bio,
       'wallPaper': wallPaper,
-      'tags': tags.map((e) => e.toJson())
+      'tags': tags.map((e) => e.toJson()).toList()
     };
   }
 

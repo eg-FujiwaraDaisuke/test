@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
 
 /// 暗号化して保存しているTokenを提供するDataSource
 abstract class EncryptionTokenDataSource {
@@ -9,9 +10,13 @@ abstract class EncryptionTokenDataSource {
 
   Future<String> getRefreshToken();
 
+  Future<String> restoreUser();
+
   Future<void> setAppToken(String appToken);
 
   Future<void> setRefreshToken(String refreshToken);
+
+  Future<void> storeUser(String userJson);
 }
 
 class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
@@ -26,6 +31,8 @@ class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
   static const _appTokenKey = 'app_token_key';
 
   static const _refreshTokenKey = 'refresh_token_key';
+
+  static const _userKey = 'user_key';
 
   final FlutterSecureStorage secureStorage;
 
@@ -44,6 +51,13 @@ class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
   }
 
   @override
+  Future<String> restoreUser() async {
+    final box = await _getEncryptedBox();
+    final String userJson = box.get(_userKey);
+    return userJson;
+  }
+
+  @override
   Future<void> setAppToken(String appToken) async {
     final box = await _getEncryptedBox();
     await box.putAll({
@@ -56,6 +70,14 @@ class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
     final box = await _getEncryptedBox();
     await box.putAll({
       _refreshTokenKey: refreshToken,
+    });
+  }
+
+  @override
+  Future<void> storeUser(String userJson) async {
+    final box = await _getEncryptedBox();
+    await box.putAll({
+      _userKey: userJson,
     });
   }
 
