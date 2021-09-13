@@ -196,8 +196,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                         child: Image.asset(
                           'assets/images/profile_setting/character.png',
                           fit: BoxFit.contain,
-                          width: 92,
-                          height: 86,
+                          width: 69,
+                          height: 77,
                         ),
                       ),
                       Positioned(
