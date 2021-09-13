@@ -4,11 +4,13 @@ import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/utile.dart';
 
-class SupportPlantDecideDialog {
+class SupportPlantDecisionDialog {
   final BuildContext context;
+  final selectPowerPlant;
 
-  SupportPlantDecideDialog({
+  SupportPlantDecisionDialog({
     required this.context,
+    required this.selectPowerPlant,
   }) : super();
 
   void showDialog() {
@@ -27,9 +29,9 @@ class SupportPlantDecideDialog {
                 ),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       //TODO ここに発電所の名前が入ります。
-                      '「XXX発電所」',
+                      '「${selectPowerPlant.name}」',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFFF8C00),
@@ -71,11 +73,20 @@ class SupportPlantDecideDialog {
                     const SizedBox(
                       height: 32,
                     ),
-                    Button(onTap: () {}, text: '決定する', size: ButtonSize.S),
+                    Button(
+                        onTap: () {
+                          // TODO ここで応援APIを叩く
+                          _hideDialog();
+                        },
+                        text: '決定する',
+                        size: ButtonSize.S),
                     const SizedBox(
                       height: 12,
                     ),
-                    GestureDetector(onTap: _hideDialog, child: Text('キャンセル')),
+                    GestureDetector(
+                      onTap: () => _hideDialog,
+                      child: Text('キャンセル'),
+                    ),
                   ],
                 ),
               ),
@@ -117,7 +128,7 @@ class SupportPlantDecideDialog {
             width: 80,
             height: 80,
             child: Image.network(
-              'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
+              selectPowerPlant.image,
               fit: BoxFit.cover,
             ),
           ),
@@ -128,7 +139,7 @@ class SupportPlantDecideDialog {
             width: 157,
             //TODO ここに発電所の名前が入ります。
             child: Text(
-              'みつばち発電所みつばち発電所みつばち発電所',
+              selectPowerPlant.name,
               style: TextStyle(
                 color: Color(0xFF575292),
                 fontSize: 13,

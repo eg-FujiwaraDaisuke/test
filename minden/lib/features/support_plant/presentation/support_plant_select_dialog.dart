@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_decide_dialog.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/utile.dart';
 
@@ -162,7 +160,7 @@ class SupportPlantSelectDialog {
                           ? Button(
                               onTap: () {
                                 _hideDialog();
-                                SupportPlantDecideDialog(
+                                SupportPlantDecisionDialog(
                                   context: context,
                                   selectPowerPlant: selectPowerPlant,
                                 ).showDialog();

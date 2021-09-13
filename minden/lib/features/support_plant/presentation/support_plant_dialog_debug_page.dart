@@ -4,7 +4,7 @@ import 'package:minden/features/support_participant/domain/entities/participant.
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_plant/domain/entities/support.dart';
 
-import 'package:minden/features/support_plant/presentation/support_plant_decide_dialog.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
@@ -110,7 +110,7 @@ class _SupportPlantDialogDebugPageState
               onPressed: () {
                 // 契約件数１応援０の場合
                 if (userDammy.supportableNumber > registPowerPlants.length) {
-                  SupportPlantDecideDialog(
+                  SupportPlantDecisionDialog(
                           context: context,
                           selectPowerPlant: selectPowerPlantDammy)
                       .showDialog();
