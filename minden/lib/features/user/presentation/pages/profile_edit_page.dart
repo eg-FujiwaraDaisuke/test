@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
@@ -19,7 +20,7 @@ class ProfileEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF6F5EF),
+      backgroundColor: const Color(0xFFF6F5EF),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -32,8 +33,8 @@ class ProfileEditPage extends StatelessWidget {
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
@@ -43,7 +44,7 @@ class ProfileEditPage extends StatelessWidget {
             child: Container(
               width: 90,
               height: 44,
-              margin: EdgeInsets.only(right: 18),
+              margin: const EdgeInsets.only(right: 18),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
                 color: Colors.white,
@@ -52,12 +53,12 @@ class ProfileEditPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset('assets/images/user/check.svg'),
-                  SizedBox(
+                  const SizedBox(
                     width: 10.5,
                   ),
                   Text(
                     i18nTranslate(context, 'user_edit_complete'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 12,
                       fontFamily: 'NotoSansJP',
@@ -78,32 +79,30 @@ class ProfileEditPage extends StatelessWidget {
             child: Column(
               children: [
                 Stack(
-                  alignment: Alignment.center,
+                  alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,
                   children: [
                     _ProfileWallPaperEdit(),
                     Positioned(
-                      bottom: -44,
-                      child: _ProfileImageEdit(
+                      child: _ProfileIconEdit(
                         icon: data.icon,
-                        wallPaper: data.wallPaper,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 63,
                 ),
                 _ProfileNameEditForm(
                   name: data.name,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 33,
                 ),
                 _ProfileBioEditForm(
                   bio: data.bio,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 _ImportantTagsList(
@@ -117,8 +116,8 @@ class ProfileEditPage extends StatelessWidget {
     );
   }
 
-  void _prev(BuildContext context) async {
-    final isdiscard = await showDialog(
+  Future<void> _prev(BuildContext context) async {
+    final isDiscard = await showDialog(
       context: context,
       builder: (context) {
         return Platform.isIOS
@@ -129,15 +128,15 @@ class ProfileEditPage extends StatelessWidget {
                     context, 'profile_edit_alert_discard_confirm')),
                 actions: <Widget>[
                   CupertinoDialogAction(
-                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                     onPressed: () => Navigator.pop(context, false),
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                   ),
                   CupertinoDialogAction(
-                    child: Text(i18nTranslate(context, 'discard')),
                     isDestructiveAction: true,
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
+                    child: Text(i18nTranslate(context, 'discard')),
                   ),
                 ],
               )
@@ -148,21 +147,21 @@ class ProfileEditPage extends StatelessWidget {
                     context, 'profile_edit_alert_discard_confirm')),
                 actions: [
                   TextButton(
-                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                     onPressed: () => Navigator.pop(context, false),
+                    child: Text(i18nTranslate(context, 'cancel_katakana')),
                   ),
                   TextButton(
-                    child: Text(i18nTranslate(context, 'discard')),
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
+                    child: Text(i18nTranslate(context, 'discard')),
                   ),
                 ],
               );
       },
     );
 
-    if (isdiscard) {
+    if (isDiscard) {
       Navigator.pop(context);
     }
   }
@@ -180,23 +179,29 @@ class _ProfileWallPaperEdit extends StatefulWidget {
 class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   File? _image;
 
-  void _setImage(File cropedImage) {
+  void _setImage(File croppedImage) {
     setState(() {
-      _image = cropedImage == null ? _image : cropedImage;
+      _image = croppedImage ?? _image;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none,
       children: [
-        CustomPaint(
-          size: Size(MediaQuery.of(context).size.width, 168),
-          painter: WallPaperPainter(wallPaperImage: null),
+        Column(
+          children: [
+            CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, 168),
+              painter: WallPaperPainter(wallPaperImage: null),
+            ),
+            Container(
+              height: 44,
+            ),
+          ],
         ),
         Positioned(
-          bottom: 26,
+          bottom: 70,
           right: 55,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -205,7 +210,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                   context: context, imageHandler: _setImage);
             },
             child: Container(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10),
               child: Center(
                 child: SvgPicture.asset(
                   'assets/images/user/camera.svg',
@@ -221,25 +226,22 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   }
 }
 
-class _ProfileImageEdit extends StatefulWidget {
-  final String icon;
-  final String wallPaper;
-
-  _ProfileImageEdit({
+class _ProfileIconEdit extends StatefulWidget {
+  const _ProfileIconEdit({
     required this.icon,
-    required this.wallPaper,
   }) : super();
+  final String icon;
 
   @override
-  _ProfileImageEditState createState() => _ProfileImageEditState();
+  _ProfileIconEditState createState() => _ProfileIconEditState();
 }
 
-class _ProfileImageEditState extends State<_ProfileImageEdit> {
+class _ProfileIconEditState extends State<_ProfileIconEdit> {
   File? _image;
 
-  void _setImage(File cropedImage) {
+  void _setImage(File croppedImage) {
     setState(() {
-      _image = cropedImage == null ? _image : cropedImage;
+      _image = croppedImage ?? _image;
     });
   }
 
@@ -251,7 +253,7 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
           child: Container(
             width: 99,
             height: 99,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFFFF8C00),
               shape: BoxShape.circle,
             ),
@@ -260,7 +262,7 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
                 width: 93,
                 height: 93,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFB92),
+                  color: const Color(0xFFFFFB92),
                   shape: BoxShape.circle,
                   border: Border.all(
                     width: 3,
@@ -283,13 +285,15 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
           child: GestureDetector(
             onTap: () {
               ImagePickerBottomSheet.show(
-                  context: context, imageHandler: _setImage);
+                  context: context,
+                  imageHandler: _setImage,
+                  cropStyle: CropStyle.circle);
             },
             child: Container(
               width: 30,
               height: 30,
               decoration: BoxDecoration(
-                color: Color(0xFFFFFB92),
+                color: const Color(0xFFFFFB92),
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
                   color: Colors.white,
@@ -312,11 +316,10 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
 }
 
 class _ProfileNameEditForm extends StatelessWidget {
-  final String name;
-
   const _ProfileNameEditForm({
     required this.name,
   }) : super();
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -333,10 +336,10 @@ class _ProfileNameEditForm extends StatelessWidget {
             ),
             child: TextFormField(
               initialValue: name,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFF7C7C7C),
                 fontSize: 18,
                 fontFamily: 'NotoSansJP',
@@ -351,9 +354,8 @@ class _ProfileNameEditForm extends StatelessWidget {
 }
 
 class _ProfileBioEditForm extends StatelessWidget {
-  final bio;
-
   const _ProfileBioEditForm({required this.bio}) : super();
+  final bio;
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +363,7 @@ class _ProfileBioEditForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          i18nTranslate(context, 'profile_edit_salf_intro'),
+          i18nTranslate(context, 'profile_edit_self_intro'),
           style: TextStyle(
             color: Colors.black,
             fontSize: 14,
@@ -370,7 +372,7 @@ class _ProfileBioEditForm extends StatelessWidget {
             letterSpacing: calcLetterSpacing(letter: 4),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
         Form(
@@ -387,11 +389,11 @@ class _ProfileBioEditForm extends StatelessWidget {
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               initialValue: bio,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
               style: TextStyle(
-                color: Color(0xFF7C7C7C),
+                color: const Color(0xFF7C7C7C),
                 fontSize: 12,
                 fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.w400,
@@ -407,13 +409,12 @@ class _ProfileBioEditForm extends StatelessWidget {
 }
 
 class _ImportantTagsList extends StatelessWidget {
-  final List<Tag> tagsList;
-
   const _ImportantTagsList({required this.tagsList}) : super();
+  final List<Tag> tagsList;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 338,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -439,14 +440,14 @@ class _ImportantTagsList extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: Color(0xFFFF8C00),
+                      color: const Color(0xFFFF8C00),
                       width: 2,
                     ),
                   ),
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/images/user/add.svg',
-                      color: Color(0xFFFF8C00),
+                      color: const Color(0xFFFF8C00),
                       width: 7,
                       height: 7,
                     ),
@@ -455,22 +456,19 @@ class _ImportantTagsList extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
-          Container(
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              spacing: 5,
-              runSpacing: 10,
-              children: tagsList
-                  .map((tag) => ImportantTagListItem(
-                        tag: tag,
-                        onSelect: () {},
-                        isSelected: true,
-                      ))
-                  .toList(),
-            ),
+          Wrap(
+            spacing: 5,
+            runSpacing: 10,
+            children: tagsList
+                .map((tag) => ImportantTagListItem(
+                      tag: tag,
+                      onSelect: () {},
+                      isSelected: true,
+                    ))
+                .toList(),
           ),
         ],
       ),
