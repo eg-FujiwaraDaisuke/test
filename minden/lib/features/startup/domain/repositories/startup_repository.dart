@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/failure.dart';
-import 'package:minden/features/startup/domain/entities/startup_info.dart';
+import 'package:minden/features/startup/domain/entities/startup.dart';
 
 // domain - repository
 
@@ -15,5 +15,5 @@ import 'package:minden/features/startup/domain/entities/startup_info.dart';
 
 // ドメイン層では、repositoryはEntityを返すことと、エラーはFailureとして返すようにします。
 abstract class StartupRepository {
-  Future<Either<Failure, StartupInfo>> getStartupInfo();
+  Future<Either<Failure, Startup>> getStartupInfo();
 }

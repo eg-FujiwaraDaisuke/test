@@ -1,20 +1,20 @@
 import 'package:minden/core/error/exceptions.dart';
-import 'package:minden/features/localize/data/models/localized_info_model.dart';
+import 'package:minden/features/localize/data/models/localized_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // data - datasource
 
 abstract class LocalizedInfoDataSource {
-  Future<LocalizedInfoModel> getLocalizedInfo({
+  Future<LocalizedModel> getLocalizedInfo({
     required String osLanguageCode,
   });
 
-  Future<LocalizedInfoModel> updateLocalizedInfo(String updateCode);
+  Future<LocalizedModel> updateLocalizedInfo(String updateCode);
 }
 
 class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
   @override
-  Future<LocalizedInfoModel> getLocalizedInfo({
+  Future<LocalizedModel> getLocalizedInfo({
     required String osLanguageCode,
   }) async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -25,13 +25,13 @@ class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
     if (languageCode.isEmpty) {
       throw LocalCacheException();
     }
-    return LocalizedInfoModel(languageCode: languageCode);
+    return LocalizedModel(languageCode: languageCode);
   }
 
   @override
-  Future<LocalizedInfoModel> updateLocalizedInfo(String updateCode) async {
+  Future<LocalizedModel> updateLocalizedInfo(String updateCode) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString("language_code", updateCode);
-    return LocalizedInfoModel(languageCode: updateCode);
+    return LocalizedModel(languageCode: updateCode);
   }
 }

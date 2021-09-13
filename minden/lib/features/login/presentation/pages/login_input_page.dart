@@ -5,9 +5,9 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/botton_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/home/presentation/pages/home_page.dart';
+import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
-import 'package:minden/features/login/presentation/pages/login_forgot_password_page.dart';
+
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
@@ -22,9 +22,7 @@ class LoginInputPage extends StatefulWidget {
 }
 
 class _LoginInputPageState extends State<LoginInputPage> {
-  bool _isAutoLogin = false;
   bool _isShowPassword = false;
-
   String _userLoginId = '';
   String _userLoginPassword = '';
 
@@ -54,7 +52,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
 
   void _login() {
     final bloc = BlocProvider.of<LoginBloc>(context);
-    bloc.add(GetLoginUserInfo(_userLoginId, _userLoginPassword));
+    bloc.add(GetLoginUserEvent(_userLoginId, _userLoginPassword));
   }
 
   @override
@@ -119,49 +117,16 @@ class _LoginInputPageState extends State<LoginInputPage> {
                         ),
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 13.0,
-                                      width: 13.0,
-                                      child: Checkbox(
-                                        activeColor: Color(0xFFFF8C00),
-                                        value: _isAutoLogin,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _isAutoLogin = value ?? false;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 7,
-                                    ),
-                                    Text(
-                                      i18nTranslate(
-                                          context, 'login_auto_login'),
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        letterSpacing:
-                                            calcLetterSpacing(letter: 1),
-                                        fontFamily: 'NotoSansJP',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               GestureDetector(
                                 onTap: () {
                                   final route = NoAnimationMaterialPageRoute(
-                                    builder: (context) => LoginForgotPassword(),
-                                    settings: RouteSettings(
-                                        name: "/login/forgotPassword"),
+                                    builder: (context) => ForgotPasswordPage(),
+                                    settings:
+                                        RouteSettings(name: "/forgotPassword"),
                                   );
-                                  Navigator.pushReplacement(context, route);
+                                  Navigator.push(context, route);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -195,53 +160,6 @@ class _LoginInputPageState extends State<LoginInputPage> {
                           onTap: _login,
                           text: i18nTranslate(context, 'login_login'),
                           size: BottonSize.L,
-                        ),
-                        SizedBox(
-                          height: 27,
-                        ),
-                        Center(
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // TODO アカウント作成ページに飛ばす
-                                  print('アカウント作成');
-                                },
-                                child: Text(
-                                  i18nTranslate(
-                                      context, 'login_create_account'),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFFFF8C00),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 17,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  print('ログインせずに利用する');
-                                  final route = NoAnimationMaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                    settings: RouteSettings(name: "/home"),
-                                  );
-                                  Navigator.pushReplacement(context, route);
-                                },
-                                child: Text(
-                                  i18nTranslate(context, 'login_not_login_use'),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF787877),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     ),

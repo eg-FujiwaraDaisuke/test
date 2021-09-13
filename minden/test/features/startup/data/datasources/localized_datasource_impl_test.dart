@@ -2,7 +2,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
-import 'package:minden/features/localize/data/models/localized_info_model.dart';
+import 'package:minden/features/localize/data/models/localized_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -15,13 +15,13 @@ void main() async {
     dataSource = LocalizedInfoDataSourceImpl();
   });
 
-  final jaModel = LocalizedInfoModel.fromJson({"language_code": "ja"});
-  final enModel = LocalizedInfoModel.fromJson({"language_code": "en"});
+  final jaModel = LocalizedModel.fromJson({"language_code": "ja"});
+  final enModel = LocalizedModel.fromJson({"language_code": "en"});
   group('datasource test', () {
     test(
       'should be a subclass of LocalizedInfoModel entity',
       () async {
-        expect(jaModel, isA<LocalizedInfoModel>());
+        expect(jaModel, isA<LocalizedModel>());
       },
     );
     test(

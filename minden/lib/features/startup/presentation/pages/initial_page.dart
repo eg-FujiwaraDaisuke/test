@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -9,8 +8,6 @@ import 'package:minden/core/env/config.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/home/presentation/pages/home_page.dart';
-
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
@@ -56,9 +53,9 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
         // localizeの取得設定の後、remote configの読み込みを行う。
         _bloc.add(GetStartupInfoEvent());
       } else if (state is LocalizedStateError) {
-        await FlutterI18n.refresh(context, Locale("ja"));
+        await FlutterI18n.refresh(context, const Locale('ja'));
         BlocProvider.of<LocalizedBloc>(context)
-            .add(UpdateLocalizedInfoEvent("ja"));
+            .add(UpdateLocalizedInfoEvent('ja'));
       }
     });
 
@@ -192,8 +189,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
 
   @override
   void dispose() {
-    super.dispose();
     _bloc.close();
+    super.dispose();
   }
 
   @override

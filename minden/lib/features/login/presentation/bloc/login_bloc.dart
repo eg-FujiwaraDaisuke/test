@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/usecases/get_login_user.dart';
 part 'login_event.dart';
@@ -15,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
-    if (event is GetLoginUserInfo) {
+    if (event is GetLoginUserEvent) {
       try {
         yield LoginLoading();
         final failureOrUser = await usecase(Params(
@@ -24,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         ));
 
         yield failureOrUser.fold<LoginState>(
-          (failure) => throw UnimplementedError(),
+          (failure) => throw ServerFailure(),
           (user) => LoginLoaded(user: user),
         );
       } catch (e) {

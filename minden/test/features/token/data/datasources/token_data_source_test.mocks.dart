@@ -2,7 +2,8 @@
 // in minden/test/features/token/data/datasources/token_data_source_test.dart.
 // Do not manually edit this file.
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i2;
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart'
+    as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: comment_references
@@ -12,12 +13,12 @@ import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: avoid_redundant_argument_values
 
-/// A class which mocks [FlutterSecureStorage].
+/// A class which mocks [EncryptionTokenDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFlutterSecureStorage extends _i1.Mock
-    implements _i2.FlutterSecureStorage {
-  MockFlutterSecureStorage() {
+class MockEncryptionTokenDataSource extends _i1.Mock
+    implements _i2.EncryptionTokenDataSource {
+  MockEncryptionTokenDataSource() {
     _i1.throwOnMissingStub(this);
   }
 }

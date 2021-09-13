@@ -3,10 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
-import 'package:minden/features/startup/domain/entities/startup_info.dart';
+import 'package:minden/features/startup/domain/entities/startup.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';
 
-import '../../domain/entities/startup_info.dart';
+import '../../domain/entities/startup.dart';
 
 // data - repository
 
@@ -23,7 +23,7 @@ class StartupRepositoryImpl implements StartupRepository {
     required this.dataSource,
   });
 
-  Future<Either<Failure, StartupInfo>> getStartupInfo() async {
+  Future<Either<Failure, Startup>> getStartupInfo() async {
     final hasConnection = await (Connectivity().checkConnectivity());
     if (hasConnection == ConnectivityResult.none) {
       return Left(ConnectionFailure());

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:minden/features/localize/domain/entities/localized_info.dart';
+import 'package:minden/features/localize/domain/entities/localized.dart';
 import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
@@ -10,7 +10,7 @@ import 'package:minden/features/localize/presentation/bloc/localized_state.dart'
 import '../../../../core/error/failure.dart';
 
 class LocalizedBloc extends Bloc<LocalizedEvent, LocalizedState> {
-  final GetLocalizedInfo usecase;
+  final GetLocalizedEvent usecase;
 
   LocalizedBloc(LocalizedState initialState, this.usecase)
       : super(initialState);
@@ -29,7 +29,7 @@ class LocalizedBloc extends Bloc<LocalizedEvent, LocalizedState> {
   }
 
   Stream<LocalizedState> _loadedState(
-    Either<Failure, LocalizedInfo> info,
+    Either<Failure, Localized> info,
   ) async* {
     yield info.fold<LocalizedState>(
       (failure) => LocalizedStateError(),
