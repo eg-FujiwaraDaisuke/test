@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
@@ -80,15 +81,13 @@ class UserProfileEditPage extends StatelessWidget {
             child: Column(
               children: [
                 Stack(
-                  alignment: Alignment.center,
+                  alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,
                   children: [
                     _ProfileWallPaperEdit(),
                     Positioned(
-                      bottom: -44,
-                      child: _ProfileImageEdit(
+                      child: _ProfileIconEdit(
                         icon: data.icon,
-                        wallPaper: data.wallPaper,
                       ),
                     ),
                   ],
@@ -120,7 +119,7 @@ class UserProfileEditPage extends StatelessWidget {
   }
 
   void _prev(BuildContext context) async {
-    final isdiscard = await showDialog(
+    final isDiscard = await showDialog(
       context: context,
       builder: (context) {
         return Platform.isIOS
@@ -164,8 +163,12 @@ class UserProfileEditPage extends StatelessWidget {
       },
     );
 
-    if (isdiscard) {
-      Navigator.pop(context);
+    if (isDiscard) {
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => UserProfilePage(),
+        settings: RouteSettings(name: "/user/profile"),
+      );
+      Navigator.pushReplacement(context, route);
     }
   }
 
@@ -192,14 +195,20 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none,
       children: [
-        CustomPaint(
-          size: Size(MediaQuery.of(context).size.width, 168),
-          painter: WallPaperPainter(wallPaperimage: null),
+        Column(
+          children: [
+            CustomPaint(
+              size: Size(MediaQuery.of(context).size.width, 168),
+              painter: WallPaperPainter(wallPaperimage: null),
+            ),
+            Container(
+              height: 44,
+            ),
+          ],
         ),
         Positioned(
-          bottom: 26,
+          bottom: 70,
           right: 55,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -224,20 +233,18 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   }
 }
 
-class _ProfileImageEdit extends StatefulWidget {
+class _ProfileIconEdit extends StatefulWidget {
   final String icon;
-  final String wallPaper;
 
-  _ProfileImageEdit({
+  _ProfileIconEdit({
     required this.icon,
-    required this.wallPaper,
   }) : super();
 
   @override
-  _ProfileImageEditState createState() => _ProfileImageEditState();
+  _ProfileIconEditState createState() => _ProfileIconEditState();
 }
 
-class _ProfileImageEditState extends State<_ProfileImageEdit> {
+class _ProfileIconEditState extends State<_ProfileIconEdit> {
   File? _image;
 
   void _setImage(File cropedImage) {
@@ -286,7 +293,9 @@ class _ProfileImageEditState extends State<_ProfileImageEdit> {
           child: GestureDetector(
             onTap: () {
               ImagePickerBottomSheet.show(
-                  context: context, imageHandler: _setImage);
+                  context: context,
+                  imageHandler: _setImage,
+                  cropStyle: CropStyle.circle);
             },
             child: Container(
               width: 30,
