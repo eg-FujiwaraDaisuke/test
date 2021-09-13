@@ -109,6 +109,8 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
         shortCatchphrase: '1',
         catchphrase: 'キャッチフレーズ',
         thankYouMessage: '1',
+        ownerMessage:
+            '　こんにちは。私は山形県米沢市で2019年からソーラーシェアリングと言う農地で発電しながら下の土地でお米を栽培しています。応援特典として1年間(12月から11月まで)10回以上応援していただいた方に、新米つや姫3合（450g）をお送りします。私の所属する米沢稔りの会で産地直送の販売もしています。山形県エコファーマーの認証を受け化学肥料や農薬を減らした特別栽培の美味しいお米を食べて下さい。田んぼでは日本一規模が大きい発電所です。',
       );
       return Right(data);
     } on ServerException {

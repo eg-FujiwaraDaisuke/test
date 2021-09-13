@@ -43,6 +43,7 @@ dependencies:
 
   bot_toast: ^4.0.1
   after_layout: ^1.1.0
+  expandable: ^5.0.1
 
   firebase_core_platform_interface: ^4.0.1
   firebase_core: ^1.4.0

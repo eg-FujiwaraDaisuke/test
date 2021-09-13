@@ -95,7 +95,7 @@ class PowerPlantListItem extends StatelessWidget {
 
           final route = NoAnimationMaterialPageRoute(
             builder: (context) =>
-                PowerPlantDetailPage(powerPlantDetail: detail),
+                PowerPlantDetailPage(powerPlantId: powerPlant.plantId),
             settings: const RouteSettings(name: '/home/top/detail'),
           );
           Navigator.push(context, route);
