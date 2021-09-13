@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
+
 import '../../../utile.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -8,11 +11,18 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  String _decideCode = '';
   String _inputPassword = '';
   String _reinputPassword = '';
 
   bool _isShowInputPassword = false;
   bool _isShowReinputPassword = false;
+
+  void _onInputChangedDecideCode(value) {
+    setState(() {
+      _decideCode = value;
+    });
+  }
 
   void _onInputChangedPassword(value) {
     setState(() {
@@ -44,28 +54,35 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 21),
+          padding: const EdgeInsets.symmetric(horizontal: 21),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
                 i18nTranslate(context, 'forgot_password_reset'),
-                style: TextStyle(
-                  color: Color(0xFF787877),
+                style: const TextStyle(
+                  color: Color(0xFF575292),
                   fontSize: 20,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
-                height: 34,
+              const SizedBox(
+                height: 35,
+              ),
+              DecideCodeInput(
+                hintText: i18nTranslate(context, '確認コード入力'),
+                onChanged: _onInputChangedDecideCode,
+              ),
+              const SizedBox(
+                height: 47,
               ),
               PasswordInput(
                 hintText: i18nTranslate(context, 'reset_password_hint_text'),
@@ -73,7 +90,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 onChanged: _onInputChangedPassword,
                 onShowPassword: _onShowInputPassword,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               PasswordInput(
@@ -82,35 +99,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 onChanged: _onReInputChangedPassword,
                 onShowPassword: _onShowReinputPassword,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              GestureDetector(
-                onTap: () {
-                  // TODO 設定を完了する
-                },
-                child: Container(
-                  width: 399,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF8C00),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      i18nTranslate(context, 'profile_setting_complete'),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              Button(
+                  onTap: () {
+                    // TODO ここでパスワード変更APIを叩く
+                    print(_decideCode);
+                  },
+                  text: i18nTranslate(context, 'profile_setting_complete'),
+                  size: ButtonSize.L)
             ],
           ),
         ),
@@ -119,18 +117,77 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 }
 
-class PasswordInput extends StatelessWidget {
-  final isShowPassword;
-  final hintText;
-  final Function onChanged;
-  final Function onShowPassword;
+class DecideCodeInput extends StatelessWidget {
+  DecideCodeInput({
+    required this.onChanged,
+    required this.hintText,
+  }) : super();
 
+  final String hintText;
+  final Function onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          hintText,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Color(0xFF6A6F7D),
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        TextFormField(
+          onChanged: (value) {
+            onChanged(value);
+          },
+          decoration: const InputDecoration(
+            filled: true,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 0.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xFFFF8C00),
+              ),
+            ),
+            border: OutlineInputBorder(),
+            fillColor: Colors.white,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 15,
+            ),
+          ),
+          style: const TextStyle(
+            fontSize: 17,
+            color: Color(0xFF000000),
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PasswordInput extends StatelessWidget {
   PasswordInput(
       {required this.isShowPassword,
       required this.onChanged,
       required this.onShowPassword,
       required this.hintText})
       : super();
+  final bool isShowPassword;
+  final String hintText;
+  final Function onChanged;
+  final Function onShowPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -146,10 +203,10 @@ class PasswordInput extends StatelessWidget {
             hintText: hintText,
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFFA7A7A7).withOpacity(0.5),
+                color: const Color(0xFFA7A7A7).withOpacity(0.5),
               ),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xFFFF8C00),
               ),
@@ -159,7 +216,7 @@ class PasswordInput extends StatelessWidget {
                 isShowPassword
                     ? Icons.visibility
                     : Icons.visibility_off_outlined,
-                color: Color(0xFFA7A7A7),
+                color: const Color(0xFFA7A7A7),
               ),
               onPressed: () {
                 onShowPassword();
@@ -167,8 +224,8 @@ class PasswordInput extends StatelessWidget {
             ),
           ),
           style: TextStyle(
-            fontSize: 17.0,
-            color: Color(0xFF000000),
+            fontSize: 17,
+            color: const Color(0xFF000000),
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
             letterSpacing: calcLetterSpacing(letter: 4),
