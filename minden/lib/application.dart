@@ -17,7 +17,6 @@ import 'package:minden/features/login/data/repositories/login_repository_impl.da
 import 'package:minden/features/login/domain/usecases/get_login_user.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
-import 'package:minden/features/power_plant/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
@@ -31,6 +30,7 @@ import 'core/ui/tab_indicator.dart';
 import 'features/debug/debug_push_message_page.dart';
 import 'features/home/presentation/pages/home_page.dart';
 import 'features/login/presentation/bloc/login_bloc.dart';
+import 'features/power_plant/presentation/pages/power_plant_page.dart';
 import 'features/startup/presentation/pages/initial_page.dart';
 import 'features/uploader/presentation/bloc/upload_bloc.dart';
 import 'features/uploader/presentation/bloc/upload_state.dart';

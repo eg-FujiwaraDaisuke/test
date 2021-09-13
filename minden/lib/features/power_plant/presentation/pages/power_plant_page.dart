@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/power_plant.dart';
-import 'package:minden/features/power_plant/pages/power_plant_pickup_page.dart';
-import 'package:minden/features/power_plant/viewmodel/power_plant_page_view_model.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
+import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
 /// ホーム - トップ
 class HomeTopPage extends StatelessWidget {
