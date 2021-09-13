@@ -1,4 +1,5 @@
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/support_plant/domain/entities/support.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class UserModel extends User {
@@ -9,13 +10,15 @@ class UserModel extends User {
     required String limitedPlantId,
     required int supportableNumber,
     required Profile profile,
+    required List<Support> supports,
   }) : super(
             loginId: loginId,
             accountId: accountId,
             contractor: contractor,
             limitedPlantId: limitedPlantId,
             supportableNumber: supportableNumber,
-            profile: profile);
+            profile: profile,
+            supports: supports);
 
   factory UserModel.fromUser(User user) {
     // print(user.profile);
@@ -25,7 +28,8 @@ class UserModel extends User {
         contractor: user.contractor,
         limitedPlantId: user.limitedPlantId,
         supportableNumber: user.supportableNumber,
-        profile: user.profile);
+        profile: user.profile,
+        supports: user.supports);
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
