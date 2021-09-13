@@ -76,6 +76,7 @@ class _TutorialPageState extends State<TutorialPage> {
     ];
 
     return Scaffold(
+      backgroundColor: const Color(0xFFf5f3ed),
       body: SafeArea(
         child: Container(
           color: const Color(0xFFf5f3ed),
@@ -103,8 +104,8 @@ class _TutorialPageState extends State<TutorialPage> {
                 }).toList(),
               ),
               Positioned(
-                left: 16,
-                right: 16,
+                left: 39,
+                right: 39,
                 bottom: 16,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +123,7 @@ class _TutorialPageState extends State<TutorialPage> {
                           style: TextStyle(
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w400,
-                            fontSize: 14,
+                            fontSize: 16,
                             color: const Color(0xFFABAAAB),
                             letterSpacing: calcLetterSpacing(letter: 4),
                           ),
@@ -141,8 +142,8 @@ class _TutorialPageState extends State<TutorialPage> {
                           style: TextStyle(
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: const Color(0xFF000000),
+                            fontSize: 16,
+                            color: const Color(0xFF787877),
                             letterSpacing: calcLetterSpacing(letter: 4),
                           ),
                         ),
@@ -157,8 +158,8 @@ class _TutorialPageState extends State<TutorialPage> {
                           style: TextStyle(
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: const Color(0xFF000000),
+                            fontSize: 16,
+                            color: const Color(0xFF787877),
                             letterSpacing: calcLetterSpacing(letter: 4),
                           ),
                         ),
