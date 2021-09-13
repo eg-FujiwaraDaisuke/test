@@ -1,14 +1,25 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_decide_dialog.dart';
+import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/utile.dart';
 
 class SupportPlantSelectDialog {
   final BuildContext context;
+  final PowerPlant selectPowerPlant;
+  List<RegistPowerPlant> registPowerPlants;
+  final User user;
 
   SupportPlantSelectDialog({
     required this.context,
+    required this.selectPowerPlant,
+    required this.registPowerPlants,
+    required this.user,
   }) : super();
 
   void showDialog() {
@@ -16,6 +27,9 @@ class SupportPlantSelectDialog {
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
+          final canRegistList = registPowerPlants
+              .where((registPowerPlant) => registPowerPlant.isRegist)
+              .toList();
           return Stack(
             children: [
               Positioned(
@@ -29,65 +43,26 @@ class SupportPlantSelectDialog {
                   child: Column(
                     children: [
                       // 契約件数１件で応援中１件の場合
-                      true
-                          ? Column(
-                              children: [
-                                Text(
-                                  //TODO ここに応援中の発電所の名前が入ります。
-                                  '現在「XXX発電所」',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFFFF8C00),
-                                    fontSize: 18,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  'を応援中です。',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFF575292),
-                                    fontSize: 16,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  //TODO ここに応援したい発電所の名前が入ります。
-                                  '「XXX発電所」',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFFFF8C00),
-                                    fontSize: 18,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  'に変更してよろしいですか？',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFF575292),
-                                    fontSize: 16,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Text(
-                              // TODO ここに応援可能発電所数を表示
-                              '応援出来る発電所は2件までです。',
+                      if (user.supportableNumber == 1 &&
+                          registPowerPlants.length == 1)
+                        Column(
+                          children: [
+                            Text(
+                              //TODO ここに応援中の発電所の名前が入ります。
+                              '現在「${registPowerPlants[0].powerPlant.name}」',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xFFFF8C00),
+                                fontSize: 18,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              'を応援中です。',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Color(0xFF575292),
@@ -96,6 +71,47 @@ class SupportPlantSelectDialog {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              //TODO ここに応援したい発電所の名前が入ります。
+                              '「${selectPowerPlant.name}」',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xFFFF8C00),
+                                fontSize: 18,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              'に変更してよろしいですか？',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xFF575292),
+                                fontSize: 16,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        Text(
+                          // TODO ここに応援可能発電所数を表示
+                          '応援出来る発電所は2件までです。',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFF575292),
+                            fontSize: 16,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
 
                       const SizedBox(
                         height: 14,
@@ -124,17 +140,8 @@ class SupportPlantSelectDialog {
                         height: 25,
                       ),
 
-                      _buildSupportingPlantList(),
+                      _buildSupportingPlantList(setState),
 
-                      const SizedBox(
-                        height: 5,
-                      ),
-
-                      Container(
-                        color: const Color(0xFFDADADA),
-                        width: 287,
-                        height: 1,
-                      ),
                       const SizedBox(
                         height: 19,
                       ),
@@ -151,11 +158,35 @@ class SupportPlantSelectDialog {
                       const SizedBox(
                         height: 32,
                       ),
-                      Button(onTap: () {}, text: '次へ', size: ButtonSize.S),
+                      user.supportableNumber > canRegistList.length
+                          ? Button(
+                              onTap: () {
+                                _hideDialog();
+                                SupportPlantDecideDialog(
+                                  context: context,
+                                  selectPowerPlant: selectPowerPlant,
+                                ).showDialog();
+                              },
+                              text: '次へ',
+                              size: ButtonSize.S,
+                            )
+                          : Button(
+                              onTap: () {},
+                              text: '次へ',
+                              isActive: false,
+                              size: ButtonSize.S,
+                            ),
                       const SizedBox(
                         height: 12,
                       ),
-                      GestureDetector(onTap: _hideDialog, child: Text('キャンセル')),
+                      GestureDetector(
+                        onTap: () {
+                          registPowerPlants.forEach((registPowerPlant) =>
+                              registPowerPlant.isRegist = true);
+                          _hideDialog();
+                        },
+                        child: Text('キャンセル'),
+                      ),
                     ],
                   ),
                 ),
@@ -176,7 +207,7 @@ class SupportPlantSelectDialog {
     );
   }
 
-  Widget _buildSupportingPlantList() {
+  Widget _buildSupportingPlantList(setState) {
     return Column(
       children: [
         Text(
@@ -193,50 +224,84 @@ class SupportPlantSelectDialog {
           height: 15,
         ),
         Column(
-          children: [_buildSupportingPlantListItem()],
+          children: registPowerPlants
+              .map(
+                (registPowerPlant) =>
+                    _buildSupportingPlantListItem(registPowerPlant, setState),
+              )
+              .toList(),
         )
       ],
     );
   }
 
-  Widget _buildSupportingPlantListItem() {
+  Widget _buildSupportingPlantListItem(
+      RegistPowerPlant registPowerPlant, setState) {
     return SizedBox(
       width: 253,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            '○○○○下関発電所',
-            style: TextStyle(
-              color: Color(0xFF575292),
-              fontSize: 13,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-            ),
+          const SizedBox(
+            height: 9,
           ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              width: 71,
-              height: 31,
-              decoration: BoxDecoration(
-                color: Color(0xFF75C975),
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: Center(
-                child: Text(
-                  '選択解除',
-                  style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-                    fontSize: 10,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                  ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                registPowerPlant.powerPlant.name,
+                style: TextStyle(
+                  color: Color(0xFF575292),
+                  fontSize: 13,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-          )
+              GestureDetector(
+                onTap: () {
+                  // TODO 登録フラグを切り替える
+                  setState(() {
+                    registPowerPlant.isRegist = !registPowerPlant.isRegist;
+                  });
+                },
+                child: Container(
+                  width: 71,
+                  height: 31,
+                  decoration: BoxDecoration(
+                    color: registPowerPlant.isRegist
+                        ? Color(0xFF75C975)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: Color(0xFF75C975),
+                      width: registPowerPlant.isRegist ? 0 : 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      registPowerPlant.isRegist ? '選択解除' : '解除済み',
+                      style: TextStyle(
+                        color: registPowerPlant.isRegist
+                            ? Color(0xFFFFFFFF)
+                            : Color(0xFF75C975),
+                        fontSize: 10,
+                        fontFamily: 'NotoSansJP',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 9,
+          ),
+          Container(
+            color: const Color(0xFFDADADA),
+            width: 287,
+            height: 1,
+          ),
         ],
       ),
     );
@@ -264,7 +329,7 @@ class SupportPlantSelectDialog {
             width: 80,
             height: 80,
             child: Image.network(
-              'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
+              selectPowerPlant.image,
               fit: BoxFit.cover,
             ),
           ),
@@ -275,7 +340,7 @@ class SupportPlantSelectDialog {
             width: 157,
             //TODO ここに発電所の名前が入ります。
             child: Text(
-              'みつばち発電所みつばち発電所みつばち発電所',
+              selectPowerPlant.name,
               style: TextStyle(
                 color: Color(0xFF575292),
                 fontSize: 13,
