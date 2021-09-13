@@ -3,18 +3,16 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
 import '../../../../utile.dart';
 
-class UserProfileEditPage extends StatelessWidget {
+class ProfileEditPage extends StatelessWidget {
   // 確認用仮データ
   final data = ProfileDamyData().damyData;
 
@@ -170,7 +168,6 @@ class UserProfileEditPage extends StatelessWidget {
   }
 
   void _complete(BuildContext context) {
-    // TODO ここで更新データ保存
     Navigator.pop(context);
   }
 }
@@ -196,7 +193,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
       children: [
         CustomPaint(
           size: Size(MediaQuery.of(context).size.width, 168),
-          painter: WallPaperPainter(wallPaperimage: null),
+          painter: WallPaperPainter(wallPaperImage: null),
         ),
         Positioned(
           bottom: 26,

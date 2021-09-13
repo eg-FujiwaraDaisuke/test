@@ -24,8 +24,8 @@ import 'package:minden/features/uploader/data/repositories/media_repository_impl
 import 'package:minden/features/uploader/domain/usecases/upload_media.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
+import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
 import 'core/ui/tab_indicator.dart';
 import 'features/debug/debug_push_message_page.dart';
@@ -137,8 +137,8 @@ class Application extends StatelessWidget {
       '/home/top': (_) => HomeTopPage(),
       '/my_page/matching': (_) => MatchingPage(),
       '/user': (_) => UserPage(),
-      '/user/profile': (_) => UserProfilePage(),
-      '/user/profile/edit': (_) => UserProfileEditPage(),
+      '/user/profile': (_) => ProfilePage(),
+      '/user/profile/edit': (_) => ProfileEditPage(),
       '/message': (_) => MessageView(),
     };
   }

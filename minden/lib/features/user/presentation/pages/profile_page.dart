@@ -5,13 +5,12 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_edit_page.dart';
+import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
 import '../../../../utile.dart';
 
-class UserProfilePage extends StatelessWidget {
-  // 確認用仮データ
+class ProfilePage extends StatelessWidget {
   final data = ProfileDamyData().damyData;
 
   @override
@@ -19,37 +18,34 @@ class UserProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            // user<->profileはpush/pop
-            // ただ、編集画面を経由するとnoanimationでポップされてしまう。
             Navigator.pop(context);
           },
           child: Center(
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
         actions: [
           GestureDetector(
             onTap: () {
-              // profile<->editはトグルなのでpushReplaceでアニメーションなし
               final route = NoAnimationMaterialPageRoute(
-                builder: (context) => UserProfileEditPage(),
-                settings: RouteSettings(name: "/user/profile/edit"),
+                builder: (context) => ProfileEditPage(),
+                settings: const RouteSettings(name: '/user/profile/edit'),
               );
               Navigator.push(context, route);
             },
             child: Container(
               width: 90,
               height: 44,
-              margin: EdgeInsets.only(right: 18),
+              margin: const EdgeInsets.only(right: 18),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
                 color: Colors.white,
@@ -58,12 +54,12 @@ class UserProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset('assets/images/user/edit.svg'),
-                  SizedBox(
+                  const SizedBox(
                     width: 9,
                   ),
                   Text(
                     i18nTranslate(context, 'user_edit'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 12,
                       fontFamily: 'NotoSansJP',
@@ -89,7 +85,7 @@ class UserProfilePage extends StatelessWidget {
                   children: [
                     CustomPaint(
                       size: Size(MediaQuery.of(context).size.width, 168),
-                      painter: WallPaperPainter(wallPaperimage: null),
+                      painter: WallPaperPainter(wallPaperImage: null),
                     ),
                     Positioned(
                       bottom: -44,
@@ -97,31 +93,27 @@ class UserProfilePage extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 66,
                 ),
                 _ProfileName(
                   name: data.name,
                 ),
-
-                SizedBox(
+                const SizedBox(
                   height: 43,
                 ),
-
                 _ProfileBio(bio: data.bio),
-
-                SizedBox(
+                const SizedBox(
                   height: 37,
                 ),
-
                 _TagsList(
                   tagsList: data.tags,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 37,
                 ),
-                // // あとで共通Componentを組み込む
-                _SelectedPlantList(selectedPlantList: [])
+                // TODO あとで共通Componentを組み込む
+                const _SelectedPlantList(selectedPlantList: [])
               ],
             ),
           ),
@@ -132,16 +124,16 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class _ProfileIcon extends StatelessWidget {
-  final String icon;
-
   const _ProfileIcon({required this.icon});
+
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 99,
       height: 99,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Color(0xFFFF8C00),
         shape: BoxShape.circle,
       ),
@@ -150,7 +142,7 @@ class _ProfileIcon extends StatelessWidget {
           width: 93,
           height: 93,
           decoration: BoxDecoration(
-            color: Color(0xFFFFFB92),
+            color: const Color(0xFFFFFB92),
             shape: BoxShape.circle,
             border: Border.all(
               width: 3,
@@ -164,17 +156,17 @@ class _ProfileIcon extends StatelessWidget {
 }
 
 class _ProfileName extends StatelessWidget {
-  final String name;
-
   const _ProfileName({
     required this.name,
   });
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       name,
-      style: TextStyle(
+      style: const TextStyle(
         color: Color(0xFF575292),
         fontSize: 18,
         fontFamily: 'NotoSansJP',
@@ -185,15 +177,14 @@ class _ProfileName extends StatelessWidget {
 }
 
 class _ProfileBio extends StatelessWidget {
-  final String bio;
-
-  _ProfileBio({
+  const _ProfileBio({
     required this.bio,
   }) : super();
+  final String bio;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 338,
       child: Text(
         bio,
@@ -211,13 +202,12 @@ class _ProfileBio extends StatelessWidget {
 }
 
 class _TagsList extends StatelessWidget {
-  final List<Tag> tagsList;
-
   const _TagsList({required this.tagsList}) : super();
+  final List<Tag> tagsList;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 338,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,22 +222,21 @@ class _TagsList extends StatelessWidget {
               letterSpacing: calcLetterSpacing(letter: 4),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
-          Container(
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              spacing: 5,
-              runSpacing: 10,
-              children: tagsList
-                  .map((tag) => ImportantTagListItem(
-                        tag: tag,
-                        onSelect: () {},
-                        isSelected: true,
-                      ))
-                  .toList(),
-            ),
+          Wrap(
+            spacing: 5,
+            runSpacing: 10,
+            children: tagsList
+                .map(
+                  (tag) => ImportantTagListItem(
+                    tag: tag,
+                    onSelect: () {},
+                    isSelected: true,
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),
@@ -256,36 +245,31 @@ class _TagsList extends StatelessWidget {
 }
 
 class _SelectedPlantList extends StatelessWidget {
-  final selectedPlantList;
-
   const _SelectedPlantList({required this.selectedPlantList}) : super();
+  final selectedPlantList;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            i18nTranslate(context, 'user_select_plant'),
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              letterSpacing: calcLetterSpacing(letter: 4),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          i18nTranslate(context, 'user_select_plant'),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+            letterSpacing: calcLetterSpacing(letter: 4),
           ),
-          SizedBox(
-            height: 7,
-          ),
-          Container(
-            child: Column(
-              children: [_SelectedPlantListItem()],
-            ),
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 7,
+        ),
+        Column(
+          children: [_SelectedPlantListItem()],
+        ),
+      ],
     );
   }
 }

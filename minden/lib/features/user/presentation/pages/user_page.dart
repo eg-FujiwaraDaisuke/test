@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
-import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
+import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
@@ -62,7 +62,7 @@ class UserPage extends StatelessWidget {
                 children: [
                   CustomPaint(
                     size: Size(MediaQuery.of(context).size.width, 168),
-                    painter: WallPaperPainter(wallPaperimage: null),
+                    painter: WallPaperPainter(wallPaperImage: null),
                   ),
                   Positioned(
                     bottom: -44,
@@ -213,7 +213,7 @@ class _MenuItem extends StatelessWidget {
         switch (routeName) {
           case '/user/profile':
             final route = MaterialPageRoute(
-              builder: (context) => UserProfilePage(),
+              builder: (context) => ProfilePage(),
               settings: RouteSettings(name: routeName),
             );
             Navigator.push(context, route);

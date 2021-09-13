@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class WallPaperPainter extends CustomPainter {
-  Image? wallPaperimage;
-  WallPaperPainter({this.wallPaperimage}) : super();
+  WallPaperPainter({this.wallPaperImage}) : super();
+  Image? wallPaperImage;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -41,9 +41,9 @@ class WallPaperPainter extends CustomPainter {
       )
       ..close();
 
-    final paint = Paint()..color = Color(0xFFFFFB92);
+    final paint = Paint()..color = const Color(0xFFFFFB92);
 
-    if (wallPaperimage == null) {
+    if (wallPaperImage == null) {
       canvas.drawPath(path, paint);
     } else {
       // TODO 第一引数でエラーが起きる
