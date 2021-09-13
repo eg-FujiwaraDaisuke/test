@@ -26,6 +26,7 @@ void main() {
       limitedPlantId: "",
       supportableNumber: 1,
       contractor: "",
+      isNewbie: false,
       profile: const Profile(
         bio: '',
         name: '',

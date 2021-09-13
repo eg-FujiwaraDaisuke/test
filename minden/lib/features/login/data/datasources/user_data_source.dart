@@ -37,7 +37,9 @@ class UserDataSourceImpl implements UserDataSource {
       await si<EncryptionTokenDataSourceImpl>()
           .setRefreshToken(tokenElement["refreshToken"]);
 
+      print("${json.decode(response.body)}");
       final user = UserModel.fromJson(json.decode(response.body));
+      print("login : ${user.toJson()}");
       await si<EncryptionTokenDataSourceImpl>()
           .storeUser(json.encode(user.toJson()));
       return user;

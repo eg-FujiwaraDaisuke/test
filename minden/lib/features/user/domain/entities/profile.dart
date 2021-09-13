@@ -73,28 +73,3 @@ class Tag extends Equatable {
   @override
   List<Object> get props => [tagId];
 }
-
-// class SelectPowerPlant extends Equatable {
-//   const SelectPowerPlant({
-//     required this.plantId,
-//     required this.name,
-//     required this.images,
-//     required this.catchphrase,
-//     required this.location,
-//     required this.capacity,
-//     required this.powerGenerationMethods,
-//     required this.isNewArrivals,
-//   });
-//
-//   final String plantId;
-//   final String name;
-//   final List<String> images;
-//   final String catchphrase;
-//   final String location;
-//   final Object capacity;
-//   final String powerGenerationMethods;
-//   final bool isNewArrivals;
-//
-//   @override
-//   List<Object?> get props => [plantId];
-// }

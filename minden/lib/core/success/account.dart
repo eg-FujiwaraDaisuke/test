@@ -29,8 +29,12 @@ class Account {
     _refreshToken = await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
 
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
+    final userJson = json.decode(jsonData);
+
     _me = User.fromJson(json.decode(jsonData));
-    print("${_me.loginId?.isEmpty ?? "#### you need login #### "}");
-    print("${_appToken}, ${_refreshToken}, ${_me.toJson() ?? ""}");
+    if (_me.loginId == null) {
+      print('#### you need login ####');
+    }
+    print("${_appToken}, ${_refreshToken}, ${_me.toJson()}");
   }
 }

@@ -27,12 +27,12 @@ class ApiConfig {
     }
   };
 
-  static Map<String, Object> apiEndpoint() {
-    return _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
+  static Map<String, dynamic> apiEndpoint() {
+    return _endpoint[Config.getEnvironmentString()] as Map<String, dynamic>;
   }
 
   static Map<String, String> tokenHeader() {
-    final env = _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
+    final env = _endpoint[Config.getEnvironmentString()] as Map<String, dynamic>;
     final defaultHeaders = env['headers']! as Map<String, String>;
     final appToken = si<Account>().appToken;
     final refreshToken = si<Account>().refreshToken;

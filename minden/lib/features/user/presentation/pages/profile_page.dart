@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
-import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
@@ -17,7 +16,6 @@ import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
-import '../../../../injection_container.dart';
 import '../../../../utile.dart';
 
 class ProfilePage extends StatefulWidget {

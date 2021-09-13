@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:minden/core/env/config.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
@@ -20,6 +22,8 @@ import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../injection_container.dart';
 
 class InitialPage extends StatefulWidget {
   @override
@@ -39,6 +43,10 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
+
+    () async {
+      await si<Account>().prepare();
+    }();
 
     // ローカライズの初期化
     StreamSubscription? localizedSubscription;
@@ -73,7 +81,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
           await _showAlert(
               message: i18nTranslate(context, state.localizedKey, state.args),
               actionName: i18nTranslate(context, state.actionKey),
-              actionUrl: state.actionUrl ?? "",
+              actionUrl: state.actionUrl ?? '',
               barrierDismissible: false);
           _bloc.add(GetStartupInfoEvent());
         })();
@@ -84,9 +92,9 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
         if (state.info.hasLatestVersion) {
           (() async {
             await _showAlert(
-                message: i18nTranslate(context, "latest_version_message_%s",
+                message: i18nTranslate(context, 'latest_version_message_%s',
                     [state.info.latestVersion]),
-                actionName: i18nTranslate(context, "store_action"),
+                actionName: i18nTranslate(context, 'store_action'),
                 actionUrl: state.info.storeUrl,
                 barrierDismissible: true);
 
@@ -167,24 +175,28 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     if (!hasTutorial) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => TutorialPage(),
-        settings: RouteSettings(name: "/tutorial"),
+        settings: const RouteSettings(name: '/tutorial'),
       );
       Navigator.pushReplacement(context, route);
       return;
     }
-    // チュートリアルはみたが、ログインしないユーザー
+
+    if (si<Account>().appToken.isEmpty) {
+      // チュートリアルはみたが、ログインしないユーザー
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => LoginPage(),
+        settings: const RouteSettings(name: '/login'),
+      );
+      Navigator.pushReplacement(context, route);
+      return;
+    }
+
+    // ログインしてて、チュートリアルもみたユーザー
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginPage(),
-      settings: RouteSettings(name: "/login"),
+      builder: (context) => HomePage(),
+      settings: const RouteSettings(name: '/home'),
     );
     Navigator.pushReplacement(context, route);
-
-    //TODO ログインしてて、チュートリアルもみたユーザー
-    // final route = NoAnimationMaterialPageRoute(
-    //   builder: (context) => HomePage(),
-    //   settings: RouteSettings(name: "/home"),
-    // );
-    // Navigator.pushReplacement(context, route);
   }
 
   @override
