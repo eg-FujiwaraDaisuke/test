@@ -24,9 +24,8 @@ class SupportParticipantsDialog {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      //TODO ここに応援中の人数が入ります。
-                      '現在16人が応援しています！',
+                    Text(
+                      '現在${participants.length}が応援しています！',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFF787877),
@@ -46,8 +45,7 @@ class SupportParticipantsDialog {
                         runSpacing: 16,
                         children: participants
                             .map(
-                              (participant) =>
-                                  _buildPartcipantItem(participant),
+                              _buildPartcipantItem,
                             )
                             .toList(),
                       ),
@@ -80,7 +78,7 @@ class SupportParticipantsDialog {
                           width: 29,
                         ),
                         Text(
-                          //TODO ここに応援中の人数が入ります。
+                          //TODO ここにWEBから応援している人数が入ります。
                           '7人',
                           textAlign: TextAlign.center,
                           style: TextStyle(
