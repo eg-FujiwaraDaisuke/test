@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -178,6 +179,63 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 7),
+                Image.asset(
+                  'assets/images/profile_setting/hukidasi_illust.png',
+                  fit: BoxFit.contain,
+                  width: 213,
+                  height: 65,
+                ),
+                SizedBox(
+                  width: 262,
+                  height: 134,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        bottom: 10,
+                        child: Image.asset(
+                          'assets/images/profile_setting/character.png',
+                          fit: BoxFit.contain,
+                          width: 92,
+                          height: 86,
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          width: 186,
+                          height: 134,
+                          child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/profile_setting/fukidasi.png',
+                                  fit: BoxFit.contain,
+                                  width: 186,
+                                  height: 134,
+                                ),
+                                Text(
+                                  '普段気にかけていることや\n目指していること、好きなことや\n気になっていることなどでも\nOKです',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF9A7446),
+                                    height: calcFontHeight(
+                                        fontSize: 10, lineHeight: 14),
+                                    letterSpacing:
+                                        calcLetterSpacing(letter: -6),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Text(
                   i18nTranslate(
                       context, 'profile_setting_important_tag_find_user'),
@@ -185,8 +243,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF787877),
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF75C975),
                     height: calcFontHeight(fontSize: 12, lineHeight: 17.38),
                   ),
                 ),

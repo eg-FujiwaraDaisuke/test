@@ -98,6 +98,7 @@ flutter:
     - assets/images/user/
     - assets/images/power_plant/
     - assets/images/tutorial/
+    - assets/images/profile_setting/
     - assets/images/sample/
     - assets/fonts/
   fonts:
