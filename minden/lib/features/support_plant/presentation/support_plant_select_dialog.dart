@@ -8,11 +8,6 @@ import 'package:minden/features/support_plant/presentation/support_plant_dialog_
 import 'package:minden/utile.dart';
 
 class SupportPlantSelectDialog {
-  final BuildContext context;
-  final PowerPlant selectPowerPlant;
-  List<RegistPowerPlant> registPowerPlants;
-  final User user;
-
   SupportPlantSelectDialog({
     required this.context,
     required this.selectPowerPlant,
@@ -20,12 +15,17 @@ class SupportPlantSelectDialog {
     required this.user,
   }) : super();
 
+  final BuildContext context;
+  final PowerPlant selectPowerPlant;
+  List<RegistPowerPlant> registPowerPlants;
+  final User user;
+
   void showDialog() {
     Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
-          final canRegistList = registPowerPlants
+          final canRegistPowerPlants = registPowerPlants
               .where((registPowerPlant) => registPowerPlant.isRegist)
               .toList();
           return Stack(
@@ -46,10 +46,9 @@ class SupportPlantSelectDialog {
                         Column(
                           children: [
                             Text(
-                              //TODO ここに応援中の発電所の名前が入ります。
                               '現在「${registPowerPlants[0].powerPlant.name}」',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFFFF8C00),
                                 fontSize: 18,
                                 fontFamily: 'NotoSansJP',
@@ -59,7 +58,7 @@ class SupportPlantSelectDialog {
                             const SizedBox(
                               height: 6,
                             ),
-                            Text(
+                            const Text(
                               'を応援中です。',
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -73,10 +72,9 @@ class SupportPlantSelectDialog {
                               height: 6,
                             ),
                             Text(
-                              //TODO ここに応援したい発電所の名前が入ります。
                               '「${selectPowerPlant.name}」',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFFFF8C00),
                                 fontSize: 18,
                                 fontFamily: 'NotoSansJP',
@@ -86,7 +84,7 @@ class SupportPlantSelectDialog {
                             const SizedBox(
                               height: 6,
                             ),
-                            Text(
+                            const Text(
                               'に変更してよろしいですか？',
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -100,10 +98,9 @@ class SupportPlantSelectDialog {
                         )
                       else
                         Text(
-                          // TODO ここに応援可能発電所数を表示
-                          '応援出来る発電所は2件までです。',
+                          '応援出来る発電所は${user.supportableNumber}件までです。',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(0xFF575292),
                             fontSize: 16,
                             fontFamily: 'NotoSansJP',
@@ -132,7 +129,7 @@ class SupportPlantSelectDialog {
                       const SizedBox(
                         height: 14,
                       ),
-                      _buildSelectedPlantListItem(),
+                      _buildSelectedPlantListItem(canRegistPowerPlants),
 
                       const SizedBox(
                         height: 25,
@@ -156,24 +153,27 @@ class SupportPlantSelectDialog {
                       const SizedBox(
                         height: 32,
                       ),
-                      user.supportableNumber > canRegistList.length
-                          ? Button(
-                              onTap: () {
-                                _hideDialog();
-                                SupportPlantDecisionDialog(
-                                  context: context,
-                                  selectPowerPlant: selectPowerPlant,
-                                ).showDialog();
-                              },
-                              text: '次へ',
-                              size: ButtonSize.S,
-                            )
-                          : Button(
-                              onTap: () {},
-                              text: '次へ',
-                              isActive: false,
-                              size: ButtonSize.S,
-                            ),
+                      if (user.supportableNumber > canRegistPowerPlants.length)
+                        Button(
+                          onTap: () {
+                            _hideDialog();
+                            SupportPlantDecisionDialog(
+                              context: context,
+                              selectPowerPlant: selectPowerPlant,
+                              user: user,
+                              registPowerPlants: registPowerPlants,
+                            ).showDialog();
+                          },
+                          text: '次へ',
+                          size: ButtonSize.S,
+                        )
+                      else
+                        Button(
+                          onTap: () {},
+                          text: '次へ',
+                          isActive: false,
+                          size: ButtonSize.S,
+                        ),
                       const SizedBox(
                         height: 12,
                       ),
@@ -183,7 +183,15 @@ class SupportPlantSelectDialog {
                               registPowerPlant.isRegist = true);
                           _hideDialog();
                         },
-                        child: Text('キャンセル'),
+                        child: const Text(
+                          'キャンセル',
+                          style: TextStyle(
+                            color: Color(0xFF787877),
+                            fontSize: 14,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -208,7 +216,7 @@ class SupportPlantSelectDialog {
   Widget _buildSupportingPlantList(setState) {
     return Column(
       children: [
-        Text(
+        const Text(
           '＜現在応援中の発電所＞',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -248,7 +256,7 @@ class SupportPlantSelectDialog {
             children: [
               Text(
                 registPowerPlant.powerPlant.name,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xFF575292),
                   fontSize: 13,
                   fontFamily: 'NotoSansJP',
@@ -267,7 +275,7 @@ class SupportPlantSelectDialog {
                   height: 31,
                   decoration: BoxDecoration(
                     color: registPowerPlant.isRegist
-                        ? Color(0xFF75C975)
+                        ? const Color(0xFF75C975)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(22),
                     border: Border.all(
@@ -280,8 +288,8 @@ class SupportPlantSelectDialog {
                       registPowerPlant.isRegist ? '選択解除' : '解除済み',
                       style: TextStyle(
                         color: registPowerPlant.isRegist
-                            ? Color(0xFFFFFFFF)
-                            : Color(0xFF75C975),
+                            ? const Color(0xFFFFFFFF)
+                            : const Color(0xFF75C975),
                         fontSize: 10,
                         fontFamily: 'NotoSansJP',
                         fontWeight: FontWeight.w700,
@@ -305,21 +313,18 @@ class SupportPlantSelectDialog {
     );
   }
 
-  Widget _buildSelectedPlantListItem() {
+  Widget _buildSelectedPlantListItem(canRegistPowerPlants) {
     return Container(
       width: 286,
       height: 80,
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          )
-        ],
+        border: Border.all(
+            color: user.supportableNumber > canRegistPowerPlants.length
+                ? const Color(0xFF828282)
+                : const Color(0xFFE2E2E2).withOpacity(0.5)),
       ),
       child: Row(
         children: [
@@ -336,11 +341,10 @@ class SupportPlantSelectDialog {
           ),
           SizedBox(
             width: 157,
-            //TODO ここに発電所の名前が入ります。
             child: Text(
               selectPowerPlant.name,
               style: TextStyle(
-                color: Color(0xFF575292),
+                color: const Color(0xFF575292),
                 fontSize: 13,
                 fontFamily: 'NotoSansJP',
                 fontWeight: FontWeight.w700,

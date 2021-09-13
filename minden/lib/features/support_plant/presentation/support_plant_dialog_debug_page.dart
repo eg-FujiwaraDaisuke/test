@@ -46,7 +46,7 @@ class _SupportPlantDialogDebugPageState
         'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
   );
 
-  User userDammy = User(
+  User userDammy = const User(
     loginId: 'nakajo@minden.co.jp',
     accountId: 'step1_02@minden.co.jp',
     contractor: 'ぽーたるてすと に',
@@ -87,13 +87,19 @@ class _SupportPlantDialogDebugPageState
       registPowerPlants = [
         RegistPowerPlant(
           isRegist: true,
-          powerPlant:
-              PowerPlant(plantId: 'MP2021080808', name: 'test1', image: ''),
+          powerPlant: PowerPlant(
+              plantId: 'MP2021080808',
+              name: 'test1',
+              image:
+                  'https://images.unsplash.com/photo-1631414836323-ad2f6963061c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1276&q=80'),
         ),
         RegistPowerPlant(
           isRegist: true,
-          powerPlant:
-              PowerPlant(plantId: 'MP2021080809', name: 'test2', image: ''),
+          powerPlant: PowerPlant(
+              plantId: 'MP2021080809',
+              name: 'test2',
+              image:
+                  'https://images.unsplash.com/photo-1593642702909-dec73df255d7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80'),
         ),
       ];
     });
@@ -111,9 +117,11 @@ class _SupportPlantDialogDebugPageState
                 // 契約件数１応援０の場合
                 if (userDammy.supportableNumber > registPowerPlants.length) {
                   SupportPlantDecisionDialog(
-                          context: context,
-                          selectPowerPlant: selectPowerPlantDammy)
-                      .showDialog();
+                    context: context,
+                    selectPowerPlant: selectPowerPlantDammy,
+                    user: userDammy,
+                    registPowerPlants: registPowerPlants,
+                  ).showDialog();
                 } else {
                   SupportPlantSelectDialog(
                           context: context,

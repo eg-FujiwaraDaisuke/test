@@ -6,8 +6,11 @@ class CustomDialogOverlay extends ModalRoute<void> {
   //Androidで実機のバックボタンを押すとダイアログが閉じてしまう
   final bool isAndroidBackEnable;
 
-  CustomDialogOverlay(this.contents, {this.isAndroidBackEnable = false})
-      : super();
+  CustomDialogOverlay(
+    this.contents, {
+    this.isAndroidBackEnable = false,
+  }) : super();
+
   @override
   Duration get transitionDuration => Duration(milliseconds: 0);
   @override
