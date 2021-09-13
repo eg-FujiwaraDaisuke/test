@@ -17,18 +17,23 @@ mixin RetryProcessMixin {
         () => function(),
         retryIf: (e) async {
           if (e is TokenExpiredException) {
-            final dataSource = TokenDataSourceImpl(
-              client: http.Client(),
-              encryptionTokenDataSource: si<EncryptionTokenDataSourceImpl>(),
-            );
-            await dataSource.getAppToken(true);
+            print("#### retry ####");
+            try {
+              final dataSource = TokenDataSourceImpl(
+                client: http.Client(),
+                encryptionTokenDataSource: si<EncryptionTokenDataSourceImpl>(),
+              );
+              await dataSource.getAppToken(true);
+            } catch(e) {
+              print(e);
+            }
             return true;
           }
           return false;
         },
         delayFactor: const Duration(seconds: 1),
         maxDelay: const Duration(seconds: 32),
-        maxAttempts: 2,
+        maxAttempts: 3,
       );
     } catch (otherError) {
       rethrow;

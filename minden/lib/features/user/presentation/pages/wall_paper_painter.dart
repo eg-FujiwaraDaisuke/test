@@ -1,8 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 class WallPaperPainter extends CustomPainter {
   WallPaperPainter({this.wallPaperImage}) : super();
-  Image? wallPaperImage;
+  ui.Image? wallPaperImage;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -46,13 +48,12 @@ class WallPaperPainter extends CustomPainter {
     if (wallPaperImage == null) {
       canvas.drawPath(path, paint);
     } else {
-      // TODO 第一引数でエラーが起きる
-      // canvas.drawImage(wallPaperimage, const Offset(0, 0), paint);
+      canvas.drawImage(wallPaperImage!, const Offset(0, 0), paint);
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }

@@ -14,13 +14,13 @@ class Account {
 
   String get refreshToken => _refreshToken;
 
-  User get me => _me;
+  String get userId => _me.profile.userId ?? '';
 
   bool isMe(String userId) {
     if (userId.isEmpty) {
       return false;
     }
-    final storedUserId = _me.profile.userId ?? "";
+    final storedUserId = _me.profile.userId ?? '';
     return storedUserId == userId;
   }
 
@@ -31,7 +31,7 @@ class Account {
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
     final userJson = json.decode(jsonData);
 
-    _me = User.fromJson(json.decode(jsonData));
+    _me = User.fromJson(userJson);
     if (_me.loginId == null) {
       print('#### you need login ####');
     }

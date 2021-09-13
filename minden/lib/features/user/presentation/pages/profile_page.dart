@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
@@ -16,6 +17,7 @@ import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
+import '../../../../injection_container.dart';
 import '../../../../utile.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -41,7 +43,14 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-    _bloc.add(GetProfileEvent(userId: "MC20210808002"));
+
+    _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
   }
 
   @override
@@ -79,8 +88,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   actions: [
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final ret = await Navigator.push<bool>(
                           context,
                           PageRouteBuilder(
                             pageBuilder:
@@ -102,11 +111,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           ),
                         );
+
+                        // リロード
+                        if (ret ?? false) {
+                          _bloc.add(
+                              GetProfileEvent(userId: si<Account>().userId));
+                        }
                       },
                       child: Container(
                         width: 90,
                         height: 44,
-                        margin: const EdgeInsets.only(right: 18),
+                        margin:
+                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22),
                           color: Colors.white,
@@ -202,26 +218,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           clipBehavior: Clip.none,
                           children: [
                             CustomPaint(
-                              size: Size(
-                                  MediaQuery.of(context).size.width, 168),
+                              size:
+                                  Size(MediaQuery.of(context).size.width, 168),
                               painter: WallPaperPainter(wallPaperImage: null),
                             ),
                             const Positioned(
                               bottom: -44,
-                              child: _ProfileIcon(icon: ""),
+                              child: _ProfileIcon(icon: ''),
                             )
                           ],
                         ),
                         const SizedBox(
                           height: 66,
                         ),
-                        const _ProfileName(
-                          name: "",
-                        ),
+                        const _ProfileName(name: ''),
                         const SizedBox(
                           height: 43,
                         ),
-                        const _ProfileBio(bio: ""),
+                        const _ProfileBio(bio: ''),
                       ],
                     ),
                   ),

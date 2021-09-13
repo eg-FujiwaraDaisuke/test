@@ -25,7 +25,7 @@ class Profile extends Equatable {
         tags: tags);
   }
 
-  final String userId;
+  final String? userId;
   final String name;
   final String icon;
   final String bio;

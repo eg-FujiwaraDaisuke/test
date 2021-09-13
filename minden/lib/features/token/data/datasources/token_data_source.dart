@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
+
+import '../../../../injection_container.dart';
 
 final tokenDataSourceProvider = Provider<TokenDataSource>((ref) =>
     TokenDataSourceImpl(
@@ -45,6 +48,8 @@ class TokenDataSourceImpl implements TokenDataSource {
       await encryptionTokenDataSource.setAppToken(token.appToken);
       await encryptionTokenDataSource.setAppToken(token.refreshToken);
 
+      await si<Account>().prepare();
+
       return token.appToken;
     } else {
       // ローカルに保持しているAppTokenを取り出す
@@ -66,6 +71,7 @@ class TokenDataSourceImpl implements TokenDataSource {
       headers: headers,
     );
 
+    print("${response.body}");
     if (response.statusCode == 200) {
       return TokenModel.fromJson(json.decode(response.body));
     } else {
