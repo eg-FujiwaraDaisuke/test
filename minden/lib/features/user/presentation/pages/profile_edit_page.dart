@@ -26,6 +26,7 @@ import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
 import '../../../../injection_container.dart';
@@ -52,15 +53,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   late String _wallPaperUrl;
   late String _iconUrl;
-  late UploadItem _uploadItem;
+  late String _name;
+  late String _bio;
 
   @override
   void initState() {
     super.initState();
 
+    _name = '';
+    _bio = '';
     _wallPaperUrl = '';
     _iconUrl = '';
-    _uploadItem = UploadItem.none;
 
     _getBloc = GetProfileBloc(
       const ProfileStateInitial(),
@@ -97,6 +100,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   void dispose() {
     _updateBloc.close();
+    _getBloc.close();
     super.dispose();
   }
 
@@ -179,9 +183,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             alignment: Alignment.bottomCenter,
                             clipBehavior: Clip.none,
                             children: [
-                              _ProfileWallPaperEdit(),
+                              _ProfileWallPaperEdit(
+                                imageHandler: (value) {
+                                  _wallPaperUrl = value;
+                                },
+                              ),
                               Positioned(
-                                child: _ProfileIconEdit(),
+                                child: _ProfileIconEdit(
+                                  imageHandler: (value) {
+                                    _iconUrl = value;
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -210,65 +222,26 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 ),
               );
             }
-            return Scaffold(
-              backgroundColor: const Color(0xFFF6F5EF),
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                centerTitle: true,
-              ),
-              extendBodyBehindAppBar: true,
-              body: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomCenter,
-                          clipBehavior: Clip.none,
-                          children: [
-                            _ProfileWallPaperEdit(),
-                            Positioned(
-                              child: _ProfileIconEdit(),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 63,
-                        ),
-                        const _ProfileNameEditForm(
-                          name: '',
-                        ),
-                        const SizedBox(
-                          height: 33,
-                        ),
-                        const _ProfileBioEditForm(
-                          bio: '',
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const _ImportantTagsList(
-                          tagsList: [],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
+            return PlaceHolderProfile();
           },
         ),
       ),
     );
   }
 
+  bool _isDirty() {
+    return _iconUrl.isNotEmpty ||
+        _wallPaperUrl.isNotEmpty ||
+        _name.isNotEmpty ||
+        _bio.isNotEmpty;
+  }
+
   Future<void> _prev(BuildContext context) async {
-    // TODO
-    // if (isDirty) {
-    //
-    // }
+    if (!_isDirty()) {
+      Navigator.pop(context, false);
+      return;
+    }
+
     final isDiscard = await showDialog(
       context: context,
       builder: (context) {
@@ -324,6 +297,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 }
 
 class _ProfileWallPaperEdit extends StatefulWidget {
+  _ProfileWallPaperEdit({required this.imageHandler});
+
+  final Function(String url) imageHandler;
+
   @override
   _ProfileWallPaperEditState createState() => _ProfileWallPaperEditState();
 }
@@ -364,6 +341,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                 await NetworkAssetBundle(Uri.parse(state.media.url)).load('');
             final bytes = imageData.buffer.asUint8List();
             _uiImage = await loadImage(bytes);
+            widget.imageHandler(state.media.url);
             setState(() {});
           }
         }
@@ -420,6 +398,10 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
 }
 
 class _ProfileIconEdit extends StatefulWidget {
+  _ProfileIconEdit({required this.imageHandler});
+
+  final Function(String url) imageHandler;
+
   @override
   _ProfileIconEditState createState() => _ProfileIconEditState();
 }
@@ -447,6 +429,7 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
             if (_queuing) {
               _queuing = false;
               _url = state.media.url;
+              widget.imageHandler(state.media.url);
             }
           }
           return Stack(

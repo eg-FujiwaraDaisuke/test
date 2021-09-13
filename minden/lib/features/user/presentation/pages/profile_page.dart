@@ -199,54 +199,54 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               );
             }
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                centerTitle: true,
-                automaticallyImplyLeading: false,
-              ),
-              extendBodyBehindAppBar: true,
-              body: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          clipBehavior: Clip.none,
-                          children: [
-                            CustomPaint(
-                              size:
-                                  Size(MediaQuery.of(context).size.width, 168),
-                              painter: WallPaperPainter(wallPaperImage: null),
-                            ),
-                            const Positioned(
-                              bottom: -44,
-                              child: _ProfileIcon(icon: ''),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 66,
-                        ),
-                        const _ProfileName(name: ''),
-                        const SizedBox(
-                          height: 43,
-                        ),
-                        const _ProfileBio(bio: ''),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
+            return PlaceHolderProfile();
           },
         ),
       ),
     );
   }
+}
+
+class PlaceHolderProfile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    CustomPaint(
+                      size:
+                      Size(MediaQuery.of(context).size.width, 168),
+                      painter: WallPaperPainter(wallPaperImage: null),
+                    ),
+                    const Positioned(
+                      bottom: -44,
+                      child: _ProfileIcon(icon: ''),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }
 
 class _ProfileIcon extends StatelessWidget {
