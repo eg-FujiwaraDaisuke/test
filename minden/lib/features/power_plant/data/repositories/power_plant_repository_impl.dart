@@ -7,6 +7,7 @@ import 'package:minden/features/power_plant/data/repositories/power_plant_reposi
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 
 const bool replaceMock = true;
@@ -56,6 +57,17 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
     try {
       final plant =
           await powerPlantDataSource.getPowerPlantParticipants(plantId);
+      return Right(plant);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, TagResponse>> getPowerPlantTags(
+      String plantId) async {
+    try {
+      final plant = await powerPlantDataSource.getPowerPlantTags(plantId);
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());

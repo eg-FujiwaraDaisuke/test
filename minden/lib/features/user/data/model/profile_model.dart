@@ -42,6 +42,6 @@ class TagModel extends Tag {
   }
 
   factory TagModel.fromJson(Map<String, dynamic> tag) {
-    return TagModel(tagId: tag["tagId"], tagName: tag["tagName"]);
+    return TagModel(tagId: tag['tagId'], tagName: tag['tagName']);
   }
 }

@@ -7,6 +7,7 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
+import 'package:minden/features/power_plant/data/model/tag_response_model.dart';
 
 final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
     (ref) => PowerPlantDataSourceImpl(client: http.Client()));
@@ -17,6 +18,8 @@ abstract class PowerPlantDataSource {
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId);
 
   Future<PowerPlantParticipantModel> getPowerPlantParticipants(String plantId);
+
+  Future<TagResponseModel> getPowerPlantTags(String plantId);
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -29,6 +32,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   final _powerPlantPath = '/api/v1/power_plant';
 
   final _powerPlantParticipantPath = '/api/v1/power_plant/participants';
+
+  final _powerPlantTags = '/api/v1/power_plant/tags';
 
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
@@ -80,6 +85,24 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       return PowerPlantParticipantModel.fromJson(json.decode(response.body));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<TagResponseModel> getPowerPlantTags(String plantId) async {
+    final body = json.encode({'plantId': plantId});
+    final env = ApiConfig.apiEndpoint();
+
+    final response = await client.post(
+      Uri.parse((env['url']! as String) + _powerPlantTags),
+      headers: env['headers']! as Map<String, String>,
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return TagResponseModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException();
     }
