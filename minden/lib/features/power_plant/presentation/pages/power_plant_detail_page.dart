@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 /// 発電所詳細
 class PowerPlantDetailPage extends ConsumerWidget {
@@ -78,7 +80,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                _generateDetail(data.detail!, data.participant!),
+                _generateDetail(data.detail!, data.participant!, data.tags!),
                 // この発電所を応援する
                 Container(
                   height: 82,
@@ -133,7 +135,10 @@ class PowerPlantDetailPage extends ConsumerWidget {
   }
 
   Widget _generateDetail(
-      PowerPlantDetail detail, PowerPlantParticipant participant) {
+    PowerPlantDetail detail,
+    PowerPlantParticipant participant,
+    List<Tag> tags,
+  ) {
     return Column(
       children: [
         Padding(
@@ -214,7 +219,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 45),
-              _generateDetailTags(participant),
+              _generateDetailTags(participant, tags),
               _generateDetailMessages(detail),
               const SizedBox(height: 47),
             ],
@@ -224,7 +229,10 @@ class PowerPlantDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _generateDetailTags(PowerPlantParticipant participant) {
+  Widget _generateDetailTags(
+    PowerPlantParticipant participant,
+    List<Tag> tags,
+  ) {
     return Column(
       children: [
         const Divider(
@@ -248,6 +256,22 @@ class PowerPlantDetailPage extends ConsumerWidget {
           children: [
             ParticipantUserIconGroup(participant: participant),
           ],
+        ),
+        // 大切にしていることタグ
+        const SizedBox(height: 16),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 10,
+            children: tags
+                .map((tag) => ImportantTagListItem(
+                      tag: tag,
+                      onSelect: () {},
+                      isSelected: true,
+                    ))
+                .toList(),
+          ),
         ),
         const SizedBox(height: 16),
       ],

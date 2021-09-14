@@ -5,6 +5,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 import 'package:minden/features/token/data/repositories/token_repository_impl.dart';
 import 'package:minden/features/token/domain/repositories/token_repository.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 final powerPlantDetailPageViewModelProvider = StateNotifierProvider<
         PowerPlantDetailPageViewModel, PowerPlantDetailPageState>(
@@ -22,6 +23,7 @@ class PowerPlantDetailPageViewModel
   ) : super(PowerPlantDetailPageState(
           detail: null,
           participant: null,
+          tags: null,
           selectedCompanyIndex: 0,
         ));
 
@@ -38,6 +40,7 @@ class PowerPlantDetailPageViewModel
         state = PowerPlantDetailPageState(
           detail: right,
           participant: state.participant,
+          tags: state.tags,
           selectedCompanyIndex: 0,
         )
       },
@@ -51,6 +54,21 @@ class PowerPlantDetailPageViewModel
         state = PowerPlantDetailPageState(
           detail: state.detail,
           participant: right,
+          tags: state.tags,
+          selectedCompanyIndex: 0,
+        )
+      },
+    );
+
+    (await powerPlantRepository.getPowerPlantTags(plantId)).fold(
+      (left) => {
+        // TODO エラーハンドリング
+      },
+      (right) => {
+        state = PowerPlantDetailPageState(
+          detail: state.detail,
+          participant: state.participant,
+          tags: right.tags,
           selectedCompanyIndex: 0,
         )
       },
@@ -61,6 +79,7 @@ class PowerPlantDetailPageViewModel
     state = PowerPlantDetailPageState(
       detail: state.detail,
       participant: state.participant,
+      tags: state.tags,
       selectedCompanyIndex: index,
     );
   }
@@ -70,6 +89,7 @@ class PowerPlantDetailPageState {
   PowerPlantDetailPageState({
     required this.detail,
     required this.participant,
+    required this.tags,
     required this.selectedCompanyIndex,
   });
 
@@ -78,6 +98,9 @@ class PowerPlantDetailPageState {
 
   /// 応援ユーザー情報
   late final PowerPlantParticipant? participant;
+
+  /// 大切していることタグ一覧
+  late final List<Tag>? tags;
 
   /// 選択中のピックアップ電力会社index
   late final int selectedCompanyIndex;

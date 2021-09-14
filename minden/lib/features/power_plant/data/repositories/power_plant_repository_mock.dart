@@ -2,14 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
-import 'package:minden/features/power_plant/data/model/tag_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
-import 'package:minden/features/power_plant/domain/entities/tag.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 
 class PowerPlantRepositoryMock implements PowerPlantRepository {
   @override
@@ -18,7 +18,7 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
     try {
       final data = PowerPlantsResponse(
         tag: const TagModel(
-          tagId: '1',
+          tagId: 1,
           tagName: 'テストタグ',
         ),
         powerPlants: [
@@ -186,16 +186,16 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
       const data = TagResponse(
         tags: [
           Tag(
-            tagId: '1',
-            tagName: '#使い捨てしません',
+            tagId: 1,
+            tagName: '使い捨てしません',
           ),
           Tag(
-            tagId: '2',
-            tagName: '#環境負荷ゼロ',
+            tagId: 2,
+            tagName: '環境負荷ゼロ',
           ),
           Tag(
-            tagId: '3',
-            tagName: '#フェアトレード',
+            tagId: 3,
+            tagName: 'フェアトレード',
           )
         ],
       );

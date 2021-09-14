@@ -1,6 +1,6 @@
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
-import 'package:minden/features/power_plant/data/model/tag_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/user/data/model/profile_model.dart';
 
 class PowerPlantsResponseModel extends PowerPlantsResponse {
   const PowerPlantsResponseModel({
