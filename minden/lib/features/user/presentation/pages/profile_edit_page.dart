@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +29,6 @@ import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.d
 
 import '../../../../injection_container.dart';
 import '../../../../utile.dart';
-
-enum UploadItem {
-  icon,
-  wallPaper,
-  none,
-}
 
 class ProfileEditPage extends StatefulWidget {
   @override
@@ -191,16 +183,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               clipBehavior: Clip.antiAlias,
                               children: [
                                 _ProfileWallPaperEdit(
-                                  imageUrl:
-                                      'https://d1nt9ilagmjg63.cloudfront.net/media/1631577810186-nakajo@minden.co.jp-image',
+                                  imageUrl: state.profile.wallPaper,
                                   imageHandler: (value) {
                                     _wallPaperUrl = value;
                                   },
                                 ),
                                 Positioned(
                                   child: _ProfileIconEdit(
-                                    imageUrl:
-                                        'https://d1nt9ilagmjg63.cloudfront.net/media/1631578986577-nakajo@minden.co.jp-image',
+                                    imageUrl: state.profile.icon,
                                     imageHandler: (value) {
                                       _iconUrl = value;
                                     },
@@ -212,7 +202,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               height: 17,
                             ),
                             _ProfileNameEditForm(
-                              name: _name,
+                              name: state.profile.name,
                               textHandler: (value) {
                                 _name = value;
                               },
@@ -221,7 +211,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               height: 33,
                             ),
                             _ProfileBioEditForm(
-                              bio: _bio,
+                              bio: state.profile.bio,
                               textHandler: (value) {
                                 _bio = value;
                               },

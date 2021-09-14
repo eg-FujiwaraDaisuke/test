@@ -45,6 +45,7 @@
 "profile_setting_tag_description_select" : "選択してください（何個でも選択タグ可）",
 "profile_setting_tag_description_wo" : "を\n",
 "profile_setting_tag_description_you" : "あなたが",
+"reset_password_decide_code" : "確認コード入力",
 "reset_password_hint_text" : "新しいパスワード（8文字以上32文字以下　英字、数字から2種類以上）",
 "reset_password_re_input" : "パスワード再入力",
 "skip" : "Skip",
@@ -69,9 +70,9 @@
 "user_menu_contact" : "お問い合わせ",
 "user_menu_contract" : "ご契約内容",
 "user_menu_logout" : "ログアウト",
+"user_menu_message" : "メッセージ",
 "user_menu_profile" : "プロフィール",
 "user_menu_select_plant" : "選択した発電所",
-"user_menu_thanks_message" : "メッセージ",
 "user_mypage" : "マイページ",
 "user_select_plant" : "選択中の電力会社"
 }

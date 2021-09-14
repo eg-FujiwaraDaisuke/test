@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
@@ -259,17 +259,17 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 ),
                 const SizedBox(height: 28),
                 if (_selectedTags.isEmpty)
-                  Botton(
+                  Button(
                     onTap: () => {},
                     text: i18nTranslate(context, 'profile_setting_next'),
-                    size: BottonSize.S,
+                    size: ButtonSize.S,
                     isActive: false,
                   )
                 else
-                  Botton(
+                  Button(
                     onTap: _next,
                     text: i18nTranslate(context, 'profile_setting_next'),
-                    size: BottonSize.S,
+                    size: ButtonSize.S,
                   ),
                 const SizedBox(height: 32),
               ],

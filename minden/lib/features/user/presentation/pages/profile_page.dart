@@ -13,7 +13,6 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
@@ -26,7 +25,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final data = ProfileDamyData().damyData;
   late GetProfileBloc _bloc;
 
   @override
@@ -161,14 +159,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.center,
                             clipBehavior: Clip.none,
                             children: [
-                              if (data.wallPaper == '')
+                              if (state.profile.wallPaper.isEmpty)
                                 Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 173,
                                     color: const Color(0xFFFFFB92))
                               else
                                 Image.network(
-                                  data.wallPaper,
+                                  state.profile.wallPaper,
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,
@@ -181,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               Positioned(
                                 bottom: -44,
-                                child: _ProfileIcon(icon: data.icon),
+                                child: _ProfileIcon(icon: state.profile.icon),
                               )
                             ],
                           ),
@@ -189,17 +187,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 60,
                           ),
                           _ProfileName(
-                            name: data.name,
+                            name: state.profile.name,
                           ),
                           const SizedBox(
                             height: 35,
                           ),
-                          _ProfileBio(bio: data.bio),
+                          _ProfileBio(bio: state.profile.bio),
                           const SizedBox(
                             height: 43,
                           ),
                           _TagsList(
-                            tagsList: data.tags,
+                            tagsList: state.profile.tags,
                           ),
                           const SizedBox(
                             height: 37,
@@ -388,6 +386,7 @@ class _TagsList extends StatelessWidget {
 
 class _SelectedPlantList extends StatelessWidget {
   const _SelectedPlantList({required this.selectedPlantList});
+
   final selectedPlantList;
 
   @override

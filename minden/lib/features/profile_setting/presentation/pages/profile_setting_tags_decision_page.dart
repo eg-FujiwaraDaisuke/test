@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
@@ -137,10 +137,10 @@ class _ProfileSettingTagsDecisionPageState
                 ),
               ),
               const SizedBox(height: 112),
-              Botton(
+              Button(
                 onTap: () => {_decide(context)},
                 text: i18nTranslate(context, 'decide'),
-                size: BottonSize.S,
+                size: ButtonSize.S,
               ),
               const SizedBox(height: 19),
               GestureDetector(

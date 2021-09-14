@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_icon_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
@@ -91,10 +91,10 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
                       _inputName = value;
                     }),
                 const SizedBox(height: 182),
-                Botton(
+                Button(
                   onTap: _next,
                   text: i18nTranslate(context, 'profile_setting_next'),
-                  size: BottonSize.S,
+                  size: ButtonSize.S,
                 ),
               ],
             ),
