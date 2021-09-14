@@ -116,7 +116,7 @@ class _SupportPlantDialogDebugPageState
               onPressed: () async {
                 // 契約件数１応援０の場合
                 if (userDammy.supportableNumber > registPowerPlants.length) {
-                  SupportPlantDecisionDialog(
+                  await SupportPlantDecisionDialog(
                     context: context,
                     selectPowerPlant: selectPowerPlantDammy,
                     user: userDammy,
