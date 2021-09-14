@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class Profile extends Equatable {
   const Profile({
@@ -47,29 +48,3 @@ class Profile extends Equatable {
   List<Object?> get props => [userId];
 }
 
-class Tag extends Equatable {
-  const Tag({
-    required this.tagId,
-    required this.tagName,
-  });
-
-  factory Tag.fromJson(Map<String, dynamic> tag) {
-    return Tag(
-      tagId: tag['tagId'],
-      tagName: tag['tagName'],
-    );
-  }
-
-  final int tagId;
-  final String tagName;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'tagId': tagId,
-      'tagName': tagName,
-    };
-  }
-
-  @override
-  List<Object> get props => [tagId];
-}

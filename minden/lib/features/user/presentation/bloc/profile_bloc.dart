@@ -49,7 +49,9 @@ class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         yield failureOrUser.fold<ProfileState>(
           (failure) => throw ServerFailure(),
-          (profile) => ProfileLoaded(profile: profile),
+          (profile) {
+            return ProfileLoaded(profile: profile);
+          },
         );
       } catch (e) {
         yield ProfileLoadError(e.toString());

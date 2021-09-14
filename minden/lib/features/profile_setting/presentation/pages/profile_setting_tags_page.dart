@@ -9,12 +9,12 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/utile.dart';
 
 class ProfileSettingTagsPage extends StatefulWidget {
@@ -23,8 +23,9 @@ class ProfileSettingTagsPage extends StatefulWidget {
 }
 
 class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
-  final List<Tag> _selectedTags = [];
+  final List<Tag?> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
+  late GetTagsBloc _tagBloc;
   late UpdateTagBloc _updateTagBloc;
 
   @override
@@ -63,20 +64,51 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       ),
     );
     _allTagBloc.add(const GetTagEvent());
+
+    _tagBloc = GetTagsBloc(
+      const TagStateInitial(),
+      GetTags(
+        TagRepositoryImpl(
+          dataSource: TagDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _tagBloc.stream.listen((event) {
+      if (event is TagLoading) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is TagGetSucceed) {
+        setState(() {
+          _selectedTags.addAll(event.tags);
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _allTagBloc.close();
+    _tagBloc.close();
     _updateTagBloc.close();
     super.dispose();
   }
 
   void _onSelectTag(Tag tag) {
-    if (_selectedTags.contains(tag)) {
+    print("${_selectedTags}, ${tag}");
+    final foundTag = _selectedTags.firstWhere((element) {
+      print(">>> ${element}, ${tag}");
+      return element?.tagId == tag.tagId;
+    }, orElse: () => null);
+    if (foundTag != null) {
       setState(() {
-        _selectedTags.remove(tag);
+        _selectedTags.remove(foundTag);
       });
+      print("found ${foundTag}, param ${tag}, list ${_selectedTags}, ");
     } else {
       if (_selectedTags.length >= 4) {
         // タグは4つ以下 alertを表示する
@@ -86,6 +118,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       setState(() {
         _selectedTags.add(tag);
       });
+      print("remove ${tag}, list ${_selectedTags}, ");
     }
   }
 
@@ -200,6 +233,9 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                         return;
                       }
                       Loading.hide();
+                      if (state is CategoryGetSucceed) {
+                        _tagBloc.add(const GetTagEvent());
+                      }
                     },
                     child: BlocBuilder<GetAllTagsBloc, TagState>(
                       builder: (context, state) {
@@ -249,9 +285,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _next() {
-    print("${_selectedTags.map((e) => e.tagId).toList()}");
     _updateTagBloc
-        .add(UpdateTagEvent(tags: _selectedTags.map((e) => e.tagId).toList()));
+        .add(UpdateTagEvent(tags: _selectedTags.map((e) => e!.tagId).toList()));
   }
 }
 
@@ -265,7 +300,7 @@ class _TagsList extends StatefulWidget {
       : super();
 
   final List<Tag> tagsList;
-  final List<Tag> selectedTags;
+  final List<Tag?> selectedTags;
   final Function onSelect;
   final Color color;
   final String title;
@@ -318,15 +353,18 @@ class _TagsListState extends State<_TagsList> {
               alignment: WrapAlignment.center,
               spacing: 5,
               runSpacing: 10,
-              children: widget.tagsList
-                  .map(
-                    (tag) => ImportantTagListItem(
-                      tag: tag,
-                      onSelect: widget.onSelect,
-                      isSelected: widget.selectedTags.contains(tag),
-                    ),
-                  )
-                  .toList(),
+              children: widget.tagsList.map(
+                (tag) {
+                  return ImportantTagListItem(
+                    tag: tag,
+                    onSelect: widget.onSelect,
+                    isSelected: widget.selectedTags.firstWhere((element) {
+                          return element?.tagId == tag.tagId;
+                        }, orElse: () => null) !=
+                        null,
+                  );
+                },
+              ).toList(),
             ),
           ),
         ],

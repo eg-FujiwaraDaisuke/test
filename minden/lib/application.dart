@@ -6,7 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/ui/tab_indicator.dart';
 import 'package:minden/features/debug/debug_page.dart';
+import 'package:minden/features/debug/debug_push_message_page.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
 import 'package:minden/features/localize/data/repositories/localized_info_repository_impl.dart';
 import 'package:minden/features/localize/domain/usecases/localized_usecase.dart';
@@ -15,26 +18,21 @@ import 'package:minden/features/localize/presentation/bloc/localized_state.dart'
 import 'package:minden/features/login/data/datasources/user_data_source.dart';
 import 'package:minden/features/login/data/repositories/login_repository_impl.dart';
 import 'package:minden/features/login/domain/usecases/login_usecase.dart';
+import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
+import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
 import 'package:minden/features/uploader/domain/usecases/media_usecase.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
-import 'package:minden/features/user/presentation/pages/user_page.dart';
+import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
-
-import 'core/ui/tab_indicator.dart';
-import 'features/debug/debug_push_message_page.dart';
-import 'features/home/presentation/pages/home_page.dart';
-import 'features/login/presentation/bloc/login_bloc.dart';
-import 'features/power_plant/presentation/pages/power_plant_page.dart';
-import 'features/startup/presentation/pages/initial_page.dart';
-import 'features/uploader/presentation/bloc/upload_bloc.dart';
-import 'features/uploader/presentation/bloc/upload_state.dart';
-import 'injection_container.dart';
+import 'package:minden/features/user/presentation/pages/user_page.dart';
+import 'package:minden/injection_container.dart';
 
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);

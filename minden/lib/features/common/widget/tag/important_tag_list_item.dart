@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 import 'important_tags.dart';
 
