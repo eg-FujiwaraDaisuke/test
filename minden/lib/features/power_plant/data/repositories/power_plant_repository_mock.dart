@@ -126,10 +126,30 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
     try {
       const data = PowerPlantParticipant(
           page: '1',
-          total: '2',
+          total: '4',
           plantId: '1',
           yearMonth: '202109',
           userList: [
+            PowerPlantParticipantUser(
+              userId: '1',
+              name: 'さとう',
+              contractor: '1',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
+            PowerPlantParticipantUser(
+              userId: '2',
+              name: 'やまだ',
+              contractor: '2',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
             PowerPlantParticipantUser(
               userId: '1',
               name: 'さとう',

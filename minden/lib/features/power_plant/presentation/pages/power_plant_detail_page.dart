@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 
@@ -26,6 +27,10 @@ class PowerPlantDetailPage extends ConsumerWidget {
     });
 
     final data = watch(powerPlantDetailPageViewModelProvider);
+
+    if (data.detail == null || data.participant == null) {
+      return Container();
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -61,7 +66,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                         bottom: 56,
                       ),
                       child: Text(
-                        data.value!.catchphrase!,
+                        data.detail!.catchphrase!,
                         style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'NotoSansJP',
@@ -73,8 +78,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                if (data.value == null) Container(),
-                if (data.value != null) _generateDetail(data.value!),
+                _generateDetail(data.detail!, data.participant!),
                 // この発電所を応援する
                 Container(
                   height: 82,
@@ -128,7 +132,8 @@ class PowerPlantDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _generateDetail(PowerPlantDetail detail) {
+  Widget _generateDetail(
+      PowerPlantDetail detail, PowerPlantParticipant participant) {
     return Column(
       children: [
         Padding(
@@ -209,7 +214,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 45),
-              _generateDetailTags(),
+              _generateDetailTags(participant),
               _generateDetailMessages(detail),
               const SizedBox(height: 47),
             ],
@@ -219,7 +224,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _generateDetailTags() {
+  Widget _generateDetailTags(PowerPlantParticipant participant) {
     return Column(
       children: [
         const Divider(
@@ -237,6 +242,14 @@ class PowerPlantDetailPage extends ConsumerWidget {
             height: 1.43,
           ),
         ),
+        // 応援ユーザー
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ParticipantUserIconGroup(participant: participant),
+          ],
+        ),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -346,6 +359,109 @@ class PowerPlantDetailPage extends ConsumerWidget {
             ]),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 応援ユーザー表示
+class ParticipantUserIconGroup extends StatelessWidget {
+  const ParticipantUserIconGroup({Key? key, required this.participant})
+      : super(key: key);
+
+  /// 表示可能な最大ユーザーアイコン数
+  static const maxUserIconCount = 3;
+
+  /// 表示可能な最大アイコン数
+  static const maxIconCount = 4;
+
+  /// アイコン同士の重なり度合い
+  static const overlapLength = 22.0;
+
+  /// アイコンサイズ（直径）
+  static const iconSize = 30.0;
+
+  final PowerPlantParticipant participant;
+
+  @override
+  Widget build(BuildContext context) {
+    return _generateParticipant(participant);
+  }
+
+  Widget _generateParticipant(PowerPlantParticipant participant) {
+    final icons = _generateParticipantIcons(participant);
+
+    return Stack(
+      children: List.generate(
+        icons.length,
+        (index) {
+          return Padding(
+            padding: EdgeInsets.fromLTRB(
+                (maxIconCount - index) * overlapLength, 0, 0, 0),
+            child: icons[index],
+          );
+        },
+      ),
+    );
+  }
+
+  List<Widget> _generateParticipantIcons(PowerPlantParticipant participant) {
+    final total = int.parse(participant.total);
+    if (maxUserIconCount < total) {
+      // 4人以上応援ユーザーがいる場合、
+      return [
+        _generateCircleRemainIcon(total),
+        ...participant.userList
+            .take(maxUserIconCount)
+            .map((p) => _generateCircleUserIcon(p.icon))
+            .toList()
+      ];
+    } else {
+      // 3人以下の応援ユーザーしかいないため、「+X」表記を行わない
+      return participant.userList
+          .map((p) => _generateCircleUserIcon(p.icon))
+          .toList();
+    }
+  }
+
+  Widget _generateCircleUserIcon(String imageUrl) {
+    return Container(
+      width: iconSize,
+      height: iconSize,
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(iconSize / 2),
+      ),
+      // 魔法の padding
+      padding: const EdgeInsets.all(0.5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(iconSize / 2),
+        child: Image.network(
+          imageUrl,
+          width: iconSize,
+          height: iconSize,
+        ),
+      ),
+    );
+  }
+
+  Widget _generateCircleRemainIcon(int participantCount) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(iconSize / 2),
+      child: Container(
+        width: iconSize,
+        height: iconSize,
+        alignment: Alignment.center,
+        color: const Color(0xFFEDCB50),
+        padding: const EdgeInsets.only(left: 4),
+        child: Text('+${participantCount - 3}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+              height: 1.2,
+            )),
       ),
     );
   }
