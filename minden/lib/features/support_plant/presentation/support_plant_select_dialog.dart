@@ -20,7 +20,7 @@ class SupportPlantSelectDialog {
   List<RegistPowerPlant> registPowerPlants;
   final User user;
 
-  Future<bool?> showDialog() async {
+  Future<T?> showDialog<T>() async {
     await Navigator.push(
       context,
       CustomDialogOverlay(
@@ -221,7 +221,7 @@ class SupportPlantSelectDialog {
                       if (user.supportableNumber > canRegistPowerPlants.length)
                         Button(
                           onTap: () {
-                            Navigator.pop(context, true);
+                            return Navigator.pop(context, true);
                           },
                           text: i18nTranslate(context, 'to_next'),
                           size: ButtonSize.S,
@@ -240,8 +240,7 @@ class SupportPlantSelectDialog {
                         onTap: () {
                           registPowerPlants.forEach((registPowerPlant) =>
                               registPowerPlant.isRegist = true);
-
-                          Navigator.pop(context, false);
+                          return Navigator.pop(context, false);
                         },
                         child: Text(
                           i18nTranslate(context, 'cancel_katakana'),
@@ -262,7 +261,7 @@ class SupportPlantSelectDialog {
                 right: 27,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context, false);
+                    return Navigator.pop(context, false);
                   },
                   child: const Icon(Icons.close),
                 ),

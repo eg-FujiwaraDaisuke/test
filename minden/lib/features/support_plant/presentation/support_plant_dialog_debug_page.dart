@@ -128,8 +128,9 @@ class _SupportPlantDialogDebugPageState
                           selectPowerPlant: selectPowerPlantDammy,
                           user: userDammy,
                           registPowerPlants: registPowerPlants)
-                      .showDialog();
+                      .showDialog<bool>();
 
+                  print('isSelected');
                   print(isSelected);
 
                   if (isSelected!) {
