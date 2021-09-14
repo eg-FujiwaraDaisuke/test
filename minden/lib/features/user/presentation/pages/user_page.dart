@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/user_profile_page.dart';
-import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
+
 import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
 
 import '../../../../utile.dart';
@@ -23,7 +24,7 @@ class _Menu {
 
   final String title;
   final String icon;
-  final String? routeName;
+  final String routeName;
   final MenuType type;
 }
 
@@ -157,9 +158,9 @@ class _MenuListView extends StatelessWidget {
           routeName: '/user/profile',
           type: MenuType.common),
       _Menu(
-          title: i18nTranslate(context, 'user_menu_thanks_message'),
+          title: i18nTranslate(context, 'user_menu_message'),
           icon: 'message',
-          routeName: '/user/thanksMessage',
+          routeName: '/user/message',
           type: MenuType.message),
       _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
@@ -258,7 +259,7 @@ class _MenuItem extends StatelessWidget {
 class _MenuMessageItem extends StatelessWidget {
   final String title;
   final String icon;
-  final String? routeName;
+  final String routeName;
   final bool hasUnreadNotice = true;
 
   const _MenuMessageItem({
@@ -273,7 +274,7 @@ class _MenuMessageItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         final route = MaterialPageRoute(
-          builder: (context) => UserThanksMessagePage(),
+          builder: (context) => MessagePage(),
           settings: const RouteSettings(name: '/user/message'),
         );
 
