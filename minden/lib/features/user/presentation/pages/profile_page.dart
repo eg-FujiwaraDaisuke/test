@@ -9,14 +9,13 @@ import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
-import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
 import '../../../../injection_container.dart';
 import '../../../../utile.dart';
@@ -70,6 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, state) {
             if (state is ProfileLoadError) {
               return Scaffold(
+                backgroundColor: Colors.white,
                 appBar: AppBar(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Text(
                               i18nTranslate(context, 'user_edit'),
                               style: const TextStyle(
-                                color: Colors.black,
+                                color: Color(0xFF575292),
                                 fontSize: 12,
                                 fontFamily: 'NotoSansJP',
                                 fontWeight: FontWeight.w500,
@@ -161,10 +161,23 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.center,
                             clipBehavior: Clip.none,
                             children: [
+                              if (data.wallPaper == '')
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 173,
+                                    color: const Color(0xFFFFFB92))
+                              else
+                                Image.network(
+                                  data.wallPaper,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 173,
+                                  fit: BoxFit.cover,
+                                ),
                               CustomPaint(
                                 size: Size(
-                                    MediaQuery.of(context).size.width, 168),
-                                painter: WallPaperPainter(wallPaperImage: null),
+                                    MediaQuery.of(context).size.width, 173),
+                                painter:
+                                    WallPaperArcPainter(color: Colors.white),
                               ),
                               Positioned(
                                 bottom: -44,
@@ -173,17 +186,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                           const SizedBox(
-                            height: 66,
+                            height: 60,
                           ),
                           _ProfileName(
                             name: data.name,
                           ),
                           const SizedBox(
-                            height: 43,
+                            height: 35,
                           ),
                           _ProfileBio(bio: data.bio),
                           const SizedBox(
-                            height: 37,
+                            height: 43,
                           ),
                           _TagsList(
                             tagsList: data.tags,
@@ -229,10 +242,13 @@ class PlaceHolderProfile extends StatelessWidget {
                   alignment: Alignment.center,
                   clipBehavior: Clip.none,
                   children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 173,
+                        color: const Color(0xFFFFFB92)),
                     CustomPaint(
-                      size:
-                      Size(MediaQuery.of(context).size.width, 168),
-                      painter: WallPaperPainter(wallPaperImage: null),
+                      size: Size(MediaQuery.of(context).size.width, 173),
+                      painter: WallPaperArcPainter(color: Colors.white),
                     ),
                     const Positioned(
                       bottom: -44,
@@ -247,7 +263,6 @@ class PlaceHolderProfile extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class _ProfileIcon extends StatelessWidget {
@@ -316,7 +331,7 @@ class _ProfileBio extends StatelessWidget {
       child: Text(
         bio,
         style: TextStyle(
-          color: Colors.black,
+          color: const Color(0xFF787877),
           fontSize: 12,
           fontFamily: 'NotoSansJP',
           fontWeight: FontWeight.w400,
@@ -342,7 +357,7 @@ class _TagsList extends StatelessWidget {
           Text(
             i18nTranslate(context, 'user_important'),
             style: TextStyle(
-              color: Colors.black,
+              color: const Color(0xFF575292),
               fontSize: 14,
               fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.w700,
@@ -372,7 +387,7 @@ class _TagsList extends StatelessWidget {
 }
 
 class _SelectedPlantList extends StatelessWidget {
-  const _SelectedPlantList({required this.selectedPlantList}) : super();
+  const _SelectedPlantList({required this.selectedPlantList});
   final selectedPlantList;
 
   @override
@@ -383,7 +398,7 @@ class _SelectedPlantList extends StatelessWidget {
         Text(
           i18nTranslate(context, 'user_select_plant'),
           style: TextStyle(
-            color: Colors.black,
+            color: const Color(0xFF575292),
             fontSize: 14,
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w700,

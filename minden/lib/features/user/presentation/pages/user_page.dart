@@ -4,7 +4,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_thanks_message_page.dart';
-import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
 import '../../../../utile.dart';
 
@@ -34,9 +34,10 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         centerTitle: true,
         title: Text(
           i18nTranslate(context, 'user_mypage'),
@@ -60,9 +61,21 @@ class UserPage extends StatelessWidget {
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
                 children: [
+                  if (data.wallPaper == '')
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 173,
+                        color: const Color(0xFFFFFB92))
+                  else
+                    Image.network(
+                      data.wallPaper,
+                      width: MediaQuery.of(context).size.width,
+                      height: 173,
+                      fit: BoxFit.cover,
+                    ),
                   CustomPaint(
-                    size: Size(MediaQuery.of(context).size.width, 168),
-                    painter: WallPaperPainter(wallPaperImage: null),
+                    size: Size(MediaQuery.of(context).size.width, 173),
+                    painter: WallPaperArcPainter(color: Colors.white),
                   ),
                   Positioned(
                     bottom: -44,
@@ -71,7 +84,7 @@ class UserPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 66,
+                height: 60,
               ),
               _ProfileName(
                 name: data.name,
@@ -89,9 +102,8 @@ class UserPage extends StatelessWidget {
 }
 
 class _ProfileIcon extends StatelessWidget {
-  final String icon;
-
   const _ProfileIcon({required this.icon});
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +111,7 @@ class _ProfileIcon extends StatelessWidget {
       width: 99,
       height: 99,
       decoration: const BoxDecoration(
-        color: const Color(0xFFFF8C00),
+        color: Color(0xFFFF8C00),
         shape: BoxShape.circle,
       ),
       child: Center(
@@ -333,6 +345,7 @@ class _MenuMessageItem extends StatelessWidget {
                 if (hasUnreadNotice)
                   Flexible(
                     child: Text(
+                      // TODO 未読で最新メッセージの発電所が入ります
                       'XXX発電所' +
                           i18nTranslate(context, 'thanks_message_notification'),
                       style: TextStyle(

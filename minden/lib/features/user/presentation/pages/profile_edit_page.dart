@@ -27,7 +27,7 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
-import 'package:minden/features/user/presentation/pages/wall_paper_painter.dart';
+import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
 import '../../../../injection_container.dart';
 import '../../../../utile.dart';
@@ -165,7 +165,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             Text(
                               i18nTranslate(context, 'user_edit_complete'),
                               style: const TextStyle(
-                                color: Colors.black,
+                                color: Color(0xFF575292),
                                 fontSize: 12,
                                 fontFamily: 'NotoSansJP',
                                 fontWeight: FontWeight.w500,
@@ -188,11 +188,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                           children: [
                             Stack(
                               alignment: Alignment.bottomCenter,
-                              clipBehavior: Clip.none,
+                              clipBehavior: Clip.antiAlias,
                               children: [
                                 _ProfileWallPaperEdit(
                                   imageUrl:
-                                      "https://d1nt9ilagmjg63.cloudfront.net/media/1631577810186-nakajo@minden.co.jp-image",
+                                      'https://d1nt9ilagmjg63.cloudfront.net/media/1631577810186-nakajo@minden.co.jp-image',
                                   imageHandler: (value) {
                                     _wallPaperUrl = value;
                                   },
@@ -200,7 +200,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 Positioned(
                                   child: _ProfileIconEdit(
                                     imageUrl:
-                                        "https://d1nt9ilagmjg63.cloudfront.net/media/1631578986577-nakajo@minden.co.jp-image",
+                                        'https://d1nt9ilagmjg63.cloudfront.net/media/1631578986577-nakajo@minden.co.jp-image',
                                     imageHandler: (value) {
                                       _iconUrl = value;
                                     },
@@ -209,7 +209,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               ],
                             ),
                             const SizedBox(
-                              height: 63,
+                              height: 17,
                             ),
                             _ProfileNameEditForm(
                               name: _name,
@@ -265,39 +265,51 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       builder: (context) {
         return Platform.isIOS
             ? CupertinoAlertDialog(
-                title:
-                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
-                content: Text(i18nTranslate(
-                    context, 'profile_edit_alert_discard_confirm')),
+                title: Text(
+                  i18nTranslate(context, 'profile_edit_alert_discard'),
+                ),
+                content: Text(
+                  i18nTranslate(context, 'profile_edit_alert_discard_confirm'),
+                ),
                 actions: <Widget>[
                   CupertinoDialogAction(
                     onPressed: () => Navigator.pop(context, false),
-                    child: Text(i18nTranslate(context, 'cancel_katakana')),
+                    child: Text(
+                      i18nTranslate(context, 'cancel_katakana'),
+                    ),
                   ),
                   CupertinoDialogAction(
                     isDestructiveAction: true,
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    child: Text(i18nTranslate(context, 'discard')),
+                    child: Text(
+                      i18nTranslate(context, 'discard'),
+                    ),
                   ),
                 ],
               )
             : AlertDialog(
-                title:
-                    Text(i18nTranslate(context, 'profile_edit_alert_discard')),
-                content: Text(i18nTranslate(
-                    context, 'profile_edit_alert_discard_confirm')),
+                title: Text(
+                  i18nTranslate(context, 'profile_edit_alert_discard'),
+                ),
+                content: Text(
+                  i18nTranslate(context, 'profile_edit_alert_discard_confirm'),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context, false),
-                    child: Text(i18nTranslate(context, 'cancel_katakana')),
+                    child: Text(
+                      i18nTranslate(context, 'cancel_katakana'),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    child: Text(i18nTranslate(context, 'discard')),
+                    child: Text(
+                      i18nTranslate(context, 'discard'),
+                    ),
                   ),
                 ],
               );
@@ -332,31 +344,11 @@ class _ProfileWallPaperEdit extends StatefulWidget {
 }
 
 class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
-  ui.Image? _uiImage;
   bool _queuing = false;
 
   @override
   void initState() {
     super.initState();
-    _imageFromUrl(widget.imageUrl);
-  }
-
-  Future<void> _imageFromUrl(String url) async {
-    if (url.isEmpty) return;
-    final imageData = await NetworkAssetBundle(Uri.parse(url)).load('');
-    final bytes = imageData.buffer.asUint8List();
-    final image = await _loadImage(bytes);
-    setState(() {
-      _uiImage = image;
-    });
-  }
-
-  Future<ui.Image> _loadImage(Uint8List img) async {
-    final completer = Completer<ui.Image>();
-    ui.decodeImageFromList(img, (ui.Image img) {
-      return completer.complete(img);
-    });
-    return completer.future;
   }
 
   @override
@@ -374,7 +366,6 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
         if (state is Uploaded) {
           if (_queuing) {
             _queuing = false;
-            await _imageFromUrl(state.media.url);
             widget.imageHandler(state.media.url);
           }
         }
@@ -382,17 +373,26 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
       child: BlocBuilder<UploadBloc, UploadState>(
         builder: (context, state) {
           return Stack(
+            clipBehavior: Clip.none,
             children: [
-              Column(
-                children: [
-                  CustomPaint(
-                    size: Size(MediaQuery.of(context).size.width, 168),
-                    painter: WallPaperPainter(wallPaperImage: _uiImage),
-                  ),
-                  Container(
-                    height: 44,
-                  ),
-                ],
+              if (widget.imageUrl == '')
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 174,
+                    color: const Color(0xFFFFFB92))
+              else
+                Image.network(
+                  widget.imageUrl,
+                  width: MediaQuery.of(context).size.width,
+                  height: 174,
+                  fit: BoxFit.cover,
+                ),
+              CustomPaint(
+                size: Size(MediaQuery.of(context).size.width, 174),
+                painter: WallPaperArcPainter(color: const Color(0xFFF6F5EF)),
+              ),
+              const SizedBox(
+                height: 212,
               ),
               Positioned(
                 bottom: 70,
@@ -401,13 +401,16 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ImagePickerBottomSheet.show(
-                        context: context,
-                        imageHandler: (value) {
-                          _queuing = true;
-                          BlocProvider.of<UploadBloc>(context)
-                              .add(UploadMediaEvent(value));
-                        },
-                        cropStyle: CropStyle.circle);
+                      context: context,
+                      imageHandler: (value) {
+                        _queuing = true;
+                        BlocProvider.of<UploadBloc>(context)
+                            .add(UploadMediaEvent(value));
+                      },
+                      cropStyle: CropStyle.rectangle,
+                      clipHeight: 174,
+                      clipWidth: 375,
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -514,13 +517,16 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                 child: GestureDetector(
                   onTap: () {
                     ImagePickerBottomSheet.show(
-                        context: context,
-                        imageHandler: (value) {
-                          _queuing = true;
-                          BlocProvider.of<UploadBloc>(context)
-                              .add(UploadMediaEvent(value));
-                        },
-                        cropStyle: CropStyle.circle);
+                      context: context,
+                      imageHandler: (value) {
+                        _queuing = true;
+                        BlocProvider.of<UploadBloc>(context)
+                            .add(UploadMediaEvent(value));
+                      },
+                      cropStyle: CropStyle.rectangle,
+                      clipHeight: 174,
+                      clipWidth: 375,
+                    );
                   },
                   child: Container(
                     width: 30,
@@ -616,7 +622,7 @@ class _ProfileBioEditForm extends StatelessWidget {
         Text(
           i18nTranslate(context, 'profile_edit_self_intro'),
           style: TextStyle(
-            color: Colors.black,
+            color: const Color(0xFF575292),
             fontSize: 14,
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w700,
@@ -679,7 +685,7 @@ class _ImportantTagsList extends StatelessWidget {
               Text(
                 i18nTranslate(context, 'user_important'),
                 style: TextStyle(
-                  color: Colors.black,
+                  color: const Color(0xFF575292),
                   fontSize: 14,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w700,
