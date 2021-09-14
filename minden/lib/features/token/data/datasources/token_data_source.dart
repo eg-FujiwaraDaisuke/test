@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
+
+import '../../../../injection_container.dart';
 
 final tokenDataSourceProvider = Provider<TokenDataSource>((ref) =>
     TokenDataSourceImpl(
@@ -45,6 +48,8 @@ class TokenDataSourceImpl implements TokenDataSource {
       await encryptionTokenDataSource.setAppToken(token.appToken);
       await encryptionTokenDataSource.setAppToken(token.refreshToken);
 
+      await si<Account>().prepare();
+
       return token.appToken;
     } else {
       // ローカルに保持しているAppTokenを取り出す
@@ -56,15 +61,21 @@ class TokenDataSourceImpl implements TokenDataSource {
   /// [refreshToken] を用いて、新しいappToken, refreshTokenを取得する
   @override
   Future<TokenModel> requestRefreshToken(String refreshToken) async {
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
 
-    final defaultHeaders = env['headers']! as Map<String, String>;
-    final headers = {'refreshToken': refreshToken, ...defaultHeaders};
+    final headers = {
+      'refreshToken': refreshToken,
+      ...ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded
+    };
+
+    print("### ${headers}");
 
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _authPath),
+      Uri.parse(endpoint + _authPath),
       headers: headers,
     );
+
+    print("### token response ${response.statusCode} ${response.body}");
 
     if (response.statusCode == 200) {
       return TokenModel.fromJson(json.decode(response.body));

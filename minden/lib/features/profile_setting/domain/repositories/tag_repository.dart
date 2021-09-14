@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/success/success.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 

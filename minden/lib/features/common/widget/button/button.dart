@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/common/widget/button/botton_style.dart';
-import 'botton_size.dart';
+import 'package:minden/features/common/widget/button/button_style.dart';
+import 'button_size.dart';
 
-class Botton extends StatelessWidget {
-  Botton(
+class Button extends StatelessWidget {
+  Button(
       {required this.onTap,
       required this.text,
       required this.size,
@@ -12,7 +12,7 @@ class Botton extends StatelessWidget {
 
   final Function onTap;
   final String text;
-  final BottonSize size;
+  final ButtonSize size;
   final bool isActive;
 
   @override
@@ -23,11 +23,11 @@ class Botton extends StatelessWidget {
           if (isActive) {onTap()}
         },
         child: Container(
-          width: bottonStyle[size]!.width,
-          height: bottonStyle[size]!.height,
+          width: buttonStyle[size]!.width,
+          height: buttonStyle[size]!.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-              Radius.circular(bottonStyle[size]!.height * 0.5),
+              Radius.circular(buttonStyle[size]!.height * 0.5),
             ),
             color: isActive ? null : Color(0xFFE0E0E0),
             gradient: isActive

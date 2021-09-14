@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class TagCategory extends Equatable {
@@ -25,7 +26,7 @@ class TagCategory extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'categoryName': categoryName,
-      'tags': tags.map((e) => e.toJson()),
+      'tags': tags.map((e) => e.toJson()).toList(),
     };
   }
 

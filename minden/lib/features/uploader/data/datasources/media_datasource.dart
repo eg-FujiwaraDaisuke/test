@@ -6,10 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
-import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/uploader/data/models/media_model.dart';
-
-import '../../../../injection_container.dart';
 
 abstract class MediaDataSource {
   Future<MediaModel> upload({required Uint8List bytes});
@@ -24,17 +21,17 @@ class MediaDataSourceImpl implements MediaDataSource {
 
   @override
   Future<MediaModel> upload({required Uint8List bytes}) async {
-    final env = await ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderMultipartFormData);
 
-    final request = http.MultipartRequest(
-        "POST", Uri.parse((env['url'] as String) + _v1Path));
-    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
-    request.headers
-        .addAll({'appToken': appToken, 'Content-Type': 'multipart/form-data'});
+    final request =
+        http.MultipartRequest("POST", Uri.parse(endpoint + _v1Path));
+    request.headers.addAll(headers);
 
     final stream = http.ByteStream.fromBytes(bytes);
     final multipartFile =
-        http.MultipartFile("content", stream, bytes.length, filename: "image");
+        http.MultipartFile('content', stream, bytes.length, filename: 'image');
     request.files.add(multipartFile);
     final response = await request.send();
 

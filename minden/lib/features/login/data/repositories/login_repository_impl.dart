@@ -17,7 +17,6 @@ class LoginRepositoryImpl implements LoginRepository {
   ) async {
     try {
       final user = await userDataSource.getLoginUser(id, password);
-      print("login model : ${user.toJson()}");
       return Right(user);
     } on ServerException {
       return left(LoginFailure());
