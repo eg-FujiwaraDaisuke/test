@@ -3,7 +3,6 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/utile.dart';
 
@@ -195,8 +194,8 @@ class SupportPlantSelectDialog {
                 top: 25,
                 right: 27,
                 child: GestureDetector(
-                  child: Icon(Icons.close),
                   onTap: _hideDialog,
+                  child: const Icon(Icons.close),
                 ),
               ),
             ],
@@ -273,7 +272,7 @@ class SupportPlantSelectDialog {
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(22),
                     border: Border.all(
-                      color: Color(0xFF75C975),
+                      color: const Color(0xFF75C975),
                       width: registPowerPlant.isRegist ? 0 : 1,
                     ),
                   ),

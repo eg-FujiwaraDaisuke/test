@@ -28,9 +28,9 @@ class SupportPlantDecisionDialog {
               .where((registPowerPlant) => registPowerPlant.isRegist)
               .toList();
 
-          List<PowerPlant> newRegistPowerPlants = [
+          final newRegistPowerPlants = [
             ...canRegistPowerPlants
-                .map((PowerPlant) => PowerPlant.powerPlant)
+                .map((powerPlant) => powerPlant.powerPlant)
                 .toList(),
             selectPowerPlant
           ];
@@ -80,7 +80,7 @@ class SupportPlantDecisionDialog {
                           '以下の発電所を来月から応援します。\nよろしいですか？',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Color(0xFF575292),
+                            color: const Color(0xFF575292),
                             fontSize: 16,
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w500,
@@ -115,7 +115,6 @@ class SupportPlantDecisionDialog {
                       Button(
                           onTap: () {
                             // TODO ここで応援APIを叩く
-                            print(newRegistPowerPlants);
                             _hideDialog();
                           },
                           text: '決定する',
@@ -147,10 +146,8 @@ class SupportPlantDecisionDialog {
                 top: 25,
                 right: 27,
                 child: GestureDetector(
-                  child: Icon(Icons.close),
-                  onTap: () {
-                    _hideDialog();
-                  },
+                  onTap: _hideDialog,
+                  child: const Icon(Icons.close),
                 ),
               ),
             ],
