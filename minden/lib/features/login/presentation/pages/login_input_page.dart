@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
@@ -156,10 +156,10 @@ class _LoginInputPageState extends State<LoginInputPage> {
                         SizedBox(
                           height: 32,
                         ),
-                        Botton(
+                        Button(
                           onTap: _login,
                           text: i18nTranslate(context, 'login_login'),
-                          size: BottonSize.L,
+                          size: ButtonSize.L,
                         ),
                       ],
                     ),
