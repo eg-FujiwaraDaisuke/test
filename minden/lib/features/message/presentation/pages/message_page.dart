@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
-import 'package:minden/features/user/presentation/pages/user_page.dart';
+
 import '../../../../utile.dart';
 import 'minden_message_dialog.dart';
 
