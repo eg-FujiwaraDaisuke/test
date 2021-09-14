@@ -74,7 +74,7 @@ class UserPage extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   CustomPaint(
-                    size: Size(MediaQuery.of(context).size.width, 173),
+                    size: Size(MediaQuery.of(context).size.width, 174),
                     painter: WallPaperArcPainter(color: Colors.white),
                   ),
                   Positioned(

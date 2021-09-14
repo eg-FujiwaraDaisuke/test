@@ -374,7 +374,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                 Image.network(
                   widget.imageUrl,
                   width: MediaQuery.of(context).size.width,
-                  height: 174,
+                  height: 173,
                   fit: BoxFit.cover,
                 ),
               CustomPaint(

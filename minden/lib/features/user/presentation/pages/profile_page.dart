@@ -173,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               CustomPaint(
                                 size: Size(
-                                    MediaQuery.of(context).size.width, 173),
+                                    MediaQuery.of(context).size.width, 174),
                                 painter:
                                     WallPaperArcPainter(color: Colors.white),
                               ),
@@ -245,7 +245,7 @@ class PlaceHolderProfile extends StatelessWidget {
                         height: 173,
                         color: const Color(0xFFFFFB92)),
                     CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 173),
+                      size: Size(MediaQuery.of(context).size.width, 174),
                       painter: WallPaperArcPainter(color: Colors.white),
                     ),
                     const Positioned(
