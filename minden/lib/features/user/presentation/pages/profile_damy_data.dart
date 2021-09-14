@@ -1,3 +1,4 @@
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class ProfileDamyData {
