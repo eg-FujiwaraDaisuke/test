@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
         },
         child: BlocBuilder<GetProfileBloc, ProfileState>(
           builder: (context, state) {
-            if (state is ProfileLoadError) {
+            if (state is ProfileLoaded) {
               return Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(

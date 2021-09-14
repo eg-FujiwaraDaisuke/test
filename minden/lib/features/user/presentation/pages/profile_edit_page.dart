@@ -123,7 +123,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         },
         child: BlocBuilder<GetProfileBloc, ProfileState>(
           builder: (context, state) {
-            if (state is ProfileLoadError) {
+            if (state is ProfileLoaded) {
               return Scaffold(
                 backgroundColor: const Color(0xFFF6F5EF),
                 appBar: AppBar(

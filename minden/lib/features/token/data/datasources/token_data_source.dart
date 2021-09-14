@@ -61,15 +61,17 @@ class TokenDataSourceImpl implements TokenDataSource {
   /// [refreshToken] を用いて、新しいappToken, refreshTokenを取得する
   @override
   Future<TokenModel> requestRefreshToken(String refreshToken) async {
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
 
-    final defaultHeaders = env['headers']! as Map<String, String>;
-    final headers = {'refreshToken': refreshToken, ...defaultHeaders};
+    final headers = {
+      'refreshToken': refreshToken,
+      ...ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded
+    };
 
     print("### ${headers}");
 
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _authPath),
+      Uri.parse(endpoint + _authPath),
       headers: headers,
     );
 
