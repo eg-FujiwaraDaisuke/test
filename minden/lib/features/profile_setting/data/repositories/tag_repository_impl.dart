@@ -4,9 +4,9 @@ import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/profile_setting/domain/repositories/tag_repository.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
 
 // data - repository
 
@@ -30,7 +30,7 @@ class TagRepositoryImpl with RetryProcessMixin implements TagRepository {
   @override
   Future<Either<Failure, List<Tag>>> getTags() async {
     try {
-      final tags = await retryRequest(dataSource.getTags);
+      final tags = await retryRequest(() => dataSource.getTags());
       return Right(tags);
     } on ServerException {
       return Left(ServerFailure());
@@ -52,8 +52,7 @@ class TagRepositoryImpl with RetryProcessMixin implements TagRepository {
   Future<Either<Failure, List<Tag>>> getPlantTags(
       {required String plantId}) async {
     try {
-      final tags =
-          await retryRequest(() => dataSource.getPlantTags(plantId));
+      final tags = await retryRequest(() => dataSource.getPlantTags(plantId));
       return Right(tags);
     } on ServerException {
       return Left(ServerFailure());

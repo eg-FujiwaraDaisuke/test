@@ -7,20 +7,18 @@ import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/profile_setting/data/models/tag_category_model.dart';
-import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
-import 'package:minden/features/user/data/model/profile_model.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/data/models/tag_model.dart';
 
 abstract class TagDataSource {
   Future<Success> updateTags({required List<int> tags});
 
-  Future<List<TagCategory>> getAllTags();
+  Future<List<TagCategoryModel>> getAllTags();
 
-  Future<List<Tag>> getTags();
+  Future<List<TagModel>> getTags();
 
-  Future<List<Tag>> getPlantTags(String plantId);
+  Future<List<TagModel>> getPlantTags(String plantId);
 
-  Future<List<Tag>> getPlantsTags();
+  Future<List<TagModel>> getPlantsTags();
 }
 
 class TagDataSourceImpl implements TagDataSource {
@@ -40,17 +38,17 @@ class TagDataSourceImpl implements TagDataSource {
 
   @override
   Future<Success> updateTags({required List<int> tags}) async {
-    final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
-    final body =
-        json.encode({"tags": tags.map<String>((e) => e.toString()).toList()});
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
+    final body = json.encode({
+      "tags": tags.toSet().toList().map<String>((e) => e.toString()).toList()
+    });
 
-    final response = await client.post(
-        Uri.parse((env['url']! as String) + _updateTagsPath),
-        headers: headers,
-        body: body);
+    final response = await client.post(Uri.parse(endpoint + _updateTagsPath),
+        headers: headers, body: body);
 
-    print("${response.body}");
+    print("### update tag ${body}, ${response.body}");
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 401) {
@@ -61,16 +59,17 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<TagCategory>> getAllTags() async {
-    final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+  Future<List<TagCategoryModel>> getAllTags() async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _getAllTagsPath),
+      Uri.parse(endpoint + _getAllTagsPath),
       headers: headers,
     );
 
     final list = json.decode(response.body);
-    final categories = list.map<TagCategory>((e) {
+    final categories = list.map<TagCategoryModel>((e) {
       return TagCategoryModel.fromJson(e);
     }).toList();
     if (response.statusCode == 200) {
@@ -83,22 +82,22 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<Tag>> getTags() async {
-    final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+  Future<List<TagModel>> getTags() async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _getTagsPath),
+      Uri.parse(endpoint + _getTagsPath),
       headers: headers,
     );
 
     final map = json.decode(response.body);
     final list = map['tags'] ?? [];
-    final tags = list.map<Tag>((e) {
+    final tags = list.map<TagModel>((e) {
       return TagModel.fromJson(e);
     }).toList();
 
     if (response.statusCode == 200) {
-      print("${tags}");
       return tags;
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
@@ -108,11 +107,12 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<Tag>> getPlantTags(String plantId) async {
-    final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+  Future<List<TagModel>> getPlantTags(String plantId) async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _getPlantTagsPath),
+      Uri.parse(endpoint + _getPlantTagsPath),
       headers: headers,
     );
 
@@ -126,11 +126,12 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<Tag>> getPlantsTags() async {
-    final env = ApiConfig.apiEndpoint();
-    final headers = await ApiConfig.tokenHeader();
+  Future<List<TagModel>> getPlantsTags() async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
     final response = await client.get(
-      Uri.parse((env['url']! as String) + _getPlantsTagsPath),
+      Uri.parse(endpoint + _getPlantsTagsPath),
       headers: headers,
     );
 

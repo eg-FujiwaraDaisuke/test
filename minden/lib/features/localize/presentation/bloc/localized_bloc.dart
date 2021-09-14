@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:minden/features/localize/domain/entities/localized.dart';
-import 'package:minden/features/localize/domain/usecases/get_localized_info.dart';
+import 'package:minden/features/localize/domain/usecases/localized_usecase.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 

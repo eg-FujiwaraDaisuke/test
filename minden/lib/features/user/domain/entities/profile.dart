@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class Profile extends Equatable {
   const Profile({
@@ -25,7 +26,7 @@ class Profile extends Equatable {
         tags: tags);
   }
 
-  final String userId;
+  final String? userId;
   final String name;
   final String icon;
   final String bio;
@@ -39,7 +40,7 @@ class Profile extends Equatable {
       'icon': icon,
       'bio': bio,
       'wallPaper': wallPaper,
-      'tags': tags.map((e) => e.toJson())
+      'tags': tags.map((e) => e.toJson()).toList()
     };
   }
 
@@ -47,54 +48,3 @@ class Profile extends Equatable {
   List<Object?> get props => [userId];
 }
 
-class Tag extends Equatable {
-  const Tag({
-    required this.tagId,
-    required this.tagName,
-  });
-
-  factory Tag.fromJson(Map<String, dynamic> tag) {
-    return Tag(
-      tagId: tag['tagId'],
-      tagName: tag['tagName'],
-    );
-  }
-
-  final int tagId;
-  final String tagName;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'tagId': tagId,
-      'tagName': tagName,
-    };
-  }
-
-  @override
-  List<Object> get props => [tagId];
-}
-
-// class SelectPowerPlant extends Equatable {
-//   const SelectPowerPlant({
-//     required this.plantId,
-//     required this.name,
-//     required this.images,
-//     required this.catchphrase,
-//     required this.location,
-//     required this.capacity,
-//     required this.powerGenerationMethods,
-//     required this.isNewArrivals,
-//   });
-//
-//   final String plantId;
-//   final String name;
-//   final List<String> images;
-//   final String catchphrase;
-//   final String location;
-//   final Object capacity;
-//   final String powerGenerationMethods;
-//   final bool isNewArrivals;
-//
-//   @override
-//   List<Object?> get props => [plantId];
-// }

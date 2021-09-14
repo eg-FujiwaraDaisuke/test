@@ -1,44 +1,35 @@
-import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
+import 'dart:io';
+
+import 'package:minden/core/success/account.dart';
 import 'package:minden/injection_container.dart';
 
 import 'config.dart';
 
 class ApiConfig {
-  static final _endpoint = {
-    Config.kDevFlavor: {
-      'url': 'https://www.dev.minapp.minden.co.jp',
-      'headers': {
-        'content-type': 'application/json',
-      }
-    },
-    Config.kStagingFlavor: {
-      'url': 'https://www.stg.minapp.minden.co.jp',
-      'headers': {
-        'content-type': 'application/json',
-      }
-    },
-    Config.kProdFlavor: {
-      'url': 'https://www.minapp.minden.co.jp',
-      'headers': {
-        'content-type': 'application/json',
-      }
-    }
+  static final Map<String, dynamic> _endpoint = {
+    Config.kDevFlavor: 'https://www.dev.minapp.minden.co.jp',
+    Config.kStagingFlavor: 'https://www.stg.minapp.minden.co.jp',
+    Config.kProdFlavor: 'https://www.minapp.minden.co.jp',
   };
 
-  static Map<String, Object> apiEndpoint() {
-    return _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
-  }
+  static final contentTypeHeaderApplicationJson = {
+    HttpHeaders.contentTypeHeader: 'application/json'
+  };
+  static final contentTypeHeaderApplicationXFormUrlEncoded = {
+    HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
+  };
+  static final contentTypeHeaderMultipartFormData = {
+    HttpHeaders.contentTypeHeader: 'multipart/form-data'
+  };
 
-  static Future<Map<String, String>> tokenHeader() async {
-    final env = _endpoint[Config.getEnvironmentString()] as Map<String, Object>;
-    final defaultHeaders = env['headers']! as Map<String, String>;
-    final appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
-    final refreshToken =
-        await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+  static String apiEndpoint() => _endpoint[Config.getEnvironmentString()];
+
+  static Map<String, String> tokenHeader() {
+    final appToken = si<Account>().appToken;
+    final refreshToken = si<Account>().refreshToken;
     return {
       'appToken': appToken,
       'refreshToken': refreshToken,
-      ...defaultHeaders
     };
   }
 }

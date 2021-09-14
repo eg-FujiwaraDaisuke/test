@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
+import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/forgot_password/pages/forgot_password_message_page.dart';
 
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import '../../../../utile.dart';
@@ -31,7 +34,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        elevation: 0,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
@@ -40,71 +43,51 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: SvgPicture.asset(
               'assets/images/common/leading_back.svg',
               fit: BoxFit.fill,
-              width: 44.0,
-              height: 44.0,
+              width: 44,
+              height: 44,
             ),
           ),
         ),
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 21),
+          padding: const EdgeInsets.symmetric(horizontal: 21),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
                 i18nTranslate(context, 'forgot_password_reset'),
-                style: TextStyle(
-                  color: Color(0xFF787877),
+                style: const TextStyle(
+                  color: Color(0xFF575292),
                   fontSize: 20,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 49,
               ),
               EmailInput(
                 onChanged: _onInputChangedId,
                 onReset: _onInputResetId,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 43,
               ),
-              GestureDetector(
+              Button(
                 onTap: () {
-                  // TODO リセットリンクを送る
                   final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => ForgotPasswordPage(),
-                    settings:
-                        RouteSettings(name: "/login/forgotPasswordMessage"),
+                    builder: (context) => ForgotPasswordMessagePage(),
+                    settings: const RouteSettings(
+                        name: '/login/forgotPasswordMessage'),
                   );
                   Navigator.pushReplacement(context, route);
                 },
-                child: Container(
-                  width: 399,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF8C00),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      i18nTranslate(context, 'forgot_password_send_reset_link'),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFFFFFFFF),
-                      ),
-                    ),
-                  ),
-                ),
+                text: i18nTranslate(context, 'forgot_password_send_reset_link'),
+                size: ButtonSize.L,
               ),
             ],
           ),
@@ -136,14 +119,14 @@ class _EmailInputState extends State<EmailInput> {
       children: [
         Text(
           i18nTranslate(context, 'login_id'),
-          style: TextStyle(
-            fontSize: 14.0,
+          style: const TextStyle(
+            fontSize: 14,
             color: Color(0xFF6A6F7D),
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 14,
         ),
         TextFormField(
@@ -154,10 +137,10 @@ class _EmailInputState extends State<EmailInput> {
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFFA7A7A7).withOpacity(0.5),
+                color: const Color(0xFFA7A7A7).withOpacity(0.5),
               ),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xFFFF8C00),
               ),
@@ -175,8 +158,8 @@ class _EmailInputState extends State<EmailInput> {
             ),
           ),
           style: TextStyle(
-            fontSize: 17.0,
-            color: Color(0xFF000000),
+            fontSize: 17,
+            color: const Color(0xFF000000),
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
             letterSpacing: calcLetterSpacing(letter: 4),

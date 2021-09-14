@@ -7,7 +7,7 @@ class ForgotPasswordMessagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -17,13 +17,14 @@ class ForgotPasswordMessagePage extends StatelessWidget {
                 i18nTranslate(context, 'forgot_reset_send_mail'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 17.0,
-                    color: Color(0xFF787877),
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                    height: calcFontHeight(lineHeight: 24.62, fontSize: 17)),
+                  fontSize: 17,
+                  color: const Color(0xFF575292),
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w700,
+                  height: calcFontHeight(lineHeight: 24.62, fontSize: 17),
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 38,
               ),
               Image.asset(

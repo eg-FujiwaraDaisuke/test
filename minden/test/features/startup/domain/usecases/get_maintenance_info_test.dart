@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/startup/domain/entities/startup.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';
-import 'package:minden/features/startup/domain/usecases/get_startup_info.dart';
+import 'package:minden/features/startup/domain/usecases/startup_usecase.dart';
 import 'package:mockito/mockito.dart';
 
 class MockStartupRepository extends Mock implements StartupRepository {}

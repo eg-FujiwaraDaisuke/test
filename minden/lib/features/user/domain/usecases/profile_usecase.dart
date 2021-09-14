@@ -6,12 +6,36 @@ import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/domain/repositories/profile_repository.dart';
 
 // domain - usecase
-class UpdateProfile extends UseCase<Profile, ProfileParams> {
+class GetProfile extends UseCase<Profile, GetProfileParams> {
+  GetProfile(this.repository);
+
+  final ProfileRepository repository;
+
+  Future<Either<Failure, Profile>> call(GetProfileParams params) async {
+    return await repository.get(
+      userId: params.userId,
+    );
+  }
+}
+
+class GetProfileParams extends Equatable {
+  const GetProfileParams(
+    this.userId,
+  );
+
+  final String userId;
+
+  @override
+  List<Object> get props => [userId];
+}
+
+// domain - usecase
+class UpdateProfile extends UseCase<Profile, UpdateProfileParams> {
   UpdateProfile(this.repository);
 
   final ProfileRepository repository;
 
-  Future<Either<Failure, Profile>> call(ProfileParams params) async {
+  Future<Either<Failure, Profile>> call(UpdateProfileParams params) async {
     return await repository.update(
       name: params.name,
       icon: params.icon,
@@ -21,8 +45,8 @@ class UpdateProfile extends UseCase<Profile, ProfileParams> {
   }
 }
 
-class ProfileParams extends Equatable {
-  const ProfileParams(
+class UpdateProfileParams extends Equatable {
+  const UpdateProfileParams(
     this.name,
     this.icon,
     this.bio,
