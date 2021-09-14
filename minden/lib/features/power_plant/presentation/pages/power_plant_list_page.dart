@@ -157,9 +157,9 @@ class PowerPlantListItem extends StatelessWidget {
           child: SizedBox(
             width: 418,
             height: 280,
-            child: Image.asset(
-              'assets/images/sample/power_plant_sample.png',
-              fit: BoxFit.fitWidth,
+            child: Image.network(
+              powerPlant.plantImage1,
+              fit: BoxFit.cover,
             ),
           ),
         ),
