@@ -83,6 +83,15 @@ class PowerPlantMessageDialog {
                 child: const Icon(Icons.close),
               ),
             ),
+            Positioned(
+              bottom: -119,
+              right: -39,
+              child: Image.asset(
+                'assets/images/message/character_fly.png',
+                width: 160,
+                height: 119,
+              ),
+            ),
           ],
         ),
         isAndroidBackEnable: false,
