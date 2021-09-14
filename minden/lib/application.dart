@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/ui/tab_indicator.dart';
 import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/debug/debug_push_message_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
@@ -86,6 +85,7 @@ class Application extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate, // This is required
         ],
         theme: ThemeData(
+          indicatorColor: const Color(0xFFFF8C00),
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: <TargetPlatform, PageTransitionsBuilder>{
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -93,8 +93,7 @@ class Application extends StatelessWidget {
             },
           ),
           tabBarTheme: const TabBarTheme().copyWith(
-            indicator: const TabIndicator(),
-            labelPadding: const EdgeInsets.symmetric(vertical: 12.0),
+            labelPadding: const EdgeInsets.symmetric(vertical: 12),
             labelColor: Colors.black,
             labelStyle: const TextStyle(
               fontFamily: 'NotoSansJP',
