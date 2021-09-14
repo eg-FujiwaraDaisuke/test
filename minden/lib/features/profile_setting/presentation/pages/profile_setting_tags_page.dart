@@ -203,7 +203,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                       Positioned(
                         right: 0,
                         top: 0,
-                        child: Container(
+                        child: SizedBox(
                           width: 186,
                           height: 134,
                           child: Stack(
@@ -216,7 +216,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                                   height: 134,
                                 ),
                                 Text(
-                                  '普段気にかけていることや\n目指していること、好きなことや\n気になっていることなどでも\nOKです',
+                                  i18nTranslate(
+                                      context, 'profile_setting_tag_fukidasi'),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 10,
