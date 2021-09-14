@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
@@ -76,22 +75,6 @@ class PowerPlantListItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           logD('onTapped power plant.');
-          final detail = PowerPlantDetail(
-            plantId: powerPlant.plantId,
-            areaCode: powerPlant.areaCode,
-            name: powerPlant.name,
-            viewAddress: powerPlant.viewAddress,
-            voltageType: powerPlant.voltageType,
-            powerGenerationMethod: powerPlant.powerGenerationMethod,
-            renewableType: powerPlant.renewableType,
-            generationCapacity: powerPlant.generationCapacity,
-            displayOrder: powerPlant.displayOrder,
-            isRecommend: powerPlant.isRecommend,
-            ownerName: powerPlant.ownerName,
-            startDate: powerPlant.startDate,
-            endDate: powerPlant.endDate,
-            plantImage1: powerPlant.plantImage1,
-          );
 
           final route = NoAnimationMaterialPageRoute(
             builder: (context) =>
@@ -115,16 +98,20 @@ class PowerPlantListItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            powerPlant.name,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF575292),
-                              height: 1.43,
+                        Flexible(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              powerPlant.name,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF575292),
+                                height: 1.43,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
                             ),
                           ),
                         ),
@@ -249,7 +236,7 @@ class PowerPlantListItem extends StatelessWidget {
         width: 300,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: Text(
-          powerPlant.shortCatchphrase!,
+          powerPlant.shortCatchphrase ?? '',
           textAlign: textAlignment,
           style: const TextStyle(
             color: Colors.white,

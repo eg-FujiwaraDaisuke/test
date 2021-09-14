@@ -50,7 +50,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return PowerPlantsResponseModel.fromJson(json.decode(response.body));
+      return PowerPlantsResponseModel.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw ServerException();
     }
@@ -69,7 +70,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return PowerPlantDetailModel.fromJson(json.decode(response.body));
+      return PowerPlantDetailModel.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw ServerException();
     }
@@ -89,7 +91,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return PowerPlantParticipantModel.fromJson(json.decode(response.body));
+      return PowerPlantParticipantModel.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw ServerException();
     }
@@ -108,7 +111,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return TagResponseModel.fromJson(json.decode(response.body));
+      return TagResponseModel.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw ServerException();
     }
