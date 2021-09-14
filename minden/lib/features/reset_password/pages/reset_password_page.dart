@@ -78,7 +78,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 height: 35,
               ),
               DecideCodeInput(
-                hintText: i18nTranslate(context, '確認コード入力'),
+                hintText: i18nTranslate(context, 'reset_password_decide_code'),
                 onChanged: _onInputChangedDecideCode,
               ),
               const SizedBox(
