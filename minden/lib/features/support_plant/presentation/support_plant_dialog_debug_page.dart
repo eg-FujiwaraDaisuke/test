@@ -123,19 +123,23 @@ class _SupportPlantDialogDebugPageState
                     registPowerPlants: registPowerPlants,
                   ).showDialog();
                 } else {
-                  await SupportPlantSelectDialog(
+                  final isSelected = await SupportPlantSelectDialog(
                           context: context,
                           selectPowerPlant: selectPowerPlantDammy,
                           user: userDammy,
                           registPowerPlants: registPowerPlants)
                       .showDialog();
 
-                  await SupportPlantDecisionDialog(
-                    context: context,
-                    selectPowerPlant: selectPowerPlantDammy,
-                    user: userDammy,
-                    registPowerPlants: registPowerPlants,
-                  ).showDialog();
+                  print(isSelected);
+
+                  if (isSelected!) {
+                    await SupportPlantDecisionDialog(
+                      context: context,
+                      selectPowerPlant: selectPowerPlantDammy,
+                      user: userDammy,
+                      registPowerPlants: registPowerPlants,
+                    ).showDialog();
+                  }
                 }
               },
             ),

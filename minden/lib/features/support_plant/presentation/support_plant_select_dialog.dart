@@ -20,7 +20,7 @@ class SupportPlantSelectDialog {
   List<RegistPowerPlant> registPowerPlants;
   final User user;
 
-  Future<void> showDialog() async {
+  Future<bool?> showDialog() async {
     await Navigator.push(
       context,
       CustomDialogOverlay(
@@ -28,6 +28,7 @@ class SupportPlantSelectDialog {
           final canRegistPowerPlants = registPowerPlants
               .where((registPowerPlant) => registPowerPlant.isRegist)
               .toList();
+
           return Stack(
             children: [
               Positioned(
@@ -220,7 +221,7 @@ class SupportPlantSelectDialog {
                       if (user.supportableNumber > canRegistPowerPlants.length)
                         Button(
                           onTap: () {
-                            _hideDialog();
+                            Navigator.pop(context, true);
                           },
                           text: i18nTranslate(context, 'to_next'),
                           size: ButtonSize.S,
@@ -239,7 +240,8 @@ class SupportPlantSelectDialog {
                         onTap: () {
                           registPowerPlants.forEach((registPowerPlant) =>
                               registPowerPlant.isRegist = true);
-                          _hideDialog();
+
+                          Navigator.pop(context, false);
                         },
                         child: Text(
                           i18nTranslate(context, 'cancel_katakana'),
@@ -259,7 +261,9 @@ class SupportPlantSelectDialog {
                 top: 25,
                 right: 27,
                 child: GestureDetector(
-                  onTap: _hideDialog,
+                  onTap: () {
+                    Navigator.pop(context, false);
+                  },
                   child: const Icon(Icons.close),
                 ),
               ),
@@ -417,12 +421,5 @@ class SupportPlantSelectDialog {
         ],
       ),
     );
-  }
-
-  /*
-   * 非表示
-   */
-  void _hideDialog() {
-    Navigator.of(context).pop();
   }
 }
