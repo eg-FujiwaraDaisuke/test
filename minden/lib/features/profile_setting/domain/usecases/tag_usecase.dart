@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/core/usecase/usecase.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/profile_setting/domain/repositories/tag_repository.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';

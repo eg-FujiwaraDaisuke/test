@@ -37,13 +37,16 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
-    final body = (tagId != null) ? json.encode({'tagId': tagId}) : '';
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final response = await client.post(
-      Uri.parse((env['url']! as String) + _powerPlantsPath),
-      headers: env['headers']! as Map<String, String>,
-      body: body,
+    final url = Uri.parse(endpoint + _powerPlantsPath);
+    final response = await client.get(
+      url.replace(queryParameters: {
+        'tagId': tagId,
+      }),
+      headers: headers,
     );
 
     if (response.statusCode == 200) {
@@ -55,13 +58,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   @override
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId) async {
-    final body = json.encode({'plantId': plantId});
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final response = await client.post(
-      Uri.parse((env['url']! as String) + _powerPlantPath),
-      headers: env['headers']! as Map<String, String>,
-      body: body,
+    final url = Uri.parse(endpoint + _powerPlantPath);
+    final response = await client.get(
+      url.replace(queryParameters: {'plantId': plantId}),
+      headers: headers,
     );
 
     if (response.statusCode == 200) {
@@ -74,13 +78,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   @override
   Future<PowerPlantParticipantModel> getPowerPlantParticipants(
       String plantId) async {
-    final body = json.encode({'plantId': plantId});
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final response = await client.post(
-      Uri.parse((env['url']! as String) + _powerPlantParticipantPath),
-      headers: env['headers']! as Map<String, String>,
-      body: body,
+    final url = Uri.parse(endpoint + _powerPlantParticipantPath);
+    final response = await client.get(
+      url.replace(queryParameters: {'plantId': plantId}),
+      headers: headers,
     );
 
     if (response.statusCode == 200) {
@@ -92,13 +97,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   @override
   Future<TagResponseModel> getPowerPlantTags(String plantId) async {
-    final body = json.encode({'plantId': plantId});
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final response = await client.post(
-      Uri.parse((env['url']! as String) + _powerPlantTags),
-      headers: env['headers']! as Map<String, String>,
-      body: body,
+    final url = Uri.parse(endpoint + _powerPlantTags);
+    final response = await client.get(
+      url.replace(queryParameters: {'plantId': plantId}),
+      headers: headers,
     );
 
     if (response.statusCode == 200) {

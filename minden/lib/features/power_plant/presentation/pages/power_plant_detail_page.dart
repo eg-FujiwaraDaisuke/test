@@ -8,7 +8,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_detail.d
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 /// 発電所詳細
 class PowerPlantDetailPage extends ConsumerWidget {

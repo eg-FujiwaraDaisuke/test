@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 /// 大切にしているタグ一覧APIレスポンス
 class TagResponse extends Equatable {

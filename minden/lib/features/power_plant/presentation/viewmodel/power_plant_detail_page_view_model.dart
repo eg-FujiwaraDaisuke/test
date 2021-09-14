@@ -3,9 +3,9 @@ import 'package:minden/features/power_plant/data/repositories/power_plant_reposi
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/token/data/repositories/token_repository_impl.dart';
 import 'package:minden/features/token/domain/repositories/token_repository.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
 
 final powerPlantDetailPageViewModelProvider = StateNotifierProvider<
         PowerPlantDetailPageViewModel, PowerPlantDetailPageState>(

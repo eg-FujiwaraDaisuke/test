@@ -8,8 +8,8 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
-import 'package:minden/features/user/data/model/profile_model.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
+import 'package:minden/features/profile_setting/data/models/tag_model.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class PowerPlantRepositoryMock implements PowerPlantRepository {
   @override

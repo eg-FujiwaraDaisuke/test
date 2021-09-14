@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/botton_size.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_bio_page.dart';
@@ -16,7 +16,7 @@ import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/usecases/update_profile.dart';
+import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -47,7 +47,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
       ),
     );
     _bloc.stream.listen((event) {
-      if (event is ProfileUpdating) {
+      if (event is ProfileLoading) {
         Loading.show(context);
         return;
       }
@@ -144,10 +144,10 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
                         child: _buildImage(state),
                       ),
                       const SizedBox(height: 182),
-                      Botton(
+                      Button(
                         onTap: _next,
                         text: i18nTranslate(context, 'profile_setting_next'),
-                        size: BottonSize.S,
+                        size: ButtonSize.S,
                       ),
                     ],
                   ),

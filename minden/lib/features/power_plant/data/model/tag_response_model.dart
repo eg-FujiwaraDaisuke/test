@@ -1,5 +1,5 @@
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
-import 'package:minden/features/user/data/model/profile_model.dart';
+import 'package:minden/features/profile_setting/data/models/tag_model.dart';
 
 class TagResponseModel extends TagResponse {
   const TagResponseModel({

@@ -97,7 +97,8 @@ class ImagePickerBottomSheet {
       final File? cropped = await ImageCropper.cropImage(
         cropStyle: cropStyle,
         sourcePath: mediaFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        aspectRatio: CropAspectRatio(
+            ratioX: clipWidth.toDouble(), ratioY: clipHeight.toDouble()),
         compressQuality: 100,
         maxWidth: clipWidth,
         maxHeight: clipHeight,
