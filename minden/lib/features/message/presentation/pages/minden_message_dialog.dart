@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/thanks_message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message.dart';
 import 'package:minden/features/user/presentation/pages/custom_dialog_overlay.dart';
+import 'package:minden/utile.dart';
 
-class MessageDialog {
-  MessageDialog({required this.context, required this.message}) : super();
+class MindenMessageDialog {
+  MindenMessageDialog({required this.context, required this.message}) : super();
   final BuildContext context;
   final Message message;
 
@@ -18,7 +19,7 @@ class MessageDialog {
               child: Container(
                 width: 338,
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 35, bottom: 90),
+                padding: const EdgeInsets.only(top: 35, bottom: 84),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -31,48 +32,46 @@ class MessageDialog {
                   children: [
                     SizedBox(
                       width: 276,
+                      height: 76,
                       child: Center(
                         child: Text(
-                          message.plantId,
-                          style: const TextStyle(
-                            color: Color(0xFF27AE60),
-                            fontSize: 18,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w700,
-                          ),
+                          message.title,
+                          style: TextStyle(
+                              color: const Color(0xFF27AE60),
+                              fontSize: 18,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w700,
+                              height:
+                                  calcFontHeight(fontSize: 18, lineHeight: 18)),
                         ),
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 3,
                     ),
-                    Container(
-                      width: 252,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          )
-                        ],
+                    SizedBox(
+                      width: 142,
+                      height: 142,
+                      child: Image.asset(
+                        'assets/images/message/character.png',
+                        width: 142,
+                        height: 142,
                       ),
                     ),
                     const SizedBox(
-                      height: 29,
+                      height: 12,
                     ),
                     SizedBox(
-                      width: 265,
+                      width: 298,
                       child: Text(
                         message.body,
-                        style: const TextStyle(
-                          color: Color(0xFF27AE60),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF27AE60),
                           fontSize: 14,
                           fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
+                          height: calcFontHeight(fontSize: 14, lineHeight: 18),
                         ),
                       ),
                     ),
@@ -84,19 +83,8 @@ class MessageDialog {
               right: 27,
               top: 25,
               child: GestureDetector(
-                child: Icon(Icons.close),
-                onTap: () {
-                  _hideDialog();
-                },
-              ),
-            ),
-            Positioned(
-              bottom: -75,
-              right: -80,
-              child: Image.asset(
-                'assets/images/user/bee.png',
-                width: 236,
-                height: 104,
+                onTap: _hideDialog,
+                child: const Icon(Icons.close),
               ),
             ),
           ],

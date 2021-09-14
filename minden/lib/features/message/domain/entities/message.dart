@@ -67,7 +67,7 @@ final userMessageDammy = UserMessage(
       created: 1628831743,
       read: false,
       importance: 'high',
-      messageType: '発電所',
+      messageType: 'みんでん',
     ),
     Message(
       messageId: 3,
@@ -81,7 +81,7 @@ final userMessageDammy = UserMessage(
       created: 1628831743,
       read: true,
       importance: 'high',
-      messageType: 'みんでん',
+      messageType: '発電所',
     ),
     Message(
       messageId: 4,
@@ -95,7 +95,7 @@ final userMessageDammy = UserMessage(
       created: 1628831743,
       read: true,
       importance: 'high',
-      messageType: 'みんでん',
+      messageType: '発電所',
     )
   ],
 );

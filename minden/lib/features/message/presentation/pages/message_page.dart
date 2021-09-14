@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/thanks_message/domain/entities/message.dart';
-import 'package:minden/features/thanks_message/presentation/pages/thanks_message_dialog.dart';
+import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
-
 import '../../../../utile.dart';
+import 'minden_message_dialog.dart';
 
-class ThanksMessagePage extends StatelessWidget {
+class MessagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,7 @@ class ThanksMessagePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             color: Colors.white,
-            margin: EdgeInsets.only(top: 100),
+            margin: const EdgeInsets.only(top: 100),
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,12 @@ class _ThanksMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        MessageDialog(context: context, message: message).showDialog();
+        if (message.messageType == 'みんでん') {
+          MindenMessageDialog(context: context, message: message).showDialog();
+        } else {
+          PowerPlantMessageDialog(context: context, message: message)
+              .showDialog();
+        }
       },
       child: Container(
         width: 288,
@@ -135,9 +140,10 @@ class _ThanksMessage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${message.plantId}',
+                              // TODO ここに発電所の名前がはいる
+                              message.plantId,
                               style: TextStyle(
-                                color: Color(0xFFFF8C00),
+                                color: const Color(0xFFFF8C00),
                                 fontSize: 10,
                                 fontFamily: 'NotoSansJP',
                                 fontWeight: FontWeight.w700,
