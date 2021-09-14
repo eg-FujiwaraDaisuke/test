@@ -23,7 +23,7 @@ class PowerPlantPickup extends ConsumerWidget {
             CarouselSlider(
               items: data.value.map((data) {
                 return Builder(builder: (context) {
-                  return const _PickupImage();
+                  return const _PowerPlantImage();
                 });
               }).toList(),
               options: _generateCarouselOpts(viewModel.setSelectedPickupIndex),
@@ -68,18 +68,25 @@ class CarouselNextPrevController extends StatelessWidget {
     return Row(
       children: [
         _generatePrevButton(),
-        Spacer(),
+        const Spacer(),
         _generateNextButton(),
       ],
     );
   }
 
   Widget _generatePrevButton() {
-    return GestureDetector(
+    return InkWell(
       onTap: () => controller.previousPage(curve: Curves.decelerate),
       child: Container(
         height: _radius * 2,
         width: _radius,
+        decoration: const BoxDecoration(
+          color: Color(0x9CFFFFFF),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(_radius),
+            bottomRight: Radius.circular(_radius),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(right: 4),
           child: SvgPicture.asset(
@@ -87,23 +94,23 @@ class CarouselNextPrevController extends StatelessWidget {
             fit: BoxFit.none,
           ),
         ),
-        decoration: BoxDecoration(
-          color: const Color(0x9CFFFFFF),
-          borderRadius: BorderRadius.only(
-            topRight: const Radius.circular(_radius),
-            bottomRight: const Radius.circular(_radius),
-          ),
-        ),
       ),
     );
   }
 
   Widget _generateNextButton() {
-    return GestureDetector(
+    return InkWell(
       onTap: () => controller.nextPage(curve: Curves.decelerate),
       child: Container(
         height: _radius * 2,
         width: _radius,
+        decoration: const BoxDecoration(
+          color: Color(0x9CFFFFFF),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(_radius),
+            bottomLeft: Radius.circular(_radius),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(left: 4),
           child: SvgPicture.asset(
@@ -111,79 +118,29 @@ class CarouselNextPrevController extends StatelessWidget {
             fit: BoxFit.none,
           ),
         ),
-        decoration: BoxDecoration(
-          color: const Color(0x9CFFFFFF),
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(_radius),
-            bottomLeft: const Radius.circular(_radius),
-          ),
-        ),
       ),
     );
   }
 }
 
-/// 電力会社ピックアップカルーセルのインジケーター
-class _PickupIndicator extends ConsumerWidget {
-  static const double indicatorSize = 6.0;
-
-  final int index;
-
-  _PickupIndicator({required this.index});
-
-  @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final data = watch(powerPlantPageViewModelProvider);
-
-    return Row(
-      children: [
-        Container(
-          width: indicatorSize,
-          height: indicatorSize,
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle, color: _specificColor(data)),
-        ),
-      ],
-    );
-  }
-
-  Color _specificColor(PowerPlantPageState data) {
-    if (data.selectedCompanyIndex == index) {
-      return Color(0xFF000000);
-    } else {
-      return Color(0xFFC4C4C4);
-    }
-  }
-}
-
-/// 電力会社ピックアップ画像
-class _PickupImage extends StatelessWidget {
-  const _PickupImage({
+/// 発電所ヘッダー画像
+class _PowerPlantImage extends StatelessWidget {
+  const _PowerPlantImage({
     Key? key,
     this.imageUrl = 'assets/images/sample/power_plant_pickup_sample.png',
-    this.description = '米沢米の田んぼの上にソーラーパネルを設置した発電所。農薬を減らしておいしいお米をつくっている。',
   }) : super(key: key);
 
   final String imageUrl;
 
-  final String description;
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        // 画像
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 282,
-          child: Image.asset(
-            imageUrl,
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-      ],
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 282,
+      child: Image.asset(
+        imageUrl,
+        fit: BoxFit.fitWidth,
+      ),
     );
   }
 }
