@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/thanks_message/domain/entities/thanks_message.dart';
+import 'package:minden/features/thanks_message/domain/entities/message.dart';
 import 'package:minden/features/user/presentation/pages/custom_dialog_overlay.dart';
 
-class ThanksMessageDialog {
+class MessageDialog {
+  MessageDialog({required this.context, required this.message}) : super();
   final BuildContext context;
-  final ThanksMessage message;
-  ThanksMessageDialog({required this.context, required this.message}) : super();
+  final Message message;
 
   void showDialog() {
     Navigator.push(
@@ -18,23 +18,23 @@ class ThanksMessageDialog {
               child: Container(
                 width: 338,
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 35, bottom: 90),
+                padding: const EdgeInsets.only(top: 35, bottom: 90),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     width: 2,
-                    color: Color(0xFF75C975),
+                    color: const Color(0xFF75C975),
                   ),
                 ),
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 276,
                       child: Center(
                         child: Text(
-                          message.powerPlant.name,
-                          style: TextStyle(
+                          message.plantId,
+                          style: const TextStyle(
                             color: Color(0xFF27AE60),
                             fontSize: 18,
                             fontFamily: 'NotoSansJP',
@@ -43,7 +43,7 @@ class ThanksMessageDialog {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
@@ -54,21 +54,21 @@ class ThanksMessageDialog {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.4),
-                            spreadRadius: 1.0,
-                            blurRadius: 4.0,
-                            offset: Offset(0, 4),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
                           )
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 29,
                     ),
-                    Container(
+                    SizedBox(
                       width: 265,
                       child: Text(
-                        message.message,
-                        style: TextStyle(
+                        message.body,
+                        style: const TextStyle(
                           color: Color(0xFF27AE60),
                           fontSize: 14,
                           fontFamily: 'NotoSansJP',
