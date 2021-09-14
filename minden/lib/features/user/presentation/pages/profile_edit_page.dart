@@ -46,8 +46,10 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  // 確認用仮データ
   final data = ProfileDamyData().damyData;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   late UpdateProfileBloc _updateBloc;
   late GetProfileBloc _getBloc;
 
@@ -92,6 +94,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         return;
       }
       Loading.hide();
+      if (event is ProfileLoaded) {
+        Navigator.pop(context, true);
+      }
     });
 
     _getBloc.add(GetProfileEvent(userId: si<Account>().userId));
@@ -177,45 +182,58 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   top: false,
                   child: SingleChildScrollView(
                     child: Center(
-                      child: Column(
-                        children: [
-                          Stack(
-                            alignment: Alignment.bottomCenter,
-                            clipBehavior: Clip.none,
-                            children: [
-                              _ProfileWallPaperEdit(
-                                imageHandler: (value) {
-                                  _wallPaperUrl = value;
-                                },
-                              ),
-                              Positioned(
-                                child: _ProfileIconEdit(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Stack(
+                              alignment: Alignment.bottomCenter,
+                              clipBehavior: Clip.none,
+                              children: [
+                                _ProfileWallPaperEdit(
+                                  imageUrl:
+                                      "https://d1nt9ilagmjg63.cloudfront.net/media/1631577810186-nakajo@minden.co.jp-image",
                                   imageHandler: (value) {
-                                    _iconUrl = value;
+                                    _wallPaperUrl = value;
                                   },
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 63,
-                          ),
-                          const _ProfileNameEditForm(
-                            name: '',
-                          ),
-                          const SizedBox(
-                            height: 33,
-                          ),
-                          const _ProfileBioEditForm(
-                            bio: '',
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          const _ImportantTagsList(
-                            tagsList: [],
-                          ),
-                        ],
+                                Positioned(
+                                  child: _ProfileIconEdit(
+                                    imageUrl:
+                                        "https://d1nt9ilagmjg63.cloudfront.net/media/1631578986577-nakajo@minden.co.jp-image",
+                                    imageHandler: (value) {
+                                      _iconUrl = value;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 63,
+                            ),
+                            _ProfileNameEditForm(
+                              name: _name,
+                              textHandler: (value) {
+                                _name = value;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 33,
+                            ),
+                            _ProfileBioEditForm(
+                              bio: _bio,
+                              textHandler: (value) {
+                                _bio = value;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            const _ImportantTagsList(
+                              tagsList: [],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -292,13 +310,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   void _complete(BuildContext context) {
-    Navigator.pop(context, true);
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      _updateBloc.add(UpdateProfileEvent(
+          name: _name, icon: _iconUrl, bio: _bio, wallPaper: _wallPaperUrl));
+    }
   }
 }
 
 class _ProfileWallPaperEdit extends StatefulWidget {
-  _ProfileWallPaperEdit({required this.imageHandler});
+  const _ProfileWallPaperEdit({
+    required this.imageUrl,
+    required this.imageHandler,
+  });
 
+  final String imageUrl;
   final Function(String url) imageHandler;
 
   @override
@@ -312,9 +338,20 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   @override
   void initState() {
     super.initState();
+    _imageFromUrl(widget.imageUrl);
   }
 
-  Future<ui.Image> loadImage(Uint8List img) async {
+  Future<void> _imageFromUrl(String url) async {
+    if (url.isEmpty) return;
+    final imageData = await NetworkAssetBundle(Uri.parse(url)).load('');
+    final bytes = imageData.buffer.asUint8List();
+    final image = await _loadImage(bytes);
+    setState(() {
+      _uiImage = image;
+    });
+  }
+
+  Future<ui.Image> _loadImage(Uint8List img) async {
     final completer = Completer<ui.Image>();
     ui.decodeImageFromList(img, (ui.Image img) {
       return completer.complete(img);
@@ -337,18 +374,14 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
         if (state is Uploaded) {
           if (_queuing) {
             _queuing = false;
-            final imageData =
-                await NetworkAssetBundle(Uri.parse(state.media.url)).load('');
-            final bytes = imageData.buffer.asUint8List();
-            _uiImage = await loadImage(bytes);
+            await _imageFromUrl(state.media.url);
             widget.imageHandler(state.media.url);
-            setState(() {});
           }
         }
       },
       child: BlocBuilder<UploadBloc, UploadState>(
         builder: (context, state) {
-          final stack = Stack(
+          return Stack(
             children: [
               Column(
                 children: [
@@ -390,7 +423,6 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
               ),
             ],
           );
-          return stack;
         },
       ),
     );
@@ -398,8 +430,12 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
 }
 
 class _ProfileIconEdit extends StatefulWidget {
-  _ProfileIconEdit({required this.imageHandler});
+  const _ProfileIconEdit({
+    required this.imageUrl,
+    required this.imageHandler,
+  });
 
+  final String imageUrl;
   final Function(String url) imageHandler;
 
   @override
@@ -409,6 +445,14 @@ class _ProfileIconEdit extends StatefulWidget {
 class _ProfileIconEditState extends State<_ProfileIconEdit> {
   bool _queuing = false;
   String _url = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.imageUrl.isNotEmpty) {
+      _url = widget.imageUrl;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -510,44 +554,59 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
 class _ProfileNameEditForm extends StatelessWidget {
   const _ProfileNameEditForm({
     required this.name,
-  }) : super();
+    required this.textHandler,
+  });
+
   final String name;
+  final Function(String text) textHandler;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            height: 54,
-            width: 339,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            child: TextFormField(
-              initialValue: name,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-              ),
-              style: const TextStyle(
-                color: Color(0xFF7C7C7C),
-                fontSize: 18,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 54,
+          width: 339,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
           ),
-        ],
-      ),
+          child: TextFormField(
+            initialValue: name,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
+            style: const TextStyle(
+              color: Color(0xFF7C7C7C),
+              fontSize: 18,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w700,
+            ),
+            validator: (value) {
+              if ((value?.length ?? 0) < 3) {
+                return i18nTranslate(context, 'ユーザーネームは2文字以上で入力してください');
+              }
+            },
+            onSaved: (value) {
+              if (value != null) {
+                textHandler(value);
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _ProfileBioEditForm extends StatelessWidget {
-  const _ProfileBioEditForm({required this.bio}) : super();
+  const _ProfileBioEditForm({
+    required this.bio,
+    required this.textHandler,
+  }) : super();
   final bio;
+  final Function(String text) textHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -567,32 +626,35 @@ class _ProfileBioEditForm extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Form(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-            height: 110,
-            width: 339,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+          height: 110,
+          width: 339,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: TextFormField(
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            initialValue: bio,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
             ),
-            child: TextFormField(
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              initialValue: bio,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-              ),
-              style: TextStyle(
-                color: const Color(0xFF7C7C7C),
-                fontSize: 12,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w400,
-                letterSpacing: calcLetterSpacing(letter: 0.5),
-                height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
-              ),
+            style: TextStyle(
+              color: const Color(0xFF7C7C7C),
+              fontSize: 12,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w400,
+              letterSpacing: calcLetterSpacing(letter: 0.5),
+              height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
             ),
+            onSaved: (value) {
+              if (value != null) {
+                textHandler(value);
+              }
+            },
           ),
         ),
       ],

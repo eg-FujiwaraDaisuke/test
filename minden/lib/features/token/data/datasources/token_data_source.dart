@@ -66,12 +66,15 @@ class TokenDataSourceImpl implements TokenDataSource {
     final defaultHeaders = env['headers']! as Map<String, String>;
     final headers = {'refreshToken': refreshToken, ...defaultHeaders};
 
+    print("### ${headers}");
+
     final response = await client.get(
       Uri.parse((env['url']! as String) + _authPath),
       headers: headers,
     );
 
-    print("${response.body}");
+    print("### token response ${response.statusCode} ${response.body}");
+
     if (response.statusCode == 200) {
       return TokenModel.fromJson(json.decode(response.body));
     } else {

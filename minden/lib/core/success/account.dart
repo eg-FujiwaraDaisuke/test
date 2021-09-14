@@ -25,8 +25,12 @@ class Account {
   }
 
   Future<void> prepare() async {
+    print("appToken : ${_appToken}");
     _appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
+    print("appToken : ${_appToken}");
+    print("_refreshToken : ${_refreshToken}");
     _refreshToken = await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
+    print("_refreshToken : ${_refreshToken}");
 
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
     final userJson = json.decode(jsonData);
