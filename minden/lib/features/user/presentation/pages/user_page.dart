@@ -158,7 +158,7 @@ class _MenuListView extends StatelessWidget {
           routeName: '/user/profile',
           type: MenuType.common),
       _Menu(
-          title: i18nTranslate(context, 'user_menu_thanks_message'),
+          title: i18nTranslate(context, 'user_menu_message'),
           icon: 'message',
           routeName: '/user/message',
           type: MenuType.message),

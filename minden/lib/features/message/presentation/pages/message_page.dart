@@ -17,7 +17,7 @@ class MessagePage extends StatelessWidget {
         elevation: 0,
         leading: _buildBackLeadingButton(context),
         title: Text(
-          i18nTranslate(context, 'user_menu_thanks_message'),
+          i18nTranslate(context, 'user_menu_message'),
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
