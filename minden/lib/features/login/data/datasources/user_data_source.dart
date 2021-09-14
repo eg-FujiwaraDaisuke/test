@@ -22,11 +22,11 @@ class UserDataSourceImpl implements UserDataSource {
   @override
   Future<UserModel> getLoginUser(String id, String password) async {
     final body = json.encode({'loginId': id, 'password': password});
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
 
     final response = await client.post(
-      Uri.parse((env['url'] as String) + _authPath),
-      headers: env['headers'] as Map<String, String>,
+      Uri.parse(endpoint + _authPath),
+      headers: ApiConfig.contentTypeHeaderApplicationJson,
       body: body,
     );
 

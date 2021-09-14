@@ -36,8 +36,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     required String bio,
     required String wallPaper,
   }) async {
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final param = {};
     if (name.isNotEmpty) {
       param['name'] = name;
@@ -53,10 +54,8 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     }
 
     final body = json.encode(param);
-    final response = await client.post(
-        Uri.parse((env['url']! as String) + _updatePath),
-        headers: headers,
-        body: body);
+    final response = await client.post(Uri.parse(endpoint + _updatePath),
+        headers: headers, body: body);
 
     print("#### profile update : ${body} ${response.body}");
     if (response.statusCode == 200) {
@@ -70,13 +69,13 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   @override
   Future<ProfileModel> get({required String userId}) async {
-    final env = ApiConfig.apiEndpoint();
+    final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
-
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
     final queryParameters = {
       'userId': userId,
     };
-    var url = Uri.parse((env['url']! as String) + _getPath);
+    var url = Uri.parse(endpoint + _getPath);
     url = url.replace(queryParameters: queryParameters);
     final response = await client.get(
       url,
