@@ -20,8 +20,8 @@ class SupportPlantSelectDialog {
   List<RegistPowerPlant> registPowerPlants;
   final User user;
 
-  void showDialog() {
-    Navigator.push(
+  Future<void> showDialog() async {
+    await Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
@@ -157,12 +157,6 @@ class SupportPlantSelectDialog {
                         Button(
                           onTap: () {
                             _hideDialog();
-                            SupportPlantDecisionDialog(
-                              context: context,
-                              selectPowerPlant: selectPowerPlant,
-                              user: user,
-                              registPowerPlants: registPowerPlants,
-                            ).showDialog();
                           },
                           text: '次へ',
                           size: ButtonSize.S,

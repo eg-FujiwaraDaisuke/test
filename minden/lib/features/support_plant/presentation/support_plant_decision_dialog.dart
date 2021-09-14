@@ -19,8 +19,8 @@ class SupportPlantDecisionDialog {
   final List<RegistPowerPlant> registPowerPlants;
   final User user;
 
-  void showDialog() {
-    Navigator.push(
+  Future<void> showDialog() async {
+    await Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {

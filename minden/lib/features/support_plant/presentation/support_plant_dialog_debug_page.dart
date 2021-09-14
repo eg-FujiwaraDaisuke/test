@@ -113,7 +113,7 @@ class _SupportPlantDialogDebugPageState
           children: [
             ElevatedButton(
               child: Text('応援する'),
-              onPressed: () {
+              onPressed: () async {
                 // 契約件数１応援０の場合
                 if (userDammy.supportableNumber > registPowerPlants.length) {
                   SupportPlantDecisionDialog(
@@ -123,12 +123,19 @@ class _SupportPlantDialogDebugPageState
                     registPowerPlants: registPowerPlants,
                   ).showDialog();
                 } else {
-                  SupportPlantSelectDialog(
+                  await SupportPlantSelectDialog(
                           context: context,
                           selectPowerPlant: selectPowerPlantDammy,
                           user: userDammy,
                           registPowerPlants: registPowerPlants)
                       .showDialog();
+
+                  await SupportPlantDecisionDialog(
+                    context: context,
+                    selectPowerPlant: selectPowerPlantDammy,
+                    user: userDammy,
+                    registPowerPlants: registPowerPlants,
+                  ).showDialog();
                 }
               },
             ),
