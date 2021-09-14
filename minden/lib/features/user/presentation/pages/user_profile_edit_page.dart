@@ -59,7 +59,7 @@ class UserProfileEditPage extends StatelessWidget {
                     width: 10.5,
                   ),
                   Text(
-                    i18nTranslate(context, 'user_edit_complete'),
+                    i18nTranslate(context, 'complete'),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 12,

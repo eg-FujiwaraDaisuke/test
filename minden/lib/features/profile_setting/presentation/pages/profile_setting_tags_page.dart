@@ -225,14 +225,14 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 if (_selectedTags.isEmpty)
                   Button(
                     onTap: () => {},
-                    text: i18nTranslate(context, 'profile_setting_next'),
+                    text: i18nTranslate(context, 'to_next'),
                     size: ButtonSize.S,
                     isActive: false,
                   )
                 else
                   Button(
                     onTap: _next,
-                    text: i18nTranslate(context, 'profile_setting_next'),
+                    text: i18nTranslate(context, 'to_next'),
                     size: ButtonSize.S,
                   ),
                 const SizedBox(height: 32),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
@@ -44,23 +45,59 @@ class SupportPlantSelectDialog {
                           registPowerPlants.length == 1)
                         Column(
                           children: [
-                            Text(
-                              '現在「${registPowerPlants[0].powerPlant.name}」',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Color(0xFFFF8C00),
-                                fontSize: 18,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: i18nTranslate(context, 'now'),
+                                    style: const TextStyle(
+                                      color: Color(0xFF575292),
+                                      fontSize: 16,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: i18nTranslate(
+                                        context, 'bracket_before'),
+                                    style: const TextStyle(
+                                      color: Color(0xFF575292),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: registPowerPlants[0].powerPlant.name,
+                                    style: const TextStyle(
+                                      color: Color(0xFF575292),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        i18nTranslate(context, 'bracket_after'),
+                                    style: const TextStyle(
+                                      color: Color(0xFF575292),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(
                               height: 6,
                             ),
-                            const Text(
-                              'を応援中です。',
+                            Text(
+                              i18nTranslate(
+                                  context, 'support_plant_select_supporting'),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF575292),
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',
@@ -83,10 +120,11 @@ class SupportPlantSelectDialog {
                             const SizedBox(
                               height: 6,
                             ),
-                            const Text(
-                              'に変更してよろしいですか？',
+                            Text(
+                              i18nTranslate(context,
+                                  'support_plant_select_change_alright'),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF575292),
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',
@@ -96,27 +134,54 @@ class SupportPlantSelectDialog {
                           ],
                         )
                       else
-                        Text(
-                          '応援出来る発電所は${user.supportableNumber}件までです。',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Color(0xFF575292),
-                            fontSize: 16,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: i18nTranslate(context,
+                                    'support_plant_select_can_be_supported'),
+                                style: const TextStyle(
+                                  color: Color(0xFF575292),
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              TextSpan(
+                                text: user.supportableNumber.toString(),
+                                style: const TextStyle(
+                                  color: Color(0xFF575292),
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              TextSpan(
+                                text: i18nTranslate(
+                                    context, 'support_plant_select_until'),
+                                style: const TextStyle(
+                                  color: Color(0xFF575292),
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              )
+                            ],
                           ),
+                          textAlign: TextAlign.center,
                         ),
 
                       const SizedBox(
                         height: 14,
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         width: 294,
                         child: Text(
-                          '現在の選択を解除すると新規応援先を選択出来るようになります',
+                          i18nTranslate(context,
+                              'support_plant_select_lift_can_be_supported'),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 12,
                             fontFamily: 'NotoSansJP',
@@ -139,10 +204,10 @@ class SupportPlantSelectDialog {
                       const SizedBox(
                         height: 19,
                       ),
-                      const Text(
-                        '応援する発電所は今月末まで変更可能です',
+                      Text(
+                        i18nTranslate(context, 'support_plant_can_be_changed'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF787877),
                           fontSize: 12,
                           fontFamily: 'NotoSansJP',
@@ -157,13 +222,13 @@ class SupportPlantSelectDialog {
                           onTap: () {
                             _hideDialog();
                           },
-                          text: '次へ',
+                          text: i18nTranslate(context, 'to_next'),
                           size: ButtonSize.S,
                         )
                       else
                         Button(
                           onTap: () {},
-                          text: '次へ',
+                          text: i18nTranslate(context, 'to_next'),
                           isActive: false,
                           size: ButtonSize.S,
                         ),
@@ -176,9 +241,9 @@ class SupportPlantSelectDialog {
                               registPowerPlant.isRegist = true);
                           _hideDialog();
                         },
-                        child: const Text(
-                          'キャンセル',
-                          style: TextStyle(
+                        child: Text(
+                          i18nTranslate(context, 'cancel_katakana'),
+                          style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 14,
                             fontFamily: 'NotoSansJP',
@@ -209,10 +274,10 @@ class SupportPlantSelectDialog {
   Widget _buildSupportingPlantList(setState) {
     return Column(
       children: [
-        const Text(
-          '＜現在応援中の発電所＞',
+        Text(
+          i18nTranslate(context, 'support_plant_select_current_support'),
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFF575292),
             fontSize: 13,
             fontFamily: 'NotoSansJP',
@@ -278,7 +343,11 @@ class SupportPlantSelectDialog {
                   ),
                   child: Center(
                     child: Text(
-                      registPowerPlant.isRegist ? '選択解除' : '解除済み',
+                      registPowerPlant.isRegist
+                          ? i18nTranslate(
+                              context, 'support_plant_select_deselect')
+                          : i18nTranslate(
+                              context, 'support_plant_select_released'),
                       style: TextStyle(
                         color: registPowerPlant.isRegist
                             ? const Color(0xFFFFFFFF)

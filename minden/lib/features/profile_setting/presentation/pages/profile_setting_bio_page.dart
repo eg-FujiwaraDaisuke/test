@@ -104,7 +104,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
                 const SizedBox(height: 126),
                 Button(
                   onTap: _next,
-                  text: i18nTranslate(context, 'profile_setting_next'),
+                  text: i18nTranslate(context, 'to_next'),
                   size: ButtonSize.S,
                 ),
               ],

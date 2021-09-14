@@ -51,7 +51,7 @@ class _SupportPlantDialogDebugPageState
     accountId: 'step1_02@minden.co.jp',
     contractor: 'ぽーたるてすと に',
     limitedPlantId: '',
-    supportableNumber: 2,
+    supportableNumber: 1,
     profile: Profile(
       userId: 'MC20210808006',
       name: 'hogehoge',
@@ -67,12 +67,12 @@ class _SupportPlantDialogDebugPageState
         yearMonth: '202109',
         fromApp: true,
       ),
-      Support(
-        plantId: 'MP2021080809',
-        status: 3,
-        yearMonth: '202110',
-        fromApp: true,
-      )
+      // Support(
+      //   plantId: 'MP2021080809',
+      //   status: 3,
+      //   yearMonth: '202110',
+      //   fromApp: true,
+      // )
     ],
   );
 
@@ -93,14 +93,14 @@ class _SupportPlantDialogDebugPageState
               image:
                   'https://images.unsplash.com/photo-1631414836323-ad2f6963061c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1276&q=80'),
         ),
-        RegistPowerPlant(
-          isRegist: true,
-          powerPlant: PowerPlant(
-              plantId: 'MP2021080809',
-              name: 'test2',
-              image:
-                  'https://images.unsplash.com/photo-1593642702909-dec73df255d7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80'),
-        ),
+        // RegistPowerPlant(
+        //   isRegist: true,
+        //   powerPlant: PowerPlant(
+        //       plantId: 'MP2021080809',
+        //       name: 'test2',
+        //       image:
+        //           'https://images.unsplash.com/photo-1593642702909-dec73df255d7?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80'),
+        // ),
       ];
     });
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
@@ -50,21 +51,48 @@ class SupportPlantDecisionDialog {
                       if (newRegistPowerPlants.length == 1)
                         Column(
                           children: [
-                            Text(
-                              '「${selectPowerPlant.name}」',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Color(0xFFFF8C00),
-                                fontSize: 18,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: i18nTranslate(
+                                        context, 'bracket_before'),
+                                    style: const TextStyle(
+                                      color: Color(0xFFFF8C00),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: selectPowerPlant.name,
+                                    style: const TextStyle(
+                                      color: Color(0xFFFF8C00),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        i18nTranslate(context, 'bracket_after'),
+                                    style: const TextStyle(
+                                      color: Color(0xFFFF8C00),
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
+                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text(
-                              'を応援します。よろしいですか？',
+                            Text(
+                              i18nTranslate(
+                                  context, 'support_plant_decide_alright'),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Color(0xFF575292),
@@ -77,7 +105,8 @@ class SupportPlantDecisionDialog {
                         )
                       else
                         Text(
-                          '以下の発電所を来月から応援します。\nよろしいですか？',
+                          i18nTranslate(context,
+                              'support_plant_decide_next_month_alright'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: const Color(0xFF575292),
@@ -99,10 +128,10 @@ class SupportPlantDecisionDialog {
                       const SizedBox(
                         height: 25,
                       ),
-                      const Text(
-                        '応援する発電所は今月末まで変更可能です',
+                      Text(
+                        i18nTranslate(context, 'support_plant_can_be_changed'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF787877),
                           fontSize: 12,
                           fontFamily: 'NotoSansJP',
@@ -117,7 +146,7 @@ class SupportPlantDecisionDialog {
                             // TODO ここで応援APIを叩く
                             _hideDialog();
                           },
-                          text: '決定する',
+                          text: i18nTranslate(context, 'decide'),
                           size: ButtonSize.S),
                       const SizedBox(
                         height: 12,
@@ -128,9 +157,9 @@ class SupportPlantDecisionDialog {
                               registPowerPlant.isRegist = true);
                           _hideDialog();
                         },
-                        child: const Text(
-                          'キャンセル',
-                          style: TextStyle(
+                        child: Text(
+                          i18nTranslate(context, 'cancel_katakana'),
+                          style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 14,
                             fontFamily: 'NotoSansJP',
