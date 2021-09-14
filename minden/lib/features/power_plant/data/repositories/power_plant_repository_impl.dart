@@ -5,6 +5,7 @@ import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_mock.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 
@@ -43,6 +44,18 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
       String plantId) async {
     try {
       final plant = await powerPlantDataSource.getPowerPlantDetail(plantId);
+      return Right(plant);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, PowerPlantParticipant>>
+      getPowerPlantParticipants(String plantId) async {
+    try {
+      final plant =
+          await powerPlantDataSource.getPowerPlantParticipants(plantId);
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());

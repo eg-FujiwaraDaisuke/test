@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
 
 final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
@@ -14,6 +15,8 @@ abstract class PowerPlantDataSource {
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId);
 
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId);
+
+  Future<PowerPlantParticipantModel> getPowerPlantParticipants(String plantId);
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -24,6 +27,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   final _powerPlantsPath = '/api/v1/power_plants';
 
   final _powerPlantPath = '/api/v1/power_plant';
+
+  final _powerPlantParticipantPath = '/api/v1/power_plant/participants';
 
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
@@ -56,6 +61,25 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       return PowerPlantDetailModel.fromJson(json.decode(response.body));
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PowerPlantParticipantModel> getPowerPlantParticipants(
+      String plantId) async {
+    final body = json.encode({'plantId': plantId});
+    final env = ApiConfig.apiEndpoint();
+
+    final response = await client.post(
+      Uri.parse((env['url']! as String) + _powerPlantParticipantPath),
+      headers: env['headers']! as Map<String, String>,
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return PowerPlantParticipantModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException();
     }
