@@ -4,7 +4,7 @@ import 'package:minden/features/profile_setting/data/models/tag_model.dart';
 
 class PowerPlantsResponseModel extends PowerPlantsResponse {
   const PowerPlantsResponseModel({
-    required TagModel tag,
+    required TagModel? tag,
     required List<PowerPlantModel> powerPlants,
   }) : super(
           tag: tag,
@@ -12,10 +12,11 @@ class PowerPlantsResponseModel extends PowerPlantsResponse {
         );
 
   factory PowerPlantsResponseModel.fromJson(Map<String, dynamic> json) {
+    final tagJson = json['tag'];
     final Iterable iterable = json['powerPlants'];
 
     return PowerPlantsResponseModel(
-        tag: TagModel.fromJson(json['tag']),
+        tag: (tagJson != null) ? TagModel.fromJson(tagJson) : null,
         powerPlants: List<PowerPlantModel>.from(
             iterable.map((model) => PowerPlantModel.fromJson(model))));
   }

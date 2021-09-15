@@ -3,9 +3,13 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 import 'package:minden/features/profile_setting/data/models/tag_model.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class PowerPlantRepositoryMock implements PowerPlantRepository {
   @override
@@ -26,8 +30,8 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
             voltageType: '1',
             powerGenerationMethod: '太陽光発電',
             renewableType: '1',
-            generationCapacity: '1234',
-            displayOrder: '1',
+            generationCapacity: 1234,
+            displayOrder: 1,
             isRecommend: true,
             ownerName: '1',
             startDate: DateTime.now(),
@@ -46,8 +50,8 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
             voltageType: '1',
             powerGenerationMethod: '太陽光発電',
             renewableType: '1',
-            generationCapacity: '1234',
-            displayOrder: '1',
+            generationCapacity: 1234,
+            displayOrder: 1,
             isRecommend: true,
             ownerName: '1',
             startDate: DateTime.now(),
@@ -66,8 +70,8 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
             voltageType: '1',
             powerGenerationMethod: '水力発電',
             renewableType: '1',
-            generationCapacity: '1234',
-            displayOrder: '1',
+            generationCapacity: 1234,
+            displayOrder: 1,
             isRecommend: true,
             ownerName: '1',
             startDate: DateTime.now(),
@@ -113,6 +117,89 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
 　こんにちは。私は山形県米沢市で2019年からソーラーシェアリングと言う農地で発電しながら下の土地でお米を栽培しています。応援特典として1年間(12月から11月まで)10回以上応援していただいた方に、新米つや姫3合（450g）をお送りします。私の所属する米沢稔りの会で産地直送の販売もしています。山形県エコファーマーの認証を受け化学肥料や農薬を減らした特別栽培の美味しいお米を食べて下さい。田んぼでは日本一規模が大きい発電所です。''',
       );
       return Right(data);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, PowerPlantParticipant>>
+      getPowerPlantParticipants(String plantId) async {
+    try {
+      const data = PowerPlantParticipant(
+          page: '1',
+          total: '4',
+          plantId: '1',
+          yearMonth: '202109',
+          userList: [
+            PowerPlantParticipantUser(
+              userId: '1',
+              name: 'さとう',
+              contractor: '1',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
+            PowerPlantParticipantUser(
+              userId: '2',
+              name: 'やまだ',
+              contractor: '2',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
+            PowerPlantParticipantUser(
+              userId: '1',
+              name: 'さとう',
+              contractor: '1',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
+            PowerPlantParticipantUser(
+              userId: '2',
+              name: 'やまだ',
+              contractor: '2',
+              icon:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              bio: '1',
+              wallpaper:
+                  'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+            ),
+          ]);
+      return Right(data);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, TagResponse>> getPowerPlantTags(
+      String plantId) async {
+    try {
+      const data = TagResponse(
+        tags: [
+          Tag(
+            tagId: 1,
+            tagName: '使い捨てしません',
+          ),
+          Tag(
+            tagId: 2,
+            tagName: '環境負荷ゼロ',
+          ),
+          Tag(
+            tagId: 3,
+            tagName: 'フェアトレード',
+          )
+        ],
+      );
+      return const Right(data);
     } on ServerException {
       return left(PowerPlantFailure());
     }
