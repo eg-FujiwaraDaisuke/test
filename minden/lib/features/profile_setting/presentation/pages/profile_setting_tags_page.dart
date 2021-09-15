@@ -49,10 +49,6 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
 
     _updateTagBloc.stream.listen((event) {
       if (event is TagUpdated) {
-        if (widget.isRouteToPop) {
-          Navigator.pop(context, true);
-          return;
-        }
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingTagsDecisionPage(),
           settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
@@ -146,7 +142,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
           ),
         ),
       ),
-        extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -179,8 +175,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                       ),
                     ),
                     TextSpan(
-                      text: i18nTranslate(context,
-                          'profile_setting_tag_description_important'),
+                      text: i18nTranslate(
+                          context, 'profile_setting_tag_description_important'),
                       style: TextStyle(
                         fontSize: 13,
                         fontFamily: 'NotoSansJP',
@@ -263,8 +259,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                                   color: const Color(0xFF9A7446),
                                   height: calcFontHeight(
                                       fontSize: 10, lineHeight: 14),
-                                  letterSpacing:
-                                      calcLetterSpacing(letter: -6),
+                                  letterSpacing: calcLetterSpacing(letter: -6),
                                 ),
                               ),
                             ]),
@@ -343,10 +338,14 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _prev() {
-    Navigator.pop(context, false);
+    Navigator.pop(context, []);
   }
 
   void _next() {
+    if (widget.isRouteToPop) {
+      Navigator.pop(context, _selectedTags);
+      return;
+    }
     _updateTagBloc
         .add(UpdateTagEvent(tags: _selectedTags.map((e) => e!.tagId).toList()));
   }
