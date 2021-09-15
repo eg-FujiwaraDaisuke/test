@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
+import '../../../../injection_container.dart';
 import '../../../../utile.dart';
 
 enum MenuType {
@@ -27,128 +38,128 @@ class _Menu {
   final MenuType type;
 }
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _UserPageState();
+  }
+}
+
+class _UserPageState extends State<UserPage> {
 // 確認用仮データ
   final data = ProfileDamyData().damyData;
 
+  late GetProfileBloc _bloc;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          i18nTranslate(context, 'user_mypage'),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-            letterSpacing: calcLetterSpacing(letter: 0.5),
+  void initState() {
+    super.initState();
+
+    _bloc = GetProfileBloc(
+      const ProfileStateInitial(),
+      GetProfile(
+        ProfileRepositoryImpl(
+          dataSource: ProfileDataSourceImpl(
+            client: http.Client(),
           ),
         ),
       ),
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  if (data.wallPaper == '')
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 173,
-                        color: const Color(0xFFFFFB92))
-                  else
-                    Image.network(
-                      data.wallPaper,
-                      width: MediaQuery.of(context).size.width,
-                      height: 173,
-                      fit: BoxFit.cover,
+    );
+
+    _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocListener<GetProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetProfileBloc, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoaded) {
+              return Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  centerTitle: true,
+                  title: Text(
+                    i18nTranslate(context, 'user_mypage'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: calcLetterSpacing(letter: 0.5),
                     ),
-                  CustomPaint(
-                    size: Size(MediaQuery.of(context).size.width, 174),
-                    painter: WallPaperArcPainter(color: Colors.white),
                   ),
-                  Positioned(
-                    bottom: -44,
-                    child: _ProfileIcon(icon: data.icon),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              _ProfileName(
-                name: data.name,
-              ),
-              const SizedBox(
-                height: 61,
-              ),
-              _MenuListView(),
-            ],
-          ),
+                ),
+                extendBodyBehindAppBar: true,
+                body: SafeArea(
+                  top: false,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
+                            if (state.profile.wallPaper?.isEmpty ?? true)
+                              Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 173,
+                                  color: const Color(0xFFFFFB92))
+                            else
+                              Image.network(
+                                state.profile.wallPaper!,
+                                width: MediaQuery.of(context).size.width,
+                                height: 173,
+                                fit: BoxFit.cover,
+                              ),
+                            CustomPaint(
+                              size:
+                                  Size(MediaQuery.of(context).size.width, 174),
+                              painter: WallPaperArcPainter(color: Colors.white),
+                            ),
+                            Positioned(
+                              bottom: -44,
+                              child: ProfileIcon(icon: state.profile.icon),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        ProfileName(
+                          name: state.profile.name,
+                        ),
+                        const SizedBox(
+                          height: 61,
+                        ),
+                        _MenuListView(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+            return PlaceHolderProfile();
+          },
         ),
-      ),
-    );
-  }
-}
-
-class _ProfileIcon extends StatelessWidget {
-  const _ProfileIcon({required this.icon});
-
-  final String icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 99,
-      height: 99,
-      decoration: const BoxDecoration(
-        color: Color(0xFFFF8C00),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: 93,
-          height: 93,
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFB92),
-            shape: BoxShape.circle,
-            border: Border.all(
-              width: 3,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileName extends StatelessWidget {
-  final String name;
-
-  const _ProfileName({
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      name,
-      style: const TextStyle(
-        color: Color(0xFF575292),
-        fontSize: 18,
-        fontFamily: 'NotoSansJP',
-        fontWeight: FontWeight.w700,
       ),
     );
   }
@@ -222,14 +233,16 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
+      onTap: () async {
         switch (routeName) {
           case '/user/profile':
             final route = MaterialPageRoute(
               builder: (context) => ProfilePage(),
               settings: RouteSettings(name: routeName),
             );
-            Navigator.push(context, route);
+            await Navigator.push(context, route);
+            BlocProvider.of<GetProfileBloc>(context)
+                .add(GetProfileEvent(userId: si<Account>().userId));
             break;
 
           default:

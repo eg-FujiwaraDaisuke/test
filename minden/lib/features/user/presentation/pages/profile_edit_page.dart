@@ -14,6 +14,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
@@ -23,7 +24,6 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
@@ -38,8 +38,6 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  final data = ProfileDamyData().damyData;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UpdateProfileBloc _updateBloc;
@@ -219,8 +217,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(
                               height: 30,
                             ),
-                            const _ImportantTagsList(
-                              tagsList: [],
+                            _ImportantTagsList(
+                              tagsList: state.profile.tags,
                             ),
                           ],
                         ),
@@ -326,7 +324,7 @@ class _ProfileWallPaperEdit extends StatefulWidget {
     required this.imageHandler,
   });
 
-  final String imageUrl;
+  final String? imageUrl;
   final Function(String url) imageHandler;
 
   @override
@@ -335,10 +333,14 @@ class _ProfileWallPaperEdit extends StatefulWidget {
 
 class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
   bool _queuing = false;
+  String _url = '';
 
   @override
   void initState() {
     super.initState();
+    if (widget.imageUrl?.isNotEmpty ?? false) {
+      _url = widget.imageUrl!;
+    }
   }
 
   @override
@@ -353,26 +355,27 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
           return;
         }
         Loading.hide();
-        if (state is Uploaded) {
-          if (_queuing) {
-            _queuing = false;
-            widget.imageHandler(state.media.url);
-          }
-        }
       },
       child: BlocBuilder<UploadBloc, UploadState>(
         builder: (context, state) {
+          if (state is Uploaded) {
+            if (_queuing) {
+              _queuing = false;
+              _url = state.media.url;
+              widget.imageHandler(state.media.url);
+            }
+          }
           return Stack(
             clipBehavior: Clip.none,
             children: [
-              if (widget.imageUrl == '')
+              if (_url.isEmpty)
                 Container(
                     width: MediaQuery.of(context).size.width,
                     height: 174,
                     color: const Color(0xFFFFFB92))
               else
                 Image.network(
-                  widget.imageUrl,
+                  _url,
                   width: MediaQuery.of(context).size.width,
                   height: 173,
                   fit: BoxFit.cover,
@@ -428,7 +431,7 @@ class _ProfileIconEdit extends StatefulWidget {
     required this.imageHandler,
   });
 
-  final String imageUrl;
+  final String? imageUrl;
   final Function(String url) imageHandler;
 
   @override
@@ -442,8 +445,8 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
   @override
   void initState() {
     super.initState();
-    if (widget.imageUrl.isNotEmpty) {
-      _url = widget.imageUrl;
+    if (widget.imageUrl?.isNotEmpty ?? false) {
+      _url = widget.imageUrl!;
     }
   }
 
@@ -514,8 +517,6 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                             .add(UploadMediaEvent(value));
                       },
                       cropStyle: CropStyle.rectangle,
-                      clipHeight: 174,
-                      clipWidth: 375,
                     );
                   },
                   child: Container(
@@ -553,7 +554,7 @@ class _ProfileNameEditForm extends StatelessWidget {
     required this.textHandler,
   });
 
-  final String name;
+  final String? name;
   final Function(String text) textHandler;
 
   @override
@@ -601,7 +602,7 @@ class _ProfileBioEditForm extends StatelessWidget {
     required this.bio,
     required this.textHandler,
   }) : super();
-  final bio;
+  final String? bio;
   final Function(String text) textHandler;
 
   @override
@@ -659,7 +660,9 @@ class _ProfileBioEditForm extends StatelessWidget {
 }
 
 class _ImportantTagsList extends StatelessWidget {
-  const _ImportantTagsList({required this.tagsList}) : super();
+  const _ImportantTagsList({
+    required this.tagsList,
+  }) : super();
   final List<Tag> tagsList;
 
   @override
@@ -683,7 +686,37 @@ class _ImportantTagsList extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  final ret = await Navigator.push<bool>(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ProfileSettingTagsPage(
+                        isRouteToPop: true,
+                      ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return const FadeUpwardsPageTransitionsBuilder()
+                            .buildTransitions(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProfileSettingTagsPage(
+                                          isRouteToPop: true,
+                                        ),
+                                    settings: const RouteSettings(
+                                        name: '/profileSetting/tag')),
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child);
+                      },
+                    ),
+                  );
+                  if (ret ?? false) {
+                    BlocProvider.of<GetProfileBloc>(context)
+                        .add(GetProfileEvent(userId: si<Account>().userId));
+                  }
+                },
                 child: Container(
                   width: 20,
                   height: 20,

@@ -27,10 +27,10 @@ class Profile extends Equatable {
   }
 
   final String? userId;
-  final String name;
-  final String icon;
-  final String bio;
-  final String wallPaper;
+  final String? name;
+  final String? icon;
+  final String? bio;
+  final String? wallPaper;
   final List<Tag> tags;
 
   Map<String, dynamic> toJson() {
