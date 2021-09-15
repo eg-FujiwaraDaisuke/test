@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   actions: [
                     GestureDetector(
                       onTap: () async {
-                        final ret = await Navigator.push<bool>(
+                        await Navigator.push<bool>(
                           context,
                           PageRouteBuilder(
                             pageBuilder:
@@ -111,11 +111,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         );
 
-                        // リロード
-                        if (ret ?? false) {
-                          _bloc.add(
-                              GetProfileEvent(userId: si<Account>().userId));
-                        }
+                        // 常にリロード
+                        _bloc
+                            .add(GetProfileEvent(userId: si<Account>().userId));
                       },
                       child: Container(
                         width: 90,
@@ -159,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.center,
                             clipBehavior: Clip.none,
                             children: [
-                              if (state.profile.wallPaper.isEmpty)
+                              if (state.profile.wallPaper?.isEmpty ?? true)
                                 Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 173,
@@ -266,7 +264,7 @@ class PlaceHolderProfile extends StatelessWidget {
 class _ProfileIcon extends StatelessWidget {
   const _ProfileIcon({required this.icon});
 
-  final String icon;
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +286,12 @@ class _ProfileIcon extends StatelessWidget {
               width: 3,
               color: Colors.white,
             ),
+            image: icon?.isEmpty ?? true
+                ? null
+                : DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(icon!),
+                  ),
           ),
         ),
       ),
@@ -300,12 +304,12 @@ class _ProfileName extends StatelessWidget {
     required this.name,
   });
 
-  final String name;
+  final String? name;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      name,
+      name ?? '',
       style: const TextStyle(
         color: Color(0xFF575292),
         fontSize: 18,
@@ -320,14 +324,14 @@ class _ProfileBio extends StatelessWidget {
   const _ProfileBio({
     required this.bio,
   }) : super();
-  final String bio;
+  final String? bio;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 338,
       child: Text(
-        bio,
+        bio ?? '',
         style: TextStyle(
           color: const Color(0xFF787877),
           fontSize: 12,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
@@ -19,6 +18,10 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/utile.dart';
 
 class ProfileSettingTagsPage extends StatefulWidget {
+  const ProfileSettingTagsPage({required this.isRouteToPop});
+
+  final bool isRouteToPop;
+
   @override
   _ProfileSettingTagsPageState createState() => _ProfileSettingTagsPageState();
 }
@@ -46,6 +49,10 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
 
     _updateTagBloc.stream.listen((event) {
       if (event is TagUpdated) {
+        if (widget.isRouteToPop) {
+          Navigator.pop(context, true);
+          return;
+        }
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingTagsDecisionPage(),
           settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
@@ -340,7 +347,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _prev() {
-    Navigator.pop(context);
+    Navigator.pop(context, false);
   }
 
   void _next() {
