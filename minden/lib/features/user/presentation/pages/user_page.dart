@@ -118,14 +118,14 @@ class _UserPageState extends State<UserPage> {
                           clipBehavior: Clip.none,
                           alignment: Alignment.center,
                           children: [
-                            if (state.profile?.wallPaper.isEmpty ?? true)
+                            if (state.profile.wallPaper?.isEmpty ?? true)
                               Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   color: const Color(0xFFFFFB92))
                             else
                               Image.network(
-                                state.profile.wallPaper,
+                                state.profile.wallPaper!,
                                 width: MediaQuery.of(context).size.width,
                                 height: 173,
                                 fit: BoxFit.cover,

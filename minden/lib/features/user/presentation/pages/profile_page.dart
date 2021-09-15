@@ -165,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     color: const Color(0xFFFFFB92))
                               else
                                 Image.network(
-                                  state.profile.wallPaper,
+                                  state.profile.wallPaper!,
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,
