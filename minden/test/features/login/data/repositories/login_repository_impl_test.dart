@@ -33,6 +33,7 @@ void main() {
       contractor: "",
       isNewbie: false,
       profile: ProfileModel.fromJson({}),
+      supports: [],
       // userId: "",
       // name: "�݂�ȁ@�d��",
       // secret: "20000102",

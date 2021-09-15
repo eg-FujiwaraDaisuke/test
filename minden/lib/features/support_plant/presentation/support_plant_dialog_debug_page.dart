@@ -60,6 +60,7 @@ class _SupportPlantDialogDebugPageState
       wallPaper: '',
       tags: [],
     ),
+    isNewbie: false,
     supports: [
       Support(
         plantId: 'MP2021080808',

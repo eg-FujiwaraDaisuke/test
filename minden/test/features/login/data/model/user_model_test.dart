@@ -23,6 +23,7 @@ void main() {
     // service: 'portal',
     // email: 'nakajo@minden.co.jp',
     profile: ProfileModel.fromJson({}),
+    supports: [],
   );
 
   test('should be a subclass', () async {
