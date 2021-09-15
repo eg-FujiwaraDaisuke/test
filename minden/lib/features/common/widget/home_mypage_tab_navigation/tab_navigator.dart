@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/power_plant/pages/power_plant_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 import 'home_mypage_tab.dart';
@@ -15,7 +15,7 @@ class TabNavigator extends StatelessWidget {
 
   Map<TabItem, WidgetBuilder> _routeBuliders(BuildContext context) {
     return {
-      TabItem.home: (context) => HomeTopPage(),
+      TabItem.home: (context) => PowerPlantHomePage(),
       TabItem.mypage: (context) => UserPage(),
     };
   }

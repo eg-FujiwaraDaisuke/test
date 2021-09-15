@@ -15,6 +15,7 @@ void main() {
     limitedPlantId: '',
     supportableNumber: 1,
     contractor: '',
+    isNewbie: false,
     // userId: '',
     // name: '�݂�ȁ@�d��',
     // secret: '20000102',

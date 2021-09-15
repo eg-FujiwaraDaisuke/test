@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:minden/features/uploader/domain/usecases/upload_media.dart';
+import 'package:minden/features/uploader/domain/usecases/media_usecase.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 

@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -23,7 +24,7 @@ Future<void> init() async {
   final firebaseApp = await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  final RemoteConfig remoteConfig = RemoteConfig.instance;
+  final remoteConfig = RemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(seconds: 0),
     minimumFetchInterval: const Duration(hours: 1),
@@ -35,17 +36,17 @@ Future<void> init() async {
 
   final botToastNavigatorObserver = BotToastNavigatorObserver();
 
-  final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
+  final flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
         useCountryCode: false,
         fallbackFile: 'ja',
         basePath: 'assets/i18n',
-        forcedLocale: Locale('ja')),
+        forcedLocale: const Locale('ja')),
   );
-  await flutterI18nDelegate.load(Locale('ja'));
+  await flutterI18nDelegate.load(const Locale('ja'));
 
   /// Create a [AndroidNotificationChannel] for heads up notifications
-  final AndroidNotificationChannel channel = const AndroidNotificationChannel(
+  const channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
     'This channel is used for important notifications.', // description
@@ -53,10 +54,9 @@ Future<void> init() async {
   );
 
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  final firebaseMessaging = FirebaseMessaging.instance;
 
   if (!kIsWeb) {
     /// Create an Android Notification Channel.
@@ -77,7 +77,9 @@ Future<void> init() async {
     );
 
     // フォアグラウンド状態の通知
-    // Android ではアプリがフォアグラウンド状態で画面上部にプッシュ通知メッセージを表示することができない為、ローカル通知で擬似的に通知メッセージを表示
+    // Android ではアプリがフォアグラウンド状態で画面上部に
+    // プッシュ通知メッセージを表示することができない為、
+    // ローカル通知で擬似的に通知メッセージを表示
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("フォアグラウンドでメッセージを受け取りました");
       final notification = message.notification;
@@ -108,7 +110,7 @@ Future<void> init() async {
   const encryptionTokenDataSource =
       EncryptionTokenDataSourceImpl(secureStorage: FlutterSecureStorage());
 
-
+  final account = Account();
   si
     ..registerLazySingleton(() => firebaseApp)
     ..registerLazySingleton(() => remoteConfig)
@@ -116,11 +118,13 @@ Future<void> init() async {
     ..registerLazySingleton(() => botToastNavigatorObserver)
     ..registerLazySingleton(() => flutterI18nDelegate)
     ..registerLazySingleton(() => firebaseMessaging)
-    ..registerLazySingleton(() => encryptionTokenDataSource);
+    ..registerLazySingleton(() => encryptionTokenDataSource)
+    ..registerLazySingleton(() => account);
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
+  // If you're going to use other Firebase services in the background,
+  // such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
   print("バックグラウンドでメッセージを受け取りました");

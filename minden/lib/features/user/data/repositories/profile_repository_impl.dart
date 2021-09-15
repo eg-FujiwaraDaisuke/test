@@ -32,4 +32,16 @@ class ProfileRepositoryImpl
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Profile>> get({required String userId}) async {
+    print("${userId}");
+    try {
+      final profile = await retryRequest(() => dataSource.get(userId: userId));
+      print("${profile.toJson()}");
+      return Right(profile);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
 }

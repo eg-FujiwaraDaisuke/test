@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/usecase/usecase.dart';
-import 'package:minden/features/profile_setting/domain/usecases/update_tag.dart';
+import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 
@@ -47,7 +47,10 @@ class GetAllTagsBloc extends Bloc<TagEvent, TagState> {
         final failureOrUser = await usecase(NoParams());
 
         yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
-            (category) => CategoryGetSucceed(category));
+            (category) {
+          print(category.runtimeType);
+          return CategoryGetSucceed(category);
+        });
       } catch (e) {
         yield TagUpdateError(e.toString());
       }
@@ -69,8 +72,10 @@ class GetTagsBloc extends Bloc<TagEvent, TagState> {
 
         final failureOrUser = await usecase(NoParams());
 
-        yield failureOrUser.fold<TagState>(
-            (failure) => throw ServerFailure(), (tags) => TagGetSucceed(tags));
+        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
+            (tags) {
+          return TagGetSucceed(tags);
+        });
       } catch (e) {
         yield TagUpdateError(e.toString());
       }
