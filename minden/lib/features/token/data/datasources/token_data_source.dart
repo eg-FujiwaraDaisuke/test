@@ -78,7 +78,8 @@ class TokenDataSourceImpl implements TokenDataSource {
     print("### token response ${response.statusCode} ${response.body}");
 
     if (response.statusCode == 200) {
-      return TokenModel.fromJson(json.decode(response.body));
+      final responseBody = utf8.decode(response.bodyBytes);
+      return TokenModel.fromJson(json.decode(responseBody));
     } else {
       throw ServerException();
     }

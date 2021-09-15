@@ -57,9 +57,11 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     final response = await client.post(Uri.parse(endpoint + _updatePath),
         headers: headers, body: body);
 
-    print("#### profile update : ${body} ${response.body}");
+    print(
+        "#### profile update : ${body} ${headers}, ${response.body}, ${response.headers}");
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(json.decode(response.body));
+      final responseBody = utf8.decode(response.bodyBytes);
+      return ProfileModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {
@@ -84,7 +86,8 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
     print("${response.body}");
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(json.decode(response.body));
+      final responseBody = utf8.decode(response.bodyBytes);
+      return ProfileModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {

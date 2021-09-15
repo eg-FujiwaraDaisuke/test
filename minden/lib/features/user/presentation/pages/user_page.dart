@@ -233,14 +233,16 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
+      onTap: () async {
         switch (routeName) {
           case '/user/profile':
             final route = MaterialPageRoute(
               builder: (context) => ProfilePage(),
               settings: RouteSettings(name: routeName),
             );
-            Navigator.push(context, route);
+            await Navigator.push(context, route);
+            BlocProvider.of<GetProfileBloc>(context)
+                .add(GetProfileEvent(userId: si<Account>().userId));
             break;
 
           default:
