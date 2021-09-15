@@ -14,6 +14,7 @@ import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
+import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 
 import '../../../../injection_container.dart';
@@ -177,14 +178,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               Positioned(
                                 bottom: -44,
-                                child: _ProfileIcon(icon: state.profile.icon),
+                                child: ProfileIcon(icon: state.profile.icon),
                               )
                             ],
                           ),
                           const SizedBox(
                             height: 60,
                           ),
-                          _ProfileName(
+                          ProfileName(
                             name: state.profile.name,
                           ),
                           const SizedBox(
@@ -248,7 +249,7 @@ class PlaceHolderProfile extends StatelessWidget {
                     ),
                     const Positioned(
                       bottom: -44,
-                      child: _ProfileIcon(icon: ''),
+                      child: ProfileIcon(icon: ''),
                     )
                   ],
                 ),
@@ -261,8 +262,8 @@ class PlaceHolderProfile extends StatelessWidget {
   }
 }
 
-class _ProfileIcon extends StatelessWidget {
-  const _ProfileIcon({required this.icon});
+class ProfileIcon extends StatelessWidget {
+  const ProfileIcon({required this.icon});
 
   final String? icon;
 
@@ -289,9 +290,9 @@ class _ProfileIcon extends StatelessWidget {
             image: icon?.isEmpty ?? true
                 ? null
                 : DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(icon!),
-                  ),
+              fit: BoxFit.cover,
+              image: NetworkImage(icon!),
+            ),
           ),
         ),
       ),
@@ -299,8 +300,8 @@ class _ProfileIcon extends StatelessWidget {
   }
 }
 
-class _ProfileName extends StatelessWidget {
-  const _ProfileName({
+class ProfileName extends StatelessWidget {
+  const ProfileName({
     required this.name,
   });
 
