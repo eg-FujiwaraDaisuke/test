@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CustomDialogOverlay extends ModalRoute<void> {
-  final Widget contents;
-
-  //Androidで実機のバックボタンを押すとダイアログが閉じてしまう
-  final bool isAndroidBackEnable;
-
+class CustomDialogOverlay extends ModalRoute<bool> {
   CustomDialogOverlay(
     this.contents, {
     this.isAndroidBackEnable = false,
   }) : super();
+
+  final Widget contents;
+
+  //Androidで実機のバックボタンを押すとダイアログが閉じてしまう
+  final bool isAndroidBackEnable;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 0);
@@ -35,8 +35,8 @@ class CustomDialogOverlay extends ModalRoute<void> {
       child: Stack(
         children: <Widget>[
           GestureDetector(
-            child: Container(color: Colors.transparent),
             onTap: () => Navigator.of(context).pop(),
+            child: Container(color: Colors.transparent),
           ),
           SafeArea(
             child: _buildOverlayContent(context),
@@ -68,10 +68,10 @@ class CustomDialogOverlay extends ModalRoute<void> {
 
   Widget dialogContent(BuildContext context) {
     return WillPopScope(
-      child: this.contents,
       onWillPop: () {
         return Future(() => isAndroidBackEnable);
       },
+      child: contents,
     );
   }
 }

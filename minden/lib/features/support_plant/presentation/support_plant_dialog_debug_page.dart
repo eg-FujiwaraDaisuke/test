@@ -128,10 +128,7 @@ class _SupportPlantDialogDebugPageState
                           selectPowerPlant: selectPowerPlantDammy,
                           user: userDammy,
                           registPowerPlants: registPowerPlants)
-                      .showDialog<bool>();
-
-                  print('isSelected');
-                  print(isSelected);
+                      .showDialog();
 
                   if (isSelected!) {
                     await SupportPlantDecisionDialog(
