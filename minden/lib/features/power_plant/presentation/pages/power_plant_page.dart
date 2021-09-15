@@ -45,6 +45,7 @@ class PowerPlantHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TabBar(
+                indicatorColor: Color(0xFFFF8C00),
                 tabs: tabs
                     .map((tab) => Text(
                           tab.tabName,

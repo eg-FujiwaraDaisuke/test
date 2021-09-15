@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
@@ -57,8 +58,8 @@ class DebugPageState extends State<DebugPage> {
                     '/profileSetting/name'),
                 _generateNavigatorPush(context, 'ログイン パスワードリセット',
                     (context) => ResetPasswordPage(), '/login/resetPassword'),
-                _generateNavigatorPush(context, 'ホーム - トップ',
-                    (context) => PowerPlantHomePage(), '/home/top'),
+                _generateNavigatorPush(
+                    context, 'ホーム - トップ', (context) => HomePage(), '/home/top'),
                 _generateNavigatorPush(context, 'マイページ - top',
                     (context) => UserPage(), '/user/matching'),
                 _generateNavigatorPush(context, 'マイページ - プロフィール',

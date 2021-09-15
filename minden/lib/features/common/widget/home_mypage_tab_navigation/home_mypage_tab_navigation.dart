@@ -33,7 +33,7 @@ class HomeMypageTabNavigation extends StatelessWidget {
         fontFamily: 'NotoSansJP',
         fontWeight: FontWeight.w500,
       ),
-      selectedItemColor: Color(0xFFFF8C00),
+      selectedItemColor: const Color(0xFFFF8C00),
       onTap: (index) => onSelectTab(
         TabItem.values[index],
       ),
@@ -46,7 +46,9 @@ class HomeMypageTabNavigation extends StatelessWidget {
     TabItem? tabItem,
     bool hasUnreadNotice = false,
   }) {
-    final color = currentTab == tabItem ? Color(0xFFFF8C00) : Color(0xFFA7A7A7);
+    final color = currentTab == tabItem
+        ? const Color(0xFFFF8C00)
+        : const Color(0xFFA7A7A7);
     final tabTitle = <TabItem, String>{
       TabItem.home: i18nTranslate(context, 'tab_navigation_home'),
       TabItem.mypage: i18nTranslate(context, 'tab_navigation_mypage'),

@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).push(
           MaterialPageRoute(
             settings: RouteSettings(
-                name: "/message",
+                name: '/message',
                 arguments: MessageArguments(message, openedApplication: true)),
             builder: (BuildContext context) {
               return MessageView();
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           settings: RouteSettings(
-              name: "/message",
+              name: '/message',
               arguments: MessageArguments(message, openedApplication: true)),
           builder: (BuildContext context) {
             return MessageView();
@@ -87,9 +87,12 @@ class _HomePageState extends State<HomePage> {
             _buildOffstageNavigator(TabItem.mypage)
           ],
         ),
-        bottomNavigationBar: HomeMypageTabNavigation(
-          currentTab: _currentTab,
-          onSelectTab: _selectTab,
+        bottomNavigationBar: SizedBox(
+          height: 100,
+          child: HomeMypageTabNavigation(
+            currentTab: _currentTab,
+            onSelectTab: _selectTab,
+          ),
         ),
       ),
     );
