@@ -14,7 +14,7 @@ class MediaModel extends Media {
 
   Map<String, dynamic> toJson() {
     return {
-      "contentId": contentId,
+      'contentId': contentId,
     };
   }
 }

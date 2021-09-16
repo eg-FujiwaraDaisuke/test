@@ -2,7 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/injection_container.dart';
 
 class FCMDebugPage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
       _settings = settings;
     });
 
-    print(_settings.alert);
+    logD('${_settings.alert}');
   }
 
   void setToken(String? token) {
@@ -67,11 +67,11 @@ class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
                 barrierDismissible: false,
                 builder: (_) {
                   return AlertDialog(
-                    content: Text("FCM token copied!"),
+                    content: Text('FCM token copied!'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text("OK"),
                         onPressed: () => Navigator.pop(context, true),
+                        child: Text('OK'),
                       ),
                     ],
                   );

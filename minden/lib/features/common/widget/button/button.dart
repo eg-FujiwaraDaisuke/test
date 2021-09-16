@@ -3,7 +3,7 @@ import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button_style.dart';
 
 class Button extends StatelessWidget {
-  Button(
+  const Button(
       {required this.onTap,
       required this.text,
       required this.size,

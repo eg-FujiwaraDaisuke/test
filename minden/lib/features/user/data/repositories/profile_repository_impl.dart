@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
@@ -26,7 +27,7 @@ class ProfileRepositoryImpl
     try {
       final profile = await retryRequest(() => dataSource.update(
           name: name, icon: icon, bio: bio, wallPaper: wallPaper));
-      print("${profile.toJson()}");
+      logD('${profile.toJson()}');
       return Right(profile);
     } on ServerException {
       return Left(ServerFailure());
@@ -35,10 +36,10 @@ class ProfileRepositoryImpl
 
   @override
   Future<Either<Failure, Profile>> get({required String userId}) async {
-    print(">>>${userId}");
+    logD('### $userId');
     try {
       final profile = await retryRequest(() => dataSource.get(userId: userId));
-      print("${profile.toJson()}");
+      logD('${profile.toJson()}');
       return Right(profile);
     } on ServerException {
       return Left(ServerFailure());

@@ -48,7 +48,6 @@ class GetAllTagsBloc extends Bloc<TagEvent, TagState> {
 
         yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
             (category) {
-          print(category.runtimeType);
           return CategoryGetSucceed(category);
         });
       } catch (e) {

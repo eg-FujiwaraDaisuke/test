@@ -20,9 +20,9 @@ void main() {
   });
 
   final maintenanceInfo = Startup(
-      storeUrl: "",
+      storeUrl: '',
       hasLatestVersion: false,
-      latestVersion: "1.0.0",
+      latestVersion: '1.0.0',
       hasTutorial: false);
   test(
     'should get maintenance info from the repository',

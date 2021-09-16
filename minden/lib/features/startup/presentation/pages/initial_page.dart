@@ -162,8 +162,8 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       content: Text(message),
       actions: <Widget>[
         TextButton(
-          child: Text(actionName),
           onPressed: () => Navigator.pop(context, true),
+          child: Text(actionName),
         ),
       ],
     );

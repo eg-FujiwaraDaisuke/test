@@ -9,10 +9,10 @@ import 'package:minden/features/localize/presentation/bloc/localized_event.dart'
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 
 class LocalizedBloc extends Bloc<LocalizedEvent, LocalizedState> {
-  final GetLocalizedEvent usecase;
-
   LocalizedBloc(LocalizedState initialState, this.usecase)
       : super(initialState);
+
+  final GetLocalizedEvent usecase;
 
   @override
   Stream<LocalizedState> mapEventToState(LocalizedEvent event) async* {

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class ImportantTag extends Equatable {
+  const ImportantTag(
+      {required this.title, required this.tags, required this.color});
+
   final String title;
   final Color color;
   final List<Tag> tags;
-
-  ImportantTag({required this.title, required this.tags, required this.color});
 
   @override
   List<Object> get props => [title, color, tags];

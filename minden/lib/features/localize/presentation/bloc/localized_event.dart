@@ -8,18 +8,18 @@ abstract class LocalizedEvent extends Equatable {
 }
 
 class GetLocalizedInfoEvent extends LocalizedEvent {
-  final String languageCode;
-
   GetLocalizedInfoEvent(this.languageCode);
+
+  final String languageCode;
 
   @override
   List<Object> get props => [languageCode];
 }
 
 class UpdateLocalizedInfoEvent extends LocalizedEvent {
-  final String languageCode;
-
   UpdateLocalizedInfoEvent(this.languageCode);
+
+  final String languageCode;
 
   @override
   List<Object> get props => [languageCode];

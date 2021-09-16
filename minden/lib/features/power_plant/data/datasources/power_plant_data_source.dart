@@ -52,7 +52,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      print("${responseBody}");
+      logD('$responseBody');
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else {
       logW('${response.statusCode}: ${response.body}');
@@ -90,7 +90,10 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     final url = Uri.parse(endpoint + _powerPlantParticipantPath);
     final response = await client.get(
-      url.replace(queryParameters: {'plantId': plantId}),
+      url.replace(queryParameters: {
+        'plantId': plantId,
+        'page': '1', // TODO optionalだけど400を返されるので一旦追加
+      }),
       headers: headers,
     );
 

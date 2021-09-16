@@ -61,7 +61,7 @@ class MessagePage extends StatelessWidget {
 }
 
 class _ThanksMessage extends StatelessWidget {
-  _ThanksMessage({required this.message});
+  const _ThanksMessage({required this.message});
   final Message message;
 
   @override

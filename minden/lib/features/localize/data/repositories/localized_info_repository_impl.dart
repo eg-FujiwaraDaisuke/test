@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
 import 'package:minden/features/localize/domain/entities/localized.dart';
 import 'package:minden/features/localize/domain/repositories/localized_repository.dart';
@@ -8,11 +9,11 @@ import 'package:minden/features/localize/domain/repositories/localized_repositor
 // data - repository
 
 class LocalizedInfoRepositoryImpl implements LocalizedRepository {
-  final LocalizedInfoDataSource dataSource;
-
   LocalizedInfoRepositoryImpl({
     required this.dataSource,
   });
+
+  final LocalizedInfoDataSource dataSource;
 
   @override
   Future<Either<Failure, Localized>> getLocalizedInfo(
@@ -20,7 +21,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
     try {
       final localizedInfo =
           await dataSource.getLocalizedInfo(osLanguageCode: languageCode);
-      print("[get localized info] ${localizedInfo.toJson().toString()}");
+      logD('[get localized info] ${localizedInfo.toJson().toString()}');
       return Right(localizedInfo);
     } on LocalCacheException {
       return Left(LocalCacheFailure());
@@ -32,7 +33,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
       String languageCode) async {
     try {
       final localizedInfo = await dataSource.updateLocalizedInfo(languageCode);
-      print("[update localized info] ${localizedInfo.toJson().toString()}");
+      logD('[update localized info] ${localizedInfo.toJson().toString()}');
       return Right(localizedInfo);
     } on LocalCacheException {
       return Left(LocalCacheFailure());

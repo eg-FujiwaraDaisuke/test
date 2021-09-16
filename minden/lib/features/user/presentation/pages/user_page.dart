@@ -287,16 +287,15 @@ class _MenuItem extends StatelessWidget {
 }
 
 class _MenuMessageItem extends StatelessWidget {
-  final String title;
-  final String icon;
-  final String routeName;
-  final bool hasUnreadNotice = true;
-
   const _MenuMessageItem({
     required this.title,
     required this.icon,
     required this.routeName,
   }) : super();
+  final String title;
+  final String icon;
+  final String routeName;
+  final bool hasUnreadNotice = true;
 
   @override
   Widget build(BuildContext context) {

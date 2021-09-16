@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/profile_setting/data/models/tag_category_model.dart';
 import 'package:minden/features/profile_setting/data/models/tag_model.dart';
@@ -42,13 +43,13 @@ class TagDataSourceImpl implements TagDataSource {
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final body = json.encode({
-      "tags": tags.toSet().toList().map<String>((e) => e.toString()).toList()
+      'tags': tags.toSet().toList().map<String>((e) => e.toString()).toList()
     });
 
     final response = await client.post(Uri.parse(endpoint + _updateTagsPath),
         headers: headers, body: body);
 
-    print("### update tag ${body}, ${response.body}");
+    logD('### update tag $body, ${response.body}');
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 401) {

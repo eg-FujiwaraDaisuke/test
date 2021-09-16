@@ -14,20 +14,15 @@ class StartupStateEmpty extends StartupState {}
 class StartupStateLoading extends StartupState {}
 
 class StartupStateLoaded extends StartupState {
-  final Startup info;
-
   StartupStateLoaded({required this.info});
+
+  final Startup info;
 
   @override
   List<Object> get props => [info];
 }
 
 class StartupStateError extends StartupState {
-  final String localizedKey;
-  final String actionKey;
-  final List<String>? args;
-  final String? actionUrl;
-
   StartupStateError({
     required this.localizedKey,
     required this.actionKey,
@@ -35,6 +30,11 @@ class StartupStateError extends StartupState {
     String? actionUrl,
   })  : args = args,
         actionUrl = actionUrl;
+
+  final String localizedKey;
+  final String actionKey;
+  final List<String>? args;
+  final String? actionUrl;
 
   @override
   List<Object> get props => [

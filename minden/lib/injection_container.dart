@@ -81,12 +81,13 @@ Future<void> init() async {
     // プッシュ通知メッセージを表示することができない為、
     // ローカル通知で擬似的に通知メッセージを表示
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("フォアグラウンドでメッセージを受け取りました");
+      debugPrint('フォアグラウンドでメッセージを受け取りました');
+
       final notification = message.notification;
       final android = message.notification?.android;
 
       if (notification != null && android != null) {
-        print('表示');
+        debugPrint('表示');
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
@@ -127,6 +128,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  print("バックグラウンドでメッセージを受け取りました");
-  print('Handling a background message ${message.messageId}');
+  debugPrint('バックグラウンドでメッセージを受け取りました');
+  debugPrint('Handling a background message ${message.messageId}');
 }

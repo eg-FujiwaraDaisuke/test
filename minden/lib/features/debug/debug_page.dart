@@ -88,7 +88,6 @@ class DebugPageState extends State<DebugPage> {
     String routeName,
   ) {
     return ElevatedButton(
-      child: Text(buttonLabel),
       onPressed: () {
         final route = NoAnimationMaterialPageRoute(
           builder: builder,
@@ -96,6 +95,7 @@ class DebugPageState extends State<DebugPage> {
         );
         Navigator.push(context, route);
       },
+      child: Text(buttonLabel),
     );
   }
 }

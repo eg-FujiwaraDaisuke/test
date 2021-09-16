@@ -10,9 +10,8 @@ import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
-  final GetStartupInfo usecase;
-
   StartupBloc(StartupState initialState, this.usecase) : super(initialState);
+  final GetStartupInfo usecase;
 
   @override
   Stream<StartupState> mapEventToState(StartupEvent event) async* {
@@ -37,23 +36,23 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
     switch (failure.runtimeType) {
       case ServerFailure:
         return StartupStateError(
-            localizedKey: "unsupported_error", actionKey: "ok");
+            localizedKey: 'unsupported_error', actionKey: 'ok');
       case SupportVersionFailure:
         return StartupStateError(
-          localizedKey: "update_version_message_%s",
-          actionKey: "store_action",
+          localizedKey: 'update_version_message_%s',
+          actionKey: 'store_action',
           args: [(failure as SupportVersionFailure).supportVersion],
           actionUrl: (failure).actionUrl,
         );
       case UnderMaintenanceFailure:
         return StartupStateError(
           localizedKey: (failure as UnderMaintenanceFailure).description,
-          actionKey: "maintenance_action",
+          actionKey: 'maintenance_action',
           actionUrl: failure.actionUrl,
         );
       default:
         return StartupStateError(
-            localizedKey: "unsupported_error", actionKey: "ok");
+            localizedKey: 'unsupported_error', actionKey: 'ok');
     }
   }
 }

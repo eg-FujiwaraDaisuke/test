@@ -10,8 +10,7 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_picku
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
-/// 発電所詳細
-class PowerPlantDetailPage extends ConsumerWidget {
+class PowerPlantDetailPage extends StatelessWidget {
   const PowerPlantDetailPage({
     Key? key,
     required this.powerPlantId,
@@ -20,14 +19,27 @@ class PowerPlantDetailPage extends ConsumerWidget {
   final String powerPlantId;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    // TODO 初期データ取得
+  Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context
           .read(powerPlantDetailPageViewModelProvider.notifier)
           .fetchByPlantId(powerPlantId);
     });
+    return _PowerPlantDetailPage(powerPlantId: powerPlantId);
+  }
+}
 
+/// 発電所詳細
+class _PowerPlantDetailPage extends ConsumerWidget {
+  const _PowerPlantDetailPage({
+    Key? key,
+    required this.powerPlantId,
+  }) : super(key: key);
+
+  final String powerPlantId;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
     final data = watch(powerPlantDetailPageViewModelProvider);
 
     if (data.detail == null || data.participant == null) {
@@ -42,7 +54,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: PowerPlantPickup(),
             ),
-            expandedHeight: 220,
+            expandedHeight: 270,
             backgroundColor: Colors.transparent,
           ),
           SliverList(
@@ -68,7 +80,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                         bottom: 56,
                       ),
                       child: Text(
-                        data.detail!.catchphrase!,
+                        data.detail?.catchphrase ?? '',
                         style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'NotoSansJP',
@@ -148,7 +160,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
             children: [
               // 発電所名
               Text(
-                detail.name,
+                detail.name ?? '',
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'NotoSansJP',
@@ -168,7 +180,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                   ),
                   const SizedBox(width: 3),
                   Text(
-                    detail.viewAddress,
+                    detail.viewAddress ?? '',
                     style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'NotoSansJP',
@@ -186,7 +198,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      detail.powerGenerationMethod,
+                      detail.powerGenerationMethod ?? '',
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'NotoSansJP',
@@ -286,7 +298,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 10),
-        _generateExpandableText(detail.ownerMessage!),
+        _generateExpandableText(detail.ownerMessage ?? ''),
       ],
     );
   }
@@ -414,7 +426,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   Widget _generateParticipant(PowerPlantParticipant participant) {
     final icons = _generateParticipantIcons(participant);
-
+    if (icons.isEmpty) return Container();
     return Stack(
       children: List.generate(
         icons.length,
@@ -430,7 +442,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   List<Widget> _generateParticipantIcons(PowerPlantParticipant participant) {
-    final total = int.parse(participant.total);
+    final total = participant.total;
     if (maxUserIconCount < total) {
       // 4人以上応援ユーザーがいる場合、
       return [

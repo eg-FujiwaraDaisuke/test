@@ -12,7 +12,7 @@ import 'package:minden/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const env = String.fromEnvironment("DEFINE_BUILD_ENV");
+  const env = String.fromEnvironment('DEFINE_BUILD_ENV');
   Config.setEnvironment(env);
   await di.init();
 

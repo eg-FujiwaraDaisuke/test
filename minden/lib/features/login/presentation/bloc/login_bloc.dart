@@ -1,16 +1,18 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/usecases/login_usecase.dart';
+
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final GetLoginUser usecase;
-
   LoginBloc(LoginState initialState, this.usecase) : super(initialState);
+  final GetLoginUser usecase;
 
   @override
   Stream<LoginState> mapEventToState(

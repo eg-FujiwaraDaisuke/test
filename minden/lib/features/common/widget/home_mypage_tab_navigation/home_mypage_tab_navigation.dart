@@ -4,13 +4,12 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 
 class HomeMypageTabNavigation extends StatelessWidget {
-  final TabItem currentTab;
-  final ValueChanged<TabItem> onSelectTab;
-
-  HomeMypageTabNavigation({
+  const HomeMypageTabNavigation({
     required this.currentTab,
     required this.onSelectTab,
   }) : super();
+  final TabItem currentTab;
+  final ValueChanged<TabItem> onSelectTab;
 
   @override
   Widget build(BuildContext context) {

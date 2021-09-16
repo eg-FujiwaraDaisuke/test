@@ -6,9 +6,9 @@ import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/domain/repositories/login_repository.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
-  final UserDataSource userDataSource;
-
   LoginRepositoryImpl({required this.userDataSource});
+
+  final UserDataSource userDataSource;
 
   @override
   Future<Either<LoginFailure, User>> getLoginUser(
