@@ -6,7 +6,7 @@ import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -300,7 +300,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                       if (state is CategoryGetSucceed) {
                         return Column(
                           children: state.category
-                              .map((e) => _TagsList(
+                              .map((e) => TagsList(
                                     tagsList: e.tags,
                                     onSelect: _onSelectTag,
                                     selectedTags: _selectedTags,
@@ -319,14 +319,14 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
               if (_selectedTags.isEmpty)
                 Button(
                   onTap: () => {},
-                  text: i18nTranslate(context, 'profile_setting_next'),
+                  text: i18nTranslate(context, 'to_next'),
                   size: ButtonSize.S,
                   isActive: false,
                 )
               else
                 Button(
                   onTap: _next,
-                  text: i18nTranslate(context, 'profile_setting_next'),
+                  text: i18nTranslate(context, 'to_next'),
                   size: ButtonSize.S,
                 ),
               const SizedBox(height: 32),
@@ -351,8 +351,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 }
 
-class _TagsList extends StatefulWidget {
-  const _TagsList(
+class TagsList extends StatefulWidget {
+  const TagsList(
       {required this.tagsList,
       required this.onSelect,
       required this.selectedTags,
@@ -370,7 +370,7 @@ class _TagsList extends StatefulWidget {
   _TagsListState createState() => _TagsListState();
 }
 
-class _TagsListState extends State<_TagsList> {
+class _TagsListState extends State<TagsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -411,12 +411,12 @@ class _TagsListState extends State<_TagsList> {
               color: Colors.white,
             ),
             child: Wrap(
-              alignment: WrapAlignment.center,
+              alignment: WrapAlignment.start,
               spacing: 5,
               runSpacing: 10,
               children: widget.tagsList.map(
                 (tag) {
-                  return ImportantTagListItem(
+                  return TagListItem(
                     tag: tag,
                     onSelect: widget.onSelect,
                     isSelected: widget.selectedTags.firstWhere((element) {

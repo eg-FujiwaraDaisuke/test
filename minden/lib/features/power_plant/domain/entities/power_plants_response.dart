@@ -10,14 +10,13 @@ class PowerPlantsResponse extends Equatable {
   });
 
   /// タグ
-  final Tag tag;
+  final Tag? tag;
 
   /// 顔の見える発電所情報
   final List<PowerPlant> powerPlants;
 
   @override
   List<Object> get props => [
-        tag,
         powerPlants,
       ];
 }

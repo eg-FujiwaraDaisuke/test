@@ -54,7 +54,7 @@ class PowerPlantModel extends PowerPlant {
       displayOrder: json['displayOrder'],
       isRecommend: json['isRecommend'],
       ownerName: json['ownerName'],
-      startDate: DateTime.parse(json['startDate']) ,
+      startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
       plantImage1: json['plantImage1'],
       supportGiftName: json['supportGiftName'],

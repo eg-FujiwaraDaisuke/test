@@ -20,28 +20,29 @@ void main() {
   final tId = 'nakajo@minden.co.jp';
   final tPassword = '1234qwer';
   final tUser = User(
-      // key: "20190707085551963zhayz",
-      loginId: "nakajo@minden.co.jp",
-      accountId: "",
-      limitedPlantId: "",
-      supportableNumber: 1,
-      contractor: "",
-      isNewbie: false,
-      profile: const Profile(
-        bio: '',
-        name: '',
-        userId: '',
-        wallPaper: '',
-        tags: [],
-        icon: '',
-      )
-      // userId : "",
-      // name: "�݂�ȁ@�d��",
-      // secret: "20000102",
-      // provider: "MINDEN",
-      // service: "portal",
-      // email: "nakajo@minden.co.jp",
-      );
+    // key: "20190707085551963zhayz",
+    loginId: "nakajo@minden.co.jp",
+    accountId: "",
+    limitedPlantId: "",
+    supportableNumber: 1,
+    contractor: "",
+    isNewbie: false,
+    profile: const Profile(
+      bio: '',
+      name: '',
+      userId: '',
+      wallPaper: '',
+      tags: [],
+      icon: '',
+    ),
+    supports: [],
+    // userId : "",
+    // name: "�݂�ȁ@�d��",
+    // secret: "20000102",
+    // provider: "MINDEN",
+    // service: "portal",
+    // email: "nakajo@minden.co.jp",
+  );
 
   test('should get user', () async {
     when(mockLoginRepository.getLoginUser(tId, tPassword))
