@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>カメラにアクセスするよ</string>
+	<string>カメラにアクセス</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>マイクにアクセスするよ</string>
+	<string>マイクにアクセス</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ライブラリにアクセスするよ</string>
 	<key>UIBackgroundModes</key>
