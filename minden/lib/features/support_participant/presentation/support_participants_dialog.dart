@@ -141,8 +141,8 @@ class SupportParticipantsDialog {
               top: 25,
               right: 27,
               child: GestureDetector(
-                child: Icon(Icons.close),
                 onTap: _hideDialog,
+                child: Icon(Icons.close),
               ),
             ),
           ],

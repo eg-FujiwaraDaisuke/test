@@ -113,7 +113,6 @@ class _SupportPlantDialogDebugPageState
         child: Column(
           children: [
             ElevatedButton(
-              child: Text('応援する'),
               onPressed: () async {
                 // 契約件数１応援０の場合
                 if (userDammy.supportableNumber > registPowerPlants.length) {
@@ -141,14 +140,15 @@ class _SupportPlantDialogDebugPageState
                   }
                 }
               },
+              child: Text('応援する'),
             ),
             ElevatedButton(
-              child: Text('サポートしてる人たち'),
               onPressed: () {
                 SupportParticipantsDialog(
                         context: context, participants: participantsDammyData)
                     .showDialog();
               },
+              child: Text('サポートしてる人たち'),
             ),
           ],
         ),

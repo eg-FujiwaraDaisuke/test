@@ -75,6 +75,14 @@ class MatchingPage extends StatelessWidget {
       ),
       // 影を付けたくないため、ElevatedButtonではなくTextButtonを使用
       child: TextButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFFFF8C00),
+          onPrimary: Color(0xFFFFFFFF),
+          shape: const StadiumBorder(),
+        ),
+        onPressed: () {
+          print('ご契約内容の確認');
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: const Text(
@@ -87,14 +95,6 @@ class MatchingPage extends StatelessWidget {
             ),
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFFFF8C00),
-          onPrimary: Color(0xFFFFFFFF),
-          shape: const StadiumBorder(),
-        ),
-        onPressed: () {
-          print('ご契約内容の確認');
-        },
       ),
     );
   }
