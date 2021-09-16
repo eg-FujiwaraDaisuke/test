@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/domain/entities/startup.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';
@@ -29,7 +30,7 @@ class StartupRepositoryImpl implements StartupRepository {
     }
     try {
       final startupInfo = await dataSource.getStartupInfo();
-      print('[startup Info] ${startupInfo.toJson().toString()}');
+      logD('[startup Info] ${startupInfo.toJson().toString()}');
       return Right(startupInfo);
     } on SupportVersionException catch (e) {
       return Left(SupportVersionFailure(

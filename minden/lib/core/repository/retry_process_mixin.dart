@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/datasources/token_data_source.dart';
-import 'package:retry/retry.dart' as backoff;
-
 import 'package:minden/injection_container.dart';
+import 'package:retry/retry.dart' as backoff;
 
 mixin RetryProcessMixin {
   /// http requestでの401エラーが発生した場合に自動的にリトライする
@@ -17,15 +17,15 @@ mixin RetryProcessMixin {
         () => function(),
         retryIf: (e) async {
           if (e is TokenExpiredException) {
-            print('#### retry ####');
+            logD('#### retry ####');
             try {
               final dataSource = TokenDataSourceImpl(
                 client: http.Client(),
                 encryptionTokenDataSource: si<EncryptionTokenDataSourceImpl>(),
               );
               await dataSource.getAppToken(true);
-            } catch(e) {
-              print('### retry error $e');
+            } catch (e) {
+              logD('### retry error $e');
             }
             return true;
           }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/login/data/model/user_model.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/injection_container.dart';
@@ -37,9 +38,9 @@ class UserDataSourceImpl implements UserDataSource {
       await si<EncryptionTokenDataSourceImpl>()
           .setRefreshToken(tokenElement['refreshToken']);
 
-      print('${json.decode(responseBody)}');
+      logD('${json.decode(responseBody)}');
       final user = UserModel.fromJson(json.decode(responseBody));
-      print('login : ${user.toJson()}');
+      logD('login : ${user.toJson()}');
       await si<EncryptionTokenDataSourceImpl>()
           .storeUser(json.encode(user.toJson()));
       return user;

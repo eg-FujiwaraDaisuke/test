@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/support_participant/domain/entities/participant.dart';
@@ -9,6 +10,7 @@ class SupportParticipantsDialog {
 
   final BuildContext context;
   final List<Participant> participants;
+
   void showDialog() {
     Navigator.push(
       context,
@@ -155,7 +157,7 @@ class SupportParticipantsDialog {
   Widget _buildPartcipantItem(Participant participant) {
     return GestureDetector(
       onTap: () {
-        print(participant.name);
+        logD(participant.name);
       },
       child: Column(
         children: [

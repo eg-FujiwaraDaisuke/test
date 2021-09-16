@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/matching/pages/matching_ratio_tab.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
 
@@ -81,7 +82,7 @@ class MatchingPage extends StatelessWidget {
           shape: const StadiumBorder(),
         ),
         onPressed: () {
-          print('ご契約内容の確認');
+          logD('ご契約内容の確認');
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

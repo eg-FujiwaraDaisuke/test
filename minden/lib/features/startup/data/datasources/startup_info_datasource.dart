@@ -1,5 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/startup/data/models/startup_model.dart';
 import 'package:minden/injection_container.dart';
 import 'package:package_info/package_info.dart';
@@ -35,7 +36,7 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
 
     final hasTutorial = await _hasTutorial();
 
-    print(
+    logD(
         '[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}');
 
     if (maintenanceUrl.isEmpty && underMaintenance) {

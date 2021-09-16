@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
@@ -67,14 +68,14 @@ class TokenDataSourceImpl implements TokenDataSource {
       ...ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded
     };
 
-    print('### $headers');
+    logD('### $headers');
 
     final response = await client.get(
       Uri.parse(endpoint + _authPath),
       headers: headers,
     );
 
-    print('### token response ${response.statusCode} ${response.body}');
+    logD('### token response ${response.statusCode} ${response.body}');
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);

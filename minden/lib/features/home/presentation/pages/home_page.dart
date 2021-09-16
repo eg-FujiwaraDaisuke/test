@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _postToken(String? token) {
-    debugPrint('FCM token : $token');
+    logD('FCM token : $token');
     if (token == null) return;
   }
 
@@ -42,8 +43,8 @@ class _HomePageState extends State<HomePage> {
     //TODO 通知をタップしたらメッセージページに遷移させたい
     //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
     si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
-      print('===========================ターミネイト状態');
-      print(message);
+      logD('===========================ターミネイト状態');
+      logD('${message}');
       if (message != null) {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -60,8 +61,9 @@ class _HomePageState extends State<HomePage> {
 
     // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print(message);
-      print('=========================== バックグラウンド状態');
+      logD('${message}');
+
+      logD('=========================== バックグラウンド状態');
       Navigator.of(context).push(
         MaterialPageRoute(
           settings: RouteSettings(
