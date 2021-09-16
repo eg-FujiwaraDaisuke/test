@@ -7,7 +7,7 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
@@ -121,9 +121,9 @@ class _ProfileSettingTagsDecisionPageState
                             runSpacing: 10,
                             children: state.tags
                                 .map(
-                                  (tag) => ImportantTagListItem(
+                                  (tag) => TagListItem(
                                     tag: tag,
-                                    onSelect: () {},
+                                    onSelect: (tag) {},
                                     isSelected: true,
                                   ),
                                 )

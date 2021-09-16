@@ -12,7 +12,7 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -801,9 +801,9 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
             spacing: 5,
             runSpacing: 10,
             children: _tagsList
-                .map((tag) => ImportantTagListItem(
+                .map((tag) => TagListItem(
                       tag: tag,
-                      onSelect: () {},
+                      onSelect: (tag) {},
                       isSelected: true,
                     ))
                 .toList(),
