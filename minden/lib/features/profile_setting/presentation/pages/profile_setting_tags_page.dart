@@ -146,7 +146,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
           ),
         ),
       ),
-        extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -179,8 +179,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                       ),
                     ),
                     TextSpan(
-                      text: i18nTranslate(context,
-                          'profile_setting_tag_description_important'),
+                      text: i18nTranslate(
+                          context, 'profile_setting_tag_description_important'),
                       style: TextStyle(
                         fontSize: 13,
                         fontFamily: 'NotoSansJP',
@@ -263,8 +263,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                                   color: const Color(0xFF9A7446),
                                   height: calcFontHeight(
                                       fontSize: 10, lineHeight: 14),
-                                  letterSpacing:
-                                      calcLetterSpacing(letter: -6),
+                                  letterSpacing: calcLetterSpacing(letter: -6),
                                 ),
                               ),
                             ]),
@@ -305,7 +304,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                       if (state is CategoryGetSucceed) {
                         return Column(
                           children: state.category
-                              .map((e) => _TagsList(
+                              .map((e) => TagsList(
                                     tagsList: e.tags,
                                     onSelect: _onSelectTag,
                                     selectedTags: _selectedTags,
@@ -352,8 +351,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 }
 
-class _TagsList extends StatefulWidget {
-  const _TagsList(
+class TagsList extends StatefulWidget {
+  const TagsList(
       {required this.tagsList,
       required this.onSelect,
       required this.selectedTags,
@@ -371,7 +370,7 @@ class _TagsList extends StatefulWidget {
   _TagsListState createState() => _TagsListState();
 }
 
-class _TagsListState extends State<_TagsList> {
+class _TagsListState extends State<TagsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -412,7 +411,7 @@ class _TagsListState extends State<_TagsList> {
               color: Colors.white,
             ),
             child: Wrap(
-              alignment: WrapAlignment.center,
+              alignment: WrapAlignment.start,
               spacing: 5,
               runSpacing: 10,
               children: widget.tagsList.map(
