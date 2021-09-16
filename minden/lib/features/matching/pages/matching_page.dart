@@ -4,19 +4,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/features/matching/pages/matching_ratio_tab.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
 
-
 final matchingPageViewModelProvider =
     StateNotifierProvider<MatchingPageViewModel, MatchingPageState>(
         (ref) => MatchingPageViewModel());
 
 class MatchingTabData {
-  late final String tabName;
-  late final WidgetBuilder tabPage;
-
   MatchingTabData({
     required this.tabName,
     required this.tabPage,
   });
+
+  late final String tabName;
+  late final WidgetBuilder tabPage;
 }
 
 /// マイページ - マッチング

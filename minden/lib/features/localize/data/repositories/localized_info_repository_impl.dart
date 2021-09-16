@@ -8,11 +8,11 @@ import 'package:minden/features/localize/domain/repositories/localized_repositor
 // data - repository
 
 class LocalizedInfoRepositoryImpl implements LocalizedRepository {
-  final LocalizedInfoDataSource dataSource;
-
   LocalizedInfoRepositoryImpl({
     required this.dataSource,
   });
+
+  final LocalizedInfoDataSource dataSource;
 
   @override
   Future<Either<Failure, Localized>> getLocalizedInfo(

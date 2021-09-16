@@ -12,9 +12,9 @@ abstract class UserDataSource {
 }
 
 class UserDataSourceImpl implements UserDataSource {
-  final http.Client client;
-
   UserDataSourceImpl({required this.client});
+
+  final http.Client client;
 
   final _authPath = '/api/v1/auth';
 

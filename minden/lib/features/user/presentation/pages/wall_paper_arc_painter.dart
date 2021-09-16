@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class WallPaperArcPainter extends CustomPainter {
-  Color color;
   WallPaperArcPainter({required this.color});
+
+  Color color;
+
   @override
   void paint(Canvas canvas, Size size) async {
     final rightPath = Path()

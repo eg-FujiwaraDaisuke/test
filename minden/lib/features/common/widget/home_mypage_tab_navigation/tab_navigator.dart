@@ -4,13 +4,12 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_page.
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 class TabNavigator extends StatelessWidget {
-  final GlobalKey<NavigatorState>? navigatorKey;
-  final TabItem tabItem;
-
   const TabNavigator({
     required this.navigatorKey,
     required this.tabItem,
   }) : super();
+  final GlobalKey<NavigatorState>? navigatorKey;
+  final TabItem tabItem;
 
   Map<TabItem, WidgetBuilder> _routeBuliders(BuildContext context) {
     return {

@@ -14,9 +14,9 @@ class LocalizedStateEmpty extends LocalizedState {}
 class LocalizedStateLoading extends LocalizedState {}
 
 class LocalizedStateLoaded extends LocalizedState {
-  final Localized info;
-
   LocalizedStateLoaded({required this.info});
+
+  final Localized info;
 
   @override
   List<Object> get props => [info];

@@ -10,9 +10,8 @@ import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
-  final GetStartupInfo usecase;
-
   StartupBloc(StartupState initialState, this.usecase) : super(initialState);
+  final GetStartupInfo usecase;
 
   @override
   Stream<StartupState> mapEventToState(StartupEvent event) async* {

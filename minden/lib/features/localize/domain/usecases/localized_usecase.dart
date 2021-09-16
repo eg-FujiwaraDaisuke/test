@@ -8,25 +8,23 @@ import 'package:minden/features/localize/domain/repositories/localized_repositor
 // domain - usecase
 
 class GetLocalizedEvent extends UseCase<Localized, LocalizedInfoParams> {
-  final LocalizedRepository repository;
-
   GetLocalizedEvent(this.repository);
 
-  Future<Either<Failure, Localized>> call(
-      LocalizedInfoParams params) async {
+  final LocalizedRepository repository;
+
+  Future<Either<Failure, Localized>> call(LocalizedInfoParams params) async {
     return await repository.getLocalizedInfo(params.languageCode);
   }
 
-  Future<Either<Failure, Localized>> update(
-      LocalizedInfoParams params) async {
+  Future<Either<Failure, Localized>> update(LocalizedInfoParams params) async {
     return await repository.updateLocalizedInfo(params.languageCode);
   }
 }
 
 class LocalizedInfoParams extends Equatable {
-  final String languageCode;
-
   const LocalizedInfoParams(this.languageCode);
+
+  final String languageCode;
 
   @override
   List<Object> get props => [languageCode];

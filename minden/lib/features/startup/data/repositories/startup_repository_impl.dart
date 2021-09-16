@@ -15,11 +15,11 @@ import 'package:minden/features/startup/domain/repositories/startup_repository.d
 // ドメイン層では、repositoryはEntityを返すことと、エラーはFailureとして返すことです。
 // データ層では、datasourceはModelを返すことと、エラーはexceptionを投げることです。
 class StartupRepositoryImpl implements StartupRepository {
-  final StartupInfoDataSource dataSource;
-
   StartupRepositoryImpl({
     required this.dataSource,
   });
+
+  final StartupInfoDataSource dataSource;
 
   Future<Either<Failure, Startup>> getStartupInfo() async {
     final hasConnection = await (Connectivity().checkConnectivity());

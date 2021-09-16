@@ -13,9 +13,9 @@ import 'package:minden/features/startup/domain/repositories/startup_repository.d
 // データの取得はリポジトリで行うのですが、リポジトリクラスをユースケースクラスで生成するのではなく
 // StartupRepositoryを外部から渡してもらいます。（dependency injection）
 class GetStartupInfo extends UseCase<Startup, NoParams> {
-  final StartupRepository repository;
-
   GetStartupInfo(this.repository);
+
+  final StartupRepository repository;
 
   Future<Either<Failure, Startup>> call(NoParams params) async {
     return await repository.getStartupInfo();
