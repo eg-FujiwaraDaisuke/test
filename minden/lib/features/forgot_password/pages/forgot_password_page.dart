@@ -5,8 +5,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/forgot_password/pages/forgot_password_message_page.dart';
-
-import '../../../../utile.dart';
+import 'package:minden/utile.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override

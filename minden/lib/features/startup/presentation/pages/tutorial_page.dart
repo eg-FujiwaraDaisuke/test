@@ -7,7 +7,7 @@ import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 enum PositionAlign { left, right }
 

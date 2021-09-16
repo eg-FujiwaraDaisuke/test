@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
-
-import 'home_mypage_tab.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 
 class HomeMypageTabNavigation extends StatelessWidget {
   final TabItem currentTab;

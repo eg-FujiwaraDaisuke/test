@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/usecase/usecase.dart';
+import 'package:minden/features/startup/domain/entities/startup.dart';
+import 'package:minden/features/startup/domain/usecases/startup_usecase.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
-
-import '../../../../core/error/failure.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/startup.dart';
-import '../../domain/usecases/startup_usecase.dart';
 
 class StartupBloc extends Bloc<StartupEvent, StartupState> {
   final GetStartupInfo usecase;
@@ -25,8 +24,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
   }
 
   Stream<StartupState> _eitherLoadedOrErrorState(
-    Either<Failure, Startup> failureOrInfo
-  ) async* {
+      Either<Failure, Startup> failureOrInfo) async* {
     yield failureOrInfo.fold<StartupState>(
       (failure) => _buildError(failure),
       (info) {
@@ -51,7 +49,7 @@ class StartupBloc extends Bloc<StartupEvent, StartupState> {
         return StartupStateError(
           localizedKey: (failure as UnderMaintenanceFailure).description,
           actionKey: "maintenance_action",
-          actionUrl: (failure).actionUrl,
+          actionUrl: failure.actionUrl,
         );
       default:
         return StartupStateError(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 
-import '../../../../utile.dart';
-import 'minden_message_dialog.dart';
+import 'package:minden/utile.dart';
 
 class MessagePage extends StatelessWidget {
   @override

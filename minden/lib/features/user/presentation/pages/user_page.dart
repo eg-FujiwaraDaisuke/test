@@ -15,9 +15,8 @@ import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
-
-import '../../../../injection_container.dart';
-import '../../../../utile.dart';
+import 'package:minden/injection_container.dart';
+import 'package:minden/utile.dart';
 
 enum MenuType {
   common,
