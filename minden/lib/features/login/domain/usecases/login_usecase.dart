@@ -10,6 +10,7 @@ class GetLoginUser extends UseCase<User, Params> {
 
   final LoginRepository loginRepository;
 
+  @override
   Future<Either<LoginFailure, User>> call(Params params) async {
     return await loginRepository.getLoginUser(params.id, params.password);
   }

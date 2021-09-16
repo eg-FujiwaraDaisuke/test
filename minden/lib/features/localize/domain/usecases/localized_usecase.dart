@@ -12,6 +12,7 @@ class GetLocalizedEvent extends UseCase<Localized, LocalizedInfoParams> {
 
   final LocalizedRepository repository;
 
+  @override
   Future<Either<Failure, Localized>> call(LocalizedInfoParams params) async {
     return await repository.getLocalizedInfo(params.languageCode);
   }

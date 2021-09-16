@@ -21,6 +21,7 @@ class StartupRepositoryImpl implements StartupRepository {
 
   final StartupInfoDataSource dataSource;
 
+  @override
   Future<Either<Failure, Startup>> getStartupInfo() async {
     final hasConnection = await (Connectivity().checkConnectivity());
     if (hasConnection == ConnectivityResult.none) {

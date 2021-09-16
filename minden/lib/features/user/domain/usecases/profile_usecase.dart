@@ -11,6 +11,7 @@ class GetProfile extends UseCase<Profile, GetProfileParams> {
 
   final ProfileRepository repository;
 
+  @override
   Future<Either<Failure, Profile>> call(GetProfileParams params) async {
     return await repository.get(
       userId: params.userId,
@@ -35,6 +36,7 @@ class UpdateProfile extends UseCase<Profile, UpdateProfileParams> {
 
   final ProfileRepository repository;
 
+  @override
   Future<Either<Failure, Profile>> call(UpdateProfileParams params) async {
     return await repository.update(
       name: params.name,

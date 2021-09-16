@@ -17,6 +17,7 @@ class GetStartupInfo extends UseCase<Startup, NoParams> {
 
   final StartupRepository repository;
 
+  @override
   Future<Either<Failure, Startup>> call(NoParams params) async {
     return await repository.getStartupInfo();
   }
