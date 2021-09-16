@@ -15,6 +15,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
   }) : super(key: key);
 
   final String powerPlantId;
+  final bool isFromUserPage = true;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -31,13 +32,15 @@ class PowerPlantDetailPage extends ConsumerWidget {
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            flexibleSpace: FlexibleSpaceBar(
-              background: PowerPlantPickup(),
-            ),
-            expandedHeight: 220,
-            backgroundColor: Colors.transparent,
-          ),
+          isFromUserPage
+              ? Text('aaaa')
+              : SliverAppBar(
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: PowerPlantPickup(),
+                  ),
+                  expandedHeight: 220,
+                  backgroundColor: Colors.transparent,
+                ),
           SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
