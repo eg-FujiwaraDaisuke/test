@@ -43,7 +43,6 @@ class SupportPowerPlantPage extends StatelessWidget {
 
     return DefaultTabController(
       length: tabs.length,
-      initialIndex: 1,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
