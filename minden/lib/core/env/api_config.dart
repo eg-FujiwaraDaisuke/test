@@ -13,10 +13,11 @@ class ApiConfig {
   };
 
   static final contentTypeHeaderApplicationJson = {
-    HttpHeaders.contentTypeHeader: 'application/json'
+    HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
   };
   static final contentTypeHeaderApplicationXFormUrlEncoded = {
-    HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
+    HttpHeaders.contentTypeHeader:
+        'application/x-www-form-urlencoded; charset=UTF-8'
   };
   static final contentTypeHeaderMultipartFormData = {
     HttpHeaders.contentTypeHeader: 'multipart/form-data'

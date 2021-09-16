@@ -36,6 +36,7 @@ class Account {
     final userJson = json.decode(jsonData);
 
     _me = User.fromJson(userJson);
+    print("### ${_me?.toJson()}");
     if (_me?.loginId == null) {
       print('#### you need login ####');
     }
