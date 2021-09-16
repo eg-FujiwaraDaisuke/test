@@ -26,7 +26,7 @@ class SupportPowerPlantPage extends StatelessWidget {
       tabName: '次に応援する発電所',
       // TODO ログが永遠に流れる
       // TODO 次に応援する発電所が複数あったらどうするんだろう
-      tabPage: (_) => const PowerPlantDetailPage(powerPlantId: 'MP2021080802'),
+      tabPage: (_) => const PowerPlantDetailPage(powerPlantId: 'MP2021080809'),
     ),
     SupportPowerPlantTabData(
       tabName: '応援した発電所',
