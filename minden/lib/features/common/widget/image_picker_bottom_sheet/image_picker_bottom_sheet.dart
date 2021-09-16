@@ -20,28 +20,28 @@ class ImagePickerBottomSheet {
             builder: (context) => CupertinoActionSheet(
               actions: [
                 CupertinoActionSheetAction(
-                  child: Text(i18nTranslate(context, 'image_select_gallery')),
                   onPressed: () {
                     Navigator.pop(context);
                     _pickImage(context, ImageSource.gallery, imageHandler,
                         clipWidth, clipHeight, cropStyle);
                   },
+                  child: Text(i18nTranslate(context, 'image_select_gallery')),
                 ),
                 CupertinoActionSheetAction(
-                  child: Text(i18nTranslate(context, 'image_select_camera')),
                   onPressed: () {
                     Navigator.pop(context);
                     _pickImage(context, ImageSource.camera, imageHandler,
                         clipWidth, clipHeight, cropStyle);
                   },
+                  child: Text(i18nTranslate(context, 'image_select_camera')),
                 )
               ],
               cancelButton: CupertinoActionSheetAction(
-                child: Text(i18nTranslate(context, 'cancel')),
                 isDefaultAction: true,
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                child: Text(i18nTranslate(context, 'cancel')),
               ),
             ),
           )
@@ -94,7 +94,7 @@ class ImagePickerBottomSheet {
     if (mediaFile == null) {
       return;
     } else {
-      final File? cropped = await ImageCropper.cropImage(
+      final cropped = await ImageCropper.cropImage(
         cropStyle: cropStyle,
         sourcePath: mediaFile.path,
         aspectRatio: CropAspectRatio(

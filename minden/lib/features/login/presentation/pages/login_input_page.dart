@@ -3,19 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
-
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
-  bool isError = false;
-
   LoginInputPage({
     required this.isError,
   });
+
+  bool isError = false;
 
   @override
   _LoginInputPageState createState() => _LoginInputPageState();
@@ -124,7 +123,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => ForgotPasswordPage(),
                                     settings:
-                                        RouteSettings(name: "/forgotPassword"),
+                                        RouteSettings(name: '/forgotPassword'),
                                   );
                                   Navigator.push(context, route);
                                 },
@@ -175,13 +174,12 @@ class _LoginInputPageState extends State<LoginInputPage> {
 }
 
 class EmailInput extends StatefulWidget {
-  final Function onChanged;
-  final Function onReset;
-
   const EmailInput({
     required this.onChanged,
     required this.onReset,
   }) : super();
+  final Function onChanged;
+  final Function onReset;
 
   @override
   _EmailInputState createState() => _EmailInputState();
@@ -189,6 +187,7 @@ class EmailInput extends StatefulWidget {
 
 class _EmailInputState extends State<EmailInput> {
   final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -248,15 +247,14 @@ class _EmailInputState extends State<EmailInput> {
 }
 
 class PasswordInput extends StatelessWidget {
-  final isShowPassword;
-  final Function onChanged;
-  final Function onShowPassword;
-
-  PasswordInput({
+  const PasswordInput({
     required this.isShowPassword,
     required this.onChanged,
     required this.onShowPassword,
   }) : super();
+  final isShowPassword;
+  final Function onChanged;
+  final Function onShowPassword;
 
   @override
   Widget build(BuildContext context) {

@@ -12,9 +12,9 @@ class MockMaintenanceInfoDataSource extends Mock
   @override
   Future<StartupModel> getStartupInfo() async {
     return StartupModel(
-      storeUrl: "",
+      storeUrl: '',
       hasLatestVersion: false,
-      latestVersion: "",
+      latestVersion: '',
       hasTutorial: false,
     );
   }
@@ -38,7 +38,7 @@ void main() {
       const MethodChannel('plugins.flutter.io/connectivity')
           .setMockMethodCallHandler((MethodCall methodCall) async {
         if (methodCall.method == 'check') {
-          return "wifi";
+          return 'wifi';
         }
         return null;
       });
@@ -55,7 +55,7 @@ void main() {
       const MethodChannel('plugins.flutter.io/connectivity')
           .setMockMethodCallHandler((MethodCall methodCall) async {
         if (methodCall.method == 'check') {
-          return "";
+          return '';
         }
         return null;
       });

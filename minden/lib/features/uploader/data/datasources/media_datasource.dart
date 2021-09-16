@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/uploader/data/models/media_model.dart';
 
 abstract class MediaDataSource {
@@ -26,7 +27,7 @@ class MediaDataSourceImpl implements MediaDataSource {
     headers.addAll(ApiConfig.contentTypeHeaderMultipartFormData);
 
     final request =
-        http.MultipartRequest("POST", Uri.parse(endpoint + _v1Path));
+        http.MultipartRequest('POST', Uri.parse(endpoint + _v1Path));
     request.headers.addAll(headers);
 
     final stream = http.ByteStream.fromBytes(bytes);
@@ -42,7 +43,7 @@ class MediaDataSourceImpl implements MediaDataSource {
       });
       return completer.future;
     }();
-    print("${value}");
+    logD('$value');
     if (response.statusCode == 200) {
       return MediaModel.fromJson(json.decode(value));
     } else if (response.statusCode == 401) {

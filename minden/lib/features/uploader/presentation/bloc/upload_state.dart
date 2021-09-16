@@ -29,9 +29,9 @@ class Uploaded extends UploadState {
 }
 
 class UploadError extends UploadState {
-  final String message;
-
   const UploadError(this.message);
+
+  final String message;
 
   @override
   List<Object> get props => [message];

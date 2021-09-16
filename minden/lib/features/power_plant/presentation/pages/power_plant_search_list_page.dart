@@ -8,7 +8,7 @@ import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/utile.dart';
 
 class PowerPlantSearchListPage extends StatelessWidget {
-  PowerPlantSearchListPage({required this.selectTag, Key? key})
+  const PowerPlantSearchListPage({required this.selectTag, Key? key})
       : super(key: key);
   final Tag selectTag;
 

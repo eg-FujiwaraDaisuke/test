@@ -15,8 +15,8 @@ void main() async {
     dataSource = LocalizedInfoDataSourceImpl();
   });
 
-  final jaModel = LocalizedModel.fromJson({"language_code": "ja"});
-  final enModel = LocalizedModel.fromJson({"language_code": "en"});
+  final jaModel = LocalizedModel.fromJson({'language_code': 'ja'});
+  final enModel = LocalizedModel.fromJson({'language_code': 'en'});
   group('datasource test', () {
     test(
       'should be a subclass of LocalizedInfoModel entity',
@@ -27,14 +27,14 @@ void main() async {
     test(
       'should return LocalizedInfoModel from SharedPreferences when there is one in the cache',
       () async {
-        final result = await dataSource.getLocalizedInfo(osLanguageCode: "ja");
+        final result = await dataSource.getLocalizedInfo(osLanguageCode: 'ja');
         expect(result, jaModel);
       },
     );
     test(
       'should return LocalizedInfoModel from SharedPreferences when there is one in the cache',
       () async {
-        final result = await dataSource.getLocalizedInfo(osLanguageCode: "en");
+        final result = await dataSource.getLocalizedInfo(osLanguageCode: 'en');
         expect(result, enModel);
       },
     );
@@ -42,8 +42,8 @@ void main() async {
     test(
       'should return "en" from SharedPreferences when there is one in the cache',
       () async {
-        final model = await dataSource.updateLocalizedInfo("en");
-        final result = await dataSource.getLocalizedInfo(osLanguageCode: "");
+        final model = await dataSource.updateLocalizedInfo('en');
+        final result = await dataSource.getLocalizedInfo(osLanguageCode: '');
         expect(model.languageCode, result.languageCode);
       },
     );

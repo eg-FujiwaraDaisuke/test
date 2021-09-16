@@ -1,5 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/startup/data/models/startup_model.dart';
 import 'package:minden/injection_container.dart';
 import 'package:package_info/package_info.dart';
@@ -23,20 +24,20 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
     await si<RemoteConfig>().fetchAndActivate();
 
     final maintenanceDescription =
-        si<RemoteConfig>().getString("maintenance_description");
-    final maintenanceUrl = si<RemoteConfig>().getString("maintenance_url");
+        si<RemoteConfig>().getString('maintenance_description');
+    final maintenanceUrl = si<RemoteConfig>().getString('maintenance_url');
     final underMaintenance = si<RemoteConfig>().getBool('under_maintenance');
 
-    final storeUrl = si<RemoteConfig>().getString("store_url");
+    final storeUrl = si<RemoteConfig>().getString('store_url');
     final remoteSupportVersion =
-        si<RemoteConfig>().getString("support_version");
+        si<RemoteConfig>().getString('support_version');
     final supportVersion = Version.parse(remoteSupportVersion);
     final appVersion = await _appVersion();
 
     final hasTutorial = await _hasTutorial();
 
-    print(
-        "[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}");
+    logD(
+        '[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}');
 
     if (maintenanceUrl.isEmpty && underMaintenance) {
       throw ServerException();
@@ -75,9 +76,9 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   }
 
   Future<Version> _appVersion() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final Version localVersion = Version.parse(packageInfo.version);
-    final Version appVersion = Version(
+    final packageInfo = await PackageInfo.fromPlatform();
+    final localVersion = Version.parse(packageInfo.version);
+    final appVersion = Version(
         localVersion.major, localVersion.minor, localVersion.patch,
         build: packageInfo.buildNumber);
     return appVersion;
@@ -85,7 +86,7 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
 
   Future<bool> _hasTutorial() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    final hasTutorial = sharedPreferences.getBool("has_tutorial") ?? false;
+    final hasTutorial = sharedPreferences.getBool('has_tutorial') ?? false;
     return hasTutorial;
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
-
 import 'package:minden/injection_container.dart';
 
 class Account {
@@ -25,21 +25,21 @@ class Account {
   }
 
   Future<void> prepare() async {
-    print("appToken : ${_appToken ?? ""}");
+    logD("appToken : ${_appToken ?? ""}");
     _appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
-    print("appToken : ${_appToken}");
-    print("_refreshToken : ${_refreshToken ?? ""}");
+    logD('appToken : $_appToken');
+    logD("_refreshToken : ${_refreshToken ?? ""}");
     _refreshToken = await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
-    print("_refreshToken : ${_refreshToken}");
+    logD('_refreshToken : $_refreshToken');
 
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
     final userJson = json.decode(jsonData);
 
     _me = User.fromJson(userJson);
-    print("### ${_me?.toJson()}");
+    logD('### ${_me?.toJson()}');
     if (_me?.loginId == null) {
-      print('#### you need login ####');
+      logD('#### you need login ####');
     }
-    print("${_appToken}, ${_refreshToken}, ${_me?.toJson()}");
+    logD('$_appToken, $_refreshToken, ${_me?.toJson()}');
   }
 }

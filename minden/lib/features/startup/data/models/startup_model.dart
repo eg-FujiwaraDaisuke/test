@@ -6,7 +6,7 @@ import 'package:minden/features/startup/domain/entities/startup.dart';
 // entityとmodelを定義するのは「扱う層が異なるため」と考えるのが良さそうです。
 // （ドメイン層でmodelは扱わないし、データ層でentityを扱わないようにするため）
 class StartupModel extends Startup {
-  StartupModel({
+  const StartupModel({
     required String storeUrl,
     required bool hasLatestVersion,
     required String latestVersion,
@@ -19,18 +19,18 @@ class StartupModel extends Startup {
 
   factory StartupModel.fromJson(Map<String, dynamic> json) {
     return StartupModel(
-        storeUrl: json["store_url"],
-        hasLatestVersion: json["has_latest_version"],
-        latestVersion: json["latest_version"],
-        hasTutorial: json["has_tutorial"]);
+        storeUrl: json['store_url'],
+        hasLatestVersion: json['has_latest_version'],
+        latestVersion: json['latest_version'],
+        hasTutorial: json['has_tutorial']);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "store_url": storeUrl,
-      "has_latest_version": hasLatestVersion,
-      "latest_version": latestVersion,
-      "has_tutorial": hasTutorial
+      'store_url': storeUrl,
+      'has_latest_version': hasLatestVersion,
+      'latest_version': latestVersion,
+      'has_tutorial': hasTutorial
     };
   }
 }

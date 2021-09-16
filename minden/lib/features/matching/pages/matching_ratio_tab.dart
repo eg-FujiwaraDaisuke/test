@@ -87,7 +87,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
             children: [
               SizedBox(height: 18),
               Text(
-                "${data.selectedCompanyPercentage()}",
+                '${data.selectedCompanyPercentage()}',
                 style: TextStyle(
                   fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
@@ -97,7 +97,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
                 ),
               ),
               Text(
-                "%",
+                '%',
                 style: TextStyle(
                   fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
@@ -121,7 +121,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
       final isSelected = index == selectedIndex;
 
       return PieChartSectionData(
-        color: isSelected ? const Color(0xFFFF8C00) : const Color(0xfFFFFE7C9),
+        color: isSelected ? const Color(0xFFFF8C00) : const Color(0xFFFFE7C9),
         value: v.ratio,
         // NOTE: 未設定の場合、[value]の値を表示するため、空文字を設定
         title: '',
@@ -160,7 +160,7 @@ class _ChartLegends extends ConsumerWidget {
               borderRadius: BorderRadius.all(Radius.circular(3)),
               color: isSelected
                   ? const Color(0xFFFF8C00)
-                  : const Color(0xfFFFFE7C9),
+                  : const Color(0xFFFFE7C9),
             ),
           ),
           const SizedBox(

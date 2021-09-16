@@ -13,6 +13,7 @@ class UpdateTags extends UseCase<Success, UpdateTagParams> {
 
   final TagRepository repository;
 
+  @override
   Future<Either<Failure, Success>> call(UpdateTagParams params) async {
     return await repository.updateTags(tags: params.tags);
   }
@@ -23,6 +24,7 @@ class GetAllTags extends UseCase<List<TagCategory>, NoParams> {
 
   final TagRepository repository;
 
+  @override
   Future<Either<Failure, List<TagCategory>>> call(NoParams params) async {
     return await repository.getAllTags();
   }
@@ -33,6 +35,7 @@ class GetTags extends UseCase<List<Tag>, NoParams> {
 
   final TagRepository repository;
 
+  @override
   Future<Either<Failure, List<Tag>>> call(NoParams params) async {
     return await repository.getTags();
   }

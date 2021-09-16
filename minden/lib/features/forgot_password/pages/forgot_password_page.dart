@@ -96,13 +96,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 }
 
 class EmailInput extends StatefulWidget {
-  final Function onChanged;
-  final Function onReset;
-
   const EmailInput({
     required this.onChanged,
     required this.onReset,
   }) : super();
+  final Function onChanged;
+  final Function onReset;
 
   @override
   _EmailInputState createState() => _EmailInputState();

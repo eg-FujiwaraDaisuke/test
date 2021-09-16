@@ -33,7 +33,7 @@ void main() {
     final tPassword = '1234qwer';
     final tBody = json.encode({'loginId': tId, 'password': tPassword});
 
-    final Uri tUrl =
+    final tUrl =
         Uri.parse('https://www.stg.minapp.minden.co.jp/api/v1/auth');
     final tUserModel =
         UserModel.fromJson(json.decode(fixture('login_data.json')));

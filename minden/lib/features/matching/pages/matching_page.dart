@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/matching/pages/matching_ratio_tab.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
-
 
 final matchingPageViewModelProvider =
     StateNotifierProvider<MatchingPageViewModel, MatchingPageState>(
         (ref) => MatchingPageViewModel());
 
 class MatchingTabData {
-  late final String tabName;
-  late final WidgetBuilder tabPage;
-
   MatchingTabData({
     required this.tabName,
     required this.tabPage,
   });
+
+  late final String tabName;
+  late final WidgetBuilder tabPage;
 }
 
 /// マイページ - マッチング
@@ -76,6 +76,14 @@ class MatchingPage extends StatelessWidget {
       ),
       // 影を付けたくないため、ElevatedButtonではなくTextButtonを使用
       child: TextButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFFFF8C00),
+          onPrimary: Color(0xFFFFFFFF),
+          shape: const StadiumBorder(),
+        ),
+        onPressed: () {
+          logD('ご契約内容の確認');
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: const Text(
@@ -88,14 +96,6 @@ class MatchingPage extends StatelessWidget {
             ),
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFFFF8C00),
-          onPrimary: Color(0xFFFFFFFF),
-          shape: const StadiumBorder(),
-        ),
-        onPressed: () {
-          print("ご契約内容の確認");
-        },
       ),
     );
   }

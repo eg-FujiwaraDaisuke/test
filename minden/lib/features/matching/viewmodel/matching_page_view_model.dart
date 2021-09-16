@@ -29,6 +29,8 @@ class MatchingPageViewModel extends StateNotifier<MatchingPageState> {
 }
 
 class MatchingPageState {
+  MatchingPageState({required this.value, required this.selectedCompanyIndex});
+
   /// 電力会社情報
   late final List<MatchingData> value;
 
@@ -42,14 +44,12 @@ class MatchingPageState {
 
     return (molecule / denominator * 100).toStringAsFixed(1);
   }
-
-  MatchingPageState({required this.value, required this.selectedCompanyIndex});
 }
 
 /// 仮のマッチングデータ
 class MatchingData {
+  MatchingData({required this.energyCompanyName, required this.ratio});
+
   final String energyCompanyName;
   final double ratio;
-
-  MatchingData({required this.energyCompanyName, required this.ratio});
 }

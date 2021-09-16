@@ -16,7 +16,7 @@ import 'package:minden/utile.dart';
 import 'package:http/http.dart' as http;
 
 class PowerPlantSearchByTag extends StatefulWidget {
-  PowerPlantSearchByTag({Key? key}) : super(key: key);
+  const PowerPlantSearchByTag({Key? key}) : super(key: key);
 
   @override
   _PowerPlantSearchByTagState createState() => _PowerPlantSearchByTagState();
