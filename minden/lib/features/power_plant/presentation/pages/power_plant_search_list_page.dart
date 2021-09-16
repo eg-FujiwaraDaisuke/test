@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
