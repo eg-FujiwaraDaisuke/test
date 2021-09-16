@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/support_plant/domain/entities/support.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class User extends Equatable {
@@ -10,9 +11,14 @@ class User extends Equatable {
     required this.supportableNumber,
     required this.profile,
     required this.isNewbie,
+    required this.supports,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    final List<Support> supports = json['supports']?.map<Support>((e) {
+          return Support.fromJson(e);
+        }).toList() ??
+        [];
     // from API
     if (json['user'] != null) {
       return User(
@@ -23,10 +29,9 @@ class User extends Equatable {
         supportableNumber: json['user']['supportableNumber'],
         isNewbie: json['isNewbie'],
         profile: Profile.fromJson(json['user']),
+        supports: supports,
       );
     }
-
-    // from restore
     return User(
       loginId: json['loginId'],
       accountId: json['accountId'],
@@ -35,6 +40,7 @@ class User extends Equatable {
       supportableNumber: json['supportableNumber'],
       isNewbie: json['isNewbie'],
       profile: Profile.fromJson(json['profile']),
+      supports: supports,
     );
   }
 
@@ -47,6 +53,7 @@ class User extends Equatable {
       'supportableNumber': supportableNumber,
       'isNewbie': isNewbie,
       'profile': profile.toJson(),
+      'supports': supports.map((e) => e.toJson()),
     };
   }
 
@@ -56,6 +63,7 @@ class User extends Equatable {
   final String limitedPlantId;
   final int supportableNumber;
   final Profile profile;
+  final List<Support> supports;
   final bool isNewbie;
 
   @override

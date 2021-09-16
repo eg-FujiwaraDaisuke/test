@@ -19,9 +19,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () => {
-          if (isActive) {onTap()}
-        },
+        onTap: () => {onTap()},
         child: Container(
           width: buttonStyle[size]!.width,
           height: buttonStyle[size]!.height,
