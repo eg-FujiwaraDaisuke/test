@@ -6,11 +6,11 @@ import 'important_tags.dart';
 class TagListItem extends StatefulWidget {
   TagListItem({
     required this.tag,
-    this.onSelect,
+    required this.onSelect,
     required this.isSelected,
   }) : super();
   final Tag tag;
-  final Function? onSelect;
+  final Function onSelect;
   final bool isSelected;
 
   @override
@@ -20,14 +20,12 @@ class TagListItem extends StatefulWidget {
 class _TagListItemState extends State<TagListItem> {
   @override
   Widget build(BuildContext context) {
-    return widget.onSelect == null
-        ? _buildItem()
-        : GestureDetector(
-            onTap: () {
-              widget.onSelect!(widget.tag);
-            },
-            child: _buildItem(),
-          );
+    return GestureDetector(
+      onTap: () {
+        widget.onSelect(widget.tag);
+      },
+      child: _buildItem(),
+    );
   }
 
   Widget _buildItem() {

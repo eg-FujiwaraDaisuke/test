@@ -376,6 +376,7 @@ class _TagsList extends StatelessWidget {
                 .map(
                   (tag) => TagListItem(
                     tag: tag,
+                    onSelect: (tag) {},
                     isSelected: true,
                   ),
                 )

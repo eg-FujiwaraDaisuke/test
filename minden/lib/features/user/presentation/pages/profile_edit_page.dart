@@ -803,6 +803,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
             children: _tagsList
                 .map((tag) => TagListItem(
                       tag: tag,
+                      onSelect: (tag) {},
                       isSelected: true,
                     ))
                 .toList(),
