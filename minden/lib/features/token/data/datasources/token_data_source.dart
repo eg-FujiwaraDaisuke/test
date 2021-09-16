@@ -7,8 +7,7 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/features/token/data/model/token_model.dart';
-
-import '../../../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 final tokenDataSourceProvider = Provider<TokenDataSource>((ref) =>
     TokenDataSourceImpl(

@@ -53,7 +53,7 @@ class User extends Equatable {
       'supportableNumber': supportableNumber,
       'isNewbie': isNewbie,
       'profile': profile.toJson(),
-      'supports': supports.map((e) => e.toJson()),
+      'supports': supports.map((e) => e.toJson()).toList(),
     };
   }
 

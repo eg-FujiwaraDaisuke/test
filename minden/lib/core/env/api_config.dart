@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:minden/core/env/config.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/injection_container.dart';
-
-import 'config.dart';
 
 class ApiConfig {
   static final Map<String, dynamic> _endpoint = {

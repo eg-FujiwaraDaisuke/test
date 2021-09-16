@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/features/matching/pages/matching_ratio_tab.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
 
-import 'matching_ratio_tab.dart';
 
 final matchingPageViewModelProvider =
     StateNotifierProvider<MatchingPageViewModel, MatchingPageState>(

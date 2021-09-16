@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 
-import '../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 class Account {
   String? _appToken = '';
