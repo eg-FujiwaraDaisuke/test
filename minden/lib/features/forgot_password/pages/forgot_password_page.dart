@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/forgot_password/pages/forgot_password_message_page.dart';
 
-import 'package:minden/features/login/presentation/pages/login_page.dart';
 import '../../../../utile.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -112,6 +111,7 @@ class EmailInput extends StatefulWidget {
 
 class _EmailInputState extends State<EmailInput> {
   final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(

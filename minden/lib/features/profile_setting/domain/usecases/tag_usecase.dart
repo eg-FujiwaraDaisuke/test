@@ -6,7 +6,6 @@ import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag_category.dart';
 import 'package:minden/features/profile_setting/domain/repositories/tag_repository.dart';
-import 'package:minden/features/user/domain/entities/profile.dart';
 
 // domain - usecase
 class UpdateTags extends UseCase<Success, UpdateTagParams> {
