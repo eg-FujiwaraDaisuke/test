@@ -12,7 +12,7 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
@@ -746,7 +746,7 @@ class _ImportantTagsList extends StatelessWidget {
             spacing: 5,
             runSpacing: 10,
             children: tagsList
-                .map((tag) => ImportantTagListItem(
+                .map((tag) => TagListItem(
                       tag: tag,
                       onSelect: () {},
                       isSelected: true,

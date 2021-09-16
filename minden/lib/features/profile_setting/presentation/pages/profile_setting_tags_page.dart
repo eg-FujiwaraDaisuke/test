@@ -6,7 +6,7 @@ import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -416,7 +416,7 @@ class _TagsListState extends State<TagsList> {
               runSpacing: 10,
               children: widget.tagsList.map(
                 (tag) {
-                  return ImportantTagListItem(
+                  return TagListItem(
                     tag: tag,
                     onSelect: widget.onSelect,
                     isSelected: widget.selectedTags.firstWhere((element) {

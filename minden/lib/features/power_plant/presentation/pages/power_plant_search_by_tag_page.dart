@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_seach_list_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
@@ -309,7 +309,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
             runSpacing: 10,
             children: tags
                 .map(
-                  (tag) => ImportantTagListItem(
+                  (tag) => TagListItem(
                     tag: tag,
                     onSelect: () {},
                     isSelected: true,
