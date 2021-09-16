@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
-import 'package:minden/features/power_plant/presentation/pages/power_plant_seach_list_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -201,7 +201,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
 
     // 検索結画面に飛ばす
     final route = MaterialPageRoute(
-      builder: (context) => PowerPlantSeachListPage(selectTag: tag),
+      builder: (context) => PowerPlantSearchListPage(selectTag: tag),
       settings: const RouteSettings(name: '/home/top/seach/powerPlant'),
     );
     Navigator.push(context, route);
