@@ -42,7 +42,7 @@ class MediaDataSourceImpl implements MediaDataSource {
       });
       return completer.future;
     }();
-    print('${value}');
+    print('$value');
     if (response.statusCode == 200) {
       return MediaModel.fromJson(json.decode(value));
     } else if (response.statusCode == 401) {

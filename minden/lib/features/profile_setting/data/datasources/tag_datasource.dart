@@ -48,7 +48,7 @@ class TagDataSourceImpl implements TagDataSource {
     final response = await client.post(Uri.parse(endpoint + _updateTagsPath),
         headers: headers, body: body);
 
-    print('### update tag ${body}, ${response.body}');
+    print('### update tag $body, ${response.body}');
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 401) {

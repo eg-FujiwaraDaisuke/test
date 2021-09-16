@@ -25,7 +25,7 @@ mixin RetryProcessMixin {
               );
               await dataSource.getAppToken(true);
             } catch(e) {
-              print('### retry error ${e}');
+              print('### retry error $e');
             }
             return true;
           }

@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _postToken(String? token) {
-    debugPrint('FCM token : ${token}');
+    debugPrint('FCM token : $token');
     if (token == null) return;
   }
 

@@ -67,7 +67,7 @@ class TokenDataSourceImpl implements TokenDataSource {
       ...ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded
     };
 
-    print('### ${headers}');
+    print('### $headers');
 
     final response = await client.get(
       Uri.parse(endpoint + _authPath),
