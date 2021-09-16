@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
@@ -54,6 +55,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       print("${responseBody}");
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else {
+      logW('${response.statusCode}: ${response.body}');
       throw ServerException();
     }
   }
@@ -74,6 +76,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       final responseBody = utf8.decode(response.bodyBytes);
       return PowerPlantDetailModel.fromJson(json.decode(responseBody));
     } else {
+      logW('${response.statusCode}: ${response.body}');
       throw ServerException();
     }
   }
@@ -95,6 +98,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       return PowerPlantParticipantModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } else {
+      logW('${response.statusCode}: ${response.body}');
       throw ServerException();
     }
   }
@@ -115,6 +119,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       return TagResponseModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } else {
+      logW('${response.statusCode}: ${response.body}');
       throw ServerException();
     }
   }
