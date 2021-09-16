@@ -80,7 +80,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                         bottom: 56,
                       ),
                       child: Text(
-                        data.detail!.catchphrase!,
+                        data.detail?.catchphrase ?? '',
                         style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'NotoSansJP',
@@ -160,7 +160,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
             children: [
               // 発電所名
               Text(
-                detail.name,
+                detail.name ?? '',
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'NotoSansJP',
@@ -180,7 +180,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                   ),
                   const SizedBox(width: 3),
                   Text(
-                    detail.viewAddress,
+                    detail.viewAddress ?? '',
                     style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'NotoSansJP',
@@ -198,7 +198,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      detail.powerGenerationMethod,
+                      detail.powerGenerationMethod ?? '',
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'NotoSansJP',
@@ -298,7 +298,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 10),
-        _generateExpandableText(detail.ownerMessage!),
+        _generateExpandableText(detail.ownerMessage ?? ''),
       ],
     );
   }
@@ -426,7 +426,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   Widget _generateParticipant(PowerPlantParticipant participant) {
     final icons = _generateParticipantIcons(participant);
-
+    if (icons.isEmpty) return Container();
     return Stack(
       children: List.generate(
         icons.length,
@@ -442,7 +442,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   List<Widget> _generateParticipantIcons(PowerPlantParticipant participant) {
-    final total = int.parse(participant.total);
+    final total = participant.total;
     if (maxUserIconCount < total) {
       // 4人以上応援ユーザーがいる場合、
       return [
