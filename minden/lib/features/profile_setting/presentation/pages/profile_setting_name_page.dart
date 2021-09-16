@@ -93,7 +93,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
                 const SizedBox(height: 182),
                 Button(
                   onTap: _next,
-                  text: i18nTranslate(context, 'profile_setting_next'),
+                  text: i18nTranslate(context, 'to_next'),
                   size: ButtonSize.S,
                 ),
               ],

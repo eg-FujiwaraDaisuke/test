@@ -7,8 +7,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
+
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
+
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_bio_page.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
@@ -146,7 +148,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
                       const SizedBox(height: 182),
                       Button(
                         onTap: _next,
-                        text: i18nTranslate(context, 'profile_setting_next'),
+                        text: i18nTranslate(context, 'to_next'),
                         size: ButtonSize.S,
                       ),
                     ],
