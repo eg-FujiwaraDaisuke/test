@@ -94,7 +94,7 @@ class ImagePickerBottomSheet {
     if (mediaFile == null) {
       return;
     } else {
-      final File? cropped = await ImageCropper.cropImage(
+      final cropped = await ImageCropper.cropImage(
         cropStyle: cropStyle,
         sourcePath: mediaFile.path,
         aspectRatio: CropAspectRatio(

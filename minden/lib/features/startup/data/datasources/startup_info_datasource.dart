@@ -75,9 +75,9 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
   }
 
   Future<Version> _appVersion() async {
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final Version localVersion = Version.parse(packageInfo.version);
-    final Version appVersion = Version(
+    final packageInfo = await PackageInfo.fromPlatform();
+    final localVersion = Version.parse(packageInfo.version);
+    final appVersion = Version(
         localVersion.major, localVersion.minor, localVersion.patch,
         build: packageInfo.buildNumber);
     return appVersion;

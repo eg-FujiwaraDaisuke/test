@@ -18,7 +18,7 @@ class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
     required String osLanguageCode,
   }) async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    String languageCode = sharedPreferences.getString('language_code') ?? '';
+    var languageCode = sharedPreferences.getString('language_code') ?? '';
     if (languageCode.isEmpty) {
       languageCode = osLanguageCode;
     }
