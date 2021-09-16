@@ -23,7 +23,9 @@ class PowerPlantPickup extends ConsumerWidget {
             CarouselSlider(
               items: data.value.map((data) {
                 return Builder(builder: (context) {
-                  return const _PowerPlantImage();
+                  return _PowerPlantImage(
+                    imageUrl: data.plantImage1,
+                  );
                 });
               }).toList(),
               options: _generateCarouselOpts(viewModel.setSelectedPickupIndex),
@@ -39,7 +41,7 @@ class PowerPlantPickup extends ConsumerWidget {
 
   CarouselOptions _generateCarouselOpts(Function(int index) onPageChanged) {
     return CarouselOptions(
-      height: 282,
+      height: 294,
       aspectRatio: 16 / 9,
       viewportFraction: 1.0,
       initialPage: 0,
@@ -127,7 +129,7 @@ class CarouselNextPrevController extends StatelessWidget {
 class _PowerPlantImage extends StatelessWidget {
   const _PowerPlantImage({
     Key? key,
-    this.imageUrl = 'assets/images/sample/power_plant_pickup_sample.png',
+    required this.imageUrl,
   }) : super(key: key);
 
   final String imageUrl;
@@ -136,10 +138,9 @@ class _PowerPlantImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 282,
-      child: Image.asset(
+      child: Image.network(
         imageUrl,
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.cover,
       ),
     );
   }

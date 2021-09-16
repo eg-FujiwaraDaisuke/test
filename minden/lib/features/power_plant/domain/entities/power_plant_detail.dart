@@ -49,12 +49,12 @@ class PowerPlantDetail extends Equatable {
   final String areaCode;
 
   /// 発電署名
-  final String name;
+  final String? name;
 
   /// 表示用設備所在地
   /// 都道府県＋市区町村
   /// 番地は除く
-  final String viewAddress;
+  final String? viewAddress;
 
   /// 電圧区分
   /// """1"" 〜 ""3""
@@ -64,7 +64,7 @@ class PowerPlantDetail extends Equatable {
   /// 発電方法
   /// """1"" 〜 ""5""
   /// (1: 太陽光/2: 風力/3: 地熱/4: 水力/5 : バイオマス)"
-  final String powerGenerationMethod;
+  final String? powerGenerationMethod;
 
   /// 再エネ種別
   /// "0" 〜 "1"

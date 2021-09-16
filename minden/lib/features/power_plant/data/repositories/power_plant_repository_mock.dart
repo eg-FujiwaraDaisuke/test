@@ -128,7 +128,7 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
     try {
       const data = PowerPlantParticipant(
           page: '1',
-          total: '4',
+          total: 4,
           plantId: '1',
           yearMonth: '202109',
           userList: [

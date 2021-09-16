@@ -5,7 +5,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 class PowerPlantParticipantModel extends PowerPlantParticipant {
   const PowerPlantParticipantModel({
     required String page,
-    required String total,
+    required int total,
     required String plantId,
     required String yearMonth,
     required List<PowerPlantParticipantUser> userList,

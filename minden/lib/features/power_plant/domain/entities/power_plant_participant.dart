@@ -15,7 +15,7 @@ class PowerPlantParticipant extends Equatable {
   final String page;
 
   /// 応援ユーザー総数
-  final String total;
+  final int total;
 
   /// MP番号
   final String plantId;
