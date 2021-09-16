@@ -15,7 +15,7 @@ class PowerPlantsResponseModel extends PowerPlantsResponse {
     final Iterable iterable = json['powerPlants'];
 
     return PowerPlantsResponseModel(
-        tag: TagModel.fromJson(json['tag']),
+        tag: TagModel.fromJson({}),
         powerPlants: List<PowerPlantModel>.from(
             iterable.map((model) => PowerPlantModel.fromJson(model))));
   }

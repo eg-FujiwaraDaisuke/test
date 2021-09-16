@@ -107,7 +107,7 @@ class PowerPlantListItem extends StatelessWidget {
             child: Column(
               children: [
                 // ヘッダー画像・キャッチフレーズ
-                _generateSHortCatchphraseOnImage(),
+                _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
                 // 発電署名・所在地
                 Expanded(
                   child: Padding(
@@ -118,7 +118,7 @@ class PowerPlantListItem extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            powerPlant.name,
+                            powerPlant.name ?? '',
                             style: const TextStyle(
                               fontSize: 13,
                               fontFamily: 'NotoSansJP',
@@ -161,7 +161,7 @@ class PowerPlantListItem extends StatelessWidget {
   }
 
   /// 短いキャッチフレーズを重ねて表示するヘッダー画像
-  Widget _generateSHortCatchphraseOnImage() {
+  Widget _generateSHortCatchphraseOnImage(String imageUrl) {
     return Stack(
       children: [
         ClipRRect(
@@ -170,9 +170,9 @@ class PowerPlantListItem extends StatelessWidget {
           child: SizedBox(
             width: 418,
             height: 280,
-            child: Image.asset(
-              'assets/images/sample/power_plant_sample.png',
-              fit: BoxFit.fitWidth,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -249,7 +249,7 @@ class PowerPlantListItem extends StatelessWidget {
         width: 300,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: Text(
-          powerPlant.shortCatchphrase!,
+          powerPlant.shortCatchphrase ?? '',
           textAlign: textAlignment,
           style: const TextStyle(
             color: Colors.white,

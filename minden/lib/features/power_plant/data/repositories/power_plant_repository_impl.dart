@@ -8,7 +8,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_detail.d
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 
-const bool replaceMock = true;
+const bool replaceMock = false;
 
 final powerPlantRepositoryProvider = Provider<PowerPlantRepository>(
   (ref) {
