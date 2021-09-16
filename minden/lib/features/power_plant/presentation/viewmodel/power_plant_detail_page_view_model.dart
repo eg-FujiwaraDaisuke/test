@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
+import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/token/data/repositories/token_repository_impl.dart';
 import 'package:minden/features/token/domain/repositories/token_repository.dart';
 
@@ -19,7 +21,9 @@ class PowerPlantDetailPageViewModel
     this.tokenRepository,
     this.powerPlantRepository,
   ) : super(PowerPlantDetailPageState(
-          value: null,
+          detail: null,
+          participant: null,
+          tags: null,
           selectedCompanyIndex: 0,
         ));
 
@@ -34,7 +38,37 @@ class PowerPlantDetailPageViewModel
       },
       (right) => {
         state = PowerPlantDetailPageState(
-          value: right,
+          detail: right,
+          participant: state.participant,
+          tags: state.tags,
+          selectedCompanyIndex: 0,
+        )
+      },
+    );
+
+    (await powerPlantRepository.getPowerPlantParticipants(plantId)).fold(
+      (left) => {
+        // TODO エラーハンドリング
+      },
+      (right) => {
+        state = PowerPlantDetailPageState(
+          detail: state.detail,
+          participant: right,
+          tags: state.tags,
+          selectedCompanyIndex: 0,
+        )
+      },
+    );
+
+    (await powerPlantRepository.getPowerPlantTags(plantId)).fold(
+      (left) => {
+        // TODO エラーハンドリング
+      },
+      (right) => {
+        state = PowerPlantDetailPageState(
+          detail: state.detail,
+          participant: state.participant,
+          tags: right.tags,
           selectedCompanyIndex: 0,
         )
       },
@@ -43,7 +77,9 @@ class PowerPlantDetailPageViewModel
 
   void setSelectedPickupIndex(int index) {
     state = PowerPlantDetailPageState(
-      value: state.value,
+      detail: state.detail,
+      participant: state.participant,
+      tags: state.tags,
       selectedCompanyIndex: index,
     );
   }
@@ -51,12 +87,20 @@ class PowerPlantDetailPageViewModel
 
 class PowerPlantDetailPageState {
   PowerPlantDetailPageState({
-    required this.value,
+    required this.detail,
+    required this.participant,
+    required this.tags,
     required this.selectedCompanyIndex,
   });
 
   /// 電力会社詳細情報
-  late final PowerPlantDetail? value;
+  late final PowerPlantDetail? detail;
+
+  /// 応援ユーザー情報
+  late final PowerPlantParticipant? participant;
+
+  /// 大切していることタグ一覧
+  late final List<Tag>? tags;
 
   /// 選択中のピックアップ電力会社index
   late final int selectedCompanyIndex;
