@@ -93,7 +93,6 @@ class Application extends StatelessWidget {
             },
           ),
           tabBarTheme: const TabBarTheme().copyWith(
-            indicator: const TabIndicator(),
             labelPadding: const EdgeInsets.symmetric(vertical: 12.0),
             labelColor: Colors.black,
             labelStyle: const TextStyle(

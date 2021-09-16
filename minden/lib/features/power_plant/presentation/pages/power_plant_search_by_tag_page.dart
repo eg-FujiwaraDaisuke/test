@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
