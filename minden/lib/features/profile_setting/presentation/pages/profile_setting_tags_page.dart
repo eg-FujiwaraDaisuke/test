@@ -49,10 +49,6 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
 
     _updateTagBloc.stream.listen((event) {
       if (event is TagUpdated) {
-        if (widget.isRouteToPop) {
-          Navigator.pop(context, true);
-          return;
-        }
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingTagsDecisionPage(),
           settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
@@ -342,10 +338,14 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _prev() {
-    Navigator.pop(context, false);
+    Navigator.pop(context, []);
   }
 
   void _next() {
+    if (widget.isRouteToPop) {
+      Navigator.pop(context, _selectedTags);
+      return;
+    }
     _updateTagBloc
         .add(UpdateTagEvent(tags: _selectedTags.map((e) => e!.tagId).toList()));
   }
