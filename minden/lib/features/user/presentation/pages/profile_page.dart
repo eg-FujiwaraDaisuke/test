@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   actions: [
                     GestureDetector(
                       onTap: () async {
-                        final ret = await Navigator.push<bool>(
+                        await Navigator.push<bool>(
                           context,
                           PageRouteBuilder(
                             pageBuilder:
@@ -111,11 +111,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         );
 
-                        // リロード
-                        if (ret ?? false) {
-                          _bloc.add(
-                              GetProfileEvent(userId: si<Account>().userId));
-                        }
+                        // 常にリロード
+                        _bloc
+                            .add(GetProfileEvent(userId: si<Account>().userId));
                       },
                       child: Container(
                         width: 90,
@@ -159,14 +157,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.center,
                             clipBehavior: Clip.none,
                             children: [
-                              if (state.profile.wallPaper.isEmpty)
+                              if (state.profile.wallPaper?.isEmpty ?? true)
                                 Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 173,
                                     color: const Color(0xFFFFFB92))
                               else
                                 Image.network(
-                                  state.profile.wallPaper,
+                                  state.profile.wallPaper!,
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,
@@ -179,14 +177,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               Positioned(
                                 bottom: -44,
-                                child: _ProfileIcon(icon: state.profile.icon),
+                                child: ProfileIcon(icon: state.profile.icon),
                               )
                             ],
                           ),
                           const SizedBox(
                             height: 60,
                           ),
-                          _ProfileName(
+                          ProfileName(
                             name: state.profile.name,
                           ),
                           const SizedBox(
@@ -250,7 +248,7 @@ class PlaceHolderProfile extends StatelessWidget {
                     ),
                     const Positioned(
                       bottom: -44,
-                      child: _ProfileIcon(icon: ''),
+                      child: ProfileIcon(icon: ''),
                     )
                   ],
                 ),
@@ -263,10 +261,10 @@ class PlaceHolderProfile extends StatelessWidget {
   }
 }
 
-class _ProfileIcon extends StatelessWidget {
-  const _ProfileIcon({required this.icon});
+class ProfileIcon extends StatelessWidget {
+  const ProfileIcon({required this.icon});
 
-  final String icon;
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +286,12 @@ class _ProfileIcon extends StatelessWidget {
               width: 3,
               color: Colors.white,
             ),
+            image: icon?.isEmpty ?? true
+                ? null
+                : DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(icon!),
+                  ),
           ),
         ),
       ),
@@ -295,17 +299,17 @@ class _ProfileIcon extends StatelessWidget {
   }
 }
 
-class _ProfileName extends StatelessWidget {
-  const _ProfileName({
+class ProfileName extends StatelessWidget {
+  const ProfileName({
     required this.name,
   });
 
-  final String name;
+  final String? name;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      name,
+      name ?? '',
       style: const TextStyle(
         color: Color(0xFF575292),
         fontSize: 18,
@@ -320,14 +324,14 @@ class _ProfileBio extends StatelessWidget {
   const _ProfileBio({
     required this.bio,
   }) : super();
-  final String bio;
+  final String? bio;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 338,
       child: Text(
-        bio,
+        bio ?? '',
         style: TextStyle(
           color: const Color(0xFF787877),
           fontSize: 12,
@@ -370,9 +374,9 @@ class _TagsList extends StatelessWidget {
             runSpacing: 10,
             children: tagsList
                 .map(
-                  (tag) => ImportantTagListItem(
+                  (tag) => TagListItem(
                     tag: tag,
-                    onSelect: () {},
+                    onSelect: (tag) {},
                     isSelected: true,
                   ),
                 )

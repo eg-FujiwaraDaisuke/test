@@ -46,7 +46,9 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
       Loading.hide();
       if (event is ProfileLoaded) {
         final route = MaterialPageRoute(
-          builder: (context) => ProfileSettingTagsPage(),
+          builder: (context) => const ProfileSettingTagsPage(
+            isRouteToPop: false,
+          ),
           settings: const RouteSettings(name: '/profileSetting/tag'),
         );
         Navigator.push(context, route);

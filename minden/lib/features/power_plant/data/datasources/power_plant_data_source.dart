@@ -40,7 +40,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return PowerPlantsResponseModel.fromJson(json.decode(response.body));
+      final responseBody = utf8.decode(response.bodyBytes);
+      return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else {
       throw ServerException();
     }
@@ -59,7 +60,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
-      return PowerPlantDetailModel.fromJson(json.decode(response.body));
+      final responseBody = utf8.decode(response.bodyBytes);
+      return PowerPlantDetailModel.fromJson(json.decode(responseBody));
     } else {
       throw ServerException();
     }

@@ -68,7 +68,8 @@ class TagDataSourceImpl implements TagDataSource {
       headers: headers,
     );
 
-    final list = json.decode(response.body);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final list = json.decode(responseBody);
     final categories = list.map<TagCategoryModel>((e) {
       return TagCategoryModel.fromJson(e);
     }).toList();
@@ -91,7 +92,8 @@ class TagDataSourceImpl implements TagDataSource {
       headers: headers,
     );
 
-    final map = json.decode(response.body);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final map = json.decode(responseBody);
     final list = map['tags'] ?? [];
     final tags = list.map<TagModel>((e) {
       return TagModel.fromJson(e);
