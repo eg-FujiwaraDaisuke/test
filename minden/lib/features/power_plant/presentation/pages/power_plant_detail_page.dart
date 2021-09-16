@@ -10,8 +10,7 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_picku
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
-/// 発電所詳細
-class PowerPlantDetailPage extends ConsumerWidget {
+class PowerPlantDetailPage extends StatelessWidget {
   const PowerPlantDetailPage({
     Key? key,
     required this.powerPlantId,
@@ -20,14 +19,27 @@ class PowerPlantDetailPage extends ConsumerWidget {
   final String powerPlantId;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    // TODO 初期データ取得
+  Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context
           .read(powerPlantDetailPageViewModelProvider.notifier)
           .fetchByPlantId(powerPlantId);
     });
+    return _PowerPlantDetailPage(powerPlantId: powerPlantId);
+  }
+}
 
+/// 発電所詳細
+class _PowerPlantDetailPage extends ConsumerWidget {
+  const _PowerPlantDetailPage({
+    Key? key,
+    required this.powerPlantId,
+  }) : super(key: key);
+
+  final String powerPlantId;
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
     final data = watch(powerPlantDetailPageViewModelProvider);
 
     if (data.detail == null || data.participant == null) {
