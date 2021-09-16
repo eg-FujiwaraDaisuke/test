@@ -8,9 +8,9 @@ enum Flavor {
 }
 
 class Config {
-  static const String kProdFlavor = "prod";
-  static const String kStagingFlavor = "staging";
-  static const String kDevFlavor = "dev";
+  static const String kProdFlavor = 'prod';
+  static const String kStagingFlavor = 'staging';
+  static const String kDevFlavor = 'dev';
 
   static Flavor _environment = Flavor.undefined;
 
@@ -24,7 +24,7 @@ class Config {
 
   static void setEnvironment(String environment) {
     assert(isUndefined,
-        "Environment modify Error. $_environment is already set up.");
+        'Environment modify Error. $_environment is already set up.');
 
     if (environment == kProdFlavor) {
       _environment = Flavor.prod;
@@ -36,7 +36,7 @@ class Config {
       if (kReleaseMode) {
         _environment = Flavor.prod;
       } else {
-        assert(false, "error environment");
+        assert(false, 'error environment');
       }
     }
   }
@@ -50,12 +50,12 @@ class Config {
       case Flavor.prod:
         return _environmentString(Flavor.prod);
       default:
-        assert(false, "error environment");
+        assert(false, 'error environment');
         return _environmentString(Flavor.undefined);
     }
   }
 
   static String _environmentString(Flavor flavor) {
-    return flavor.toString().split(".").last;
+    return flavor.toString().split('.').last;
   }
 }

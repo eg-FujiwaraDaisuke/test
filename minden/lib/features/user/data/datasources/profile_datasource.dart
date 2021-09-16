@@ -58,7 +58,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
         headers: headers, body: body);
 
     print(
-        "#### profile update : ${body} ${headers}, ${response.body}, ${response.headers}");
+        '#### profile update : ${body} ${headers}, ${response.body}, ${response.headers}');
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       return ProfileModel.fromJson(json.decode(responseBody));
@@ -84,7 +84,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
       headers: headers,
     );
 
-    print("${response.body}");
+    print('${response.body}');
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       return ProfileModel.fromJson(json.decode(responseBody));

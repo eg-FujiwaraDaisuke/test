@@ -19,18 +19,18 @@ class StartupModel extends Startup {
 
   factory StartupModel.fromJson(Map<String, dynamic> json) {
     return StartupModel(
-        storeUrl: json["store_url"],
-        hasLatestVersion: json["has_latest_version"],
-        latestVersion: json["latest_version"],
-        hasTutorial: json["has_tutorial"]);
+        storeUrl: json['store_url'],
+        hasLatestVersion: json['has_latest_version'],
+        latestVersion: json['latest_version'],
+        hasTutorial: json['has_tutorial']);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "store_url": storeUrl,
-      "has_latest_version": hasLatestVersion,
-      "latest_version": latestVersion,
-      "has_tutorial": hasTutorial
+      'store_url': storeUrl,
+      'has_latest_version': hasLatestVersion,
+      'latest_version': latestVersion,
+      'has_tutorial': hasTutorial
     };
   }
 }

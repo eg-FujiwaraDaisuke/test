@@ -124,7 +124,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => ForgotPasswordPage(),
                                     settings:
-                                        RouteSettings(name: "/forgotPassword"),
+                                        RouteSettings(name: '/forgotPassword'),
                                   );
                                   Navigator.push(context, route);
                                 },

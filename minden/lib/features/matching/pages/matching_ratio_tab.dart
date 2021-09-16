@@ -87,7 +87,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
             children: [
               SizedBox(height: 18),
               Text(
-                "${data.selectedCompanyPercentage()}",
+                '${data.selectedCompanyPercentage()}',
                 style: TextStyle(
                   fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
@@ -97,7 +97,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
                 ),
               ),
               Text(
-                "%",
+                '%',
                 style: TextStyle(
                   fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,

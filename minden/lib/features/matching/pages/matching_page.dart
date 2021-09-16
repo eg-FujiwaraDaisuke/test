@@ -94,7 +94,7 @@ class MatchingPage extends StatelessWidget {
           shape: const StadiumBorder(),
         ),
         onPressed: () {
-          print("ご契約内容の確認");
+          print('ご契約内容の確認');
         },
       ),
     );

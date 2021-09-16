@@ -26,7 +26,7 @@ class MediaDataSourceImpl implements MediaDataSource {
     headers.addAll(ApiConfig.contentTypeHeaderMultipartFormData);
 
     final request =
-        http.MultipartRequest("POST", Uri.parse(endpoint + _v1Path));
+        http.MultipartRequest('POST', Uri.parse(endpoint + _v1Path));
     request.headers.addAll(headers);
 
     final stream = http.ByteStream.fromBytes(bytes);
@@ -42,7 +42,7 @@ class MediaDataSourceImpl implements MediaDataSource {
       });
       return completer.future;
     }();
-    print("${value}");
+    print('${value}');
     if (response.statusCode == 200) {
       return MediaModel.fromJson(json.decode(value));
     } else if (response.statusCode == 401) {

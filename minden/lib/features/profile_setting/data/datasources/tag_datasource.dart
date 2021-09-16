@@ -42,13 +42,13 @@ class TagDataSourceImpl implements TagDataSource {
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final body = json.encode({
-      "tags": tags.toSet().toList().map<String>((e) => e.toString()).toList()
+      'tags': tags.toSet().toList().map<String>((e) => e.toString()).toList()
     });
 
     final response = await client.post(Uri.parse(endpoint + _updateTagsPath),
         headers: headers, body: body);
 
-    print("### update tag ${body}, ${response.body}");
+    print('### update tag ${body}, ${response.body}');
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 401) {

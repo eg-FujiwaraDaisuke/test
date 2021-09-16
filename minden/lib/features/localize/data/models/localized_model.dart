@@ -9,13 +9,13 @@ class LocalizedModel extends Localized {
 
   factory LocalizedModel.fromJson(Map<String, dynamic> json) {
     return LocalizedModel(
-      languageCode: json["language_code"],
+      languageCode: json['language_code'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "language_code": languageCode,
+      'language_code': languageCode,
     };
   }
 }

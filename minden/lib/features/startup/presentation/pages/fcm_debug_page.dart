@@ -67,10 +67,10 @@ class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
                 barrierDismissible: false,
                 builder: (_) {
                   return AlertDialog(
-                    content: Text("FCM token copied!"),
+                    content: Text('FCM token copied!'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text("OK"),
+                        child: Text('OK'),
                         onPressed: () => Navigator.pop(context, true),
                       ),
                     ],

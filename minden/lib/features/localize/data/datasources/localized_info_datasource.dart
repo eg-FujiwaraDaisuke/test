@@ -18,7 +18,7 @@ class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
     required String osLanguageCode,
   }) async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    String languageCode = sharedPreferences.getString("language_code") ?? "";
+    String languageCode = sharedPreferences.getString('language_code') ?? '';
     if (languageCode.isEmpty) {
       languageCode = osLanguageCode;
     }
@@ -31,7 +31,7 @@ class LocalizedInfoDataSourceImpl implements LocalizedInfoDataSource {
   @override
   Future<LocalizedModel> updateLocalizedInfo(String updateCode) async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString("language_code", updateCode);
+    await sharedPreferences.setString('language_code', updateCode);
     return LocalizedModel(languageCode: updateCode);
   }
 }

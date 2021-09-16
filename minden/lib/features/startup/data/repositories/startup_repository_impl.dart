@@ -28,7 +28,7 @@ class StartupRepositoryImpl implements StartupRepository {
     }
     try {
       final startupInfo = await dataSource.getStartupInfo();
-      print("[startup Info] ${startupInfo.toJson().toString()}");
+      print('[startup Info] ${startupInfo.toJson().toString()}');
       return Right(startupInfo);
     } on SupportVersionException catch (e) {
       return Left(SupportVersionFailure(

@@ -33,13 +33,13 @@ class UserDataSourceImpl implements UserDataSource {
       final responseBody = utf8.decode(response.bodyBytes);
       final tokenElement = json.decode(responseBody);
       await si<EncryptionTokenDataSourceImpl>()
-          .setAppToken(tokenElement["appToken"]);
+          .setAppToken(tokenElement['appToken']);
       await si<EncryptionTokenDataSourceImpl>()
-          .setRefreshToken(tokenElement["refreshToken"]);
+          .setRefreshToken(tokenElement['refreshToken']);
 
-      print("${json.decode(responseBody)}");
+      print('${json.decode(responseBody)}');
       final user = UserModel.fromJson(json.decode(responseBody));
-      print("login : ${user.toJson()}");
+      print('login : ${user.toJson()}');
       await si<EncryptionTokenDataSourceImpl>()
           .storeUser(json.encode(user.toJson()));
       return user;

@@ -20,7 +20,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
     try {
       final localizedInfo =
           await dataSource.getLocalizedInfo(osLanguageCode: languageCode);
-      print("[get localized info] ${localizedInfo.toJson().toString()}");
+      print('[get localized info] ${localizedInfo.toJson().toString()}');
       return Right(localizedInfo);
     } on LocalCacheException {
       return Left(LocalCacheFailure());
@@ -32,7 +32,7 @@ class LocalizedInfoRepositoryImpl implements LocalizedRepository {
       String languageCode) async {
     try {
       final localizedInfo = await dataSource.updateLocalizedInfo(languageCode);
-      print("[update localized info] ${localizedInfo.toJson().toString()}");
+      print('[update localized info] ${localizedInfo.toJson().toString()}');
       return Right(localizedInfo);
     } on LocalCacheException {
       return Left(LocalCacheFailure());

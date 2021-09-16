@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _postToken(String? token) {
-    debugPrint("FCM token : ${token}");
+    debugPrint('FCM token : ${token}');
     if (token == null) return;
   }
 
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).push(
           MaterialPageRoute(
             settings: RouteSettings(
-                name: "/message",
+                name: '/message',
                 arguments: MessageArguments(message, openedApplication: true)),
             builder: (BuildContext context) {
               return MessageView();
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           settings: RouteSettings(
-              name: "/message",
+              name: '/message',
               arguments: MessageArguments(message, openedApplication: true)),
           builder: (BuildContext context) {
             return MessageView();

@@ -17,7 +17,7 @@ mixin RetryProcessMixin {
         () => function(),
         retryIf: (e) async {
           if (e is TokenExpiredException) {
-            print("#### retry ####");
+            print('#### retry ####');
             try {
               final dataSource = TokenDataSourceImpl(
                 client: http.Client(),
@@ -25,7 +25,7 @@ mixin RetryProcessMixin {
               );
               await dataSource.getAppToken(true);
             } catch(e) {
-              print("### retry error ${e}");
+              print('### retry error ${e}');
             }
             return true;
           }

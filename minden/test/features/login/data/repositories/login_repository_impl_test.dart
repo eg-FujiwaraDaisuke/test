@@ -26,11 +26,11 @@ void main() {
     final tPassword = '1234qwer';
     final tUserModel = UserModel(
       // key: "20190707085551963zhayz",
-      loginId: "nakajo@minden.co.jp",
-      accountId: "",
-      limitedPlantId: "",
+      loginId: 'nakajo@minden.co.jp',
+      accountId: '',
+      limitedPlantId: '',
       supportableNumber: 1,
-      contractor: "",
+      contractor: '',
       isNewbie: false,
       profile: ProfileModel.fromJson({}),
       supports: [],

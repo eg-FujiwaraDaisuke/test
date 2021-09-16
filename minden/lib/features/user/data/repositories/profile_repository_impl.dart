@@ -26,7 +26,7 @@ class ProfileRepositoryImpl
     try {
       final profile = await retryRequest(() => dataSource.update(
           name: name, icon: icon, bio: bio, wallPaper: wallPaper));
-      print("${profile.toJson()}");
+      print('${profile.toJson()}');
       return Right(profile);
     } on ServerException {
       return Left(ServerFailure());
@@ -35,10 +35,10 @@ class ProfileRepositoryImpl
 
   @override
   Future<Either<Failure, Profile>> get({required String userId}) async {
-    print(">>>${userId}");
+    print('>>>${userId}');
     try {
       final profile = await retryRequest(() => dataSource.get(userId: userId));
-      print("${profile.toJson()}");
+      print('${profile.toJson()}');
       return Right(profile);
     } on ServerException {
       return Left(ServerFailure());

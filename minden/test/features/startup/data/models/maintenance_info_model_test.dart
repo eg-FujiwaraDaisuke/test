@@ -8,9 +8,9 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   final model = StartupModel(
-    storeUrl: "https://minden.co.jp/",
+    storeUrl: 'https://minden.co.jp/',
     hasLatestVersion: false,
-    latestVersion: "1.0.0",
+    latestVersion: '1.0.0',
     hasTutorial: true,
   );
 

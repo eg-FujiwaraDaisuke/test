@@ -23,20 +23,20 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
     await si<RemoteConfig>().fetchAndActivate();
 
     final maintenanceDescription =
-        si<RemoteConfig>().getString("maintenance_description");
-    final maintenanceUrl = si<RemoteConfig>().getString("maintenance_url");
+        si<RemoteConfig>().getString('maintenance_description');
+    final maintenanceUrl = si<RemoteConfig>().getString('maintenance_url');
     final underMaintenance = si<RemoteConfig>().getBool('under_maintenance');
 
-    final storeUrl = si<RemoteConfig>().getString("store_url");
+    final storeUrl = si<RemoteConfig>().getString('store_url');
     final remoteSupportVersion =
-        si<RemoteConfig>().getString("support_version");
+        si<RemoteConfig>().getString('support_version');
     final supportVersion = Version.parse(remoteSupportVersion);
     final appVersion = await _appVersion();
 
     final hasTutorial = await _hasTutorial();
 
     print(
-        "[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}");
+        '[version info] app: ${appVersion.toString()}, supportVersion: ${supportVersion.toString()}');
 
     if (maintenanceUrl.isEmpty && underMaintenance) {
       throw ServerException();
@@ -85,7 +85,7 @@ class StartupInfoDataSourceImpl implements StartupInfoDataSource {
 
   Future<bool> _hasTutorial() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    final hasTutorial = sharedPreferences.getBool("has_tutorial") ?? false;
+    final hasTutorial = sharedPreferences.getBool('has_tutorial') ?? false;
     return hasTutorial;
   }
 }
