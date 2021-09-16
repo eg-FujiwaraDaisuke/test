@@ -314,7 +314,6 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                 .map(
                   (tag) => TagListItem(
                     tag: tag,
-                    onSelect: () {},
                     isSelected: true,
                   ),
                 )

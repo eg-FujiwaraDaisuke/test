@@ -67,7 +67,6 @@ class PowerPlantSearchListPage extends StatelessWidget {
                         children: [
                           TagListItem(
                             tag: selectTag,
-                            onSelect: () {},
                             isSelected: true,
                           ),
                           Row(

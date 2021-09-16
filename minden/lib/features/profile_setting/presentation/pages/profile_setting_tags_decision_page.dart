@@ -123,7 +123,6 @@ class _ProfileSettingTagsDecisionPageState
                                 .map(
                                   (tag) => TagListItem(
                                     tag: tag,
-                                    onSelect: () {},
                                     isSelected: true,
                                   ),
                                 )

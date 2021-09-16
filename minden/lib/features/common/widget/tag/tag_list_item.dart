@@ -6,11 +6,11 @@ import 'important_tags.dart';
 class TagListItem extends StatefulWidget {
   TagListItem({
     required this.tag,
-    required this.onSelect,
+    this.onSelect,
     required this.isSelected,
   }) : super();
   final Tag tag;
-  final Function onSelect;
+  final Function? onSelect;
   final bool isSelected;
 
   @override
@@ -20,31 +20,35 @@ class TagListItem extends StatefulWidget {
 class _TagListItemState extends State<TagListItem> {
   @override
   Widget build(BuildContext context) {
-    final selectedColor = _getColor(widget.tag);
-    return GestureDetector(
-      onTap: () {
-        widget.onSelect(widget.tag);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(17),
-          border: Border.all(
-            color:
-                const Color(0xFFE2E2E2).withOpacity(widget.isSelected ? 0 : 1),
-          ),
-          color: widget.isSelected ? selectedColor : Colors.white,
+    return widget.onSelect == null
+        ? _buildItem()
+        : GestureDetector(
+            onTap: () {
+              widget.onSelect!(widget.tag);
+            },
+            child: _buildItem(),
+          );
+  }
+
+  Widget _buildItem() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(
+          color: const Color(0xFFE2E2E2).withOpacity(widget.isSelected ? 0 : 1),
         ),
-        child: Text(
-          '#${widget.tag.tagName}',
-          style: TextStyle(
-            color: widget.isSelected
-                ? const Color(0xFF575292)
-                : const Color(0xFF787877),
-            fontSize: 14,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w400,
-          ),
+        color: widget.isSelected ? _getColor(widget.tag) : Colors.white,
+      ),
+      child: Text(
+        '#${widget.tag.tagName}',
+        style: TextStyle(
+          color: widget.isSelected
+              ? const Color(0xFF575292)
+              : const Color(0xFF787877),
+          fontSize: 14,
+          fontFamily: 'NotoSansJP',
+          fontWeight: FontWeight.w400,
         ),
       ),
     );

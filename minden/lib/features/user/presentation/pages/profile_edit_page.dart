@@ -748,7 +748,6 @@ class _ImportantTagsList extends StatelessWidget {
             children: tagsList
                 .map((tag) => TagListItem(
                       tag: tag,
-                      onSelect: () {},
                       isSelected: true,
                     ))
                 .toList(),
