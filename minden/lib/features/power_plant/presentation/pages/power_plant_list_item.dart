@@ -62,50 +62,86 @@ class PowerPlantListItem extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          flex: 2,
-                          child: Text(
-                            powerPlant.name ?? '',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF575292),
-                              height: 1.43,
-                            ),
-                            overflow: TextOverflow.visible,
-                            softWrap: true,
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              SvgPicture.asset(
-                                'assets/images/power_plant/location.svg',
-                                width: 10,
-                                height: 12,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Text(
+                                powerPlant.name ?? '',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF575292),
+                                  height: 1.43,
+                                ),
+                                overflow: TextOverflow.visible,
+                                softWrap: true,
                               ),
-                              const SizedBox(width: 6),
-                              Flexible(
-                                child: Text(
-                                  powerPlant.viewAddress,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFFA7A7A7),
-                                    height: 1.48,
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  SvgPicture.asset(
+                                    'assets/images/power_plant/location.svg',
+                                    width: 10,
+                                    height: 12,
                                   ),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: Text(
+                                      powerPlant.viewAddress,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontFamily: 'NotoSansJP',
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFFA7A7A7),
+                                        height: 1.48,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (reservedDate != null || supportedData != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                reservedDate == null
+                                    ? ''
+                                    : '🚩${reservedDate}からこの発電所を応援',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFFF8C00),
                                 ),
                               ),
+                              Text(
+                                supportedData == null
+                                    ? ''
+                                    : '${supportedData}から応援',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFA7A7A7),
+                                ),
+                              )
                             ],
                           ),
-                        ),
                       ],
                     ),
                   ),
