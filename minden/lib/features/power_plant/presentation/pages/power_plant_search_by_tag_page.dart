@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_seach_list_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -169,9 +170,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                     children: state.category
                         .map((e) => TagsList(
                               tagsList: e.tags,
-                              onSelect: () {
-                                // 検索結画面に飛ばす
-                              },
+                              onSelect: _onSelectTag,
                               selectedTags: _selectedTags,
                               color: const Color(0xFFFFC2BE),
                               title: e.categoryName,
@@ -186,6 +185,23 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
         ],
       ),
     );
+  }
+
+  void _onSelectTag(Tag tag) {
+    final foundTag = _selectedTags.firstWhere((element) {
+      return element?.tagId == tag.tagId;
+    }, orElse: () => null);
+
+    setState(() {
+      _selectedTags.add(tag);
+    });
+
+    // 検索結画面に飛ばす
+    final route = MaterialPageRoute(
+      builder: (context) => PowerPlantSeachListPage(selectTag: tag),
+      settings: const RouteSettings(name: '/home/top/seach/powerPlant'),
+    );
+    Navigator.push(context, route);
   }
 
   Widget _buildCharacter() {
@@ -278,7 +294,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
         const Text(
           'あなたの選んだタグ',
           style: TextStyle(
-            color: const Color(0xFF575292),
+            color: Color(0xFF575292),
             fontSize: 12,
             fontFamily: 'NotoSansJP',
             fontWeight: FontWeight.w500,
