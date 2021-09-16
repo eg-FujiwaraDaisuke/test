@@ -54,7 +54,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: PowerPlantPickup(),
             ),
-            expandedHeight: 220,
+            expandedHeight: 270,
             backgroundColor: Colors.transparent,
           ),
           SliverList(
