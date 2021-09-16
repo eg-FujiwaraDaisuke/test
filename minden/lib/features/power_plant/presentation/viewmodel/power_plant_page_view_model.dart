@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
@@ -31,6 +32,7 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
     (await powerPlantRepository.getPowerPlant(null)).fold(
       (left) => {
         // TODO エラーハンドリング
+        logD('$left')
       },
       (right) => {
         state = PowerPlantPageState(

@@ -5,8 +5,7 @@ import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/login/data/model/user_model.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
-
-import '../../../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 abstract class UserDataSource {
   Future<UserModel> getLoginUser(String id, String password);

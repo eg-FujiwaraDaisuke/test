@@ -1,11 +1,10 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/startup/data/models/startup_model.dart';
+import 'package:minden/injection_container.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
-
-import '../../../../injection_container.dart';
 
 // data - datasource
 

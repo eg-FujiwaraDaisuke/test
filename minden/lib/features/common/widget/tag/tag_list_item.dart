@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:minden/features/common/widget/tag/important_tags.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
-import 'important_tags.dart';
 
 class TagListItem extends StatefulWidget {
   TagListItem({

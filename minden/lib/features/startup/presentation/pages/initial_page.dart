@@ -21,9 +21,8 @@ import 'package:minden/features/startup/presentation/bloc/startup_bloc.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
+import 'package:minden/injection_container.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../../injection_container.dart';
 
 class InitialPage extends StatefulWidget {
   @override

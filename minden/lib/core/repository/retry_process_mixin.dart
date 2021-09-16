@@ -6,7 +6,7 @@ import 'package:minden/features/token/data/datasources/encryption_token_data_sou
 import 'package:minden/features/token/data/datasources/token_data_source.dart';
 import 'package:retry/retry.dart' as backoff;
 
-import '../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 mixin RetryProcessMixin {
   /// http requestでの401エラーが発生した場合に自動的にリトライする

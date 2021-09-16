@@ -6,8 +6,6 @@ import 'package:minden/features/startup/data/datasources/startup_info_datasource
 import 'package:minden/features/startup/domain/entities/startup.dart';
 import 'package:minden/features/startup/domain/repositories/startup_repository.dart';
 
-import '../../domain/entities/startup.dart';
-
 // data - repository
 
 // 実装ガイド

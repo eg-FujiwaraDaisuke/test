@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button_style.dart';
-import 'button_size.dart';
 
 class Button extends StatelessWidget {
   Button(

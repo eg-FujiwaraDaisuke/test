@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
-import 'package:minden/features/common/widget/tag/important_tag_list_item.dart';
+import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
@@ -265,7 +265,7 @@ class PowerPlantDetailPage extends ConsumerWidget {
             spacing: 5,
             runSpacing: 10,
             children: tags
-                .map((tag) => ImportantTagListItem(
+                .map((tag) => TagListItem(
                       tag: tag,
                       onSelect: () {},
                       isSelected: true,

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
-
-import '../../../utile.dart';
+import 'package:minden/utile.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   @override

@@ -90,7 +90,7 @@ class PowerPlantListItem extends StatelessWidget {
             child: Column(
               children: [
                 // ヘッダー画像・キャッチフレーズ
-                _generateSHortCatchphraseOnImage(),
+                _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
                 // 発電署名・所在地
                 Expanded(
                   child: Padding(
@@ -99,42 +99,46 @@ class PowerPlantListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              powerPlant.name,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF575292),
-                                height: 1.43,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
+                          flex: 2,
+                          child: Text(
+                            powerPlant.name ?? '',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF575292),
+                              height: 1.43,
                             ),
+                            overflow: TextOverflow.visible,
+                            softWrap: true,
                           ),
                         ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/images/power_plant/location.svg',
-                              width: 10,
-                              height: 12,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              powerPlant.viewAddress,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFFA7A7A7),
-                                height: 1.48,
+                        Flexible(
+                          flex: 1,
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/images/power_plant/location.svg',
+                                width: 10,
+                                height: 12,
                               ),
-                            ),
-                          ],
-                        )
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  powerPlant.viewAddress,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFFA7A7A7),
+                                    height: 1.48,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -148,7 +152,7 @@ class PowerPlantListItem extends StatelessWidget {
   }
 
   /// 短いキャッチフレーズを重ねて表示するヘッダー画像
-  Widget _generateSHortCatchphraseOnImage() {
+  Widget _generateSHortCatchphraseOnImage(String imageUrl) {
     return Stack(
       children: [
         ClipRRect(
@@ -157,8 +161,11 @@ class PowerPlantListItem extends StatelessWidget {
           child: SizedBox(
             width: 418,
             height: 280,
-            child: Image.network(
-              powerPlant.plantImage1,
+            child: FadeInImage.assetNetwork(
+              // TODO replace place holder
+              placeholder:
+                  'assets/images/power_plant/power_plant_header_bg.png',
+              image: imageUrl,
               fit: BoxFit.cover,
             ),
           ),

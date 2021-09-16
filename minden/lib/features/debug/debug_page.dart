@@ -13,8 +13,7 @@ import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
-
-import '../../injection_container.dart';
+import 'package:minden/injection_container.dart';
 
 /// デバッグ用画面
 /// デバッグビルド時のみ遷移可能で、各画面への遷移や機能呼び出しを提供する
