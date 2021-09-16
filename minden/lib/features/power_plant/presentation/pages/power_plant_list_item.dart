@@ -45,27 +45,9 @@ class PowerPlantListItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           logD('onTapped power plant.');
-          final detail = PowerPlantDetail(
-            plantId: powerPlant.plantId,
-            areaCode: powerPlant.areaCode,
-            name: powerPlant.name,
-            viewAddress: powerPlant.viewAddress,
-            voltageType: powerPlant.voltageType,
-            powerGenerationMethod: powerPlant.powerGenerationMethod,
-            renewableType: powerPlant.renewableType,
-            generationCapacity: powerPlant.generationCapacity,
-            displayOrder: powerPlant.displayOrder,
-            isRecommend: powerPlant.isRecommend,
-            ownerName: powerPlant.ownerName,
-            startDate: powerPlant.startDate,
-            endDate: powerPlant.endDate,
-            plantImage1: powerPlant.plantImage1,
-          );
-
           final route = NoAnimationMaterialPageRoute(
-            builder: (context) => PowerPlantDetailPage(
-              powerPlantId: powerPlant.plantId,
-            ),
+            builder: (context) =>
+                PowerPlantDetailPage(powerPlantId: powerPlant.plantId),
             settings: const RouteSettings(name: '/home/top/detail'),
           );
           Navigator.push(context, route);
