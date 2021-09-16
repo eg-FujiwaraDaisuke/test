@@ -116,22 +116,22 @@ class PowerPlantListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              powerPlant.name ?? '',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF575292),
-                                height: 1.43,
-                              ),
+                          flex: 2,
+                          child: Text(
+                            powerPlant.name ?? '',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF575292),
+                              height: 1.43,
                             ),
+                            overflow: TextOverflow.visible,
+                            softWrap: true,
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
+                        Flexible(
+                          flex: 1,
                           child: Row(
                             children: [
                               const SizedBox(width: 8),
@@ -141,14 +141,16 @@ class PowerPlantListItem extends StatelessWidget {
                                 height: 12,
                               ),
                               const SizedBox(width: 6),
-                              Text(
-                                powerPlant.viewAddress,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFA7A7A7),
-                                  height: 1.48,
+                              Flexible(
+                                child: Text(
+                                  powerPlant.viewAddress,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFFA7A7A7),
+                                    height: 1.48,
+                                  ),
                                 ),
                               ),
                             ],
