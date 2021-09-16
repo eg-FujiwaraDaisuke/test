@@ -3,7 +3,7 @@ import 'package:minden/features/localize/domain/entities/localized.dart';
 // data - model
 
 class LocalizedModel extends Localized {
-  LocalizedModel({
+  const LocalizedModel({
     required String languageCode,
   }) : super(languageCode: languageCode);
 

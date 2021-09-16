@@ -6,7 +6,7 @@ import 'package:minden/features/startup/domain/entities/startup.dart';
 // entityとmodelを定義するのは「扱う層が異なるため」と考えるのが良さそうです。
 // （ドメイン層でmodelは扱わないし、データ層でentityを扱わないようにするため）
 class StartupModel extends Startup {
-  StartupModel({
+  const StartupModel({
     required String storeUrl,
     required bool hasLatestVersion,
     required String latestVersion,

@@ -252,7 +252,7 @@ class PasswordInput extends StatelessWidget {
   final Function onChanged;
   final Function onShowPassword;
 
-  PasswordInput({
+  const PasswordInput({
     required this.isShowPassword,
     required this.onChanged,
     required this.onShowPassword,

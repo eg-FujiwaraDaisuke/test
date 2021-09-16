@@ -26,7 +26,7 @@ class GetLocalizedEvent extends UseCase<Localized, LocalizedInfoParams> {
 class LocalizedInfoParams extends Equatable {
   final String languageCode;
 
-  LocalizedInfoParams(this.languageCode);
+  const LocalizedInfoParams(this.languageCode);
 
   @override
   List<Object> get props => [languageCode];

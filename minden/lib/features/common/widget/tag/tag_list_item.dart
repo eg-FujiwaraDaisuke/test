@@ -4,7 +4,7 @@ import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 
 class TagListItem extends StatefulWidget {
-  TagListItem({
+  const TagListItem({
     required this.tag,
     required this.onSelect,
     required this.isSelected,

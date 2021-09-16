@@ -117,7 +117,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 }
 
 class DecideCodeInput extends StatelessWidget {
-  DecideCodeInput({
+  const DecideCodeInput({
     required this.onChanged,
     required this.hintText,
   }) : super();
@@ -177,7 +177,7 @@ class DecideCodeInput extends StatelessWidget {
 }
 
 class PasswordInput extends StatelessWidget {
-  PasswordInput(
+  const PasswordInput(
       {required this.isShowPassword,
       required this.onChanged,
       required this.onShowPassword,

@@ -7,7 +7,7 @@ class ImportantTag extends Equatable {
   final Color color;
   final List<Tag> tags;
 
-  ImportantTag({required this.title, required this.tags, required this.color});
+  const ImportantTag({required this.title, required this.tags, required this.color});
 
   @override
   List<Object> get props => [title, color, tags];

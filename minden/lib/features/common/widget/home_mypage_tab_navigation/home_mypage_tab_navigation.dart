@@ -7,7 +7,7 @@ class HomeMypageTabNavigation extends StatelessWidget {
   final TabItem currentTab;
   final ValueChanged<TabItem> onSelectTab;
 
-  HomeMypageTabNavigation({
+  const HomeMypageTabNavigation({
     required this.currentTab,
     required this.onSelectTab,
   }) : super();

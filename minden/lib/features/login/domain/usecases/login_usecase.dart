@@ -18,7 +18,7 @@ class Params extends Equatable {
   final String id;
   final String password;
 
-  Params({required this.id, required this.password});
+  const Params({required this.id, required this.password});
 
   @override
   List<Object> get props => [id, password];
