@@ -89,12 +89,9 @@ class _HomePageState extends State<HomePage> {
             _buildOffstageNavigator(TabItem.mypage)
           ],
         ),
-        bottomNavigationBar: SizedBox(
-          height: 100,
-          child: HomeMypageTabNavigation(
-            currentTab: _currentTab,
-            onSelectTab: _selectTab,
-          ),
+        bottomNavigationBar: HomeMypageTabNavigation(
+          currentTab: _currentTab,
+          onSelectTab: _selectTab,
         ),
       ),
     );
