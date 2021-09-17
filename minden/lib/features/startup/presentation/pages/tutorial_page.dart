@@ -9,23 +9,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:minden/injection_container.dart';
 
-enum PositionAlign { left, right }
-
 class Tutorial {
-  Tutorial(
-      {required this.title,
-      required this.description,
-      required this.imagePath,
-      required this.tittlePosition,
-      required this.titleTextAlign,
-      required this.positionAlign});
+  Tutorial({
+    required this.title,
+    required this.description,
+    required this.imagePath,
+    required this.tittlePosition,
+    required this.titleTextAlign,
+  });
 
   final String title;
   final String description;
   final String imagePath;
   final Map<String, double> tittlePosition;
   final TextAlign titleTextAlign;
-  final PositionAlign positionAlign;
 }
 
 class TutorialPage extends StatefulWidget {
@@ -54,24 +51,21 @@ class _TutorialPageState extends State<TutorialPage> {
         title: i18nTranslate(context, 'tutorial_step_1_title'),
         description: i18nTranslate(context, 'tutorial_step_1_description'),
         titleTextAlign: TextAlign.left,
-        tittlePosition: {'left': 39, 'right': 0, 'top': 227},
-        positionAlign: PositionAlign.left,
+        tittlePosition: {'left': 39, 'top': 86},
       ),
       Tutorial(
         imagePath: 'tutorial-2.png',
         title: i18nTranslate(context, 'tutorial_step_2_title'),
         description: i18nTranslate(context, 'tutorial_step_2_description'),
         titleTextAlign: TextAlign.right,
-        tittlePosition: {'right': 18, 'left': 0, 'top': 201},
-        positionAlign: PositionAlign.right,
+        tittlePosition: {'left': 30, 'top': 85},
       ),
       Tutorial(
         imagePath: 'tutorial-3.png',
         title: i18nTranslate(context, 'tutorial_step_3_title'),
         description: i18nTranslate(context, 'tutorial_step_3_description'),
         titleTextAlign: TextAlign.right,
-        tittlePosition: {'right': 32, 'left': 0, 'top': 74},
-        positionAlign: PositionAlign.right,
+        tittlePosition: {'left': 25, 'top': 85},
       ),
     ];
 
@@ -224,7 +218,7 @@ class Slide extends StatelessWidget {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 484,
+              height: 486,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
@@ -232,31 +226,12 @@ class Slide extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 484,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: FractionalOffset.center,
-                  end: FractionalOffset.bottomCenter,
-                  colors: [
-                    const Color(0xFFf5f3ed).withOpacity(0),
-                    const Color(0xFFf5f3ed).withOpacity(1),
-                  ],
-                  stops: const [
-                    0.0,
-                    1.0,
-                  ],
-                ),
-              ),
-            ),
             Positioned(
               top: data.tittlePosition['top'],
               left: data.tittlePosition['left'],
-              right: data.tittlePosition['right'],
               child: Text(
                 data.title,
-                textAlign: data.titleTextAlign,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'NotoSansJP',

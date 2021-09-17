@@ -65,7 +65,7 @@ class SupportParticipantsDialog {
                     const SizedBox(
                       height: 27,
                     ),
-                    Container(
+                    SizedBox(
                       width: 286,
                       child: Wrap(
                         alignment: WrapAlignment.start,
@@ -162,26 +162,32 @@ class SupportParticipantsDialog {
       child: Column(
         children: [
           Container(
-            width: 47,
-            height: 47,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.network(
-              participant.icon,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(
+              width: 47,
+              height: 47,
+              clipBehavior: Clip.hardEdge,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: participant.icon.isEmpty
+                    ? Image.asset(
+                        'assets/images/user/icon_no_photo.png',
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        participant.icon,
+                        fit: BoxFit.cover,
+                      ),
+              )),
+          const SizedBox(
             height: 5,
           ),
-          Container(
+          SizedBox(
             width: 66,
             child: Text(
               participant.name,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFFFF8C00),
                 fontSize: 11,
                 fontFamily: 'NotoSansJP',
