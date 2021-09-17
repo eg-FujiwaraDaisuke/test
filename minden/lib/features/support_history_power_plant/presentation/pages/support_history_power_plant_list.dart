@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
-class SupportHistoryPowerPlantList extends ConsumerWidget {
-  const SupportHistoryPowerPlantList({Key? key}) : super(key: key);
+class SupportHistoryPowerPlantList extends StatelessWidget {
+  const SupportHistoryPowerPlantList(this.historyType);
+
+  final String historyType;
+
+  @override
+  Widget build(BuildContext context) {
+
+    logD(historyType);
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context
+          .read(powerPlantPageViewModelProvider.notifier)
+          .historyFetch(historyType);
+    });
+    return const _SupportHistoryPowerPlantList();
+  }
+}
+
+class _SupportHistoryPowerPlantList extends ConsumerWidget {
+  const _SupportHistoryPowerPlantList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    // TODO ここで応援したことのある発電所を取得する
     final data = watch(powerPlantPageViewModelProvider);
 
     return ListView.builder(

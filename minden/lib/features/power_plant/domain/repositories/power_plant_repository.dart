@@ -28,4 +28,9 @@ abstract class PowerPlantRepository {
   Future<Either<PowerPlantFailure, TagResponse>> getPowerPlantTags(
     String plantId,
   );
+
+  /// [historyType] 応援予約 or 応援履歴
+  Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlantHistory(
+    String historyType,
+  );
 }

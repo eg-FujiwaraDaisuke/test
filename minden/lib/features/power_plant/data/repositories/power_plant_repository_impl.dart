@@ -80,4 +80,19 @@ class PowerPlantRepositoryImpl
       return left(PowerPlantFailure());
     }
   }
+
+  /// [historyType] 応援予約 or 応援履歴
+  @override
+  Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlantHistory(
+    String historyType,
+  ) async {
+    try {
+      final plants = await retryRequest(
+          () => powerPlantDataSource.getPowerPlantHistory(historyType));
+
+      return Right(plants);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
 }

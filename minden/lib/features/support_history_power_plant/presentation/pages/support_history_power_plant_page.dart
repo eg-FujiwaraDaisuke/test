@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 
 class SupportPowerPlantTabData {
@@ -21,21 +19,16 @@ class SupportHistoryPowerPlantPage extends StatelessWidget {
   final tabs = [
     SupportPowerPlantTabData(
       tabName: '次に応援する発電所',
-      tabPage: (_) => const SupportHistoryPowerPlantList(),
+      tabPage: (_) => const SupportHistoryPowerPlantList('history'),
     ),
     SupportPowerPlantTabData(
       tabName: '応援した発電所',
-      tabPage: (_) => const SupportHistoryPowerPlantList(),
+      tabPage: (_) => const SupportHistoryPowerPlantList('reservation'),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // TODO 初期データ取得
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(powerPlantPageViewModelProvider.notifier).fetch();
-    });
-
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(

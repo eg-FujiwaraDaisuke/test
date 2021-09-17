@@ -49,6 +49,23 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
       selectedCompanyIndex: index,
     );
   }
+
+  Future<void> historyFetch(String historyType) async {
+    logD(historyType);
+    (await powerPlantRepository.getPowerPlantHistory(historyType)).fold(
+          (left) => {
+        // TODO エラーハンドリング
+        logD('$left')
+      },
+          (right) => {
+        state = PowerPlantPageState(
+          value: right.powerPlants,
+          selectedCompanyIndex: 0,
+        )
+      },
+    );
+  }
+
 }
 
 class PowerPlantPageState {
