@@ -59,6 +59,7 @@ class _SupportPlantDialogDebugPageState
       bio: '',
       wallPaper: '',
       tags: [],
+      selectedPowerPlants: [],
     ),
     isNewbie: false,
     supports: [

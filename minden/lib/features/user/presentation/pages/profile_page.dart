@@ -200,7 +200,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 37,
                           ),
                           // TODO あとで共通Componentを組み込む
-                          const _SelectedPlantList(selectedPlantList: [])
+                          _SelectedPlantList(
+                              selectedPlantList:
+                                  state.profile.selectedPowerPlants)
                         ],
                       ),
                     ),

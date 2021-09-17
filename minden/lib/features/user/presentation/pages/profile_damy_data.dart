@@ -13,5 +13,6 @@ class ProfileDamyData {
       Tag(tagId: 2, tagName: 'フェアトレード'),
       Tag(tagId: 3, tagName: 'エコ'),
     ],
+    selectedPowerPlants: [],
   );
 }
