@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_mock.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
@@ -24,7 +25,9 @@ final powerPlantRepositoryProvider = Provider<PowerPlantRepository>(
   },
 );
 
-class PowerPlantRepositoryImpl implements PowerPlantRepository {
+class PowerPlantRepositoryImpl
+    with RetryProcessMixin
+    implements PowerPlantRepository {
   PowerPlantRepositoryImpl({required this.powerPlantDataSource});
 
   final PowerPlantDataSource powerPlantDataSource;
@@ -33,7 +36,9 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlant(
       String? tagId) async {
     try {
-      final plants = await powerPlantDataSource.getPowerPlant(tagId);
+      final plants =
+          await retryRequest(() => powerPlantDataSource.getPowerPlant(tagId));
+
       return Right(plants);
     } on ServerException {
       return left(PowerPlantFailure());
@@ -44,7 +49,8 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, PowerPlantDetail>> getPowerPlantDetail(
       String plantId) async {
     try {
-      final plant = await powerPlantDataSource.getPowerPlantDetail(plantId);
+      final plant = await retryRequest(
+          () => powerPlantDataSource.getPowerPlantDetail(plantId));
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());
@@ -55,8 +61,8 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, PowerPlantParticipant>>
       getPowerPlantParticipants(String plantId) async {
     try {
-      final plant =
-          await powerPlantDataSource.getPowerPlantParticipants(plantId);
+      final plant = await retryRequest(
+          () => powerPlantDataSource.getPowerPlantParticipants(plantId));
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());
@@ -67,7 +73,8 @@ class PowerPlantRepositoryImpl implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, TagResponse>> getPowerPlantTags(
       String plantId) async {
     try {
-      final plant = await powerPlantDataSource.getPowerPlantTags(plantId);
+      final plant = await retryRequest(
+          () => powerPlantDataSource.getPowerPlantTags(plantId));
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());
