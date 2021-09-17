@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
+import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
 class PowerPlantPickup extends ConsumerWidget {
@@ -11,8 +11,22 @@ class PowerPlantPickup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final viewModel = watch(powerPlantPageViewModelProvider.notifier);
-    final data = watch(powerPlantPageViewModelProvider);
+    final viewModel = watch(powerPlantDetailPageViewModelProvider.notifier);
+    final data = watch(powerPlantDetailPageViewModelProvider);
+
+    final images = [];
+    if (data.detail?.plantImage1.isNotEmpty ?? false) {
+      images.add(data.detail?.plantImage1);
+    }
+    if (data.detail?.plantImage2?.isNotEmpty ?? false) {
+      images.add(data.detail?.plantImage2);
+    }
+    if (data.detail?.plantImage3?.isNotEmpty ?? false) {
+      images.add(data.detail?.plantImage3);
+    }
+    if (data.detail?.plantImage4?.isNotEmpty ?? false) {
+      images.add(data.detail?.plantImage4);
+    }
 
     return Column(
       children: [
@@ -21,14 +35,14 @@ class PowerPlantPickup extends ConsumerWidget {
           children: [
             // カルーセル
             CarouselSlider(
-              items: data.value.map((data) {
+              items: images.map((e) {
                 return Builder(builder: (context) {
                   return _PowerPlantImage(
-                    imageUrl: data.plantImage1,
+                    imageUrl: e ?? '',
                   );
                 });
               }).toList(),
-              options: _generateCarouselOpts(viewModel.setSelectedPickupIndex),
+              options: _generateCarouselOpts((index) {}),
               carouselController: _carouselController,
             ),
             // カルーセル操作ボタン
@@ -138,8 +152,10 @@ class _PowerPlantImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: Image.network(
-        imageUrl,
+      child: FadeInImage.assetNetwork(
+        // TODO replace place holder
+        placeholder: 'assets/images/power_plant/power_plant_header_bg.png',
+        image: imageUrl ?? '',
         fit: BoxFit.cover,
       ),
     );

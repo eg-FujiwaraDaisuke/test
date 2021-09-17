@@ -76,7 +76,7 @@ class PowerPlantListItem extends StatelessWidget {
         onTap: () {
           logD('onTapped power plant.');
 
-          final route = NoAnimationMaterialPageRoute(
+          final route = MaterialPageRoute(
             builder: (context) =>
                 PowerPlantDetailPage(powerPlantId: powerPlant.plantId),
             settings: const RouteSettings(name: '/home/top/detail'),

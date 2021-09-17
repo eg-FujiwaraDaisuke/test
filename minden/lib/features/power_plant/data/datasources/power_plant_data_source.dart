@@ -54,6 +54,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       final responseBody = utf8.decode(response.bodyBytes);
       logD(responseBody);
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
     } else {
       logW('${response.statusCode}: ${response.body}');
       throw ServerException();
@@ -76,6 +78,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       final responseBody = utf8.decode(response.bodyBytes);
       logD(responseBody);
       return PowerPlantDetailModel.fromJson(json.decode(responseBody));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
     } else {
       logW('${response.statusCode}: ${response.body}');
       throw ServerException();
@@ -102,6 +106,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       logD(utf8.decode(response.bodyBytes));
       return PowerPlantParticipantModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
     } else {
       logW('${response.statusCode}: ${response.body}');
       throw ServerException();
@@ -123,6 +129,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     if (response.statusCode == 200) {
       return TagResponseModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
     } else {
       logW('${response.statusCode}: ${response.body}');
       throw ServerException();
