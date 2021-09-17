@@ -6,6 +6,7 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
+import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
@@ -169,15 +170,14 @@ class _MenuListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _menuList = [
       _Menu(
-          title: i18nTranslate(context, 'user_menu_select_plant'),
+          title: i18nTranslate(context, 'user_menu_profile'),
           icon: 'select_plant',
-          // TODO routeは仮
           routeName: '/user/profile',
           type: MenuType.common),
       _Menu(
-          title: i18nTranslate(context, 'user_menu_profile'),
+          title: i18nTranslate(context, 'user_menu_support_power_plant'),
           icon: 'person',
-          routeName: '/user/profile',
+          routeName: '/user/supporPowerPlant',
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_message'),
@@ -241,6 +241,13 @@ class _MenuItem extends StatelessWidget {
             await Navigator.push(context, route);
             BlocProvider.of<GetProfileBloc>(context)
                 .add(GetProfileEvent(userId: si<Account>().userId));
+            break;
+          case '/user/supporPowerPlant':
+            final route = MaterialPageRoute(
+              builder: (context) => SupportHistoryPowerPlantPage(),
+              settings: RouteSettings(name: routeName),
+            );
+            await Navigator.push(context, route);
             break;
 
           default:

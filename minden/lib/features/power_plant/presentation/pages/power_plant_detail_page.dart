@@ -461,6 +461,8 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   Widget _generateCircleUserIcon(String? imageUrl) {
+
+    final valid = Uri.parse(imageUrl ?? '').isAbsolute;
     return Container(
       width: iconSize,
       height: iconSize,
@@ -473,8 +475,8 @@ class ParticipantUserIconGroup extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(iconSize / 2),
         child: Image.network(
-          // TODO replace
-          imageUrl ?? 'https://placeimg.com/480/480/any',
+          // TODO replace icon url
+          valid ? imageUrl! : 'https://placeimg.com/480/480/any',
           width: iconSize,
           height: iconSize,
         ),

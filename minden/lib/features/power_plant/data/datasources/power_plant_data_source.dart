@@ -21,6 +21,8 @@ abstract class PowerPlantDataSource {
   Future<PowerPlantParticipantModel> getPowerPlantParticipants(String plantId);
 
   Future<TagResponseModel> getPowerPlantTags(String plantId);
+
+  Future<PowerPlantsResponseModel> getPowerPlantHistory(String historyType);
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -36,6 +38,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   final _powerPlantTags = '/api/v1/power_plant/tags';
 
+  final _powerPlantHistory = '/api/v1/support_history';
+
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
     final endpoint = ApiConfig.apiEndpoint();
@@ -45,7 +49,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final url = Uri.parse(endpoint + _powerPlantsPath);
     final response = await client.get(
       url.replace(queryParameters: {
-        // TODO fix 
+        // TODO fix
         'tagId': '0',
       }),
       headers: headers,
@@ -130,6 +134,33 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     if (response.statusCode == 200) {
       return TagResponseModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
+    } else {
+      logW('${response.statusCode}: ${response.body}');
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<PowerPlantsResponseModel> getPowerPlantHistory(
+      String historyType) async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
+
+    final url = Uri.parse(endpoint + _powerPlantHistory);
+    final response = await client.get(
+      url.replace(queryParameters: {
+        'historyType': historyType,
+      }),
+      headers: headers,
+    );
+
+    final responseBody = utf8.decode(response.bodyBytes);
+    logD(responseBody);
+    if (response.statusCode == 200) {
+      return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {
