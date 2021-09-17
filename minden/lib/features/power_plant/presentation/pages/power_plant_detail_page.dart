@@ -41,7 +41,6 @@ class _PowerPlantDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final data = watch(powerPlantDetailPageViewModelProvider);
-
     if (data.detail == null || data.participant == null) {
       return Container();
     }
@@ -92,7 +91,8 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                _generateDetail(data.detail!, data.participant!, data.tags ?? []),
+                _generateDetail(
+                    data.detail!, data.participant!, data.tags ?? []),
                 // この発電所を応援する
                 Container(
                   height: 82,
@@ -473,6 +473,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(iconSize / 2),
         child: Image.network(
+          // TODO replace
           imageUrl ?? 'https://placeimg.com/480/480/any',
           width: iconSize,
           height: iconSize,

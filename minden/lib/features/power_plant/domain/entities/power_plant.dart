@@ -23,6 +23,29 @@ class PowerPlant extends Equatable {
     this.thankYouMessage,
   });
 
+  factory PowerPlant.fromJson(Map<String, dynamic> json) {
+    return PowerPlant(
+      plantId: json['plantId'],
+      areaCode: json['areaCode'],
+      name: json['name'],
+      viewAddress: json['viewAddress'],
+      voltageType: json['voltageType'],
+      powerGenerationMethod: json['powerGenerationMethod'],
+      renewableType: json['renewableType'],
+      generationCapacity: json['generationCapacity'],
+      displayOrder: json['displayOrder'],
+      isRecommend: json['isRecommend'],
+      ownerName: json['ownerName'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+      plantImage1: json['plantImage1'],
+      supportGiftName: json['supportGiftName'],
+      shortCatchphrase: json['shortCatchphrase'],
+      catchphrase: json['catchphrase'],
+      thankYouMessage: json['thankYouMessage'],
+    );
+  }
+
   /// MP番号
   final String plantId;
 
@@ -31,7 +54,7 @@ class PowerPlant extends Equatable {
   final String areaCode;
 
   /// 発電署名
-  final String? name;
+  final String name;
 
   /// 表示用設備所在地
   /// 都道府県＋市区町村
@@ -91,6 +114,29 @@ class PowerPlant extends Equatable {
 
   /// 応援のお礼メッセージ
   final String? thankYouMessage;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'plantId': plantId,
+      'areaCode': areaCode,
+      'name': name,
+      'viewAddress': viewAddress,
+      'voltageType': voltageType,
+      'powerGenerationMethod': powerGenerationMethod,
+      'renewableType': renewableType,
+      'generationCapacity': generationCapacity,
+      'displayOrder': displayOrder,
+      'isRecommend': isRecommend,
+      'ownerName': ownerName,
+      'startDate': startDate.toString(),
+      'endDate': endDate.toString(),
+      'plantImage1': plantImage1,
+      'supportGiftName': supportGiftName,
+      'shortCatchphrase': shortCatchphrase,
+      'catchphrase': catchphrase,
+      'thankYouMessage': thankYouMessage,
+    };
+  }
 
   @override
   List<Object> get props => [

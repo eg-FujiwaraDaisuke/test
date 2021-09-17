@@ -6,6 +6,9 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -200,7 +203,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 37,
                           ),
                           // TODO あとで共通Componentを組み込む
-                          const _SelectedPlantList(selectedPlantList: [])
+                          _SelectedPlantList(
+                              selectedPlantList:
+                                  state.profile.selectedPowerPlants)
                         ],
                       ),
                     ),
@@ -390,44 +395,37 @@ class _TagsList extends StatelessWidget {
 class _SelectedPlantList extends StatelessWidget {
   const _SelectedPlantList({required this.selectedPlantList});
 
-  final selectedPlantList;
+  final List<PowerPlant> selectedPlantList;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          i18nTranslate(context, 'user_select_plant'),
-          style: TextStyle(
-            color: const Color(0xFF575292),
-            fontSize: 14,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-            letterSpacing: calcLetterSpacing(letter: 4),
+        Padding(
+          padding: EdgeInsets.only(left: 32),
+          child: Text(
+            i18nTranslate(context, 'user_select_plant'),
+            style: TextStyle(
+              color: const Color(0xFF575292),
+              fontSize: 14,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w700,
+              letterSpacing: calcLetterSpacing(letter: 4),
+            ),
           ),
         ),
         const SizedBox(
           height: 7,
         ),
-        Column(
-          children: [_SelectedPlantListItem()],
-        ),
+        ...selectedPlantList
+            .map((e) => PowerPlantListItem(
+                  key: ValueKey(e.plantId),
+                  powerPlant: e,
+                  direction: Direction.topLeft,
+                ))
+            .toList()
       ],
-    );
-  }
-}
-
-class _SelectedPlantListItem extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 343,
-      height: 352,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.blue,
-      ),
     );
   }
 }
