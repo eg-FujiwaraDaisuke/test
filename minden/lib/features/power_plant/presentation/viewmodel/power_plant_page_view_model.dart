@@ -28,8 +28,8 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
 
   PowerPlantPageState matchingData() => state;
 
-  Future<void> fetch() async {
-    (await powerPlantRepository.getPowerPlant(null)).fold(
+  Future<void> fetch(String? tagId) async {
+    (await powerPlantRepository.getPowerPlant(tagId)).fold(
       (left) => {
         // TODO エラーハンドリング
         logD('$left')
@@ -53,11 +53,11 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
   Future<void> historyFetch(String historyType) async {
     logD(historyType);
     (await powerPlantRepository.getPowerPlantHistory(historyType)).fold(
-          (left) => {
+      (left) => {
         // TODO エラーハンドリング
         logD('$left')
       },
-          (right) => {
+      (right) => {
         state = PowerPlantPageState(
           value: right.powerPlants,
           selectedCompanyIndex: 0,
@@ -65,7 +65,6 @@ class PowerPlantPageViewModel extends StateNotifier<PowerPlantPageState> {
       },
     );
   }
-
 }
 
 class PowerPlantPageState {

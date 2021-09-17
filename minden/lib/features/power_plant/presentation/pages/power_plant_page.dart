@@ -29,7 +29,7 @@ class PowerPlantHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO 初期データ取得
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(powerPlantPageViewModelProvider.notifier).fetch();
+      context.read(powerPlantPageViewModelProvider.notifier).fetch(null);
     });
 
     return DefaultTabController(

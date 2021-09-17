@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
-import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/utile.dart';
@@ -15,6 +14,12 @@ class PowerPlantSearchListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context
+          .read(powerPlantPageViewModelProvider.notifier)
+          .fetch(selectTag.tagId.toString());
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -131,8 +136,7 @@ class PowerPlantSearchListPage extends StatelessWidget {
                         letterSpacing: calcLetterSpacing(letter: 4)),
                   ),
                   const SizedBox(height: 31),
-                  // TODO 大量のエラーがでる
-                  // _PowerPlantSeachList(),
+                  const _PowerPlantSeachList(),
                 ],
               ),
             ),
@@ -151,22 +155,19 @@ class _PowerPlantSeachList extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final data = watch(powerPlantPageViewModelProvider);
 
+    var index = 0;
+    final plants = [];
+    data.value.forEach((element) {
+      final direction = searchDirectionByIndex(index);
+      index++;
+      plants.add(PowerPlantListItem(
+        key: ValueKey(element.plantId),
+        powerPlant: element,
+        direction: direction,
+      ));
+    });
     return Column(
-      children: [
-        ListView.builder(
-          itemCount: data.value.length,
-          itemBuilder: (BuildContext context, int index) {
-            final powerPlant = data.value[index];
-            final direction = searchDirectionByIndex(index);
-
-            return PowerPlantListItem(
-              key: ValueKey(powerPlant.plantId),
-              powerPlant: powerPlant,
-              direction: direction,
-            );
-          },
-        ),
-      ],
+      children: [...plants],
     );
   }
 
