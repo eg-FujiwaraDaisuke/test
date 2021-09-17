@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
