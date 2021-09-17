@@ -52,7 +52,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      logD('$responseBody');
+      logD(responseBody);
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else {
       logW('${response.statusCode}: ${response.body}');
@@ -74,6 +74,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
+      logD(responseBody);
       return PowerPlantDetailModel.fromJson(json.decode(responseBody));
     } else {
       logW('${response.statusCode}: ${response.body}');
@@ -98,6 +99,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     if (response.statusCode == 200) {
+      logD(utf8.decode(response.bodyBytes));
       return PowerPlantParticipantModel.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } else {
