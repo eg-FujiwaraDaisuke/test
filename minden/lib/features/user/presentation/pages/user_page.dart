@@ -6,7 +6,7 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
-import 'package:minden/features/support_power_plant/presentation/pages/support_power_plant_page.dart';
+import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
@@ -244,7 +244,7 @@ class _MenuItem extends StatelessWidget {
             break;
           case '/user/supporPowerPlant':
             final route = MaterialPageRoute(
-              builder: (context) => SupportPowerPlantPage(),
+              builder: (context) => SupportHistoryPowerPlantPage(),
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);

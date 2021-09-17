@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
-
 import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
-import 'package:minden/features/support_power_plant/presentation/pages/support_history_power_plant_list.dart';
+import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 
 class SupportPowerPlantTabData {
   SupportPowerPlantTabData({
@@ -18,15 +15,13 @@ class SupportPowerPlantTabData {
 }
 
 /// ホーム - トップ
-class SupportPowerPlantPage extends StatelessWidget {
-  SupportPowerPlantPage({Key? key}) : super(key: key);
+class SupportHistoryPowerPlantPage extends StatelessWidget {
+  SupportHistoryPowerPlantPage({Key? key}) : super(key: key);
 
   final tabs = [
     SupportPowerPlantTabData(
       tabName: '次に応援する発電所',
-      // TODO ログが永遠に流れる
-      // TODO 次に応援する発電所が複数あったらどうするんだろう
-      tabPage: (_) => const PowerPlantDetailPage(powerPlantId: 'MP2021080809'),
+      tabPage: (_) => const SupportHistoryPowerPlantList(),
     ),
     SupportPowerPlantTabData(
       tabName: '応援した発電所',
