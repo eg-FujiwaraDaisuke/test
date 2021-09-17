@@ -92,7 +92,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                _generateDetail(data.detail!, data.participant!, data.tags!),
+                _generateDetail(data.detail!, data.participant!, data.tags ?? []),
                 // この発電所を応援する
                 Container(
                   height: 82,
@@ -460,7 +460,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
     }
   }
 
-  Widget _generateCircleUserIcon(String imageUrl) {
+  Widget _generateCircleUserIcon(String? imageUrl) {
     return Container(
       width: iconSize,
       height: iconSize,
@@ -473,7 +473,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(iconSize / 2),
         child: Image.network(
-          imageUrl,
+          imageUrl ?? 'https://placeimg.com/480/480/any',
           width: iconSize,
           height: iconSize,
         ),

@@ -31,7 +31,7 @@ class PowerPlant extends Equatable {
   final String areaCode;
 
   /// 発電署名
-  final String name;
+  final String? name;
 
   /// 表示用設備所在地
   /// 都道府県＋市区町村
