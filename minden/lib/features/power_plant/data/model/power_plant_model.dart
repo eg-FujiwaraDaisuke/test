@@ -41,26 +41,30 @@ class PowerPlantModel extends PowerPlant {
           thankYouMessage: thankYouMessage,
         );
 
-  factory PowerPlantModel.fromJson(Map<String, dynamic> json) {
+  factory PowerPlantModel.fromProfile(PowerPlant powerPlant) {
     return PowerPlantModel(
-      plantId: json['plantId'],
-      areaCode: json['areaCode'],
-      name: json['name'],
-      viewAddress: json['viewAddress'],
-      voltageType: json['voltageType'],
-      powerGenerationMethod: json['powerGenerationMethod'],
-      renewableType: json['renewableType'],
-      generationCapacity: json['generationCapacity'],
-      displayOrder: json['displayOrder'],
-      isRecommend: json['isRecommend'],
-      ownerName: json['ownerName'],
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      plantImage1: json['plantImage1'],
-      supportGiftName: json['supportGiftName'],
-      shortCatchphrase: json['shortCatchphrase'],
-      catchphrase: json['catchphrase'],
-      thankYouMessage: json['thankYouMessage'],
+      plantId: powerPlant.plantId,
+      areaCode: powerPlant.areaCode,
+      name: powerPlant.name,
+      viewAddress: powerPlant.viewAddress,
+      voltageType: powerPlant.voltageType,
+      powerGenerationMethod: powerPlant.powerGenerationMethod,
+      renewableType: powerPlant.renewableType,
+      generationCapacity: powerPlant.generationCapacity,
+      displayOrder: powerPlant.displayOrder,
+      isRecommend: powerPlant.isRecommend,
+      ownerName: powerPlant.ownerName,
+      startDate: powerPlant.startDate,
+      endDate: powerPlant.endDate,
+      plantImage1: powerPlant.plantImage1,
+      supportGiftName: powerPlant.supportGiftName,
+      shortCatchphrase: powerPlant.shortCatchphrase,
+      catchphrase: powerPlant.catchphrase,
+      thankYouMessage: powerPlant.thankYouMessage,
     );
+  }
+  
+  factory PowerPlantModel.fromJson(Map<String, dynamic> json) {
+    return PowerPlantModel.fromProfile(PowerPlant.fromJson(json));
   }
 }

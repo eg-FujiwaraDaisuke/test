@@ -45,7 +45,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final url = Uri.parse(endpoint + _powerPlantsPath);
     final response = await client.get(
       url.replace(queryParameters: {
-        'tagId': tagId,
+        // TODO fix 
+        'tagId': '0',
       }),
       headers: headers,
     );

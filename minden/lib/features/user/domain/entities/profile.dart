@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 
 class Profile extends Equatable {
@@ -9,6 +11,7 @@ class Profile extends Equatable {
     required this.bio,
     required this.wallPaper,
     required this.tags,
+    required this.selectedPowerPlants,
   });
 
   factory Profile.fromJson(Map<String, dynamic> elem) {
@@ -16,13 +19,19 @@ class Profile extends Equatable {
           return Tag.fromJson(e);
         }).toList() ??
         [];
+    final List<PowerPlant> selectedPowerPlants =
+        elem['selectedPowerPlants']?.map<PowerPlant>((e) {
+              return PowerPlant.fromJson(e);
+            }).toList() ??
+            [];
     return Profile(
         userId: elem['userId'],
         name: elem['name'],
         icon: elem['icon'],
         bio: elem['bio'],
         wallPaper: elem['wallPaper'],
-        tags: tags);
+        tags: tags,
+        selectedPowerPlants: selectedPowerPlants);
   }
 
   final String? userId;
@@ -31,6 +40,7 @@ class Profile extends Equatable {
   final String? bio;
   final String? wallPaper;
   final List<Tag> tags;
+  final List<PowerPlant> selectedPowerPlants;
 
   Map<String, dynamic> toJson() {
     return {
@@ -39,7 +49,9 @@ class Profile extends Equatable {
       'icon': icon,
       'bio': bio,
       'wallPaper': wallPaper,
-      'tags': tags.map((e) => e.toJson()).toList()
+      'tags': tags.map((e) => e.toJson()).toList(),
+      'selectedPowerPlants':
+          selectedPowerPlants.map((e) => e.toJson()).toList(),
     };
   }
 
