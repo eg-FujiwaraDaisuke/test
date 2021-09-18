@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
@@ -12,8 +14,8 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
-import 'package:http/http.dart' as http;
 
 class PowerPlantSearchByTag extends StatefulWidget {
   const PowerPlantSearchByTag({Key? key}) : super(key: key);
@@ -61,8 +63,8 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
       Loading.hide();
     });
 
-    _allTagBloc.add(const GetTagEvent());
-    _tagBloc.add(const GetTagEvent());
+    _allTagBloc.add(GetTagEvent());
+    _tagBloc.add(GetTagEvent(userId: si<Account>().userId));
   }
 
   @override

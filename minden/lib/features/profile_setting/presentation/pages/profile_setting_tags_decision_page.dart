@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
@@ -15,6 +16,7 @@ import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
+import 'package:minden/injection_container.dart';
 
 class ProfileSettingTagsDecisionPage extends StatefulWidget {
   @override
@@ -39,7 +41,8 @@ class _ProfileSettingTagsDecisionPageState
         ),
       ),
     );
-    _bloc.add(const GetTagEvent());
+
+    _bloc.add(GetTagEvent(userId: si<Account>().userId));
   }
 
   @override

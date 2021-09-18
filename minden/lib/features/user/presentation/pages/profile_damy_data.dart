@@ -9,9 +9,9 @@ class ProfileDamyData {
     bio: 'ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。ここには、自己紹介文・メッセージが入ります。',
     wallPaper: '',
     tags: [
-      Tag(tagId: 1, tagName: '地産地消'),
-      Tag(tagId: 2, tagName: 'フェアトレード'),
-      Tag(tagId: 3, tagName: 'エコ'),
+      Tag(tagId: 1, tagName: '地産地消', colorCode: '1'),
+      Tag(tagId: 2, tagName: 'フェアトレード', colorCode: '1'),
+      Tag(tagId: 3, tagName: 'エコ', colorCode: '1'),
     ],
     selectedPowerPlants: [],
   );

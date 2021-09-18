@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minden/features/common/widget/tag/important_tags.dart';
+import 'package:minden/core/util/color_code_util.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
-
 
 class TagListItem extends StatefulWidget {
   const TagListItem({
@@ -9,7 +8,7 @@ class TagListItem extends StatefulWidget {
     required this.onSelect,
     required this.isSelected,
   }) : super();
-  final Tag tag;
+  final Tag? tag;
   final Function onSelect;
   final bool isSelected;
 
@@ -39,7 +38,7 @@ class _TagListItemState extends State<TagListItem> {
         color: widget.isSelected ? _getColor(widget.tag) : Colors.white,
       ),
       child: Text(
-        '#${widget.tag.tagName}',
+        '#${widget.tag?.tagName ?? ''}',
         style: TextStyle(
           color: widget.isSelected
               ? const Color(0xFF575292)
@@ -52,12 +51,8 @@ class _TagListItemState extends State<TagListItem> {
     );
   }
 
-  Color _getColor(Tag tag) {
-    ImportantTag? contain;
-    importantTags.forEach((importantTag) {
-      final isExist = importantTag.tags.contains(tag);
-      if (isExist) contain = importantTag;
-    });
-    return contain?.color ?? const Color(0xFFFFC2BE);
+  Color _getColor(Tag? tag) {
+    print("${tag?.toJson()}");
+    return getColorFromCode(tag?.colorCode ?? '1');
   }
 }
