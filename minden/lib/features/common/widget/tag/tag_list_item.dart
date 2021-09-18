@@ -52,7 +52,6 @@ class _TagListItemState extends State<TagListItem> {
   }
 
   Color _getColor(Tag? tag) {
-    print("${tag?.toJson()}");
     return getColorFromCode(tag?.colorCode ?? '1');
   }
 }
