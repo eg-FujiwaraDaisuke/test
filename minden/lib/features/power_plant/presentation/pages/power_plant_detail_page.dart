@@ -44,6 +44,20 @@ class _PowerPlantDetailPage extends ConsumerWidget {
     if (data.detail == null || data.participant == null) {
       return Container();
     }
+    final images = <String>[];
+    final detail = data.detail!;
+    if (detail.plantImage1.isNotEmpty) {
+      images.add(detail.plantImage1);
+    }
+    if (detail.plantImage2?.isNotEmpty ?? false) {
+      images.add(detail.plantImage2!);
+    }
+    if (detail.plantImage3?.isNotEmpty ?? false) {
+      images.add(detail.plantImage3!);
+    }
+    if (detail.plantImage4?.isNotEmpty ?? false) {
+      images.add(detail.plantImage4!);
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -51,7 +65,9 @@ class _PowerPlantDetailPage extends ConsumerWidget {
         slivers: <Widget>[
           SliverAppBar(
             flexibleSpace: FlexibleSpaceBar(
-              background: PowerPlantPickup(),
+              background: PowerPlantPickup(
+                images: images,
+              ),
             ),
             expandedHeight: 270,
             backgroundColor: Colors.transparent,
@@ -461,7 +477,6 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   Widget _generateCircleUserIcon(String? imageUrl) {
-
     final valid = Uri.parse(imageUrl ?? '').isAbsolute;
     return Container(
       width: iconSize,

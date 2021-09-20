@@ -1,33 +1,25 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
 
 /// 電力会社ピックアップ一覧
-class PowerPlantPickup extends ConsumerWidget {
+class PowerPlantPickup extends StatefulWidget {
+  const PowerPlantPickup({required this.images});
+
+  final List<String> images;
+
+  @override
+  State<StatefulWidget> createState() {
+    return PowerPlantPickupState();
+  }
+}
+
+class PowerPlantPickupState extends State<PowerPlantPickup> {
   final CarouselController _carouselController = CarouselController();
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final viewModel = watch(powerPlantDetailPageViewModelProvider.notifier);
-    final data = watch(powerPlantDetailPageViewModelProvider);
-
-    final images = [];
-    if (data.detail?.plantImage1.isNotEmpty ?? false) {
-      images.add(data.detail?.plantImage1);
-    }
-    if (data.detail?.plantImage2?.isNotEmpty ?? false) {
-      images.add(data.detail?.plantImage2);
-    }
-    if (data.detail?.plantImage3?.isNotEmpty ?? false) {
-      images.add(data.detail?.plantImage3);
-    }
-    if (data.detail?.plantImage4?.isNotEmpty ?? false) {
-      images.add(data.detail?.plantImage4);
-    }
-
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Stack(
@@ -35,10 +27,10 @@ class PowerPlantPickup extends ConsumerWidget {
           children: [
             // カルーセル
             CarouselSlider(
-              items: images.map((e) {
+              items: widget.images.map((e) {
                 return Builder(builder: (context) {
                   return _PowerPlantImage(
-                    imageUrl: e ?? '',
+                    imageUrl: e,
                   );
                 });
               }).toList(),

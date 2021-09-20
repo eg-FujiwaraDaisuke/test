@@ -24,7 +24,6 @@ class PowerPlantDetailPageViewModel
           detail: null,
           participant: null,
           tags: null,
-          selectedCompanyIndex: 0,
         ));
 
   final TokenRepository tokenRepository;
@@ -41,7 +40,6 @@ class PowerPlantDetailPageViewModel
           detail: right,
           participant: state.participant,
           tags: state.tags,
-          selectedCompanyIndex: 0,
         )
       },
     );
@@ -55,7 +53,6 @@ class PowerPlantDetailPageViewModel
           detail: state.detail,
           participant: right,
           tags: state.tags,
-          selectedCompanyIndex: 0,
         )
       },
     );
@@ -69,7 +66,6 @@ class PowerPlantDetailPageViewModel
           detail: state.detail,
           participant: state.participant,
           tags: right.tags,
-          selectedCompanyIndex: 0,
         )
       },
     );
@@ -80,7 +76,6 @@ class PowerPlantDetailPageViewModel
       detail: state.detail,
       participant: state.participant,
       tags: state.tags,
-      selectedCompanyIndex: index,
     );
   }
 }
@@ -90,7 +85,6 @@ class PowerPlantDetailPageState {
     required this.detail,
     required this.participant,
     required this.tags,
-    required this.selectedCompanyIndex,
   });
 
   /// 電力会社詳細情報
@@ -101,7 +95,4 @@ class PowerPlantDetailPageState {
 
   /// 大切していることタグ一覧
   late final List<Tag>? tags;
-
-  /// 選択中のピックアップ電力会社index
-  late final int selectedCompanyIndex;
 }
