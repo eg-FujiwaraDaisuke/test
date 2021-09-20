@@ -20,6 +20,7 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
         tag: const TagModel(
           tagId: 1,
           tagName: 'テストタグ',
+          colorCode: '1',
         ),
         powerPlants: [
           PowerPlantModel(
@@ -185,18 +186,9 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
     try {
       const data = TagResponse(
         tags: [
-          Tag(
-            tagId: 1,
-            tagName: '使い捨てしません',
-          ),
-          Tag(
-            tagId: 2,
-            tagName: '環境負荷ゼロ',
-          ),
-          Tag(
-            tagId: 3,
-            tagName: 'フェアトレード',
-          )
+          Tag(tagId: 1, tagName: '使い捨てしません', colorCode: '1'),
+          Tag(tagId: 2, tagName: '環境負荷ゼロ', colorCode: '1'),
+          Tag(tagId: 3, tagName: 'フェアトレード', colorCode: '1')
         ],
       );
       return const Right(data);
@@ -214,6 +206,7 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
         tag: const TagModel(
           tagId: 1,
           tagName: 'テストタグ',
+          colorCode: '1'
         ),
         powerPlants: [
           PowerPlantModel(

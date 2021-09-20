@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/color_code_util.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
@@ -15,6 +17,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfileSettingTagsPage extends StatefulWidget {
@@ -67,7 +70,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
         ),
       ),
     );
-    _allTagBloc.add(const GetTagEvent());
+    _allTagBloc.add(GetTagEvent());
 
     _tagBloc = GetTagsBloc(
       const TagStateInitial(),
@@ -292,22 +295,22 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                     }
                     Loading.hide();
                     if (state is CategoryGetSucceed) {
-                      _tagBloc.add(const GetTagEvent());
+                      _tagBloc.add(GetTagEvent(userId: si<Account>().userId));
                     }
                   },
                   child: BlocBuilder<GetAllTagsBloc, TagState>(
                     builder: (context, state) {
                       if (state is CategoryGetSucceed) {
                         return Column(
-                          children: state.category
-                              .map((e) => TagsList(
-                                    tagsList: e.tags,
-                                    onSelect: _onSelectTag,
-                                    selectedTags: _selectedTags,
-                                    color: const Color(0xFFFFC2BE),
-                                    title: e.categoryName,
-                                  ))
-                              .toList(),
+                          children: state.category.map((e) {
+                            return TagsList(
+                              tagsList: e.tags,
+                              onSelect: _onSelectTag,
+                              selectedTags: _selectedTags,
+                              color: getColorFromCode(e.colorCode),
+                              title: e.categoryName,
+                            );
+                          }).toList(),
                         );
                       }
                       return Container();
@@ -338,7 +341,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _prev() {
-    Navigator.pop(context, []);
+    Navigator.pop(context, _selectedTags);
   }
 
   void _next() {

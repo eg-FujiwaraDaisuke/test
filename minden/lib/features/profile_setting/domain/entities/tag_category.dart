@@ -5,6 +5,7 @@ class TagCategory extends Equatable {
   const TagCategory({
     required this.categoryName,
     required this.tags,
+    required this.colorCode,
   });
 
   factory TagCategory.fromJson(Map<String, dynamic> elem) {
@@ -14,13 +15,14 @@ class TagCategory extends Equatable {
         [];
 
     return TagCategory(
-      categoryName: elem['categoryName'],
-      tags: tags,
-    );
+        categoryName: elem['categoryName'],
+        tags: tags,
+        colorCode: elem['colorCode']);
   }
 
   final List<Tag> tags;
   final String categoryName;
+  final String colorCode;
 
   Map<String, dynamic> toJson() {
     return {

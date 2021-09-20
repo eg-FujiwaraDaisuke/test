@@ -53,7 +53,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   late String _iconUrl;
   late String _name;
   late String _bio;
-  late List<Tag> _tags;
+  late List<Tag?> _tags;
 
   @override
   void initState() {
@@ -94,8 +94,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       Loading.hide();
       if (event is ProfileLoaded) {
         if (_tags.isNotEmpty) {
+          _tags.removeWhere((element) => element == null);
           _updateTagBloc
-              .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
+              .add(UpdateTagEvent(tags: _tags.map((e) => e!.tagId).toList()));
           return;
         }
         Navigator.pop(context, true);
@@ -700,7 +701,7 @@ class _ImportantTagsList extends StatefulWidget {
   });
 
   final List<Tag> tagsList;
-  final Function(List<Tag> url) tagHandler;
+  final Function(List<Tag?> url) tagHandler;
 
   @override
   State<StatefulWidget> createState() {
@@ -709,7 +710,7 @@ class _ImportantTagsList extends StatefulWidget {
 }
 
 class _ImportantTagsListState extends State<_ImportantTagsList> {
-  late List<Tag> _tagsList;
+  late List<Tag?> _tagsList;
 
   @override
   void initState() {
@@ -739,7 +740,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final ret = await Navigator.push<List<Tag>>(
+                  final ret = await Navigator.push<List<Tag?>>(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>

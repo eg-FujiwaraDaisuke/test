@@ -28,9 +28,9 @@ class TagRepositoryImpl with RetryProcessMixin implements TagRepository {
   }
 
   @override
-  Future<Either<Failure, List<Tag>>> getTags() async {
+  Future<Either<Failure, List<Tag>>> getTags({required String userId}) async {
     try {
-      final tags = await retryRequest(() => dataSource.getTags());
+      final tags = await retryRequest(() => dataSource.getTags(userId));
       return Right(tags);
     } on ServerException {
       return Left(ServerFailure());

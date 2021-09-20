@@ -69,7 +69,7 @@ class GetTagsBloc extends Bloc<TagEvent, TagState> {
       try {
         yield const TagLoading();
 
-        final failureOrUser = await usecase(NoParams());
+        final failureOrUser = await usecase(GetTagParams(userId: event.userId));
 
         yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
             (tags) {

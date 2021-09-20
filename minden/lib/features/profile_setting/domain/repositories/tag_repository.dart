@@ -7,7 +7,7 @@ import 'package:minden/features/profile_setting/domain/entities/tag_category.dar
 abstract class TagRepository {
   Future<Either<Failure, List<TagCategory>>> getAllTags();
 
-  Future<Either<Failure, List<Tag>>> getTags();
+  Future<Either<Failure, List<Tag>>> getTags({required String userId});
 
   Future<Either<Failure, List<Tag>>> getPlantsTags();
 

@@ -16,7 +16,11 @@ class UpdateTagEvent extends TagEvent {
 }
 
 class GetTagEvent extends TagEvent {
-  const GetTagEvent();
+  GetTagEvent({
+    this.userId,
+  });
+
+  String? userId;
 
   @override
   List<Object> get props => [];

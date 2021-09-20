@@ -15,7 +15,7 @@ abstract class TagDataSource {
 
   Future<List<TagCategoryModel>> getAllTags();
 
-  Future<List<TagModel>> getTags();
+  Future<List<TagModel>> getTags(String userId);
 
   Future<List<TagModel>> getPlantTags(String plantId);
 
@@ -84,16 +84,21 @@ class TagDataSourceImpl implements TagDataSource {
   }
 
   @override
-  Future<List<TagModel>> getTags() async {
+  Future<List<TagModel>> getTags(String userId) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
+    final url = Uri.parse(endpoint + _getTagsPath);
     final response = await client.get(
-      Uri.parse(endpoint + _getTagsPath),
+      url.replace(queryParameters: {
+        'userId': userId,
+      }),
+
       headers: headers,
     );
 
     final responseBody = utf8.decode(response.bodyBytes);
+    logD(responseBody);
     final map = json.decode(responseBody);
     final list = map['tags'] ?? [];
     final tags = list.map<TagModel>((e) {
