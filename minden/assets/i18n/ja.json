@@ -48,6 +48,8 @@
 "profile_setting_tag_description_wo" : "を\n",
 "profile_setting_tag_description_you" : "あなたが",
 "profile_setting_tag_fukidasi" : "普段気にかけていることや\n目指していること、好きなことや\n気になっていることなどでも\nOKです",
+"report" : "報告",
+"reporting" : "報告する",
 "reset_password_decide_code" : "確認コード入力",
 "reset_password_hint_text" : "新しいパスワード（8文字以上32文字以下　英字、数字から2種類以上）",
 "reset_password_re_input" : "パスワード再入力",
@@ -92,5 +94,15 @@
 "user_menu_profile" : "プロフィール",
 "user_menu_support_power_plant" : "応援した発電所",
 "user_mypage" : "マイページ",
-"user_select_plant" : "選択中の電力会社"
+"user_select_plant" : "選択中の電力会社",
+"violate_be_useful" : "頂いた情報はみんな電力アプリコミュニティをより安全なものにするために役立てさせていただきます。",
+"violate_inappropriate" : "不適切または攻撃的な内容を含んでいる",
+"violate_reason" : "このユーザーを報告する理由をお知らせください",
+"violate_rules" : "みんな電力サービス利用規約は",
+"violate_rules_here" : "こちら",
+"violate_self_injury" : "自傷行為や自殺の意思をほのめかしている",
+"violate_specifics" : "具体的な内容",
+"violate_thanks" : "ご報告ありがとうございます",
+"violate_user" : "このユーザーを報告する",
+"violate_user_name" : "規約違反ユーザー名"
 }
