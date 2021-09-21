@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -144,10 +145,14 @@ class _PowerPlantImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      child: FadeInImage.assetNetwork(
-        // TODO replace place holder
-        placeholder: 'assets/images/power_plant/power_plant_header_bg.png',
-        image: imageUrl ?? '',
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        placeholder: (context, url) {
+          return Image.asset(
+            'assets/images/power_plant/power_plant_header_bg.png',
+            fit: BoxFit.cover,
+          );
+        },
         fit: BoxFit.cover,
       ),
     );

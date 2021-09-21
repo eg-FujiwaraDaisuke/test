@@ -1,171 +1,234 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_detail_page_view_model.dart';
-import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
+import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
+import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 
-class PowerPlantDetailPage extends StatelessWidget {
+class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
     Key? key,
-    required this.powerPlantId,
+    required this.plantId,
   }) : super(key: key);
 
-  final String powerPlantId;
+  final String plantId;
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context
-          .read(powerPlantDetailPageViewModelProvider.notifier)
-          .fetchByPlantId(powerPlantId);
-    });
-    return _PowerPlantDetailPage(powerPlantId: powerPlantId);
+  State<StatefulWidget> createState() {
+    return PowerPlantDetailPageState(plantId: plantId);
   }
 }
 
 /// 発電所詳細
-class _PowerPlantDetailPage extends ConsumerWidget {
-  const _PowerPlantDetailPage({
-    Key? key,
-    required this.powerPlantId,
-  }) : super(key: key);
+class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
+  PowerPlantDetailPageState({
+    required this.plantId,
+  });
 
-  final String powerPlantId;
+  final String plantId;
+
+  late GetPowerPlantBloc _plantBloc;
+  late GetParticipantBloc _participantBloc;
+  late GetPlantTagsBloc _plantTagsBloc;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final data = watch(powerPlantDetailPageViewModelProvider);
-    if (data.detail == null || data.participant == null) {
-      return Container();
-    }
-    final images = <String>[];
-    final detail = data.detail!;
-    if (detail.plantImage1.isNotEmpty) {
-      images.add(detail.plantImage1);
-    }
-    if (detail.plantImage2?.isNotEmpty ?? false) {
-      images.add(detail.plantImage2!);
-    }
-    if (detail.plantImage3?.isNotEmpty ?? false) {
-      images.add(detail.plantImage3!);
-    }
-    if (detail.plantImage4?.isNotEmpty ?? false) {
-      images.add(detail.plantImage4!);
-    }
+  void initState() {
+    super.initState();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            flexibleSpace: FlexibleSpaceBar(
-              background: PowerPlantPickup(
-                images: images,
-              ),
-            ),
-            expandedHeight: 270,
-            backgroundColor: Colors.transparent,
+    _plantBloc = GetPowerPlantBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlant(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              <Widget>[
-                Stack(
-                  children: [
-                    // 画像
-                    SizedBox(
-                      height: 140,
-                      width: double.infinity,
-                      child: Image.asset(
-                        'assets/images/power_plant/power_plant_header_bg.png',
-                        fit: BoxFit.fitWidth,
-                      ),
-                    ),
-                    // メッセージ
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 28,
-                        top: 24,
-                        right: 24,
-                        bottom: 56,
-                      ),
-                      child: Text(
-                        data.detail?.catchphrase ?? '',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF575292),
-                          height: 1.5,
+        ),
+      ),
+    );
+    _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
+
+    _participantBloc = GetParticipantBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlantParticipant(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
+
+    _plantTagsBloc = GetPlantTagsBloc(
+      const TagStateInitial(),
+      GetPlantTags(
+        TagRepositoryImpl(
+          dataSource: TagDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
+  }
+
+  @override
+  void dispose() {
+    _plantBloc.close();
+    _participantBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _plantBloc,
+      child: BlocListener<GetPowerPlantBloc, PowerPlantState>(
+        listener: (context, state) {
+          if (state is PowerPlantLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is PowerPlantLoaded) {
+              final images = <String>[];
+              final detail = state.powerPlant;
+              if (detail.plantImage1.isNotEmpty) {
+                images.add(detail.plantImage1);
+              }
+              if (detail.plantImage2?.isNotEmpty ?? false) {
+                images.add(detail.plantImage2!);
+              }
+              if (detail.plantImage3?.isNotEmpty ?? false) {
+                images.add(detail.plantImage3!);
+              }
+              if (detail.plantImage4?.isNotEmpty ?? false) {
+                images.add(detail.plantImage4!);
+              }
+
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: PowerPlantPickup(
+                          images: images,
                         ),
+                      ),
+                      expandedHeight: 270,
+                      backgroundColor: Colors.transparent,
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        <Widget>[
+                          Stack(
+                            children: [
+                              // メッセージ
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 28,
+                                  top: 24,
+                                  right: 24,
+                                  bottom: 56,
+                                ),
+                                child: Text(
+                                  detail.catchphrase ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF575292),
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          _generateDetail(detail),
+                          // この発電所を応援する
+                          Container(
+                            height: 82,
+                            padding: const EdgeInsets.only(bottom: 20),
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              colors: [
+                                Color(0xFFFF8C00),
+                                Color(0xFFFFC277),
+                              ],
+                              stops: [
+                                0.0,
+                                1.0,
+                              ],
+                            )),
+                            child: Center(
+                              child: InkWell(
+                                child: OutlinedButton(
+                                  onPressed: () => {logD('この発電所を応援する')},
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(42),
+                                    ),
+                                    side: const BorderSide(color: Colors.white),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 48, vertical: 12),
+                                    child: Text(
+                                      'この発電所を応援する',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'NotoSansJP',
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                        height: 1.48,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                _generateDetail(
-                    data.detail!, data.participant!, data.tags ?? []),
-                // この発電所を応援する
-                Container(
-                  height: 82,
-                  padding: const EdgeInsets.only(bottom: 20),
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Color(0xFFFF8C00),
-                      Color(0xFFFFC277),
-                    ],
-                    stops: [
-                      0.0,
-                      1.0,
-                    ],
-                  )),
-                  child: Center(
-                    child: InkWell(
-                      child: OutlinedButton(
-                        onPressed: () => {logD('この発電所を応援する')},
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(42),
-                          ),
-                          side: const BorderSide(color: Colors.white),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 48, vertical: 12),
-                          child: Text(
-                            'この発電所を応援する',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              height: 1.48,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+              );
+            }
+            return Scaffold(
+              backgroundColor: Colors.white,
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _generateDetail(
     PowerPlantDetail detail,
-    PowerPlantParticipant participant,
-    List<Tag> tags,
   ) {
     return Column(
       children: [
@@ -247,7 +310,7 @@ class _PowerPlantDetailPage extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 45),
-              _generateDetailTags(participant, tags),
+              _generateDetailParticipant(),
               _generateDetailMessages(detail),
               const SizedBox(height: 47),
             ],
@@ -257,52 +320,79 @@ class _PowerPlantDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _generateDetailTags(
-    PowerPlantParticipant participant,
-    List<Tag> tags,
-  ) {
-    return Column(
-      children: [
-        const Divider(
-          height: 1,
-          color: Color(0xFFE2E2E2),
+  Widget _generateDetailParticipant() {
+    return BlocProvider.value(
+      value: _participantBloc,
+      child: BlocListener<GetParticipantBloc, PowerPlantState>(
+        listener: (context, state) {},
+        child: BlocBuilder<GetParticipantBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is ParticipantLoaded) {
+              return Column(
+                children: [
+                  const Divider(
+                    height: 1,
+                    color: Color(0xFFE2E2E2),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'この発電所を応援しているみんなが大切にしていること',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF575292),
+                      height: 1.43,
+                    ),
+                  ),
+                  // 応援ユーザー
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ParticipantUserIconGroup(participant: state.participant),
+                    ],
+                  ),
+                  // 大切にしていることタグ
+                  const SizedBox(height: 16),
+                  _generateTag(),
+                  const SizedBox(height: 16),
+                ],
+              );
+            }
+            return Container();
+          },
         ),
-        const SizedBox(height: 10),
-        const Text(
-          'この発電所を応援しているみんなが大切にしていること',
-          style: TextStyle(
-            fontSize: 15,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF575292),
-            height: 1.43,
-          ),
+      ),
+    );
+  }
+
+  Widget _generateTag() {
+    return BlocProvider.value(
+      value: _plantTagsBloc,
+      child: BlocListener<GetPlantTagsBloc, TagState>(
+        listener: (context, state) {},
+        child: BlocBuilder<GetPlantTagsBloc, TagState>(
+          builder: (context, state) {
+            if (state is TagGetSucceed) {
+              return Container(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  spacing: 5,
+                  runSpacing: 10,
+                  children: state.tags
+                      .map((tag) => TagListItem(
+                            tag: tag,
+                            onSelect: () {},
+                            isSelected: true,
+                          ))
+                      .toList(),
+                ),
+              );
+            }
+            return Container();
+          },
         ),
-        // 応援ユーザー
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ParticipantUserIconGroup(participant: participant),
-          ],
-        ),
-        // 大切にしていることタグ
-        const SizedBox(height: 16),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Wrap(
-            spacing: 5,
-            runSpacing: 10,
-            children: tags
-                .map((tag) => TagListItem(
-                      tag: tag,
-                      onSelect: () {},
-                      isSelected: true,
-                    ))
-                .toList(),
-          ),
-        ),
-        const SizedBox(height: 16),
-      ],
+      ),
     );
   }
 

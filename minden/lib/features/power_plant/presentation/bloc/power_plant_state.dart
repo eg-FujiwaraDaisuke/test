@@ -1,0 +1,60 @@
+import 'package:equatable/equatable.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+
+abstract class PowerPlantState extends Equatable {
+  const PowerPlantState();
+}
+
+class PowerPlantStateInitial extends PowerPlantState {
+  const PowerPlantStateInitial();
+
+  @override
+  List<Object> get props => [];
+}
+
+class PowerPlantsLoaded extends PowerPlantState {
+  const PowerPlantsLoaded(this.powerPlants);
+
+  final PowerPlantsResponse powerPlants;
+
+  @override
+  List<Object> get props => [powerPlants];
+}
+
+class PowerPlantLoaded extends PowerPlantState {
+  const PowerPlantLoaded(this.powerPlant);
+
+  final PowerPlantDetail powerPlant;
+
+  @override
+  List<Object> get props => [powerPlant];
+}
+
+class ParticipantLoaded extends PowerPlantState {
+  const ParticipantLoaded(this.participant);
+
+  final PowerPlantParticipant participant;
+
+  @override
+  List<Object> get props => [participant];
+}
+
+class PowerPlantLoading extends PowerPlantState {
+  const PowerPlantLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class PowerPlantLoadError extends PowerPlantState {
+  const PowerPlantLoadError(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}

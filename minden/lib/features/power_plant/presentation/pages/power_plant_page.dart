@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
 class PowerPlantHomeTabData {
   PowerPlantHomeTabData({
@@ -19,19 +17,13 @@ class PowerPlantHomePage extends StatelessWidget {
   PowerPlantHomePage({Key? key}) : super(key: key);
 
   final tabs = [
+    PowerPlantHomeTabData(tabName: '発電所一覧', tabPage: (_) => PowerPlantList()),
     PowerPlantHomeTabData(
-        tabName: '発電所一覧', tabPage: (_) => const PowerPlantList()),
-    PowerPlantHomeTabData(
-        tabName: '発電所を探す', tabPage: (_) => PowerPlantSearchByTag()),
+        tabName: '発電所を探す', tabPage: (_) => const PowerPlantSearchByTag()),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // TODO 初期データ取得
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(powerPlantPageViewModelProvider.notifier).fetch(null);
-    });
-
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(

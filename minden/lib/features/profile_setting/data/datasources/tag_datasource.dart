@@ -93,7 +93,6 @@ class TagDataSourceImpl implements TagDataSource {
       url.replace(queryParameters: {
         'userId': userId,
       }),
-
       headers: headers,
     );
 
@@ -119,13 +118,24 @@ class TagDataSourceImpl implements TagDataSource {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
+    final url = Uri.parse(endpoint + _getPlantTagsPath);
     final response = await client.get(
-      Uri.parse(endpoint + _getPlantTagsPath),
+      url.replace(queryParameters: {
+        'plantId': plantId,
+      }),
       headers: headers,
     );
 
+    final responseBody = utf8.decode(response.bodyBytes);
+    logD(responseBody);
+    final map = json.decode(responseBody);
+    final list = map['tags'] ?? [];
+    final tags = list.map<TagModel>((e) {
+      return TagModel.fromJson(e);
+    }).toList();
+
     if (response.statusCode == 200) {
-      return [TagModel.fromJson({})];
+      return tags;
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {
@@ -143,8 +153,16 @@ class TagDataSourceImpl implements TagDataSource {
       headers: headers,
     );
 
+    final responseBody = utf8.decode(response.bodyBytes);
+    logD(responseBody);
+    final map = json.decode(responseBody);
+    final list = map['tags'] ?? [];
+    final tags = list.map<TagModel>((e) {
+      return TagModel.fromJson(e);
+    }).toList();
+
     if (response.statusCode == 200) {
-      return [TagModel.fromJson({})];
+      return tags;
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {

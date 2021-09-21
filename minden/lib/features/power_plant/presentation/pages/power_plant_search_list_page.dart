@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/utile.dart';
 
@@ -14,12 +21,6 @@ class PowerPlantSearchListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context
-          .read(powerPlantPageViewModelProvider.notifier)
-          .fetch(selectTag.tagId.toString());
-    });
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -136,7 +137,9 @@ class PowerPlantSearchListPage extends StatelessWidget {
                         letterSpacing: calcLetterSpacing(letter: 4)),
                   ),
                   const SizedBox(height: 31),
-                  const _PowerPlantSeachList(),
+                  _PowerPlantSearchList(
+                    tagId: selectTag.tagId.toString(),
+                  ),
                 ],
               ),
             ),
@@ -148,26 +151,78 @@ class PowerPlantSearchListPage extends StatelessWidget {
 }
 
 /// 発電所一覧
-class _PowerPlantSeachList extends ConsumerWidget {
-  const _PowerPlantSeachList({Key? key}) : super(key: key);
+class _PowerPlantSearchList extends StatefulWidget {
+  const _PowerPlantSearchList({required this.tagId});
+
+  final String tagId;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final data = watch(powerPlantPageViewModelProvider);
+  State<StatefulWidget> createState() {
+    return _PowerPlantSearchListState();
+  }
+}
 
-    var index = 0;
-    final plants = [];
-    data.value.forEach((element) {
-      final direction = searchDirectionByIndex(index);
-      index++;
-      plants.add(PowerPlantListItem(
-        key: ValueKey(element.plantId),
-        powerPlant: element,
-        direction: direction,
-      ));
-    });
-    return Column(
-      children: [...plants],
+class _PowerPlantSearchListState extends State<_PowerPlantSearchList> {
+  late GetPowerPlantsBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bloc = GetPowerPlantsBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlants(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _bloc.add(GetPowerPlantsEvent(tagId: widget.tagId));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocListener<GetPowerPlantsBloc, PowerPlantState>(
+        listener: (context, state) {
+          if (state is PowerPlantLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetPowerPlantsBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is PowerPlantsLoaded) {
+              var index = 0;
+              final plants = [];
+              state.powerPlants.powerPlants.forEach((element) {
+                final direction = searchDirectionByIndex(index);
+                index++;
+                plants.add(PowerPlantListItem(
+                  key: ValueKey(element.plantId),
+                  powerPlant: element,
+                  direction: direction,
+                ));
+              });
+              return Column(
+                children: [...plants],
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 

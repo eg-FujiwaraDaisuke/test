@@ -1,52 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:minden/core/ext/logger_ext.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
-import 'package:minden/features/power_plant/presentation/viewmodel/power_plant_page_view_model.dart';
 
-class SupportHistoryPowerPlantList extends StatelessWidget {
+class SupportHistoryPowerPlantList extends StatefulWidget {
   const SupportHistoryPowerPlantList(this.historyType);
 
   final String historyType;
 
   @override
-  Widget build(BuildContext context) {
-
-    logD(historyType);
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context
-          .read(powerPlantPageViewModelProvider.notifier)
-          .historyFetch(historyType);
-    });
-    return const _SupportHistoryPowerPlantList();
+  State<StatefulWidget> createState() {
+    return _SupportHistoryPowerPlantListState();
   }
 }
 
-class _SupportHistoryPowerPlantList extends ConsumerWidget {
-  const _SupportHistoryPowerPlantList({Key? key}) : super(key: key);
+class _SupportHistoryPowerPlantListState
+    extends State<SupportHistoryPowerPlantList> {
+  late GetPowerPlantsHistoryBloc _bloc;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final data = watch(powerPlantPageViewModelProvider);
+  void initState() {
+    super.initState();
 
-    return ListView.builder(
-      itemCount: data.value.length,
-      itemBuilder: (BuildContext context, int index) {
-        final powerPlant = data.value[index];
-        final direction = searchDirectionByIndex(index);
+    _bloc = GetPowerPlantsHistoryBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlantsHistory(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
 
-        return PowerPlantListItem(
-          key: ValueKey(powerPlant.plantId),
-          powerPlant: powerPlant,
-          direction: direction,
-          isShowCatchphras: false,
-          aspectRatio: 340 / 289,
-          thumbnailImageHeight: 226,
-          supportedData: '2021年8月',
-          reservedDate: '2021年9月',
-        );
-      },
+    _bloc.add(GetPowerPlantsEvent(historyType: widget.historyType));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
+        listener: (context, state) {
+          if (state is PowerPlantLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is PowerPlantsLoaded) {
+              return ListView.builder(
+                itemCount: state.powerPlants.powerPlants.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final powerPlant = state.powerPlants.powerPlants[index];
+                  final direction = searchDirectionByIndex(index);
+
+                  return PowerPlantListItem(
+                    key: ValueKey(powerPlant.plantId),
+                    powerPlant: powerPlant,
+                    direction: direction,
+                    isShowCatchphras: false,
+                    aspectRatio: 340 / 289,
+                    thumbnailImageHeight: 226,
+                    supportedData: '2021年8月',
+                    reservedDate: '2021年9月',
+                  );
+                },
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 
