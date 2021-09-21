@@ -4,7 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:minden/core/env/config.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
@@ -112,10 +112,15 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFF8C00),
       body: BlocProvider.value(
         value: _bloc,
         child: Center(
-          child: Text(Config.getEnvironmentString()),
+          child: SvgPicture.asset(
+            'assets/images/login/title.svg',
+            width: 212,
+            height: 60,
+          ),
         ),
       ),
     );
