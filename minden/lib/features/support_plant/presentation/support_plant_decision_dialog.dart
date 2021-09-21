@@ -94,7 +94,7 @@ class SupportPlantDecisionDialog {
                               i18nTranslate(
                                   context, 'support_plant_decide_alright'),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF575292),
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',
@@ -222,7 +222,7 @@ class SupportPlantDecisionDialog {
                 child: Text(
                   powerPlant.name,
                   style: TextStyle(
-                    color: Color(0xFF575292),
+                    color: const Color(0xFF575292),
                     fontSize: 13,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,

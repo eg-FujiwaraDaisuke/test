@@ -479,8 +479,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    // TODO ここ二行にしたい
                     message,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 14,
