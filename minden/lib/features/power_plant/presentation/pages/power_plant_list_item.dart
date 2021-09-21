@@ -165,7 +165,6 @@ class PowerPlantListItem extends StatelessWidget {
             width: 418,
             height: thumbnailImageHeight,
             child: FadeInImage.assetNetwork(
-              // TODO replace place holder
               placeholder:
                   'assets/images/power_plant/power_plant_header_bg.png',
               image: imageUrl,

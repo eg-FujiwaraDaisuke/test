@@ -136,7 +136,7 @@ class PowerPlantSearchListPage extends StatelessWidget {
                         letterSpacing: calcLetterSpacing(letter: 4)),
                   ),
                   const SizedBox(height: 31),
-                  const _PowerPlantSeachList(),
+                  const _PowerPlantSearchList(),
                 ],
               ),
             ),
@@ -148,8 +148,8 @@ class PowerPlantSearchListPage extends StatelessWidget {
 }
 
 /// 発電所一覧
-class _PowerPlantSeachList extends ConsumerWidget {
-  const _PowerPlantSeachList({Key? key}) : super(key: key);
+class _PowerPlantSearchList extends ConsumerWidget {
+  const _PowerPlantSearchList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
