@@ -227,7 +227,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ),
               );
             }
-            return Container();
+            return Scaffold(
+              backgroundColor: Colors.white,
+            );
           },
         ),
       ),
