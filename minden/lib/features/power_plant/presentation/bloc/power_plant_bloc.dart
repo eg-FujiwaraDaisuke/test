@@ -33,6 +33,33 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   }
 }
 
+class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
+  GetPowerPlantsHistoryBloc(PowerPlantState initialState, this.usecase)
+      : super(initialState);
+  final GetPowerPlantsHistory usecase;
+
+  @override
+  Stream<PowerPlantState> mapEventToState(
+      PowerPlantEvent event,
+      ) async* {
+    if (event is GetPowerPlantsEvent) {
+      try {
+        yield const PowerPlantLoading();
+
+        final failureOrUser =
+        await usecase(GetPowerPlantParams(historyType: event.historyType));
+
+        yield failureOrUser.fold<PowerPlantState>(
+                (failure) => throw ServerFailure(), (plants) {
+          return PowerPlantsLoaded(plants);
+        });
+      } catch (e) {
+        yield PowerPlantLoadError(e.toString());
+      }
+    }
+  }
+}
+
 class GetPowerPlantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   GetPowerPlantBloc(PowerPlantState initialState, this.usecase)
       : super(initialState);
