@@ -145,9 +145,9 @@ class _SupportPlantDialogDebugPageState
             ),
             ElevatedButton(
               onPressed: () {
-                SupportParticipantsDialog(
-                        context: context, participants: participantsDammyData)
-                    .showDialog();
+                // SupportParticipantsDialog(
+                //         context: context, participants: participantsDammyData)
+                //     .showDialog();
               },
               child: Text('サポートしてる人たち'),
             ),

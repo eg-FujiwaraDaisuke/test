@@ -21,6 +21,7 @@ import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
+import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
@@ -346,11 +347,20 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     ),
                   ),
                   // 応援ユーザー
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ParticipantUserIconGroup(participant: state.participant),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      SupportParticipantsDialog(
+                        context: context,
+                        participants: state.participant,
+                      ).showDialog();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ParticipantUserIconGroup(
+                            participant: state.participant),
+                      ],
+                    ),
                   ),
                   // 大切にしていることタグ
                   const SizedBox(height: 16),
