@@ -101,6 +101,7 @@ flutter:
     - assets/images/tutorial/
     - assets/images/profile_setting/
     - assets/images/message/
+    - assets/images/violate/
     - assets/images/sample/
     - assets/fonts/
   fonts:
