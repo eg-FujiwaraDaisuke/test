@@ -144,15 +144,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                         <Widget>[
                           Stack(
                             children: [
-                              // 画像
-                              SizedBox(
-                                height: 140,
-                                width: double.infinity,
-                                child: Image.asset(
-                                  'assets/images/power_plant/power_plant_header_bg.png',
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
                               // メッセージ
                               Padding(
                                 padding: const EdgeInsets.only(

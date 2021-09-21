@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
@@ -71,7 +72,7 @@ class PowerPlantListItem extends StatelessWidget {
                             Flexible(
                               flex: 2,
                               child: Text(
-                                powerPlant.name ?? '',
+                                powerPlant.name,
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontFamily: 'NotoSansJP',
@@ -164,10 +165,14 @@ class PowerPlantListItem extends StatelessWidget {
           child: SizedBox(
             width: 418,
             height: thumbnailImageHeight,
-            child: FadeInImage.assetNetwork(
-              placeholder:
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) {
+                return Image.asset(
                   'assets/images/power_plant/power_plant_header_bg.png',
-              image: imageUrl,
+                  fit: BoxFit.cover,
+                );
+              },
               fit: BoxFit.cover,
             ),
           ),
