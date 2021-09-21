@@ -414,12 +414,26 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 10),
-        _generateExpandableText(detail.ownerMessage ?? ''),
+        _generateExpandableText(detail.ownerMessage ?? '', 'オーナーより'),
+        const SizedBox(height: 10),
+        const Divider(
+          height: 1,
+          color: Color(0xFFE2E2E2),
+        ),
+        const SizedBox(height: 17),
+        _generateExpandableText(detail.aboutPlant ?? '', 'くわしく'),
+        const SizedBox(height: 10),
+        const Divider(
+          height: 1,
+          color: Color(0xFFE2E2E2),
+        ),
+        const SizedBox(height: 17),
+        _generateExpandableText(detail.prospect ?? '', 'これから'),
       ],
     );
   }
 
-  Widget _generateExpandableText(String message) {
+  Widget _generateExpandableText(String message, String title) {
     return ExpandableNotifier(
       // <-- Provides ExpandableController to its children
       child: Column(
@@ -432,10 +446,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'オーナーより',
-                          style: TextStyle(
+                          title,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w700,
@@ -465,10 +479,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
+                    // TODO ここ二行にしたい
                     message,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontFamily: 'NotoSansJP',
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF7D7E7F),
@@ -482,9 +497,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'オーナーより',
-                    style: TextStyle(
+                  Text(
+                    title,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'NotoSansJP',
                       fontWeight: FontWeight.w700,
@@ -501,7 +516,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
               Text(
                 message,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontFamily: 'NotoSansJP',
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF7D7E7F),
