@@ -18,9 +18,11 @@ class UpdateTagEvent extends TagEvent {
 class GetTagEvent extends TagEvent {
   GetTagEvent({
     this.userId,
+    this.plantId,
   });
 
   String? userId;
+  String? plantId;
 
   @override
   List<Object> get props => [];

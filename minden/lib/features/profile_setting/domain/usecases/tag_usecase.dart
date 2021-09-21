@@ -41,12 +41,36 @@ class GetTags extends UseCase<List<Tag>, GetTagParams> {
   }
 }
 
+class GetPlantTags extends UseCase<List<Tag>, GetTagParams> {
+  GetPlantTags(this.repository);
+
+  final TagRepository repository;
+
+  @override
+  Future<Either<Failure, List<Tag>>> call(GetTagParams params) async {
+    return await repository.getPlantTags(plantId: params.plantId!);
+  }
+}
+
+class GetPlantsTags extends UseCase<List<Tag>, NoParams> {
+  GetPlantsTags(this.repository);
+
+  final TagRepository repository;
+
+  @override
+  Future<Either<Failure, List<Tag>>> call(NoParams params) async {
+    return await repository.getPlantsTags();
+  }
+}
+
 class GetTagParams extends Equatable {
   GetTagParams({
     this.userId,
+    this.plantId,
   });
 
   String? userId;
+  String? plantId;
 
   @override
   List<Object> get props => [];

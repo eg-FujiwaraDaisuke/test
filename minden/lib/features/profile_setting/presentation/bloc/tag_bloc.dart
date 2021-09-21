@@ -81,3 +81,53 @@ class GetTagsBloc extends Bloc<TagEvent, TagState> {
     }
   }
 }
+
+class GetPlantTagsBloc extends Bloc<TagEvent, TagState> {
+  GetPlantTagsBloc(TagState initialState, this.usecase) : super(initialState);
+  final GetPlantTags usecase;
+
+  @override
+  Stream<TagState> mapEventToState(
+      TagEvent event,
+      ) async* {
+    if (event is GetTagEvent) {
+      try {
+        yield const TagLoading();
+
+        final failureOrUser = await usecase(GetTagParams(plantId: event.plantId));
+
+        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
+                (tags) {
+              return TagGetSucceed(tags);
+            });
+      } catch (e) {
+        yield TagUpdateError(e.toString());
+      }
+    }
+  }
+}
+
+class GetPlantsTagsBloc extends Bloc<TagEvent, TagState> {
+  GetPlantsTagsBloc(TagState initialState, this.usecase) : super(initialState);
+  final GetPlantsTags usecase;
+
+  @override
+  Stream<TagState> mapEventToState(
+      TagEvent event,
+      ) async* {
+    if (event is GetTagEvent) {
+      try {
+        yield const TagLoading();
+
+        final failureOrUser = await usecase(NoParams());
+
+        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
+                (tags) {
+              return TagGetSucceed(tags);
+            });
+      } catch (e) {
+        yield TagUpdateError(e.toString());
+      }
+    }
+  }
+}
