@@ -25,7 +25,7 @@ class PowerPlantSearchByTag extends StatefulWidget {
 }
 
 class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
-  final List<Tag?> _selectedTags = [];
+  List<Tag?> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
   late GetTagsBloc _tagBloc;
 
@@ -206,7 +206,9 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
       builder: (context) => PowerPlantSearchListPage(selectTag: tag),
       settings: const RouteSettings(name: '/home/top/seach/powerPlant'),
     );
-    Navigator.push(context, route);
+    Navigator.push(context, route).then((value) => setState(() {
+          _selectedTags = [];
+        }));
   }
 
   Widget _buildCharacter() {
