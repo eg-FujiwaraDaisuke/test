@@ -81,7 +81,7 @@ class TokenDataSourceImpl implements TokenDataSource {
       final responseBody = utf8.decode(response.bodyBytes);
       return TokenModel.fromJson(json.decode(responseBody));
     } else {
-      throw ServerException();
+      throw RefreshTokenExpiredException();
     }
   }
 }

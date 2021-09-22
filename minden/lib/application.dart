@@ -16,8 +16,12 @@ import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/data/datasources/user_data_source.dart';
 import 'package:minden/features/login/data/repositories/login_repository_impl.dart';
+import 'package:minden/features/login/data/repositories/logout_repository_impl.dart';
 import 'package:minden/features/login/domain/usecases/login_usecase.dart';
+import 'package:minden/features/login/domain/usecases/logout_usecase.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
@@ -70,6 +74,16 @@ class Application extends StatelessWidget {
             ),
           ),
         ),
+        BlocProvider<LogoutBloc>(
+          create: (BuildContext context) => LogoutBloc(
+            LogoutStateInitial(),
+            LogoutUser(
+              LogoutRepositoryImpl(
+                userDataSource: UserDataSourceImpl(client: http.Client()),
+              ),
+            ),
+          ),
+        )
       ],
       child: MaterialApp(
         builder: BotToastInit(),

@@ -1,10 +1,15 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
 import 'package:minden/features/debug/debug_push_message_page.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/injection_container.dart';
 
 // FCMプッシュ通知の遷移周りの初期化を行っています。
@@ -15,7 +20,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AfterLayoutMixin {
   TabItem _currentTab = TabItem.home;
 
   final _navigatorKeys = {
@@ -78,6 +83,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async =>
@@ -105,5 +115,16 @@ class _HomePageState extends State<HomePage> {
         tabItem: tabItem,
       ),
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    BlocProvider.of<LogoutBloc>(context).stream.listen((event) {
+      final route = NoAnimationMaterialPageRoute(
+        builder: (context) => LoginPage(),
+        settings: const RouteSettings(name: '/login'),
+      );
+      Navigator.pushReplacement(context, route);
+    });
   }
 }
