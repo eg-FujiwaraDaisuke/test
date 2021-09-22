@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
@@ -62,6 +65,19 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
+
+    _plantBloc.stream.listen((event) async {
+      if (event is PowerPlantLoadError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+                  (_) => false);
+        }
+      }
+    });
+
     _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
 
     _participantBloc = GetParticipantBloc(

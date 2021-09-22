@@ -6,6 +6,9 @@ import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -42,6 +45,18 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+    
+    _bloc.stream.listen((event) async {
+      if (event is ProfileLoadError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+              (_) => false);
+        }
+      }
+    });
 
     _bloc.add(GetProfileEvent(userId: si<Account>().userId));
   }
