@@ -14,12 +14,13 @@ class SupportPlantDecisionDialog {
   SupportPlantDecisionDialog({
     required this.context,
     required this.selectPowerPlant,
+    required this.registPowerPlants,
     required this.user,
   }) : super();
 
   final BuildContext context;
   final PowerPlant selectPowerPlant;
-  final List<RegistPowerPlant> registPowerPlants = [];
+  final List<RegistPowerPlant> registPowerPlants;
   final User user;
 
   Future<void> showDialog() async {

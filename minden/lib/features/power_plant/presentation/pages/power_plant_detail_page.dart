@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/ext/logger_ext.dart';
-import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
@@ -15,6 +12,7 @@ import 'package:minden/features/power_plant/data/repositories/power_plant_reposi
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
@@ -57,6 +55,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
+  List<RegistPowerPlant> _registPowerPlants = [];
 
   @override
   void initState() {
@@ -227,41 +226,79 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                       plantImage1: state.powerPlant.plantImage1,
                                     );
 
-                                    await SupportPlantDecisionDialog(
-                                      context: context,
-                                      selectPowerPlant: selectPowerPlant,
-                                      user: user,
-                                    ).showDialog();
+                                    setState(() {
+                                      _registPowerPlants = user
+                                          .profile.selectedPowerPlants
+                                          .map((selectedPowerPlant) =>
+                                              RegistPowerPlant(
+                                                  isRegist: true,
+                                                  powerPlant:
+                                                      selectedPowerPlant))
+                                          .toList();
+                                    });
 
                                     // 契約件数１応援０の場合
-                                    // if (user.supportableNumber >
-                                    //     user.profile.supports.length) {
-                                    //   await SupportPlantDecisionDialog(
-                                    //     context: context,
-                                    //     selectPowerPlant: selectPowerPlant,
-                                    //     user: user,
-                                    //   ).showDialog();
-                                    // } else {
-                                    // final isSelected =
-                                    //     await SupportPlantSelectDialog(
-                                    //             context: context,
-                                    //             selectPowerPlant:
-                                    //                 selectPowerPlantDammy,
-                                    //             user: user,
-                                    //             registPowerPlants:
-                                    //                 registPowerPlants)
-                                    //         .showDialog();
-                                    // isSelected!
-                                    //     ? await SupportPlantDecisionDialog(
-                                    //         context: context,
-                                    //         selectPowerPlant:
-                                    //             selectPowerPlantDammy,
-                                    //         user: user,
-                                    //         registPowerPlants:
-                                    //             registPowerPlants,
-                                    //       ).showDialog()
-                                    //     : null;
-                                    // }
+                                    if (user.supportableNumber >
+                                        user.profile.selectedPowerPlants
+                                            .length) {
+                                      await SupportPlantDecisionDialog(
+                                        context: context,
+                                        selectPowerPlant: selectPowerPlant,
+                                        registPowerPlants: _registPowerPlants,
+                                        user: user,
+                                      ).showDialog();
+                                    } else {
+                                      // 応援プラントを選択する
+                                      final isSelected =
+                                          await SupportPlantSelectDialog(
+                                        context: context,
+                                        selectPowerPlant: selectPowerPlant,
+                                        registPowerPlants: _registPowerPlants,
+                                        user: user,
+                                      ).showDialog();
+
+                                      // 応援プラントを選択しなかった場合、stateの中身をリセット
+                                      isSelected ??
+                                          setState(
+                                            () {
+                                              _registPowerPlants = user
+                                                  .profile.selectedPowerPlants
+                                                  .map(
+                                                    (selectedPowerPlant) =>
+                                                        RegistPowerPlant(
+                                                      isRegist: true,
+                                                      powerPlant:
+                                                          selectedPowerPlant,
+                                                    ),
+                                                  )
+                                                  .toList();
+                                            },
+                                          );
+
+                                      // 応援プラントを選択した場合、確定ダイアログに飛ばす
+                                      isSelected!
+                                          ? await SupportPlantDecisionDialog(
+                                              context: context,
+                                              selectPowerPlant:
+                                                  selectPowerPlant,
+                                              registPowerPlants:
+                                                  _registPowerPlants,
+                                              user: user,
+                                            ).showDialog()
+                                          : setState(() {
+                                              _registPowerPlants = user
+                                                  .profile.selectedPowerPlants
+                                                  .map(
+                                                    (selectedPowerPlant) =>
+                                                        RegistPowerPlant(
+                                                      isRegist: true,
+                                                      powerPlant:
+                                                          selectedPowerPlant,
+                                                    ),
+                                                  )
+                                                  .toList();
+                                            });
+                                    }
                                   },
                                   style: OutlinedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
