@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 class Loading {
   static void show(BuildContext context) {
     BotToast.showCustomLoading(
-      toastBuilder: (_) => CircularProgressIndicator(
-        valueColor:
-            AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+      toastBuilder: (_) => const CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.black12),
       ),
+      backgroundColor: Colors.transparent,
     );
   }
 
