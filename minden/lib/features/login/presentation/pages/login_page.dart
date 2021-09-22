@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_name_page.dart';
+import 'package:minden/injection_container.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocProvider.value(
       value: BlocProvider.of<LoginBloc>(context),
       child: BlocListener<LoginBloc, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginLoading) {
             Loading.show(context);
             return;
@@ -27,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
           Loading.hide();
 
           if (state is LoginLoaded) {
+            await si<Account>().prepare();
+
             if (state.user.isNewbie) {
               final route = NoAnimationMaterialPageRoute(
                 builder: (context) => ProfileSettingNamePage(),

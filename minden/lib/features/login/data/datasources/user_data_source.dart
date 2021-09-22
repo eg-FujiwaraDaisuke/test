@@ -69,7 +69,7 @@ class UserDataSourceImpl implements UserDataSource {
     await si<EncryptionTokenDataSourceImpl>().setAppToken('');
     await si<EncryptionTokenDataSourceImpl>().setRefreshToken('');
 
-    await si<EncryptionTokenDataSourceImpl>().storeUser('');
+    await si<EncryptionTokenDataSourceImpl>().storeUser('{}');
     return Success();
   }
 }

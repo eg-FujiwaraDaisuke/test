@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -106,7 +107,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        await _toHome();
+                        await _toLogin();
                       },
                       child: Opacity(
                         opacity: _currentIndex != tutorialData.length - 1
@@ -145,7 +146,7 @@ class _TutorialPageState extends State<TutorialPage> {
                     else
                       GestureDetector(
                         onTap: () async {
-                          await _toHome();
+                          await _toLogin();
                         },
                         child: Text(
                           i18nTranslate(context, 'start'),
@@ -189,12 +190,12 @@ class _TutorialPageState extends State<TutorialPage> {
     );
   }
 
-  Future<void> _toHome() async {
+  Future<void> _toLogin() async {
     await _requestPermissions();
     await _doneTutorial();
     final route = NoAnimationMaterialPageRoute(
-      builder: (context) => HomePage(),
-      settings: const RouteSettings(name: '/home'),
+      builder: (context) => LoginPage(),
+      settings: const RouteSettings(name: '/login'),
     );
     Navigator.pushReplacement(context, route);
   }
