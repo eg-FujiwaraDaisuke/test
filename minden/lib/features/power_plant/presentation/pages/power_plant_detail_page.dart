@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +9,10 @@ import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -50,7 +54,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   });
 
   final String plantId;
-
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
@@ -194,45 +197,72 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                               child: InkWell(
                                 child: OutlinedButton(
                                   onPressed: () async {
-                                    final user = await si<
+                                    final jsonData = await si<
                                             EncryptionTokenDataSourceImpl>()
-                                        .getUser();
+                                        .restoreUser();
+                                    final userJson = json.decode(jsonData);
+                                    final user = User.fromJson(userJson);
 
-                                    logD('${user}');
+                                    final selectPowerPlant = PowerPlant(
+                                      plantId: state.powerPlant.plantId,
+                                      areaCode: state.powerPlant.areaCode,
+                                      name: state.powerPlant.name ?? '',
+                                      viewAddress:
+                                          state.powerPlant.viewAddress ?? '',
+                                      voltageType: state.powerPlant.voltageType,
+                                      powerGenerationMethod: state.powerPlant
+                                              .powerGenerationMethod ??
+                                          '',
+                                      renewableType:
+                                          state.powerPlant.renewableType,
+                                      generationCapacity:
+                                          state.powerPlant.generationCapacity,
+                                      displayOrder:
+                                          state.powerPlant.displayOrder,
+                                      isRecommend: state.powerPlant.isRecommend,
+                                      ownerName:
+                                          state.powerPlant.ownerMessage ?? '',
+                                      startDate: state.powerPlant.startDate,
+                                      endDate: state.powerPlant.endDate,
+                                      plantImage1: state.powerPlant.plantImage1,
+                                    );
+
+                                    await SupportPlantDecisionDialog(
+                                      context: context,
+                                      selectPowerPlant: selectPowerPlant,
+                                      user: user,
+                                    ).showDialog();
+
+                                    // 契約件数１応援０の場合
+                                    // if (user.supportableNumber >
+                                    //     user.profile.supports.length) {
+                                    //   await SupportPlantDecisionDialog(
+                                    //     context: context,
+                                    //     selectPowerPlant: selectPowerPlant,
+                                    //     user: user,
+                                    //   ).showDialog();
+                                    // } else {
+                                    // final isSelected =
+                                    //     await SupportPlantSelectDialog(
+                                    //             context: context,
+                                    //             selectPowerPlant:
+                                    //                 selectPowerPlantDammy,
+                                    //             user: user,
+                                    //             registPowerPlants:
+                                    //                 registPowerPlants)
+                                    //         .showDialog();
+                                    // isSelected!
+                                    //     ? await SupportPlantDecisionDialog(
+                                    //         context: context,
+                                    //         selectPowerPlant:
+                                    //             selectPowerPlantDammy,
+                                    //         user: user,
+                                    //         registPowerPlants:
+                                    //             registPowerPlants,
+                                    //       ).showDialog()
+                                    //     : null;
+                                    // }
                                   },
-                                  // onPressed: () async {
-                                  //   // 契約件数１応援０の場合
-                                  //   if (userDammy.supportableNumber >
-                                  //       registPowerPlants.length) {
-                                  //     await SupportPlantDecisionDialog(
-                                  //       context: context,
-                                  //       selectPowerPlant: selectPowerPlantDammy,
-                                  //       user: userDammy,
-                                  //       registPowerPlants: registPowerPlants,
-                                  //     ).showDialog();
-                                  //   } else {
-                                  //     final isSelected =
-                                  //         await SupportPlantSelectDialog(
-                                  //                 context: context,
-                                  //                 selectPowerPlant:
-                                  //                     selectPowerPlantDammy,
-                                  //                 user: userDammy,
-                                  //                 registPowerPlants:
-                                  //                     registPowerPlants)
-                                  //             .showDialog();
-
-                                  //     isSelected!
-                                  //         ? await SupportPlantDecisionDialog(
-                                  //             context: context,
-                                  //             selectPowerPlant:
-                                  //                 selectPowerPlantDammy,
-                                  //             user: userDammy,
-                                  //             registPowerPlants:
-                                  //                 registPowerPlants,
-                                  //           ).showDialog()
-                                  //         : null;
-                                  //   }
-                                  // },
                                   style: OutlinedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(42),

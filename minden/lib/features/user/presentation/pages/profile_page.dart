@@ -201,7 +201,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(
                             height: 37,
                           ),
-                          // TODO あとで共通Componentを組み込む
                           _SelectedPlantList(
                               selectedPlantList:
                                   state.profile.selectedPowerPlants)
