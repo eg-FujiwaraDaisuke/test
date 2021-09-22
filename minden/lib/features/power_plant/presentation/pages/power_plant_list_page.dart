@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -40,6 +43,18 @@ class PowerPlantListState extends State<PowerPlantList> {
       ),
     );
 
+    _bloc.stream.listen((event) async {
+      if (event is PowerPlantLoadError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+              (_) => false);
+        }
+      }
+    });
     _bloc.add(GetPowerPlantsEvent(tagId: widget.tagId));
   }
 

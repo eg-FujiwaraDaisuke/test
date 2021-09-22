@@ -25,13 +25,14 @@ mixin RetryProcessMixin {
               );
               await dataSource.getAppToken(true);
             } catch (e) {
-              logD('### retry error $e');
+              logD('### refresh token expired error $e');
+              rethrow;
             }
             return true;
           }
           return false;
         },
-        delayFactor: const Duration(seconds: 1),
+        delayFactor: const Duration(seconds: 3),
         maxDelay: const Duration(seconds: 32),
         maxAttempts: 3,
       );
