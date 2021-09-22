@@ -47,22 +47,22 @@ class _SupportPlantDialogDebugPageState
   // );
 
   User userDammy = const User(
-    loginId: 'nakajo@minden.co.jp',
-    accountId: 'step1_02@minden.co.jp',
-    contractor: 'ぽーたるてすと に',
-    limitedPlantId: '',
-    supportableNumber: 1,
-    profile: Profile(
-      userId: 'MC20210808006',
-      name: 'hogehoge',
-      icon: '',
-      bio: '',
-      wallPaper: '',
-      tags: [],
-      selectedPowerPlants: [],
-    ),
-    isNewbie: false,
-  );
+      loginId: 'nakajo@minden.co.jp',
+      accountId: 'step1_02@minden.co.jp',
+      contractor: 'ぽーたるてすと に',
+      limitedPlantId: '',
+      supportableNumber: 1,
+      profile: Profile(
+        userId: 'MC20210808006',
+        name: 'hogehoge',
+        icon: '',
+        bio: '',
+        wallPaper: '',
+        tags: [],
+        selectedPowerPlants: [],
+      ),
+      isNewbie: false,
+      supports: []);
 
   // List<RegistPowerPlant> registPowerPlants = [];
 
