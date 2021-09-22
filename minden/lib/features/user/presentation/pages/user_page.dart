@@ -154,6 +154,15 @@ class _UserPageState extends State<UserPage> {
                           height: 61,
                         ),
                         _MenuListView(),
+                        _MenuItem(
+                          title: i18nTranslate(context, 'user_menu_logout'),
+                          icon: 'logout',
+                          routeName: '/logout',
+                          handler: () async {
+                            await _showAlert(
+                                message: "ログアウトしますか？", actionName: "Logout");
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -165,6 +174,41 @@ class _UserPageState extends State<UserPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showAlert({
+    required String message,
+    required String actionName,
+  }) async {
+    final ret = await showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(actionName),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text("Cancel"),
+              ),
+            ],
+          );
+        });
+
+    if (ret == null) return;
+
+    if (ret) {
+      BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+      await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+          (_) => false);
+    }
   }
 }
 
@@ -194,11 +238,6 @@ class _MenuListView extends StatelessWidget {
         routeName: '',
         type: MenuType.common,
       ),
-      _Menu(
-          title: i18nTranslate(context, 'user_menu_logout'),
-          icon: 'logout',
-          routeName: '/logout',
-          type: MenuType.common),
     ];
     return Column(
       children: _menuList.map((menu) {
@@ -224,10 +263,12 @@ class _MenuItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.routeName,
+    this.handler,
   }) : super();
   final String title;
   final String icon;
   final String? routeName;
+  final Function? handler;
 
   @override
   Widget build(BuildContext context) {
@@ -252,14 +293,7 @@ class _MenuItem extends StatelessWidget {
             await Navigator.push(context, route);
             break;
           case '/logout':
-            BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-            await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-                (_) => false);
-
+            handler?.call();
             break;
 
           default:
