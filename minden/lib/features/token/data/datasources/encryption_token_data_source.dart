@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
 
 final encryptionTokenDataSourceProvider = Provider<EncryptionTokenDataSource>(
     (ref) => const EncryptionTokenDataSourceImpl(
@@ -13,6 +14,8 @@ abstract class EncryptionTokenDataSource {
   Future<String> getAppToken();
 
   Future<String> getRefreshToken();
+
+  Future<User> getUser();
 
   Future<String> restoreUser();
 
@@ -52,6 +55,13 @@ class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
     final box = await _getEncryptedBox();
     final String refreshToken = box.get(_refreshTokenKey);
     return refreshToken;
+  }
+
+  @override
+  Future<User> getUser() async {
+    final box = await _getEncryptedBox();
+    final User user = box.get('user_key');
+    return user;
   }
 
   @override

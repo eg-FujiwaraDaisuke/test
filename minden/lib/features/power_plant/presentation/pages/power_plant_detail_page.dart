@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
@@ -24,6 +25,9 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
+
+import '../../../../injection_container.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
@@ -190,38 +194,45 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                               child: InkWell(
                                 child: OutlinedButton(
                                   onPressed: () async {
-                                    // 契約件数１応援０の場合
-                                    if (userDammy.supportableNumber >
-                                        registPowerPlants.length) {
-                                      await SupportPlantDecisionDialog(
-                                        context: context,
-                                        selectPowerPlant: selectPowerPlantDammy,
-                                        user: userDammy,
-                                        registPowerPlants: registPowerPlants,
-                                      ).showDialog();
-                                    } else {
-                                      final isSelected =
-                                          await SupportPlantSelectDialog(
-                                                  context: context,
-                                                  selectPowerPlant:
-                                                      selectPowerPlantDammy,
-                                                  user: userDammy,
-                                                  registPowerPlants:
-                                                      registPowerPlants)
-                                              .showDialog();
+                                    final user = await si<
+                                            EncryptionTokenDataSourceImpl>()
+                                        .getUser();
 
-                                      isSelected!
-                                          ? await SupportPlantDecisionDialog(
-                                              context: context,
-                                              selectPowerPlant:
-                                                  selectPowerPlantDammy,
-                                              user: userDammy,
-                                              registPowerPlants:
-                                                  registPowerPlants,
-                                            ).showDialog()
-                                          : null;
-                                    }
+                                    logD('${user}');
                                   },
+                                  // onPressed: () async {
+                                  //   // 契約件数１応援０の場合
+                                  //   if (userDammy.supportableNumber >
+                                  //       registPowerPlants.length) {
+                                  //     await SupportPlantDecisionDialog(
+                                  //       context: context,
+                                  //       selectPowerPlant: selectPowerPlantDammy,
+                                  //       user: userDammy,
+                                  //       registPowerPlants: registPowerPlants,
+                                  //     ).showDialog();
+                                  //   } else {
+                                  //     final isSelected =
+                                  //         await SupportPlantSelectDialog(
+                                  //                 context: context,
+                                  //                 selectPowerPlant:
+                                  //                     selectPowerPlantDammy,
+                                  //                 user: userDammy,
+                                  //                 registPowerPlants:
+                                  //                     registPowerPlants)
+                                  //             .showDialog();
+
+                                  //     isSelected!
+                                  //         ? await SupportPlantDecisionDialog(
+                                  //             context: context,
+                                  //             selectPowerPlant:
+                                  //                 selectPowerPlantDammy,
+                                  //             user: userDammy,
+                                  //             registPowerPlants:
+                                  //                 registPowerPlants,
+                                  //           ).showDialog()
+                                  //         : null;
+                                  //   }
+                                  // },
                                   style: OutlinedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(42),
