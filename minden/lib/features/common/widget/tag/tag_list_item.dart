@@ -29,7 +29,7 @@ class _TagListItemState extends State<TagListItem> {
 
   Widget _buildItem() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(17),
         border: Border.all(

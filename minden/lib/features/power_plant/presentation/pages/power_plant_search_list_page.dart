@@ -72,10 +72,38 @@ class PowerPlantSearchListPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TagListItem(
-                            tag: selectTag,
-                            onSelect: (tag) {},
-                            isSelected: true,
+                          Stack(
+                            clipBehavior: Clip.antiAlias,
+                            children: [
+                              Container(
+                                width: 150,
+                              ),
+                              Positioned(
+                                top: 4,
+                                child: TagListItem(
+                                  tag: selectTag,
+                                  onSelect: (tag) {},
+                                  isSelected: true,
+                                ),
+                              ),
+                              Container(
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: FractionalOffset.topLeft,
+                                    end: FractionalOffset.topRight,
+                                    colors: [
+                                      const Color(0xffffffff).withOpacity(0),
+                                      const Color(0xffffffff).withOpacity(1),
+                                    ],
+                                    stops: const [
+                                      0.6,
+                                      1.0,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Row(
                             children: [
