@@ -45,14 +45,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-    
+
     _bloc.stream.listen((event) async {
       if (event is ProfileLoadError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-          await Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
               (_) => false);
         }
       }

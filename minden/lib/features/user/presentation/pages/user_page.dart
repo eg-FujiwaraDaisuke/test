@@ -187,11 +187,13 @@ class _UserPageState extends State<UserPage> {
             content: Text(message),
             actions: <Widget>[
               TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(true),
                 child: Text(actionName),
               ),
               TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(false),
                 child: Text("Cancel"),
               ),
             ],
@@ -202,8 +204,7 @@ class _UserPageState extends State<UserPage> {
 
     if (ret) {
       BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-      await Navigator.pushAndRemoveUntil(
-          context,
+      await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => LoginPage(),
           ),
