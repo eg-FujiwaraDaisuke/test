@@ -382,22 +382,19 @@ class _TagsListState extends State<TagsList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 88,
-            height: 24,
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(13), topRight: Radius.circular(13)),
               color: widget.color,
             ),
-            child: Center(
-              child: Text(
-                widget.title,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF787877),
-                ),
+            child: Text(
+              '#${widget.title}',
+              style: const TextStyle(
+                fontSize: 13,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF787877),
               ),
             ),
           ),
