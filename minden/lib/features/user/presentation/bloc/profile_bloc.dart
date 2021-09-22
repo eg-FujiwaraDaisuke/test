@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
@@ -21,11 +22,13 @@ class GetProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final failureOrUser = await usecase(GetProfileParams(event.userId));
 
         yield failureOrUser.fold<ProfileState>(
-          (failure) => throw ServerFailure(),
+          (failure) => throw failure,
           (profile) => ProfileLoaded(profile: profile),
         );
+      } on RefreshTokenExpiredException catch (e) {
+        yield ProfileLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield ProfileLoadError(e.toString());
+        yield ProfileLoadError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -48,13 +51,15 @@ class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             event.name, event.icon, event.bio, event.wallPaper));
 
         yield failureOrUser.fold<ProfileState>(
-          (failure) => throw ServerFailure(),
+          (failure) => throw failure,
           (profile) {
             return ProfileLoaded(profile: profile);
           },
         );
+      } on RefreshTokenExpiredException catch (e) {
+        yield ProfileLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield ProfileLoadError(e.toString());
+        yield ProfileLoadError(message: e.toString(), needLogin: false);
       }
     }
   }

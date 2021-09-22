@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
@@ -22,11 +23,13 @@ class UpdateTagBloc extends Bloc<TagEvent, TagState> {
         final failureOrUser = await usecase(UpdateTagParams(event.tags));
 
         yield failureOrUser.fold<TagState>(
-          (failure) => throw ServerFailure(),
+          (failure) => throw failure,
           (success) => const TagUpdated(),
         );
+      } on RefreshTokenExpiredException catch (e) {
+        yield TagUpdateError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield TagUpdateError(e.toString());
+        yield TagUpdateError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -46,12 +49,14 @@ class GetAllTagsBloc extends Bloc<TagEvent, TagState> {
 
         final failureOrUser = await usecase(NoParams());
 
-        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
+        yield failureOrUser.fold<TagState>((failure) => throw failure,
             (category) {
           return CategoryGetSucceed(category);
         });
+      } on RefreshTokenExpiredException catch (e) {
+        yield TagUpdateError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield TagUpdateError(e.toString());
+        yield TagUpdateError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -71,12 +76,13 @@ class GetTagsBloc extends Bloc<TagEvent, TagState> {
 
         final failureOrUser = await usecase(GetTagParams(userId: event.userId));
 
-        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
-            (tags) {
+        yield failureOrUser.fold<TagState>((failure) => throw failure, (tags) {
           return TagGetSucceed(tags);
         });
+      } on RefreshTokenExpiredException catch (e) {
+        yield TagUpdateError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield TagUpdateError(e.toString());
+        yield TagUpdateError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -88,20 +94,22 @@ class GetPlantTagsBloc extends Bloc<TagEvent, TagState> {
 
   @override
   Stream<TagState> mapEventToState(
-      TagEvent event,
-      ) async* {
+    TagEvent event,
+  ) async* {
     if (event is GetTagEvent) {
       try {
         yield const TagLoading();
 
-        final failureOrUser = await usecase(GetTagParams(plantId: event.plantId));
+        final failureOrUser =
+            await usecase(GetTagParams(plantId: event.plantId));
 
-        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
-                (tags) {
-              return TagGetSucceed(tags);
-            });
+        yield failureOrUser.fold<TagState>((failure) => throw failure, (tags) {
+          return TagGetSucceed(tags);
+        });
+      } on RefreshTokenExpiredException catch (e) {
+        yield TagUpdateError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield TagUpdateError(e.toString());
+        yield TagUpdateError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -113,20 +121,21 @@ class GetPlantsTagsBloc extends Bloc<TagEvent, TagState> {
 
   @override
   Stream<TagState> mapEventToState(
-      TagEvent event,
-      ) async* {
+    TagEvent event,
+  ) async* {
     if (event is GetTagEvent) {
       try {
         yield const TagLoading();
 
         final failureOrUser = await usecase(NoParams());
 
-        yield failureOrUser.fold<TagState>((failure) => throw ServerFailure(),
-                (tags) {
-              return TagGetSucceed(tags);
-            });
+        yield failureOrUser.fold<TagState>((failure) => throw failure, (tags) {
+          return TagGetSucceed(tags);
+        });
+      } on RefreshTokenExpiredException catch (e) {
+        yield TagUpdateError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield TagUpdateError(e.toString());
+        yield TagUpdateError(message: e.toString(), needLogin: false);
       }
     }
   }

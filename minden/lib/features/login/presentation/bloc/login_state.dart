@@ -28,9 +28,13 @@ class LoginLoaded extends LoginState {
 }
 
 class LoginError extends LoginState {
-  const LoginError(this.message);
+  const LoginError({
+    required this.message,
+    required this.needLogin,
+  });
 
   final String message;
+  final bool needLogin;
 
   @override
   List<Object> get props => [message];

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:minden/core/error/failure.dart';
+import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
@@ -12,22 +12,24 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlants usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(
-    PowerPlantEvent event,
-  ) async* {
+  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
     if (event is GetPowerPlantsEvent) {
       try {
         yield const PowerPlantLoading();
 
         final failureOrUser =
-            await usecase(GetPowerPlantParams(tagId: event.tagId));
+        await usecase(GetPowerPlantParams(tagId: event.tagId));
 
-        yield failureOrUser.fold<PowerPlantState>(
-            (failure) => throw ServerFailure(), (plants) {
-          return PowerPlantsLoaded(plants);
-        });
+        yield failureOrUser.fold<PowerPlantState>((failure) {
+          throw failure;
+        },
+                (plants) {
+              return PowerPlantsLoaded(plants);
+            });
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield PowerPlantLoadError(e.toString());
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -39,9 +41,7 @@ class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlantsHistory usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(
-      PowerPlantEvent event,
-      ) async* {
+  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
     if (event is GetPowerPlantsEvent) {
       try {
         yield const PowerPlantLoading();
@@ -49,12 +49,14 @@ class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
         final failureOrUser =
         await usecase(GetPowerPlantParams(historyType: event.historyType));
 
-        yield failureOrUser.fold<PowerPlantState>(
-                (failure) => throw ServerFailure(), (plants) {
-          return PowerPlantsLoaded(plants);
-        });
+        yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
+                (plants) {
+              return PowerPlantsLoaded(plants);
+            });
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield PowerPlantLoadError(e.toString());
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -66,22 +68,22 @@ class GetPowerPlantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlant usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(
-    PowerPlantEvent event,
-  ) async* {
+  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
     if (event is GetPowerPlantEvent) {
       try {
         yield const PowerPlantLoading();
 
         final failureOrUser =
-            await usecase(GetPowerPlantParams(plantId: event.plantId));
+        await usecase(GetPowerPlantParams(plantId: event.plantId));
 
-        yield failureOrUser.fold<PowerPlantState>(
-            (failure) => throw ServerFailure(), (plant) {
-          return PowerPlantLoaded(plant);
-        });
+        yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
+                (plant) {
+              return PowerPlantLoaded(plant);
+            });
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield PowerPlantLoadError(e.toString());
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
       }
     }
   }
@@ -93,9 +95,7 @@ class GetParticipantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlantParticipant usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(
-      PowerPlantEvent event,
-      ) async* {
+  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
     if (event is GetPowerPlantEvent) {
       try {
         yield const PowerPlantLoading();
@@ -103,12 +103,14 @@ class GetParticipantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
         final failureOrUser =
         await usecase(GetPowerPlantParams(plantId: event.plantId));
 
-        yield failureOrUser.fold<PowerPlantState>(
-                (failure) => throw ServerFailure(), (participant) {
-          return ParticipantLoaded(participant);
-        });
+        yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
+                (participant) {
+              return ParticipantLoaded(participant);
+            });
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
-        yield PowerPlantLoadError(e.toString());
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
       }
     }
   }
