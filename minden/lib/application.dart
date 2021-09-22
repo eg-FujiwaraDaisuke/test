@@ -136,8 +136,9 @@ class Application extends StatelessWidget {
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
       '/': (_) {
+        // TODO 納品後もとに戻す
         if (kReleaseMode) {
-          return InitialPage();
+          return DebugPage();
         } else {
           return DebugPage();
         }
