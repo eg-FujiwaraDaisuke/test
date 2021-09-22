@@ -6,7 +6,7 @@ import 'package:minden/injection_container.dart';
 
 class ApiConfig {
   static final Map<String, dynamic> _endpoint = {
-    Config.kDevFlavor: 'https://www.stg.minapp.minden.co.jp',
+    Config.kDevFlavor: 'https://www.dev.minapp.minden.co.jp',
     Config.kStagingFlavor: 'https://www.stg.minapp.minden.co.jp',
     Config.kProdFlavor: 'https://www.minapp.minden.co.jp',
   };

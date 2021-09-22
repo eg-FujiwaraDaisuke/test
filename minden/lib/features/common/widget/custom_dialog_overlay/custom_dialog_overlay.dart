@@ -59,9 +59,15 @@ class CustomDialogOverlay extends ModalRoute<bool> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
+    final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
+
     return Center(
       child: SingleChildScrollView(
-        child: dialogContent(context),
+        reverse: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomSpace),
+          child: dialogContent(context),
+        ),
       ),
     );
   }
