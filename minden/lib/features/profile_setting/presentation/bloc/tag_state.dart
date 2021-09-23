@@ -46,9 +46,13 @@ class TagUpdated extends TagState {
 }
 
 class TagUpdateError extends TagState {
-  const TagUpdateError(this.message);
+  const TagUpdateError({
+    required this.message,
+    required this.needLogin,
+  });
 
   final String message;
+  final bool needLogin;
 
   @override
   List<Object> get props => [message];

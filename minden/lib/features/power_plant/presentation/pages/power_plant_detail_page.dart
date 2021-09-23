@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
@@ -71,6 +74,20 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
+
+    _plantBloc.stream.listen((event) async {
+      if (event is PowerPlantLoadError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+              (_) => false);
+        }
+      }
+    });
+
     _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
 
     _participantBloc = GetParticipantBloc(
@@ -391,7 +408,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      detail.powerGenerationMethod ?? '',
+                      _getGenerationMethod(detail.powerGenerationMethod!),
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'NotoSansJP',
@@ -641,6 +658,23 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ],
       ),
     );
+  }
+
+  String _getGenerationMethod(String powerGenerationMethod) {
+    switch (powerGenerationMethod) {
+      case '1':
+        return '太陽光発電';
+      case '2':
+        return '風力発電';
+      case '3':
+        return '地熱発電';
+      case '4':
+        return '水力発電';
+      case '5':
+        return 'バイオマス発電';
+      default:
+        return '';
+    }
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/color_code_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
@@ -25,7 +26,7 @@ class PowerPlantSearchByTag extends StatefulWidget {
 }
 
 class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
-  final List<Tag?> _selectedTags = [];
+  List<Tag?> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
   late GetTagsBloc _tagBloc;
 
@@ -176,7 +177,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                                 tagsList: e.tags,
                                 onSelect: _onSelectTag,
                                 selectedTags: _selectedTags,
-                                color: const Color(0xFFFFC2BE),
+                                color: getColorFromCode(e.colorCode),
                                 title: e.categoryName,
                               ))
                           .toList(),
@@ -192,7 +193,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
     );
   }
 
-  void _onSelectTag(Tag tag) {
+  Future<void> _onSelectTag(Tag tag) async {
     final foundTag = _selectedTags.firstWhere((element) {
       return element?.tagId == tag.tagId;
     }, orElse: () => null);
@@ -206,7 +207,10 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
       builder: (context) => PowerPlantSearchListPage(selectTag: tag),
       settings: const RouteSettings(name: '/home/top/seach/powerPlant'),
     );
-    Navigator.push(context, route);
+    await Navigator.push(context, route);
+    setState(() {
+      _selectedTags = [];
+    });
   }
 
   Widget _buildCharacter() {

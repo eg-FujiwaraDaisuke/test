@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
@@ -148,6 +151,15 @@ class _UserPageState extends State<UserPage> {
                           height: 61,
                         ),
                         _MenuListView(),
+                        _MenuItem(
+                          title: i18nTranslate(context, 'user_menu_logout'),
+                          icon: 'logout',
+                          routeName: '/logout',
+                          handler: () async {
+                            await _showAlert(
+                                message: "ログアウトしますか？", actionName: "Logout");
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -159,6 +171,42 @@ class _UserPageState extends State<UserPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showAlert({
+    required String message,
+    required String actionName,
+  }) async {
+    final ret = await showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(true),
+                child: Text(actionName),
+              ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(false),
+                child: Text("Cancel"),
+              ),
+            ],
+          );
+        });
+
+    if (ret == null) return;
+
+    if (ret) {
+      BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+      await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+          (_) => false);
+    }
   }
 }
 
@@ -185,15 +233,9 @@ class _MenuListView extends StatelessWidget {
         title: i18nTranslate(context, 'user_menu_contact'),
         icon: 'contact',
         // TODO routeは仮
-        routeName: '/user/profile',
+        routeName: '',
         type: MenuType.common,
       ),
-      _Menu(
-          title: i18nTranslate(context, 'user_menu_logout'),
-          icon: 'logout',
-          // TODO routeは仮
-          routeName: '/user/profile',
-          type: MenuType.common),
     ];
     return Column(
       children: _menuList.map((menu) {
@@ -219,10 +261,12 @@ class _MenuItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.routeName,
+    this.handler,
   }) : super();
   final String title;
   final String icon;
   final String? routeName;
+  final Function? handler;
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +289,9 @@ class _MenuItem extends StatelessWidget {
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);
+            break;
+          case '/logout':
+            handler?.call();
             break;
 
           default:

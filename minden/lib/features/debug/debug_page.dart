@@ -14,6 +14,7 @@ import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
+import 'package:minden/features/violate/presentation/violate_dialog_debug_page.dart';
 import 'package:minden/injection_container.dart';
 
 /// デバッグ用画面
@@ -56,23 +57,28 @@ class DebugPageState extends State<DebugPage> {
                     'プロフィール設定',
                     (context) => ProfileSettingNamePage(),
                     '/profileSetting/name'),
-                _generateNavigatorPush(context, 'ログイン パスワードリセット',
-                    (context) => ResetPasswordPage(), '/login/resetPassword'),
                 _generateNavigatorPush(
-                    context, 'ホーム - トップ', (context) => HomePage(), '/home/top'),
-                _generateNavigatorPush(context, 'マイページ - top',
-                    (context) => UserPage(), '/user/matching'),
-                _generateNavigatorPush(context, 'マイページ - プロフィール',
-                    (context) => ProfilePage(), '/user/profile'),
-                _generateNavigatorPush(context, 'マイページ - マッチング',
-                    (context) => MatchingPage(), '/my_page/matching'),
-                _generateNavigatorPush(context, 'push通知FCM取得',
-                    (context) => FCMDebugPage(), '/fcm_debug'),
-                _generateNavigatorPush(
-                    context,
-                    '応援ダイアログ',
-                    (context) => SupportPlantDialogDebugPage(),
-                    '/supportPlantDialogDebugPage'),
+                    context, 'ホーム', (context) => HomePage(), '/home/top'),
+
+                // TODO 納品後もとに戻す
+                // _generateNavigatorPush(context, 'ログイン パスワードリセット',
+                //     (context) => ResetPasswordPage(), '/login/resetPassword'),
+                // _generateNavigatorPush(context, 'マイページ - top',
+                //     (context) => UserPage(), '/user/matching'),
+                // _generateNavigatorPush(context, 'マイページ - プロフィール',
+                //     (context) => ProfilePage(), '/user/profile'),
+                // _generateNavigatorPush(context, 'push通知FCM取得',
+                //     (context) => FCMDebugPage(), '/fcm_debug'),
+                // _generateNavigatorPush(
+                //     context,
+                //     '応援ダイアログ',
+                //     (context) => SupportPlantDialogDebugPage(),
+                //     '/supportPlantDialogDebugPage'),
+                // _generateNavigatorPush(
+                //     context,
+                //     '通報デバックページ',
+                //     (context) => ViolateDialogDebugPage(),
+                //     '/violate_dialog_debug'),
               ],
             ),
           ),

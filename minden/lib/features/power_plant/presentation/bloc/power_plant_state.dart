@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
@@ -51,9 +49,13 @@ class PowerPlantLoading extends PowerPlantState {
 }
 
 class PowerPlantLoadError extends PowerPlantState {
-  const PowerPlantLoadError(this.message);
+  const PowerPlantLoadError({
+    required this.message,
+    required this.needLogin,
+  });
 
   final String message;
+  final bool needLogin;
 
   @override
   List<Object> get props => [message];
