@@ -294,7 +294,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      detail.powerGenerationMethod ?? '',
+                      _getGenerationMethod(detail.powerGenerationMethod!),
                       style: const TextStyle(
                         fontSize: 12,
                         fontFamily: 'NotoSansJP',
@@ -520,6 +520,23 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ],
       ),
     );
+  }
+
+  String _getGenerationMethod(String powerGenerationMethod) {
+    switch (powerGenerationMethod) {
+      case '1':
+        return '太陽光発電';
+      case '2':
+        return '風力発電';
+      case '3':
+        return '地熱発電';
+      case '4':
+        return '水力発電';
+      case '5':
+        return 'バイオマス発電';
+      default:
+        return '';
+    }
   }
 }
 
