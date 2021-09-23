@@ -317,18 +317,20 @@ class SupportPlantSelectDialog {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                registPowerPlant.powerPlant.name,
-                style: const TextStyle(
-                  color: Color(0xFF575292),
-                  fontSize: 13,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+              SizedBox(
+                width: 153,
+                child: Text(
+                  registPowerPlant.powerPlant.name,
+                  style: const TextStyle(
+                    color: Color(0xFF575292),
+                    fontSize: 13,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO 登録フラグを切り替える
                   setState(() {
                     registPowerPlant.isRegist = !registPowerPlant.isRegist;
                   });
