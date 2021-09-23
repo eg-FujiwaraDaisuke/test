@@ -330,140 +330,149 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantsLoaded) {
-              return Container(
-                height: 82,
-                padding: const EdgeInsets.only(bottom: 20),
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: [
-                    Color(0xFFFF8C00),
-                    Color(0xFFFFC277),
-                  ],
-                  stops: [
-                    0.0,
-                    1.0,
-                  ],
-                )),
-                child: Center(
-                  child: InkWell(
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        final jsonData =
-                            await si<EncryptionTokenDataSourceImpl>()
-                                .restoreUser();
-                        final userJson = json.decode(jsonData);
-                        final user = User.fromJson(userJson);
-                        final supportableNumber = user.supportableNumber;
+              final selectPowerPlant = PowerPlant(
+                plantId: detail.plantId,
+                areaCode: detail.areaCode,
+                name: detail.name ?? '',
+                viewAddress: detail.viewAddress ?? '',
+                voltageType: detail.voltageType,
+                powerGenerationMethod: detail.powerGenerationMethod ?? '',
+                renewableType: detail.renewableType,
+                generationCapacity: detail.generationCapacity,
+                displayOrder: detail.displayOrder,
+                isRecommend: detail.isRecommend,
+                ownerName: detail.ownerMessage ?? '',
+                startDate: detail.startDate,
+                endDate: detail.endDate,
+                plantImage1: detail.plantImage1,
+              );
 
-                        final selectPowerPlant = PowerPlant(
-                          plantId: detail.plantId,
-                          areaCode: detail.areaCode,
-                          name: detail.name ?? '',
-                          viewAddress: detail.viewAddress ?? '',
-                          voltageType: detail.voltageType,
-                          powerGenerationMethod:
-                              detail.powerGenerationMethod ?? '',
-                          renewableType: detail.renewableType,
-                          generationCapacity: detail.generationCapacity,
-                          displayOrder: detail.displayOrder,
-                          isRecommend: detail.isRecommend,
-                          ownerName: detail.ownerMessage ?? '',
-                          startDate: detail.startDate,
-                          endDate: detail.endDate,
-                          plantImage1: detail.plantImage1,
-                        );
+              final isSupport = state.powerPlants.powerPlants
+                  .map((powerPlant) => powerPlant.plantId)
+                  .contains(selectPowerPlant.plantId);
 
-                        setState(() {
-                          _registPowerPlants = state.powerPlants.powerPlants
-                              .map((selectedPowerPlant) => RegistPowerPlant(
-                                  isRegist: true,
-                                  powerPlant: selectedPowerPlant))
-                              .toList();
-                        });
+              return isSupport
+                  ? Container()
+                  : Container(
+                      height: 82,
+                      padding: const EdgeInsets.only(bottom: 20),
+                      decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                        colors: [
+                          Color(0xFFFF8C00),
+                          Color(0xFFFFC277),
+                        ],
+                        stops: [
+                          0.0,
+                          1.0,
+                        ],
+                      )),
+                      child: Center(
+                        child: InkWell(
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              final jsonData =
+                                  await si<EncryptionTokenDataSourceImpl>()
+                                      .restoreUser();
+                              final userJson = json.decode(jsonData);
+                              final user = User.fromJson(userJson);
+                              final supportableNumber = user.supportableNumber;
 
-                        // 契約件数１応援０の場合
-                        if (supportableNumber >
-                            state.powerPlants.powerPlants.length) {
-                          await SupportPlantDecisionDialog(
-                            context: context,
-                            selectPowerPlant: selectPowerPlant,
-                            registPowerPlants: _registPowerPlants,
-                            user: user,
-                          ).showDialog();
-                        } else {
-                          // 応援プラントを選択する
-                          final isSelected = await SupportPlantSelectDialog(
-                            context: context,
-                            selectPowerPlant: selectPowerPlant,
-                            registPowerPlants: _registPowerPlants,
-                            user: user,
-                          ).showDialog();
+                              setState(() {
+                                _registPowerPlants = state
+                                    .powerPlants.powerPlants
+                                    .map((selectedPowerPlant) =>
+                                        RegistPowerPlant(
+                                            isRegist: true,
+                                            powerPlant: selectedPowerPlant))
+                                    .toList();
+                              });
 
-                          // 応援プラントを選択しなかった場合、stateの中身をリセット
-                          isSelected ??
-                              setState(
-                                () {
-                                  _registPowerPlants =
-                                      state.powerPlants.powerPlants
-                                          .map(
-                                            (selectedPowerPlant) =>
-                                                RegistPowerPlant(
-                                              isRegist: true,
-                                              powerPlant: selectedPowerPlant,
-                                            ),
-                                          )
-                                          .toList();
-                                },
-                              );
-
-                          // 応援プラントを選択した場合、確定ダイアログに飛ばす
-                          isSelected!
-                              ? await SupportPlantDecisionDialog(
+                              // 契約件数１応援０の場合
+                              if (supportableNumber >
+                                  state.powerPlants.powerPlants.length) {
+                                await SupportPlantDecisionDialog(
                                   context: context,
                                   selectPowerPlant: selectPowerPlant,
                                   registPowerPlants: _registPowerPlants,
                                   user: user,
-                                ).showDialog()
-                              : setState(() {
-                                  _registPowerPlants =
-                                      state.powerPlants.powerPlants
-                                          .map(
-                                            (selectedPowerPlant) =>
-                                                RegistPowerPlant(
-                                              isRegist: true,
-                                              powerPlant: selectedPowerPlant,
-                                            ),
-                                          )
-                                          .toList();
-                                });
-                        }
-                      },
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        side: const BorderSide(color: Colors.white, width: 2),
-                      ),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 48, vertical: 12),
-                        child: Text(
-                          'この発電所を応援する',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            height: 1.48,
+                                ).showDialog();
+                              } else {
+                                // 応援プラントを選択する
+                                final isSelected =
+                                    await SupportPlantSelectDialog(
+                                  context: context,
+                                  selectPowerPlant: selectPowerPlant,
+                                  registPowerPlants: _registPowerPlants,
+                                  user: user,
+                                ).showDialog();
+
+                                // 応援プラントを選択しなかった場合、stateの中身をリセット
+                                isSelected ??
+                                    setState(
+                                      () {
+                                        _registPowerPlants = state
+                                            .powerPlants.powerPlants
+                                            .map(
+                                              (selectedPowerPlant) =>
+                                                  RegistPowerPlant(
+                                                isRegist: true,
+                                                powerPlant: selectedPowerPlant,
+                                              ),
+                                            )
+                                            .toList();
+                                      },
+                                    );
+
+                                // 応援プラントを選択した場合、確定ダイアログに飛ばす
+                                isSelected!
+                                    ? await SupportPlantDecisionDialog(
+                                        context: context,
+                                        selectPowerPlant: selectPowerPlant,
+                                        registPowerPlants: _registPowerPlants,
+                                        user: user,
+                                      ).showDialog()
+                                    : setState(() {
+                                        _registPowerPlants = state
+                                            .powerPlants.powerPlants
+                                            .map(
+                                              (selectedPowerPlant) =>
+                                                  RegistPowerPlant(
+                                                isRegist: true,
+                                                powerPlant: selectedPowerPlant,
+                                              ),
+                                            )
+                                            .toList();
+                                      });
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(42),
+                              ),
+                              side: const BorderSide(
+                                  color: Colors.white, width: 2),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 48, vertical: 12),
+                              child: Text(
+                                'この発電所を応援する',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                  height: 1.48,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              );
+                    );
             }
             return Container();
           },
