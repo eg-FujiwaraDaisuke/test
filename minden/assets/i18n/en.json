@@ -32,6 +32,8 @@
 "pickup_see_details" : "詳しくみる",
 "plant_list" : "電力会社一覧",
 "power_plant_detail_about" : "くわしく",
+"power_plant_detail_add_expectant_artist" : "こちらはアーティスト電力プラン限定の発電所です。アーティスト電力は今後も追加される予定ですのでご期待ください！",
+"power_plant_detail_can_not_support" : "この発電所は応援できません",
 "power_plant_detail_everyone_important" : "この発電所を応援しているみんなが大切にしていること",
 "power_plant_detail_from_owner" : "オーナーより",
 "power_plant_detail_generate_output" : "発電出力 / ",
