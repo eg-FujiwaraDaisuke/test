@@ -90,6 +90,8 @@ dev_dependencies:
 
   plugin_platform_interface: ^2.0.1
 
+  flutter_launcher_icons: ^0.9.2
+
 flutter_native_splash:
   image: "assets/images/login/splash_logo.png"
   color: "FF8C00"
@@ -141,3 +143,8 @@ flutter:
           weight: 300
         - asset: assets/fonts/Barlow/Barlow-Thin.ttf
           weight: 100
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/common/app_icon.png"
