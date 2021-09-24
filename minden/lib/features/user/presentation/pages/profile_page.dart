@@ -452,36 +452,38 @@ class _SelectedPlantList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 340,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            i18nTranslate(context, 'user_support_plant'),
-            style: TextStyle(
-              color: const Color(0xFF575292),
-              fontSize: 14,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              letterSpacing: calcLetterSpacing(letter: 4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: SizedBox(
+            width: 340,
+            child: Text(
+              i18nTranslate(context, 'user_support_plant'),
+              style: TextStyle(
+                color: const Color(0xFF575292),
+                fontSize: 14,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                letterSpacing: calcLetterSpacing(letter: 4),
+              ),
             ),
           ),
-          const SizedBox(
-            height: 7,
-          ),
-          ...selectedPlantList
-              .map((e) => PowerPlantListItem(
-                    key: ValueKey(e.plantId),
-                    powerPlant: e,
-                    direction: Direction.topLeft,
-                    isShowCatchphras: false,
-                    aspectRatio: 340 / 298,
-                    thumbnailImageHeight: 226,
-                  ))
-              .toList()
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 7,
+        ),
+        ...selectedPlantList
+            .map((e) => PowerPlantListItem(
+                  key: ValueKey(e.plantId),
+                  powerPlant: e,
+                  direction: Direction.topLeft,
+                  isShowCatchphras: false,
+                  aspectRatio: 340 / 298,
+                  thumbnailImageHeight: 226,
+                ))
+            .toList()
+      ],
     );
   }
 }
