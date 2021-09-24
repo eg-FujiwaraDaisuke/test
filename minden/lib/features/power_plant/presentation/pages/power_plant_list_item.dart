@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
@@ -112,7 +113,7 @@ class PowerPlantListItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         if (reservedDate != null || supportedData != null)
@@ -122,7 +123,7 @@ class PowerPlantListItem extends StatelessWidget {
                               Text(
                                 reservedDate == null
                                     ? ''
-                                    : '🚩${reservedDate}からこの発電所を応援',
+                                    : '🚩${reservedDate}${i18nTranslate(context, 'power_plant_support_start_date')}',
                                 style: const TextStyle(
                                   fontSize: 10,
                                   fontFamily: 'NotoSansJP',
@@ -133,7 +134,7 @@ class PowerPlantListItem extends StatelessWidget {
                               Text(
                                 supportedData == null
                                     ? ''
-                                    : '${supportedData}から応援',
+                                    : '${supportedData}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'NotoSansJP',
@@ -178,9 +179,10 @@ class PowerPlantListItem extends StatelessWidget {
           ),
         ),
         // 短いキャッチフレーズ
-        isShowCatchphras
-            ? _generateShortCatchphrase(powerPlant, direction)
-            : Container(),
+        if (isShowCatchphras)
+          _generateShortCatchphrase(powerPlant, direction)
+        else
+          Container(),
       ],
     );
   }

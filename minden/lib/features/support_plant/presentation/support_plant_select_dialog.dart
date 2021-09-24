@@ -163,7 +163,7 @@ class SupportPlantSelectDialog {
                               ),
                               TextSpan(
                                 text: i18nTranslate(
-                                    context, 'support_plant_select_until'),
+                                    context, 'support_plant_select_unit'),
                                 style: const TextStyle(
                                   color: Color(0xFF575292),
                                   fontSize: 16,
