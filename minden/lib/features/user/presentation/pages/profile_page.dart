@@ -20,6 +20,9 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
+import 'package:minden/features/violate/presentation/violate_dialog.dart';
+import 'package:minden/features/violate/presentation/violate_report_complete_dialog.dart';
+import 'package:minden/features/violate/presentation/violate_report_dialog.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
@@ -167,8 +170,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       )
                     else
                       GestureDetector(
-                        onTap: () {
-                          // TODO 通報ダイアログ
+                        onTap: () async {
+                          // ユーザーの通報
+                          final isShowReport =
+                              await ViolateDialog(context: context)
+                                  .showDialog();
+
+                          final isReport = isShowReport!
+                              ? await ViolateReportDialog(context: context)
+                                  .showDialog()
+                              : false;
+
+                          isReport!
+                              ? ViolateReportCompleteDialog(context: context)
+                                  .showDialog()
+                              : null;
                         },
                         child: Container(
                           width: 44,
