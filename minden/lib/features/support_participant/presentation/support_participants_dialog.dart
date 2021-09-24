@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
+import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
 class SupportParticipantsDialog {
   SupportParticipantsDialog({
@@ -163,8 +165,13 @@ class SupportParticipantsDialog {
   Widget _buildPartcipantItem(PowerPlantParticipantUser participant) {
     return GestureDetector(
       onTap: () {
-        // TODO ここで他人のプロフィールページに飛ぶ
-        print(participant.userId);
+        final route = MaterialPageRoute(
+          builder: (context) => ProfilePage(
+            userId: participant.userId,
+          ),
+          settings: const RouteSettings(name: '/user/profile'),
+        );
+        Navigator.push(context, route);
       },
       child: Column(
         children: [
@@ -181,9 +188,19 @@ class SupportParticipantsDialog {
                       'assets/images/user/icon_no_photo.png',
                       fit: BoxFit.cover,
                     )
-                  : Image.network(
-                      participant.icon,
+                  : CachedNetworkImage(
+                      imageUrl: participant.icon,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) {
+                        return Image.asset(
+                          'assets/images/user/icon_no_photo.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/user/icon_no_photo.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
             ),
           ),

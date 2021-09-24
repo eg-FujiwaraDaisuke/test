@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -91,7 +92,7 @@ class _ThanksMessage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (message.image == '')
+                if (message.image.isEmpty)
                   Container(
                     width: 64,
                     height: 64,
@@ -108,8 +109,14 @@ class _ThanksMessage extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(9),
                     ),
-                    child: Image.network(
-                      message.image,
+                    child: CachedNetworkImage(
+                      imageUrl: message.image,
+                      placeholder: (context, url) {
+                        return Image.asset(
+                          'assets/images/power_plant/power_plant_header_bg.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
                       width: 64,
                       height: 64,
                       fit: BoxFit.cover,

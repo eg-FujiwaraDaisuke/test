@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -851,12 +852,24 @@ class ParticipantUserIconGroup extends StatelessWidget {
       padding: const EdgeInsets.all(0.5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(iconSize / 2),
-        child: Image.network(
-          // TODO replace icon url
-          valid ? imageUrl! : 'https://placeimg.com/480/480/any',
-          width: iconSize,
-          height: iconSize,
-        ),
+        child: valid
+            ? CachedNetworkImage(
+                imageUrl: imageUrl!,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    'assets/images/user/icon_no_photo.png',
+                    fit: BoxFit.cover,
+                  );
+                },
+                width: iconSize,
+                height: iconSize,
+              )
+            : Image.asset(
+                'assets/images/user/icon_no_photo.png',
+                fit: BoxFit.cover,
+                width: iconSize,
+                height: iconSize,
+              ),
       ),
     );
   }

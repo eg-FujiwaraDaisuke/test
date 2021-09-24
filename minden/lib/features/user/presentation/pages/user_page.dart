@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -124,15 +125,21 @@ class _UserPageState extends State<UserPage> {
                                   height: 173,
                                   color: const Color(0xFFFFFB92))
                             else
-                              Image.network(
-                                state.profile.wallPaper!,
+                              CachedNetworkImage(
+                                imageUrl: state.profile.wallPaper!,
+                                placeholder: (context, url) {
+                                  return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 173,
+                                      color: const Color(0xFFFFFB92));
+                                },
                                 width: MediaQuery.of(context).size.width,
                                 height: 173,
                                 fit: BoxFit.cover,
                               ),
                             CustomPaint(
                               size:
-                                  Size(MediaQuery.of(context).size.width, 174),
+                                  Size(MediaQuery.of(context).size.width, 173),
                               painter: WallPaperArcPainter(color: Colors.white),
                             ),
                             Positioned(
@@ -275,8 +282,9 @@ class _MenuItem extends StatelessWidget {
       onTap: () async {
         switch (routeName) {
           case '/user/profile':
+            final userId = si<Account>().userId;
             final route = MaterialPageRoute(
-              builder: (context) => ProfilePage(),
+              builder: (context) => ProfilePage(userId: userId),
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);

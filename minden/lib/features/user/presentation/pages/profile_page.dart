@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,10 +21,15 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
+import 'package:minden/features/violate/presentation/violate_dialog.dart';
+import 'package:minden/features/violate/presentation/violate_report_complete_dialog.dart';
+import 'package:minden/features/violate/presentation/violate_report_dialog.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({required this.userId});
+  final String userId;
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -59,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
 
-    _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+    _bloc.add(GetProfileEvent(userId: widget.userId));
   }
 
   @override
@@ -70,6 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMe = si<Account>().isMe(widget.userId);
     return BlocProvider.value(
       value: _bloc,
       child: BlocListener<GetProfileBloc, ProfileState>(
@@ -103,64 +110,97 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   actions: [
-                    GestureDetector(
-                      onTap: () async {
-                        await Navigator.push<bool>(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    ProfileEditPage(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return const FadeUpwardsPageTransitionsBuilder()
-                                  .buildTransitions(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileEditPage(),
-                                          settings: const RouteSettings(
-                                              name: '/user/profile/edit')),
-                                      context,
-                                      animation,
-                                      secondaryAnimation,
-                                      child);
-                            },
-                          ),
-                        );
-
-                        // 常にリロード
-                        _bloc
-                            .add(GetProfileEvent(userId: si<Account>().userId));
-                      },
-                      child: Container(
-                        width: 90,
-                        height: 44,
-                        margin:
-                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset('assets/images/user/edit.svg'),
-                            const SizedBox(
-                              width: 9,
+                    if (isMe)
+                      GestureDetector(
+                        onTap: () async {
+                          await Navigator.push<bool>(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      ProfileEditPage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return const FadeUpwardsPageTransitionsBuilder()
+                                    .buildTransitions(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfileEditPage(),
+                                            settings: const RouteSettings(
+                                                name: '/user/profile/edit')),
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child);
+                              },
                             ),
-                            Text(
-                              i18nTranslate(context, 'user_edit'),
-                              style: const TextStyle(
-                                color: Color(0xFF575292),
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w500,
+                          );
+
+                          // 常にリロード
+                          _bloc.add(
+                              GetProfileEvent(userId: si<Account>().userId));
+                        },
+                        child: Container(
+                          width: 90,
+                          height: 44,
+                          margin: const EdgeInsets.only(
+                              right: 8, top: 6, bottom: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(22),
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset('assets/images/user/edit.svg'),
+                              const SizedBox(
+                                width: 9,
                               ),
-                            )
-                          ],
+                              Text(
+                                i18nTranslate(context, 'user_edit'),
+                                style: const TextStyle(
+                                  color: Color(0xFF575292),
+                                  fontSize: 12,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () async {
+                          // ユーザーの通報
+                          final isShowReport =
+                              await ViolateDialog(context: context)
+                                  .showDialog();
+
+                          final isReport = isShowReport!
+                              ? await ViolateReportDialog(context: context)
+                                  .showDialog()
+                              : false;
+
+                          isReport!
+                              ? ViolateReportCompleteDialog(context: context)
+                                  .showDialog()
+                              : null;
+                        },
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          margin: const EdgeInsets.only(
+                              right: 8, top: 6, bottom: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(22),
+                            color: Colors.black.withOpacity(0.2),
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.more_horiz),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 extendBodyBehindAppBar: true,
@@ -180,15 +220,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                     height: 173,
                                     color: const Color(0xFFFFFB92))
                               else
-                                Image.network(
-                                  state.profile.wallPaper!,
+                                CachedNetworkImage(
+                                  imageUrl: state.profile.wallPaper!,
+                                  placeholder: (context, url) {
+                                    return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 173,
+                                        color: const Color(0xFFFFFB92));
+                                  },
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,
                                 ),
                               CustomPaint(
                                 size: Size(
-                                    MediaQuery.of(context).size.width, 174),
+                                    MediaQuery.of(context).size.width, 173),
                                 painter:
                                     WallPaperArcPainter(color: Colors.white),
                               ),
@@ -261,7 +308,7 @@ class PlaceHolderProfile extends StatelessWidget {
                         height: 173,
                         color: const Color(0xFFFFFB92)),
                     CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 174),
+                      size: Size(MediaQuery.of(context).size.width, 173),
                       painter: WallPaperArcPainter(color: Colors.white),
                     ),
                     const Positioned(
@@ -413,33 +460,38 @@ class _SelectedPlantList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 340,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            i18nTranslate(context, 'user_support_plant'),
-            style: TextStyle(
-              color: const Color(0xFF575292),
-              fontSize: 14,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w700,
-              letterSpacing: calcLetterSpacing(letter: 4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: SizedBox(
+            width: 340,
+            child: Text(
+              i18nTranslate(context, 'user_support_plant'),
+              style: TextStyle(
+                color: const Color(0xFF575292),
+                fontSize: 14,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                letterSpacing: calcLetterSpacing(letter: 4),
+              ),
             ),
           ),
-          const SizedBox(
-            height: 7,
-          ),
-          ...selectedPlantList
-              .map((e) => PowerPlantListItem(
-                    key: ValueKey(e.plantId),
-                    powerPlant: e,
-                    direction: Direction.topLeft,
-                  ))
-              .toList()
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 7,
+        ),
+        ...selectedPlantList
+            .map((e) => PowerPlantListItem(
+                  key: ValueKey(e.plantId),
+                  powerPlant: e,
+                  direction: Direction.topLeft,
+                  isShowCatchphras: false,
+                  aspectRatio: 340 / 298,
+                  thumbnailImageHeight: 226,
+                ))
+            .toList()
+      ],
     );
   }
 }

@@ -53,7 +53,7 @@ class PowerPlantListItem extends StatelessWidget {
           Navigator.push(context, route);
         },
         child: AspectRatio(
-          aspectRatio: 340 / 320,
+          aspectRatio: aspectRatio,
           child: Container(
             decoration: _generateCircularRadius(),
             child: Column(
