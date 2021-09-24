@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
@@ -283,9 +284,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                       ),
                     ),
                   ),
-                  const Text(
-                    '発電出力 / ',
-                    style: TextStyle(
+                  Text(
+                    i18nTranslate(
+                        context, 'power_plant_detail_generate_output'),
+                    style: const TextStyle(
                       fontSize: 12,
                       fontFamily: 'NotoSansJP',
                       fontWeight: FontWeight.w500,
@@ -455,12 +457,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                               side: const BorderSide(
                                   color: Colors.white, width: 2),
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 48, vertical: 12),
                               child: Text(
-                                'この発電所を応援する',
-                                style: TextStyle(
+                                i18nTranslate(
+                                    context, 'power_plant_detail_support'),
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontFamily: 'NotoSansJP',
                                   fontWeight: FontWeight.w700,
@@ -496,9 +499,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     color: Color(0xFFE2E2E2),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'この発電所を応援しているみんなが大切にしていること',
-                    style: TextStyle(
+                  Text(
+                    i18nTranslate(
+                        context, 'power_plant_detail_everyone_important'),
+                    style: const TextStyle(
                       fontSize: 15,
                       fontFamily: 'NotoSansJP',
                       fontWeight: FontWeight.w700,
@@ -574,21 +578,24 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 10),
-        _generateExpandableText(detail.ownerMessage ?? '', 'オーナーより'),
+        _generateExpandableText(detail.ownerMessage ?? '',
+            i18nTranslate(context, 'power_plant_detail_from_owner')),
         const SizedBox(height: 10),
         const Divider(
           height: 1,
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 17),
-        _generateExpandableText(detail.aboutPlant ?? '', 'くわしく'),
+        _generateExpandableText(detail.aboutPlant ?? '',
+            i18nTranslate(context, 'power_plant_detail_about')),
         const SizedBox(height: 10),
         const Divider(
           height: 1,
           color: Color(0xFFE2E2E2),
         ),
         const SizedBox(height: 17),
-        _generateExpandableText(detail.prospect ?? '', 'これから'),
+        _generateExpandableText(detail.prospect ?? '',
+            i18nTranslate(context, 'power_plant_detail_prospect')),
       ],
     );
   }
@@ -618,11 +625,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 2),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 2),
                         child: Text(
-                          'もっと見る',
-                          style: TextStyle(
+                          i18nTranslate(context, 'power_plant_detail_see_more'),
+                          style: const TextStyle(
                             fontSize: 10,
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w700,
@@ -693,15 +700,15 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   String _getGenerationMethod(String powerGenerationMethod) {
     switch (powerGenerationMethod) {
       case '1':
-        return '太陽光発電';
+        return i18nTranslate(context, 'solar_power_generate');
       case '2':
-        return '風力発電';
+        return i18nTranslate(context, 'wind_power_generate');
       case '3':
-        return '地熱発電';
+        return i18nTranslate(context, 'geothermal_power_generate');
       case '4':
-        return '水力発電';
+        return i18nTranslate(context, 'hydroelectric_power_generate');
       case '5':
-        return 'バイオマス発電';
+        return i18nTranslate(context, 'biomass_power_generate');
       default:
         return '';
     }

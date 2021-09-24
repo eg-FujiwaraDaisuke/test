@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
@@ -58,7 +59,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          '発電所を探す',
+          i18nTranslate(context, 'power_plant_serch_power_plant'),
           style: TextStyle(
             fontSize: 18,
             fontFamily: 'NotoSansJP',
@@ -169,7 +170,8 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
                                         width: 3,
                                       ),
                                       Text(
-                                        '検索結果･･･',
+                                        i18nTranslate(context,
+                                            'power_plant_serch_result'),
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontFamily: 'NotoSansJP',
@@ -192,7 +194,8 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
                                         ),
                                       ),
                                       Text(
-                                        '件',
+                                        i18nTranslate(context,
+                                            'power_plant_serch_result_unit'),
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontFamily: 'NotoSansJP',
@@ -210,7 +213,8 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
                           ),
                           const SizedBox(height: 43),
                           Text(
-                            'このタグを選んだ人が応援している発電所',
+                            i18nTranslate(context,
+                                'power_plant_serch_selected_tag_support'),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',

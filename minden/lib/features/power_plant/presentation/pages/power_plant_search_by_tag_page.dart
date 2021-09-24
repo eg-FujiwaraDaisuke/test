@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/color_code_util.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
@@ -99,9 +100,9 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                 const SizedBox(
                   width: 2,
                 ),
-                const Text(
-                  '大切にしていることから探す',
-                  style: TextStyle(
+                Text(
+                  i18nTranslate(context, 'power_plant_serch_by_important'),
+                  style: const TextStyle(
                     color: Color(0xFF575292),
                     fontSize: 16,
                     fontFamily: 'NotoSansJP',
@@ -123,7 +124,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
               height: 10,
             ),
             Text(
-              'あなたが大切にしていることのタグを選択すると、\n同じタグを選択している人が応援している発電所が\n見つかります。',
+              i18nTranslate(context, 'power_plant_serch_select_important_tag'),
               style: TextStyle(
                 color: const Color(0xFF575292),
                 fontSize: 13,
@@ -256,7 +257,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                   child: SizedBox(
                     width: 138,
                     child: Text(
-                      'どんな生産者さんが電気を作っているのか見てみよう',
+                      i18nTranslate(context, 'power_plant_serch_who_make'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: const Color(0xFF9A7446),
@@ -275,7 +276,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                   child: SizedBox(
                     width: 130,
                     child: Text(
-                      '電気を作ってくれている生産者さんを応援することもできるよ！',
+                      i18nTranslate(context, 'power_plant_serch_support_owner'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: const Color(0xFF9A7446),
@@ -300,9 +301,9 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'あなたの選んだタグ',
-          style: TextStyle(
+        Text(
+          i18nTranslate(context, 'power_plant_serch_selected_tag'),
+          style: const TextStyle(
             color: Color(0xFF575292),
             fontSize: 12,
             fontFamily: 'NotoSansJP',
