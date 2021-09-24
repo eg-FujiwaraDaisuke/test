@@ -25,7 +25,6 @@ import 'package:minden/features/login/presentation/bloc/logout_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
-import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
@@ -33,7 +32,6 @@ import 'package:minden/features/uploader/domain/usecases/media_usecase.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
-import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
 
@@ -124,9 +122,9 @@ class Application extends StatelessWidget {
             ),
           ),
         ),
-        supportedLocales: [
-          const Locale('ja'),
-          const Locale('en'),
+        supportedLocales: const [
+          Locale('ja'),
+          Locale('en'),
         ],
         routes: _buildRoutes(),
       ),
@@ -149,7 +147,6 @@ class Application extends StatelessWidget {
       '/home/top': (_) => PowerPlantHomePage(),
       '/my_page/matching': (_) => MatchingPage(),
       '/user': (_) => UserPage(),
-      '/user/profile': (_) => ProfilePage(),
       '/user/profile/edit': (_) => ProfileEditPage(),
       '/message': (_) => MessageView(),
     };

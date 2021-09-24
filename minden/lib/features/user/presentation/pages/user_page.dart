@@ -275,8 +275,9 @@ class _MenuItem extends StatelessWidget {
       onTap: () async {
         switch (routeName) {
           case '/user/profile':
+            final userId = si<Account>().userId;
             final route = MaterialPageRoute(
-              builder: (context) => ProfilePage(),
+              builder: (context) => ProfilePage(userId: userId),
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);
