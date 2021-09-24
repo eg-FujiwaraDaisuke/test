@@ -16,7 +16,7 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-import 'package:minden/features/user/presentation/pages/profile_damy_data.dart';
+
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
@@ -49,9 +49,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-// 確認用仮データ
-  final data = ProfileDamyData().damyData;
-
   late GetProfileBloc _bloc;
 
   @override

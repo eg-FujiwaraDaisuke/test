@@ -25,9 +25,9 @@ class ProfileRepositoryImpl
       required String bio,
       required String wallPaper}) async {
     try {
-      final profile = await retryRequest(() =>
-          dataSource.update(
-              name: name, icon: icon, bio: bio, wallPaper: wallPaper));
+      final profile = await retryRequest(() => dataSource.update(
+          name: name, icon: icon, bio: bio, wallPaper: wallPaper));
+
       logD('${profile.toJson()}');
       return Right(profile);
     } on ServerException {

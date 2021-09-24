@@ -4,7 +4,8 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/utile.dart';
 
 class SupportPlantSelectDialog {
@@ -241,8 +242,6 @@ class SupportPlantSelectDialog {
                       ),
                       GestureDetector(
                         onTap: () {
-                          registPowerPlants.forEach((registPowerPlant) =>
-                              registPowerPlant.isRegist = true);
                           Navigator.pop(context, false);
                         },
                         child: Text(
@@ -318,18 +317,20 @@ class SupportPlantSelectDialog {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                registPowerPlant.powerPlant.name,
-                style: const TextStyle(
-                  color: Color(0xFF575292),
-                  fontSize: 13,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+              SizedBox(
+                width: 153,
+                child: Text(
+                  registPowerPlant.powerPlant.name,
+                  style: const TextStyle(
+                    color: Color(0xFF575292),
+                    fontSize: 13,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  // TODO 登録フラグを切り替える
                   setState(() {
                     registPowerPlant.isRegist = !registPowerPlant.isRegist;
                   });
@@ -381,7 +382,8 @@ class SupportPlantSelectDialog {
     );
   }
 
-  Widget _buildSelectedPlantListItem(canRegistPowerPlants) {
+  Widget _buildSelectedPlantListItem(
+      List<RegistPowerPlant> canRegistPowerPlants) {
     return Container(
       width: 286,
       height: 80,
@@ -400,7 +402,7 @@ class SupportPlantSelectDialog {
             width: 80,
             height: 80,
             child: Image.network(
-              selectPowerPlant.image,
+              selectPowerPlant.plantImage1,
               fit: BoxFit.cover,
             ),
           ),

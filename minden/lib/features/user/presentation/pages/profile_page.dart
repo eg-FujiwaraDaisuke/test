@@ -217,7 +217,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(
                             height: 37,
                           ),
-                          // TODO あとで共通Componentを組み込む
                           _SelectedPlantList(
                               selectedPlantList:
                                   state.profile.selectedPowerPlants)
@@ -414,13 +413,13 @@ class _SelectedPlantList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 32),
-          child: Text(
-            i18nTranslate(context, 'user_select_plant'),
+    return SizedBox(
+      width: 340,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            i18nTranslate(context, 'user_support_plant'),
             style: TextStyle(
               color: const Color(0xFF575292),
               fontSize: 14,
@@ -429,18 +428,18 @@ class _SelectedPlantList extends StatelessWidget {
               letterSpacing: calcLetterSpacing(letter: 4),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        ...selectedPlantList
-            .map((e) => PowerPlantListItem(
-                  key: ValueKey(e.plantId),
-                  powerPlant: e,
-                  direction: Direction.topLeft,
-                ))
-            .toList()
-      ],
+          const SizedBox(
+            height: 7,
+          ),
+          ...selectedPlantList
+              .map((e) => PowerPlantListItem(
+                    key: ValueKey(e.plantId),
+                    powerPlant: e,
+                    direction: Direction.topLeft,
+                  ))
+              .toList()
+        ],
+      ),
     );
   }
 }

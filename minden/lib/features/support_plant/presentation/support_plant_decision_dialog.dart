@@ -4,6 +4,9 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/utile.dart';
 
@@ -25,13 +28,15 @@ class SupportPlantDecisionDialog {
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
+          // 登録可能な発電所のみ保持
           final canRegistPowerPlants = registPowerPlants
               .where((registPowerPlant) => registPowerPlant.isRegist)
               .toList();
 
+          // 新しく登録する予定の発電所
           final newRegistPowerPlants = [
             ...canRegistPowerPlants
-                .map((powerPlant) => powerPlant.powerPlant)
+                .map((registPowerPlants) => registPowerPlants.powerPlant)
                 .toList(),
             selectPowerPlant
           ];
@@ -94,7 +99,7 @@ class SupportPlantDecisionDialog {
                               i18nTranslate(
                                   context, 'support_plant_decide_alright'),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF575292),
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',
@@ -187,7 +192,7 @@ class SupportPlantDecisionDialog {
     );
   }
 
-  Widget _buildSelectedPlantListItem(powerPlant) {
+  Widget _buildSelectedPlantListItem(PowerPlant powerPlant) {
     return Column(
       children: [
         const SizedBox(
@@ -210,7 +215,7 @@ class SupportPlantDecisionDialog {
                 width: 80,
                 height: 80,
                 child: Image.network(
-                  powerPlant.image,
+                  powerPlant.plantImage1,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -222,7 +227,7 @@ class SupportPlantDecisionDialog {
                 child: Text(
                   powerPlant.name,
                   style: TextStyle(
-                    color: Color(0xFF575292),
+                    color: const Color(0xFF575292),
                     fontSize: 13,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,

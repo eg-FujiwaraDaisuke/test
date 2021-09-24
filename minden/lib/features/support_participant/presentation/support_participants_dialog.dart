@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/support_participant/domain/entities/participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 
 class SupportParticipantsDialog {
-  SupportParticipantsDialog({required this.context, required this.participants})
-      : super();
+  SupportParticipantsDialog({
+    required this.context,
+    required this.participants,
+  }) : super();
 
   final BuildContext context;
-  final List<Participant> participants;
+  final PowerPlantParticipant participants;
 
   void showDialog() {
     Navigator.push(
@@ -40,7 +42,7 @@ class SupportParticipantsDialog {
                             ),
                           ),
                           TextSpan(
-                            text: participants.length.toString(),
+                            text: participants.total.toString(),
                             style: const TextStyle(
                               color: Color(0xFF787877),
                               fontSize: 16,
@@ -71,7 +73,7 @@ class SupportParticipantsDialog {
                         alignment: WrapAlignment.start,
                         spacing: 7,
                         runSpacing: 16,
-                        children: participants
+                        children: participants.userList
                             .map(
                               _buildPartcipantItem,
                             )
@@ -94,7 +96,9 @@ class SupportParticipantsDialog {
                       children: [
                         Text(
                           i18nTranslate(
-                              context, 'support_participants_support_from_web'),
+                            context,
+                            'support_participants_support_from_web',
+                          ),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Color(0xFFFF8C00),
@@ -111,7 +115,7 @@ class SupportParticipantsDialog {
                             children: [
                               TextSpan(
                                 // ここにWEBから応援している人数が入る
-                                text: '7',
+                                text: '0',
                                 style: const TextStyle(
                                   color: Color(0xFFFF8C00),
                                   fontSize: 14,
@@ -121,7 +125,9 @@ class SupportParticipantsDialog {
                               ),
                               TextSpan(
                                 text: i18nTranslate(
-                                    context, 'support_participants_people'),
+                                  context,
+                                  'support_participants_people',
+                                ),
                                 style: const TextStyle(
                                   color: Color(0xFFFF8C00),
                                   fontSize: 14,
@@ -154,38 +160,40 @@ class SupportParticipantsDialog {
     );
   }
 
-  Widget _buildPartcipantItem(Participant participant) {
+  Widget _buildPartcipantItem(PowerPlantParticipantUser participant) {
     return GestureDetector(
       onTap: () {
-        logD(participant.name);
+        // TODO ここで他人のプロフィールページに飛ぶ
+        print(participant.userId);
       },
       child: Column(
         children: [
           Container(
-              width: 47,
-              height: 47,
-              clipBehavior: Clip.hardEdge,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: participant.icon.isEmpty
-                    ? Image.asset(
-                        'assets/images/user/icon_no_photo.png',
-                        fit: BoxFit.cover,
-                      )
-                    : Image.network(
-                        participant.icon,
-                        fit: BoxFit.cover,
-                      ),
-              )),
+            width: 47,
+            height: 47,
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: participant.icon == null
+                  ? Image.asset(
+                      'assets/images/user/icon_no_photo.png',
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      participant.icon,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
           const SizedBox(
             height: 5,
           ),
           SizedBox(
             width: 66,
             child: Text(
-              participant.name,
+              participant.name ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Color(0xFFFF8C00),
