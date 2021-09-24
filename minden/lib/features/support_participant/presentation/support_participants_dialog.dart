@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
@@ -187,14 +188,20 @@ class SupportParticipantsDialog {
                       'assets/images/user/icon_no_photo.png',
                       fit: BoxFit.cover,
                     )
-                  : Image.network(participant.icon, fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                      return Image.asset(
+                  : CachedNetworkImage(
+                      imageUrl: participant.icon,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) {
+                        return Image.asset(
+                          'assets/images/user/icon_no_photo.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      errorWidget: (context, url, error) => Image.asset(
                         'assets/images/user/icon_no_photo.png',
                         fit: BoxFit.cover,
-                      );
-                    }),
+                      ),
+                    ),
             ),
           ),
           const SizedBox(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
@@ -214,9 +215,15 @@ class SupportPlantDecisionDialog {
               SizedBox(
                 width: 80,
                 height: 80,
-                child: Image.network(
-                  powerPlant.plantImage1,
+                child: CachedNetworkImage(
+                  imageUrl: powerPlant.plantImage1,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return Image.asset(
+                      'assets/images/power_plant/power_plant_header_bg.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
               const SizedBox(

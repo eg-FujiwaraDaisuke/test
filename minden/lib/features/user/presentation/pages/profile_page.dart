@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -219,15 +220,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                     height: 173,
                                     color: const Color(0xFFFFFB92))
                               else
-                                Image.network(
-                                  state.profile.wallPaper!,
+                                CachedNetworkImage(
+                                  imageUrl: state.profile.wallPaper!,
+                                  placeholder: (context, url) {
+                                    return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 173,
+                                        color: const Color(0xFFFFFB92));
+                                  },
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,
                                 ),
                               CustomPaint(
                                 size: Size(
-                                    MediaQuery.of(context).size.width, 174),
+                                    MediaQuery.of(context).size.width, 173),
                                 painter:
                                     WallPaperArcPainter(color: Colors.white),
                               ),
@@ -300,7 +308,7 @@ class PlaceHolderProfile extends StatelessWidget {
                         height: 173,
                         color: const Color(0xFFFFFB92)),
                     CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 174),
+                      size: Size(MediaQuery.of(context).size.width, 173),
                       painter: WallPaperArcPainter(color: Colors.white),
                     ),
                     const Positioned(

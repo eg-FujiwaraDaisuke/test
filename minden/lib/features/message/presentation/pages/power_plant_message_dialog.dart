@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
@@ -34,8 +35,14 @@ class PowerPlantMessageDialog {
                   SizedBox(
                     width: 256,
                     height: 192,
-                    child: Image.network(
-                      message.image,
+                    child: CachedNetworkImage(
+                      imageUrl: message.image,
+                      placeholder: (context, url) {
+                        return Image.asset(
+                          'assets/images/power_plant/power_plant_header_bg.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
                       width: 256,
                       height: 192,
                       fit: BoxFit.cover,

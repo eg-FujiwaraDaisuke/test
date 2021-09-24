@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -406,17 +407,23 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
               if (_url.isEmpty)
                 Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 174,
+                    height: 173,
                     color: const Color(0xFFFFFB92))
               else
-                Image.network(
-                  _url,
+                CachedNetworkImage(
+                  imageUrl: _url,
                   width: MediaQuery.of(context).size.width,
                   height: 173,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 173,
+                        color: const Color(0xFFFFFB92));
+                  },
                 ),
               CustomPaint(
-                size: Size(MediaQuery.of(context).size.width, 174),
+                size: Size(MediaQuery.of(context).size.width, 173),
                 painter: WallPaperArcPainter(color: const Color(0xFFF6F5EF)),
               ),
               const SizedBox(
@@ -436,7 +443,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                             .add(UploadMediaEvent(value));
                       },
                       cropStyle: CropStyle.rectangle,
-                      clipHeight: 174,
+                      clipHeight: 173,
                       clipWidth: 375,
                     );
                   },
