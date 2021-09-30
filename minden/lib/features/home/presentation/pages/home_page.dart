@@ -5,10 +5,15 @@ import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_my
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
 import 'package:minden/features/debug/debug_push_message_page.dart';
+import 'package:minden/features/fcm/data/datasources/fcm_token_data_source.dart';
+import 'package:minden/features/fcm/data/repositories/fcm_token_repository_impl.dart';
+import 'package:minden/features/fcm/domain/usecases/update_fcm_token.dart';
+import 'package:minden/features/fcm/pages/bloc/fcm_bloc.dart';
 import 'package:minden/injection_container.dart';
+import 'package:http/http.dart' as http;
 
 // FCMプッシュ通知の遷移周りの初期化を行っています。
-//bottomNavigationBarの出し分けを行います
+// bottomNavigationBarの出し分けを行います
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,6 +22,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TabItem _currentTab = TabItem.home;
+
+  late UpdateFcmTokenBloc _bloc;
 
   final _navigatorKeys = {
     TabItem.home: GlobalKey<NavigatorState>(),
@@ -29,12 +36,28 @@ class _HomePageState extends State<HomePage> {
 
   void _postToken(String? token) {
     logD('FCM token : $token');
-    if (token == null) return;
+
+    if (token == null) {
+      return;
+    }
+
+    _bloc.add(UpdateFcmTokenEvent(token));
   }
 
   @override
   void initState() {
     super.initState();
+
+    _bloc = UpdateFcmTokenBloc(
+      FcmStateInitial(),
+      UpdateFcmToken(
+        FcmTokenRepositoryImpl(
+          fcmTokenDataSource: FcmTokenDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
 
     si<FirebaseMessaging>().getToken().then(_postToken);
     si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
@@ -43,7 +66,6 @@ class _HomePageState extends State<HomePage> {
     //TODO 通知をタップしたらメッセージページに遷移させたい
     //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
     si<FirebaseMessaging>().getInitialMessage().then((RemoteMessage? message) {
-      logD('===========================ターミネイト状態');
       logD('${message}');
       if (message != null) {
         Navigator.of(context).push(
@@ -62,8 +84,6 @@ class _HomePageState extends State<HomePage> {
     // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       logD('${message}');
-
-      logD('=========================== バックグラウンド状態');
       Navigator.of(context).push(
         MaterialPageRoute(
           settings: RouteSettings(
@@ -79,6 +99,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _bloc.close();
     super.dispose();
   }
 
