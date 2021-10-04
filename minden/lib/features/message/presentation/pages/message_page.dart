@@ -1,14 +1,66 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/message/data/datasources/message_datasource.dart';
+import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
+import 'package:minden/features/message/domain/usecases/message_usecase.dart';
+import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:minden/utile.dart';
 
-class MessagePage extends StatelessWidget {
+class MessagePage extends StatefulWidget {
+  @override
+  _MessagePageState createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  late GetMessagesBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = GetMessagesBloc(
+      const MessageInitial(),
+      GetMessages(
+        MessageRepositoryImpl(
+          dataSource: MessageDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _bloc.stream.listen((event) async {
+      if (event is MessageError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+              (_) => false);
+        }
+      }
+    });
+    _bloc.add(GetMessagesEvent('1'));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +86,25 @@ class MessagePage extends StatelessWidget {
             color: Colors.white,
             margin: const EdgeInsets.only(top: 100),
             width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: userMessageDammy.messages
-                  .map((message) => _ThanksMessage(message: message))
-                  .toList(),
+            child: BlocProvider.value(
+              value: _bloc,
+              child: BlocListener<GetMessagesBloc, MessageState>(
+                listener: (context, state) {
+                  if (state is MessagesLoading) {
+                    Loading.show(context);
+                    return;
+                  }
+                  Loading.hide();
+                },
+                child: BlocBuilder<GetMessagesBloc, MessageState>(
+                  builder: (context, state) {
+                    if (state is MessagesLoaded) {
+                      return _buildMessageList(state.messages);
+                    }
+                    return Container();
+                  },
+                ),
+              ),
             ),
           ),
         ),
@@ -59,20 +125,25 @@ class MessagePage extends StatelessWidget {
       color: Colors.black,
     );
   }
-}
 
-class _ThanksMessage extends StatelessWidget {
-  const _ThanksMessage({required this.message});
-  final Message message;
+  Widget _buildMessageList(Messages messages) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: messages.messages
+          .map((messageDetail) => _buildMessageListItem(messageDetail))
+          .toList(),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildMessageListItem(MessageDetail messageDetail) {
     return GestureDetector(
       onTap: () {
-        if (message.messageType == 'みんでん') {
-          MindenMessageDialog(context: context, message: message).showDialog();
+        if (messageDetail.messageType == '1') {
+          MindenMessageDialog(context: context, messageDetail: messageDetail)
+              .showDialog();
         } else {
-          PowerPlantMessageDialog(context: context, message: message)
+          PowerPlantMessageDialog(
+                  context: context, messageDetail: messageDetail)
               .showDialog();
         }
       },
@@ -92,7 +163,7 @@ class _ThanksMessage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (message.image.isEmpty)
+                if (messageDetail.image.isEmpty)
                   Container(
                     width: 64,
                     height: 64,
@@ -110,7 +181,7 @@ class _ThanksMessage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: CachedNetworkImage(
-                      imageUrl: message.image,
+                      imageUrl: messageDetail.image,
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/power_plant/power_plant_header_bg.png',
@@ -133,7 +204,7 @@ class _ThanksMessage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              message.read
+                              messageDetail.read
                                   ? ''
                                   : i18nTranslate(
                                       context, 'thanks_message_new'),
@@ -147,7 +218,7 @@ class _ThanksMessage extends StatelessWidget {
                             ),
                             Text(
                               // TODO ここに発電所の名前がはいる
-                              message.plantId,
+                              messageDetail.plantId,
                               style: TextStyle(
                                 color: const Color(0xFFFF8C00),
                                 fontSize: 10,
@@ -165,7 +236,7 @@ class _ThanksMessage extends StatelessWidget {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          message.title,
+                          messageDetail.title,
                           style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 13,
@@ -178,7 +249,7 @@ class _ThanksMessage extends StatelessWidget {
                         height: 7,
                       ),
                       Text(
-                        message.created.toString(),
+                        messageDetail.created.toString(),
                         style: const TextStyle(
                           color: Color(0xFFC4C4C4),
                           fontSize: 10,

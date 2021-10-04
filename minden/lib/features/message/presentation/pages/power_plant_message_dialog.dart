@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
 
 class PowerPlantMessageDialog {
-  PowerPlantMessageDialog({required this.context, required this.message})
-      : super();
+  PowerPlantMessageDialog({
+    required this.context,
+    required this.messageDetail,
+  }) : super();
   final BuildContext context;
-  final Message message;
+  final MessageDetail messageDetail;
 
   void showDialog() {
     Navigator.push(
@@ -36,7 +39,7 @@ class PowerPlantMessageDialog {
                     width: 256,
                     height: 192,
                     child: CachedNetworkImage(
-                      imageUrl: message.image,
+                      imageUrl: messageDetail.image,
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/power_plant/power_plant_header_bg.png',
@@ -54,7 +57,7 @@ class PowerPlantMessageDialog {
                   SizedBox(
                     width: 265,
                     child: Text(
-                      message.body,
+                      messageDetail.body,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         color: Color(0xFF967D5E),
@@ -72,7 +75,7 @@ class PowerPlantMessageDialog {
               left: 48,
               child: Text(
                 // TODO ここに発電所の名前がはいる
-                message.plantId,
+                messageDetail.plantId,
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Color(0xFF967D5E),
