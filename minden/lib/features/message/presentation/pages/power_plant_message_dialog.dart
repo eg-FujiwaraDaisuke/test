@@ -61,14 +61,21 @@ class PowerPlantMessageDialog {
                   ),
                   SizedBox(
                     width: 265,
-                    child: Text(
-                      messageDetail.body,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: Color(0xFF967D5E),
-                        fontSize: 14,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
+                    height: 90,
+                    child: Scrollbar(
+                      isAlwaysShown: false,
+                      controller: ScrollController(),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          messageDetail.body,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: Color(0xFF967D5E),
+                            fontSize: 14,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -77,15 +84,18 @@ class PowerPlantMessageDialog {
             ),
             Positioned(
               bottom: 40,
-              left: 48,
-              child: Text(
-                powerPlantName,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  color: Color(0xFF967D5E),
-                  fontSize: 18,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+              left: 40,
+              child: SizedBox(
+                width: 200,
+                child: Text(
+                  powerPlantName,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    color: Color(0xFF967D5E),
+                    fontSize: 18,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
