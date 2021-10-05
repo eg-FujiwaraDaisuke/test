@@ -24,6 +24,10 @@ import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
+import 'package:minden/features/message/data/datasources/message_datasource.dart';
+import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
+import 'package:minden/features/message/domain/usecases/message_usecase.dart';
+import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
@@ -78,6 +82,18 @@ class Application extends StatelessWidget {
             LogoutUser(
               LogoutRepositoryImpl(
                 userDataSource: UserDataSourceImpl(client: http.Client()),
+              ),
+            ),
+          ),
+        ),
+        BlocProvider<GetMessagesBloc>(
+          create: (BuildContext context) => GetMessagesBloc(
+            const MessageInitial(),
+            GetMessages(
+              MessageRepositoryImpl(
+                dataSource: MessageDataSourceImpl(
+                  client: http.Client(),
+                ),
               ),
             ),
           ),

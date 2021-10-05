@@ -9,10 +9,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/data/datasources/message_datasource.dart';
-import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/entities/message.dart';
-import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
@@ -375,17 +372,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
   @override
   void initState() {
     super.initState();
-    _getMessagesBloc = GetMessagesBloc(
-      const MessageInitial(),
-      GetMessages(
-        MessageRepositoryImpl(
-          dataSource: MessageDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
+    _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
     _getMessagesBloc.add(GetMessagesEvent('1'));
 
     _getPowerPlantsBloc = GetPowerPlantBloc(
@@ -402,7 +389,6 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
 
   @override
   void dispose() {
-    _getMessagesBloc.close();
     _getPowerPlantsBloc.close();
     super.dispose();
   }

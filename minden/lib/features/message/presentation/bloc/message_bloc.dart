@@ -76,16 +76,16 @@ class ReadMessageBloc extends Bloc<MessageEvent, MessageState> {
     MessageEvent event,
   ) async* {
     if (event is ReadMessageEvent) {
-      yield const MessageReading();
-      final failureOrSuccess =
-          await usecase(ReadMessageParams(event.messageId));
+      try {
+        yield const MessageReading();
+        final failureOrSuccess =
+            await usecase(ReadMessageParams(event.messageId));
 
-      yield failureOrSuccess.fold(
-        (failure) => throw failure,
-        (success) => const MessageReaded(),
-      );
-
-      try {} on RefreshTokenExpiredException catch (e) {
+        yield failureOrSuccess.fold(
+          (failure) => throw failure,
+          (success) => const MessageReaded(),
+        );
+      } on RefreshTokenExpiredException catch (e) {
         yield MessageError(message: e.toString(), needLogin: true);
       } catch (e) {
         yield MessageError(message: e.toString(), needLogin: false);

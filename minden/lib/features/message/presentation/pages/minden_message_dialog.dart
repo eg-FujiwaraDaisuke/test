@@ -67,7 +67,7 @@ class MindenMessageDialog {
                     SizedBox(
                       width: 298,
                       child: Text(
-                        messageDetail.body.replaceAll('\\n', '\n'),
+                        messageDetail.body,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xFF27AE60),

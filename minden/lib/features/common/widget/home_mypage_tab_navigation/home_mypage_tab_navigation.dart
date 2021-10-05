@@ -3,11 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
-import 'package:minden/features/message/data/datasources/message_datasource.dart';
-import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
-import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
-import 'package:http/http.dart' as http;
 
 class HomeMypageTabNavigation extends StatefulWidget {
   const HomeMypageTabNavigation({
@@ -28,24 +24,8 @@ class _HomeMypageTabNavigationState extends State<HomeMypageTabNavigation> {
   @override
   void initState() {
     super.initState();
-    _bloc = GetMessagesBloc(
-      const MessageInitial(),
-      GetMessages(
-        MessageRepositoryImpl(
-          dataSource: MessageDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
+    _bloc = BlocProvider.of<GetMessagesBloc>(context);
     _bloc.add(GetMessagesEvent('1'));
-  }
-
-  @override
-  void dispose() {
-    _bloc.close();
-    super.dispose();
   }
 
   @override

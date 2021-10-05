@@ -35,36 +35,8 @@ class _MessagePageState extends State<MessagePage> {
   @override
   void initState() {
     super.initState();
-    _getMessagesBloc = GetMessagesBloc(
-      const MessageInitial(),
-      GetMessages(
-        MessageRepositoryImpl(
-          dataSource: MessageDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
-    _getMessagesBloc.stream.listen((event) async {
-      if (event is MessageError) {
-        if (event.needLogin) {
-          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (_) => false);
-        }
-      }
-    });
+    _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
     _getMessagesBloc.add(GetMessagesEvent('1'));
-  }
-
-  @override
-  void dispose() {
-    _getMessagesBloc.close();
-    super.dispose();
   }
 
   @override
