@@ -203,178 +203,238 @@ class _MessagesListItemState extends State<_MessagesListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _readMessageBloc
-            .add(ReadMessageEvent(messageId: widget.messageDetail.messageId));
-        if (widget.messageDetail.messageType == '1') {
-          MindenMessageDialog(
-                  context: context, messageDetail: widget.messageDetail)
-              .showDialog();
-        } else {
-          PowerPlantMessageDialog(
-                  context: context, messageDetail: widget.messageDetail)
-              .showDialog();
-        }
-      },
-      child: Container(
-        width: 288,
-        margin: const EdgeInsets.only(top: 25),
-        padding: const EdgeInsets.only(bottom: 13),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Color(0xFFC4C4C4),
-            ),
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (widget.messageDetail.image == null)
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFDCF6DA),
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/message/minden_thumbnail.png',
-                        width: 57,
-                        height: 54,
+    final dd =
+        DateTime.fromMillisecondsSinceEpoch(widget.messageDetail.created);
+    return BlocProvider.value(
+      value: _getPowerPlantsBloc,
+      child: BlocListener<GetPowerPlantBloc, PowerPlantState>(
+        listener: (context, state) {
+          if (state is PowerPlantLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is PowerPlantLoaded) {
+              return GestureDetector(
+                onTap: () {
+                  _readMessageBloc.add(ReadMessageEvent(
+                      messageId: widget.messageDetail.messageId));
+                  if (widget.messageDetail.messageType == '1') {
+                    MindenMessageDialog(
+                            context: context,
+                            messageDetail: widget.messageDetail)
+                        .showDialog();
+                  } else {
+                    PowerPlantMessageDialog(
+                      context: context,
+                      messageDetail: widget.messageDetail,
+                      powerPlantName: state.powerPlant.name ?? '',
+                    ).showDialog();
+                  }
+                },
+                child: Container(
+                  width: 288,
+                  margin: const EdgeInsets.only(top: 25),
+                  padding: const EdgeInsets.only(bottom: 13),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xFFC4C4C4),
                       ),
                     ),
-                  )
-                else
-                  Container(
-                    width: 64,
-                    height: 64,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.messageDetail.image!,
-                      placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/power_plant/power_plant_header_bg.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      width: 64,
-                      height: 64,
-                      fit: BoxFit.cover,
-                    ),
                   ),
-                SizedBox(
-                  width: 200,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: 200,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.messageDetail.read
-                                  ? ''
-                                  : i18nTranslate(
-                                      context, 'thanks_message_new'),
-                              style: TextStyle(
-                                color: const Color(0xFFFF8C00),
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: calcLetterSpacing(letter: 0.5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (widget.messageDetail.image == null)
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFDCF6DA),
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/images/message/minden_thumbnail.png',
+                                  width: 57,
+                                  height: 54,
+                                ),
+                              ),
+                            )
+                          else
+                            Container(
+                              width: 64,
+                              height: 64,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.messageDetail.image!,
+                                placeholder: (context, url) {
+                                  return Image.asset(
+                                    'assets/images/power_plant/power_plant_header_bg.png',
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                width: 64,
+                                height: 64,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            if (widget.messageDetail.messageType == '1')
-                              Flexible(
-                                child: Container(
-                                  padding: const EdgeInsets.only(left: 30),
+                          SizedBox(
+                            width: 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: 200,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (widget.messageDetail.read)
+                                        Text(
+                                          '',
+                                          style: TextStyle(
+                                            color: const Color(0xFFFF8C00),
+                                            fontSize: 12,
+                                            fontFamily: 'NotoSansJP',
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing:
+                                                calcLetterSpacing(letter: 0.5),
+                                          ),
+                                        )
+                                      else
+                                        Text(
+                                          i18nTranslate(
+                                              context, 'thanks_message_new'),
+                                          style: TextStyle(
+                                            color: const Color(0xFFFF8C00),
+                                            fontSize: 12,
+                                            fontFamily: 'NotoSansJP',
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing:
+                                                calcLetterSpacing(letter: 0.5),
+                                          ),
+                                        ),
+                                      if (widget.messageDetail.messageType ==
+                                          '1')
+                                        Flexible(
+                                          child: Container(
+                                            padding:
+                                                const EdgeInsets.only(left: 30),
+                                            child: Text(
+                                              'みんな電力からのお知らせ',
+                                              style: TextStyle(
+                                                color: const Color(0xFF787877),
+                                                fontSize: 10,
+                                                fontFamily: 'NotoSansJP',
+                                                fontWeight: FontWeight.w700,
+                                                letterSpacing:
+                                                    calcLetterSpacing(
+                                                        letter: 0.5),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      else
+                                        Flexible(
+                                          child: Container(
+                                            padding:
+                                                const EdgeInsets.only(left: 30),
+                                            child: Text(
+                                              state.powerPlant.name!,
+                                              style: TextStyle(
+                                                color: const Color(0xFF787877),
+                                                fontSize: 10,
+                                                fontFamily: 'NotoSansJP',
+                                                fontWeight: FontWeight.w700,
+                                                letterSpacing:
+                                                    calcLetterSpacing(
+                                                        letter: 0.5),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 7,
+                                ),
+                                SizedBox(
+                                  width: 200,
                                   child: Text(
-                                    'みんな電力からのお知らせ',
-                                    style: TextStyle(
-                                      color: const Color(0xFF787877),
-                                      fontSize: 10,
+                                    widget.messageDetail.title,
+                                    style: const TextStyle(
+                                      color: Color(0xFF787877),
+                                      fontSize: 13,
                                       fontFamily: 'NotoSansJP',
                                       fontWeight: FontWeight.w700,
-                                      letterSpacing:
-                                          calcLetterSpacing(letter: 0.5),
                                     ),
                                   ),
                                 ),
-                              )
-                            else
-                              BlocProvider.value(
-                                value: _getPowerPlantsBloc,
-                                child: BlocBuilder<GetPowerPlantBloc,
-                                    PowerPlantState>(
-                                  builder: (context, state) {
-                                    if (state is PowerPlantLoaded) {
-                                      return Flexible(
-                                        child: Container(
-                                          padding:
-                                              const EdgeInsets.only(left: 30),
-                                          child: Text(
-                                            state.powerPlant.name!,
-                                            style: TextStyle(
-                                              color: const Color(0xFF787877),
-                                              fontSize: 10,
-                                              fontFamily: 'NotoSansJP',
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: calcLetterSpacing(
-                                                  letter: 0.5),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    return const Text('');
-                                  },
+                                const SizedBox(
+                                  height: 7,
                                 ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: Text(
-                          widget.messageDetail.title,
-                          style: const TextStyle(
-                            color: Color(0xFF787877),
-                            fontSize: 13,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w700,
+                                Text(
+                                  '${dd.year}/${dd.month}',
+                                  style: const TextStyle(
+                                    color: Color(0xFFC4C4C4),
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      Text(
-                        widget.messageDetail.created.toString().toString(),
-                        style: const TextStyle(
-                          color: Color(0xFFC4C4C4),
-                          fontSize: 10,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w500,
-                        ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              );
+            }
+
+            //プレースホルダー
+            return Container(
+              width: 288,
+              margin: const EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(bottom: 13),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFC4C4C4),
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFDCF6DA),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

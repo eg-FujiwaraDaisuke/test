@@ -7,7 +7,7 @@ class MessageDetail extends Equatable {
     required this.plantId,
     required this.title,
     required this.body,
-    required this.image,
+    this.image,
     required this.created,
     required this.read,
     required this.importance,

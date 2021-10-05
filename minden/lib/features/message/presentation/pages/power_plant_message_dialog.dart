@@ -7,9 +7,11 @@ class PowerPlantMessageDialog {
   PowerPlantMessageDialog({
     required this.context,
     required this.messageDetail,
+    required this.powerPlantName,
   }) : super();
   final BuildContext context;
   final MessageDetail messageDetail;
+  final String powerPlantName;
 
   void showDialog() {
     Navigator.push(
@@ -73,8 +75,7 @@ class PowerPlantMessageDialog {
               bottom: 40,
               left: 48,
               child: Text(
-                // TODO ここに発電所の名前がはいる
-                messageDetail.plantId,
+                powerPlantName,
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                   color: Color(0xFF967D5E),
