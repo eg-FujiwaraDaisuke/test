@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
 
 class PowerPlantMessageDialog {
-  PowerPlantMessageDialog({required this.context, required this.message})
-      : super();
+  PowerPlantMessageDialog({
+    required this.context,
+    required this.messageDetail,
+    required this.powerPlantName,
+  }) : super();
   final BuildContext context;
-  final Message message;
+  final MessageDetail messageDetail;
+  final String powerPlantName;
 
   void showDialog() {
     Navigator.push(
@@ -36,13 +40,17 @@ class PowerPlantMessageDialog {
                     width: 256,
                     height: 192,
                     child: CachedNetworkImage(
-                      imageUrl: message.image,
+                      imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/power_plant/power_plant_header_bg.png',
                           fit: BoxFit.cover,
                         );
                       },
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/power_plant/power_plant_header_bg.png',
+                        fit: BoxFit.cover,
+                      ),
                       width: 256,
                       height: 192,
                       fit: BoxFit.cover,
@@ -53,14 +61,21 @@ class PowerPlantMessageDialog {
                   ),
                   SizedBox(
                     width: 265,
-                    child: Text(
-                      message.body,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: Color(0xFF967D5E),
-                        fontSize: 14,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
+                    height: 90,
+                    child: Scrollbar(
+                      isAlwaysShown: false,
+                      controller: ScrollController(),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          messageDetail.body,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: Color(0xFF967D5E),
+                            fontSize: 14,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -69,16 +84,18 @@ class PowerPlantMessageDialog {
             ),
             Positioned(
               bottom: 40,
-              left: 48,
-              child: Text(
-                // TODO ここに発電所の名前がはいる
-                message.plantId,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  color: Color(0xFF967D5E),
-                  fontSize: 18,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+              left: 40,
+              child: SizedBox(
+                width: 200,
+                child: Text(
+                  powerPlantName,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    color: Color(0xFF967D5E),
+                    fontSize: 18,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),

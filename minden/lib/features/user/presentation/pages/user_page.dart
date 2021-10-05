@@ -9,7 +9,15 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -17,7 +25,6 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
@@ -129,10 +136,16 @@ class _UserPageState extends State<UserPage> {
                                 imageUrl: state.profile.wallPaper!,
                                 placeholder: (context, url) {
                                   return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 173,
-                                      color: const Color(0xFFFFFB92));
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 173,
+                                    color: const Color(0xFFFFFB92),
+                                  );
                                 },
+                                errorWidget: (context, url, error) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 173,
+                                  color: const Color(0xFFFFFB92),
+                                ),
                                 width: MediaQuery.of(context).size.width,
                                 height: 173,
                                 fit: BoxFit.cover,
@@ -338,7 +351,7 @@ class _MenuItem extends StatelessWidget {
   }
 }
 
-class _MenuMessageItem extends StatelessWidget {
+class _MenuMessageItem extends StatefulWidget {
   const _MenuMessageItem({
     required this.title,
     required this.icon,
@@ -347,7 +360,38 @@ class _MenuMessageItem extends StatelessWidget {
   final String title;
   final String icon;
   final String routeName;
-  final bool hasUnreadNotice = true;
+
+  @override
+  _MenuMessageItemState createState() => _MenuMessageItemState();
+}
+
+class _MenuMessageItemState extends State<_MenuMessageItem> {
+  late GetMessagesBloc _getMessagesBloc;
+  late GetPowerPlantBloc _getPowerPlantsBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+    _getMessagesBloc.add(GetMessagesEvent('1'));
+
+    _getPowerPlantsBloc = GetPowerPlantBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlant(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _getPowerPlantsBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -365,75 +409,99 @@ class _MenuMessageItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 22),
         height: 56,
         width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      child: SvgPicture.asset(
-                        'assets/images/user/$icon.svg',
-                        color: const Color(0xFF575292),
-                      ),
-                    ),
-                    Positioned(
-                      right: -6,
-                      top: -3,
-                      child: Opacity(
-                        opacity: hasUnreadNotice ? 1 : 0,
-                        child: Container(
-                          width: 14,
-                          height: 14,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF8C00),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 3,
-                              color: const Color(0xFFFFFFFF),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(width: 17.5),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: const Color(0xFF575292),
-                    fontSize: 12,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: calcLetterSpacing(letter: 0.5),
-                  ),
-                ),
-                const SizedBox(width: 22),
-                if (hasUnreadNotice)
-                  Flexible(
-                    child: Text(
-                      // TODO 未読で最新メッセージの発電所が入ります
-                      'XXX発電所' +
-                          i18nTranslate(context, 'thanks_message_notification'),
-                      style: TextStyle(
-                        color: const Color(0xFFFF8C00),
-                        fontSize: 9,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: calcLetterSpacing(letter: 0.5),
-                      ),
-                    ),
-                  )
-                else
-                  Container()
-              ],
-            ),
-          ],
+        child: BlocProvider.value(
+          value: _getMessagesBloc,
+          child: BlocBuilder<GetMessagesBloc, MessageState>(
+            builder: (context, state) {
+              if (state is MessagesLoaded) {
+                if (state.messages.messages != []) {
+                  _getPowerPlantsBloc.add(GetPowerPlantEvent(
+                      plantId: state.messages.messages[0].plantId));
+                }
+                return _buildMessageNav(state.messages);
+              }
+              return Container();
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMessageNav(Messages messages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  child: SvgPicture.asset(
+                    'assets/images/user/${widget.icon}.svg',
+                    color: const Color(0xFF575292),
+                  ),
+                ),
+                Positioned(
+                  right: -6,
+                  top: -3,
+                  child: Opacity(
+                    opacity: messages.showBadge ? 1 : 0,
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF8C00),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 3,
+                          color: const Color(0xFFFFFFFF),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(width: 17.5),
+            Text(
+              widget.title,
+              style: TextStyle(
+                color: const Color(0xFF575292),
+                fontSize: 12,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w700,
+                letterSpacing: calcLetterSpacing(letter: 0.5),
+              ),
+            ),
+            const SizedBox(width: 22),
+            if (messages.showBadge)
+              BlocProvider.value(
+                value: _getPowerPlantsBloc,
+                child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
+                  builder: (context, state) {
+                    if (state is PowerPlantLoaded) {
+                      return Flexible(
+                        child: Text(
+                          '${messages.messages[0].messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
+                          style: TextStyle(
+                            color: const Color(0xFFFF8C00),
+                            fontSize: 9,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: calcLetterSpacing(letter: 0.5),
+                          ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

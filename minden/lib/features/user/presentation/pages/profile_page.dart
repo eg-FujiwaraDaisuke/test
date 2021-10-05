@@ -229,6 +229,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                         height: 173,
                                         color: const Color(0xFFFFFB92));
                                   },
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 173,
+                                    color: const Color(0xFFFFFB92),
+                                  ),
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
                                   fit: BoxFit.cover,

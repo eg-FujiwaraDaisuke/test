@@ -417,10 +417,16 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
                     return Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 173,
-                        color: const Color(0xFFFFFB92));
+                      width: MediaQuery.of(context).size.width,
+                      height: 173,
+                      color: const Color(0xFFFFFB92),
+                    );
                   },
+                  errorWidget: (context, url, error) => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 173,
+                    color: const Color(0xFFFFFB92),
+                  ),
                 ),
               CustomPaint(
                 size: Size(MediaQuery.of(context).size.width, 173),

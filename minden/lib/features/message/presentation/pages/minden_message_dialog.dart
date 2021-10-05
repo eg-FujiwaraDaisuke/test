@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/utile.dart';
 
 class MindenMessageDialog {
-  MindenMessageDialog({required this.context, required this.message}) : super();
+  MindenMessageDialog({
+    required this.context,
+    required this.messageDetail,
+  }) : super();
   final BuildContext context;
-  final Message message;
+  final MessageDetail messageDetail;
 
   void showDialog() {
     Navigator.push(
@@ -35,7 +38,7 @@ class MindenMessageDialog {
                       height: 76,
                       child: Center(
                         child: Text(
-                          message.title,
+                          messageDetail.title,
                           style: TextStyle(
                               color: const Color(0xFF27AE60),
                               fontSize: 18,
@@ -64,7 +67,7 @@ class MindenMessageDialog {
                     SizedBox(
                       width: 298,
                       child: Text(
-                        message.body,
+                        messageDetail.body,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xFF27AE60),
