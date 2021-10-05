@@ -47,6 +47,10 @@ class PowerPlantMessageDialog {
                           fit: BoxFit.cover,
                         );
                       },
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/power_plant/power_plant_header_bg.png',
+                        fit: BoxFit.cover,
+                      ),
                       width: 256,
                       height: 192,
                       fit: BoxFit.cover,

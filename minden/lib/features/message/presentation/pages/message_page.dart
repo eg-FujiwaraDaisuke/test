@@ -283,6 +283,11 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                     fit: BoxFit.cover,
                                   );
                                 },
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  'assets/images/power_plant/power_plant_header_bg.png',
+                                  fit: BoxFit.cover,
+                                ),
                                 width: 64,
                                 height: 64,
                                 fit: BoxFit.cover,

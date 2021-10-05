@@ -139,10 +139,16 @@ class _UserPageState extends State<UserPage> {
                                 imageUrl: state.profile.wallPaper!,
                                 placeholder: (context, url) {
                                   return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 173,
-                                      color: const Color(0xFFFFFB92));
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 173,
+                                    color: const Color(0xFFFFFB92),
+                                  );
                                 },
+                                errorWidget: (context, url, error) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 173,
+                                  color: const Color(0xFFFFFB92),
+                                ),
                                 width: MediaQuery.of(context).size.width,
                                 height: 173,
                                 fit: BoxFit.cover,

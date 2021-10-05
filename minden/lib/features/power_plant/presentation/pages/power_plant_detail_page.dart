@@ -861,6 +861,10 @@ class ParticipantUserIconGroup extends StatelessWidget {
                     fit: BoxFit.cover,
                   );
                 },
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/images/user/icon_no_photo.png',
+                  fit: BoxFit.cover,
+                ),
                 width: iconSize,
                 height: iconSize,
               )
