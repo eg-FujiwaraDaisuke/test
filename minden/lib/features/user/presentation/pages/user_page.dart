@@ -498,9 +498,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
                     if (state is PowerPlantLoaded) {
                       return Flexible(
                         child: Text(
-                          state.powerPlant.name! +
-                              i18nTranslate(
-                                  context, 'thanks_message_notification'),
+                          '${messages.messages[0].messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
                           style: TextStyle(
                             color: const Color(0xFFFF8C00),
                             fontSize: 9,
