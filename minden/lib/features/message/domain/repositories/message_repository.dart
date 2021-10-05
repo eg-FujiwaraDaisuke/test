@@ -7,6 +7,6 @@ import 'package:minden/features/message/domain/entities/message_detail.dart';
 abstract class MessageRepository {
   Future<Either<Failure, Messages>> getMessages(String page);
   Future<Either<Failure, MessageDetail>> getMessageDetail(
-      {required String messageId});
-  Future<Either<Failure, Success>> readMessage({required String messageId});
+      {required int messageId});
+  Future<Either<Failure, Success>> readMessage({required int messageId});
 }

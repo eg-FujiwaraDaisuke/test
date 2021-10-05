@@ -16,6 +16,12 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends StatefulWidget {
@@ -24,12 +30,12 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  late GetMessagesBloc _bloc;
+  late GetMessagesBloc _getMessagesBloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc = GetMessagesBloc(
+    _getMessagesBloc = GetMessagesBloc(
       const MessageInitial(),
       GetMessages(
         MessageRepositoryImpl(
@@ -40,7 +46,7 @@ class _MessagePageState extends State<MessagePage> {
       ),
     );
 
-    _bloc.stream.listen((event) async {
+    _getMessagesBloc.stream.listen((event) async {
       if (event is MessageError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
@@ -52,12 +58,12 @@ class _MessagePageState extends State<MessagePage> {
         }
       }
     });
-    _bloc.add(GetMessagesEvent('1'));
+    _getMessagesBloc.add(GetMessagesEvent('1'));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getMessagesBloc.close();
     super.dispose();
   }
 
@@ -87,7 +93,7 @@ class _MessagePageState extends State<MessagePage> {
             margin: const EdgeInsets.only(top: 100),
             width: MediaQuery.of(context).size.width,
             child: BlocProvider.value(
-              value: _bloc,
+              value: _getMessagesBloc,
               child: BlocListener<GetMessagesBloc, MessageState>(
                 listener: (context, state) {
                   if (state is MessagesLoading) {
@@ -96,10 +102,11 @@ class _MessagePageState extends State<MessagePage> {
                   }
                   Loading.hide();
                 },
+                // TODO 下まで行ったら次の20件を取得する
                 child: BlocBuilder<GetMessagesBloc, MessageState>(
                   builder: (context, state) {
                     if (state is MessagesLoaded) {
-                      return _buildMessageList(state.messages);
+                      return _MessagesList(messages: state.messages);
                     }
                     return Container();
                   },
@@ -125,25 +132,88 @@ class _MessagePageState extends State<MessagePage> {
       color: Colors.black,
     );
   }
+}
 
-  Widget _buildMessageList(Messages messages) {
+class _MessagesList extends StatelessWidget {
+  const _MessagesList({required this.messages});
+  final Messages messages;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: messages.messages
-          .map((messageDetail) => _buildMessageListItem(messageDetail))
+          .map(
+            (message) => _MessagesListItem(
+              messageDetail: message,
+            ),
+          )
           .toList(),
     );
   }
+}
 
-  Widget _buildMessageListItem(MessageDetail messageDetail) {
+class _MessagesListItem extends StatefulWidget {
+  const _MessagesListItem({required this.messageDetail});
+  final MessageDetail messageDetail;
+
+  @override
+  _MessagesListItemState createState() => _MessagesListItemState();
+}
+
+class _MessagesListItemState extends State<_MessagesListItem> {
+  late GetPowerPlantBloc _getPowerPlantsBloc;
+  late ReadMessageBloc _readMessageBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getPowerPlantsBloc = GetPowerPlantBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlant(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _getPowerPlantsBloc
+        .add(GetPowerPlantEvent(plantId: widget.messageDetail.plantId));
+
+    _readMessageBloc = ReadMessageBloc(
+      const MessageInitial(),
+      ReadMessage(
+        MessageRepositoryImpl(
+          dataSource: MessageDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _getPowerPlantsBloc.close();
+    _readMessageBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (messageDetail.messageType == '1') {
-          MindenMessageDialog(context: context, messageDetail: messageDetail)
+        _readMessageBloc
+            .add(ReadMessageEvent(messageId: widget.messageDetail.messageId));
+        if (widget.messageDetail.messageType == '1') {
+          MindenMessageDialog(
+                  context: context, messageDetail: widget.messageDetail)
               .showDialog();
         } else {
           PowerPlantMessageDialog(
-                  context: context, messageDetail: messageDetail)
+                  context: context, messageDetail: widget.messageDetail)
               .showDialog();
         }
       },
@@ -163,13 +233,20 @@ class _MessagePageState extends State<MessagePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (messageDetail.image.isEmpty)
+                if (widget.messageDetail.image == null)
                   Container(
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
                       color: const Color(0xFFDCF6DA),
                       borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/message/minden_thumbnail.png',
+                        width: 57,
+                        height: 54,
+                      ),
                     ),
                   )
                 else
@@ -181,7 +258,7 @@ class _MessagePageState extends State<MessagePage> {
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: CachedNetworkImage(
-                      imageUrl: messageDetail.image,
+                      imageUrl: widget.messageDetail.image!,
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/power_plant/power_plant_header_bg.png',
@@ -204,7 +281,7 @@ class _MessagePageState extends State<MessagePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              messageDetail.read
+                              widget.messageDetail.read
                                   ? ''
                                   : i18nTranslate(
                                       context, 'thanks_message_new'),
@@ -216,17 +293,52 @@ class _MessagePageState extends State<MessagePage> {
                                 letterSpacing: calcLetterSpacing(letter: 0.5),
                               ),
                             ),
-                            Text(
-                              // TODO ここに発電所の名前がはいる
-                              messageDetail.plantId,
-                              style: TextStyle(
-                                color: const Color(0xFFFF8C00),
-                                fontSize: 10,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: calcLetterSpacing(letter: 0.5),
+                            if (widget.messageDetail.messageType == '1')
+                              Flexible(
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    'みんな電力からのお知らせ',
+                                    style: TextStyle(
+                                      color: const Color(0xFF787877),
+                                      fontSize: 10,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing:
+                                          calcLetterSpacing(letter: 0.5),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else
+                              BlocProvider.value(
+                                value: _getPowerPlantsBloc,
+                                child: BlocBuilder<GetPowerPlantBloc,
+                                    PowerPlantState>(
+                                  builder: (context, state) {
+                                    if (state is PowerPlantLoaded) {
+                                      return Flexible(
+                                        child: Container(
+                                          padding:
+                                              const EdgeInsets.only(left: 30),
+                                          child: Text(
+                                            state.powerPlant.name!,
+                                            style: TextStyle(
+                                              color: const Color(0xFF787877),
+                                              fontSize: 10,
+                                              fontFamily: 'NotoSansJP',
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: calcLetterSpacing(
+                                                  letter: 0.5),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return const Text('');
+                                  },
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),
@@ -236,7 +348,7 @@ class _MessagePageState extends State<MessagePage> {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          messageDetail.title,
+                          widget.messageDetail.title,
                           style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 13,
@@ -249,7 +361,7 @@ class _MessagePageState extends State<MessagePage> {
                         height: 7,
                       ),
                       Text(
-                        messageDetail.created.toString(),
+                        widget.messageDetail.created.toString().toString(),
                         style: const TextStyle(
                           color: Color(0xFFC4C4C4),
                           fontSize: 10,

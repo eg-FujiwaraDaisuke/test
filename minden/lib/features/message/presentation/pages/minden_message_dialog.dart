@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/utile.dart';
 
@@ -68,7 +67,7 @@ class MindenMessageDialog {
                     SizedBox(
                       width: 298,
                       child: Text(
-                        messageDetail.body,
+                        messageDetail.body.replaceAll('\\n', '\n'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xFF27AE60),

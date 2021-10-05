@@ -48,7 +48,7 @@ class GetMessagesParams extends Equatable {
 
 class GetMessageDetailParams extends Equatable {
   const GetMessageDetailParams(this.messageId);
-  final String messageId;
+  final int messageId;
 
   @override
   List<Object> get props => [messageId];
@@ -56,7 +56,7 @@ class GetMessageDetailParams extends Equatable {
 
 class ReadMessageParams extends Equatable {
   const ReadMessageParams(this.messageId);
-  final String messageId;
+  final int messageId;
 
   @override
   List<Object> get props => [messageId];

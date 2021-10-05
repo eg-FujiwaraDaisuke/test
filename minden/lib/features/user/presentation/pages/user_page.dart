@@ -28,7 +28,6 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
@@ -398,6 +397,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
   @override
   void dispose() {
     _getMessagesBloc.close();
+    _getPowerPlantsBloc.close();
     super.dispose();
   }
 
@@ -422,9 +422,10 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
           child: BlocBuilder<GetMessagesBloc, MessageState>(
             builder: (context, state) {
               if (state is MessagesLoaded) {
-                if (state.messages.messages == [])
+                if (state.messages.messages != []) {
                   _getPowerPlantsBloc.add(GetPowerPlantEvent(
                       plantId: state.messages.messages[0].plantId));
+                }
                 return _buildMessageNav(state.messages);
               }
               return Container();
@@ -489,7 +490,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
                 child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
                   builder: (context, state) {
                     if (state is PowerPlantLoaded) {
-                      Flexible(
+                      return Flexible(
                         child: Text(
                           state.powerPlant.name! +
                               i18nTranslate(

@@ -18,7 +18,7 @@ class GetMessagesEvent extends MessageEvent {
 class GetMessageDetailEvent extends MessageEvent {
   const GetMessageDetailEvent({required this.messageId});
 
-  final String messageId;
+  final int messageId;
 
   @override
   List<Object> get props => [messageId];
@@ -27,7 +27,7 @@ class GetMessageDetailEvent extends MessageEvent {
 class ReadMessageEvent extends MessageEvent {
   const ReadMessageEvent({required this.messageId});
 
-  final String messageId;
+  final int messageId;
 
   @override
   List<Object> get props => [messageId];

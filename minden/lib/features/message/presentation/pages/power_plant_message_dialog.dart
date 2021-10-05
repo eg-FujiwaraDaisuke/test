@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 
 class PowerPlantMessageDialog {
@@ -39,7 +38,7 @@ class PowerPlantMessageDialog {
                     width: 256,
                     height: 192,
                     child: CachedNetworkImage(
-                      imageUrl: messageDetail.image,
+                      imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/power_plant/power_plant_header_bg.png',

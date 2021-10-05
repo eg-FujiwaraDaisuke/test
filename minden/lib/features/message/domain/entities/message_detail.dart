@@ -33,10 +33,12 @@ class MessageDetail extends Equatable {
   final String plantId;
   final String title;
   final String body;
-  final String image;
+  final String? image;
   final int created;
   final bool read;
   final String importance;
+
+  // "messageType":"1"がみんな電力からのメッセージ
   final String messageType;
 
   Map<String, dynamic> toJson() {
