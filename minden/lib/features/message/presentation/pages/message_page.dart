@@ -336,7 +336,8 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                             padding:
                                                 const EdgeInsets.only(left: 30),
                                             child: Text(
-                                              'みんな電力からのお知らせ',
+                                              i18nTranslate(
+                                                  context, 'news_from_minden'),
                                               style: TextStyle(
                                                 color: const Color(0xFF787877),
                                                 fontSize: 10,
