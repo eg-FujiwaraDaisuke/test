@@ -38,7 +38,7 @@ class MessageDetail extends Equatable {
   final bool read;
   final String importance;
 
-  // "messageType":"1"がみんな電力からのメッセージ
+  // "messageType":"1"は、みんな電力からのメッセージ
   final String messageType;
 
   Map<String, dynamic> toJson() {
