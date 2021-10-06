@@ -78,16 +78,7 @@ class MessagePage extends HookWidget {
                               .updateMessages(state.messages);
                         }
                       },
-                      child: BlocBuilder<GetMessagesBloc, MessageState>(
-                        builder: (context, state) {
-                          if (state is MessagesLoaded) {
-                            print(
-                                'buildBloc=======================================');
-                            return _MessagesList();
-                          }
-                          return Container();
-                        },
-                      ),
+                      child: _MessagesList(),
                     ),
                   )
                 : _MessagesList(),
