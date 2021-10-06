@@ -2,22 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
-import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/features/message/presentation/viewmodel/counter_controller_provider.dart';
-import 'package:minden/features/message/presentation/viewmodel/messages_view_model.dart';
+import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -26,23 +23,21 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/utile.dart';
 
-class MessagePage extends StatefulWidget {
-  @override
-  _MessagePageState createState() => _MessagePageState();
-}
-
-class _MessagePageState extends State<MessagePage> {
+class MessagePage extends HookWidget {
   late GetMessagesBloc _getMessagesBloc;
 
   @override
-  void initState() {
-    super.initState();
-    _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-    _getMessagesBloc.add(GetMessagesEvent('1'));
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final messagesStateController =
+        useProvider(messagesStateControllerProvider.notifier);
+
+    final messagesStateData =
+        useProvider(messagesStateControllerProvider.select((value) => value));
+
+    useEffect(() {
+      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+      _getMessagesBloc.add(GetMessagesEvent('1'));
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -66,29 +61,36 @@ class _MessagePageState extends State<MessagePage> {
             color: Colors.white,
             margin: const EdgeInsets.only(top: 100),
             width: MediaQuery.of(context).size.width,
-            child: BlocProvider.value(
-              value: _getMessagesBloc,
-              child: BlocListener<GetMessagesBloc, MessageState>(
-                listener: (context, state) {
-                  if (state is MessagesLoading) {
-                    Loading.show(context);
-                    return;
-                  }
-                  Loading.hide();
+            // messagesStateにデータが入ってない場合apiから取得する
+            child: messagesStateData.messages.isEmpty
+                ? BlocProvider.value(
+                    value: _getMessagesBloc,
+                    child: BlocListener<GetMessagesBloc, MessageState>(
+                      listener: (context, state) {
+                        if (state is MessagesLoading) {
+                          Loading.show(context);
+                          return;
+                        }
+                        Loading.hide();
 
-                  if (state is MessagesLoaded) {}
-                },
-                // TODO 下まで行ったら次の20件を取得する
-                child: BlocBuilder<GetMessagesBloc, MessageState>(
-                  builder: (context, state) {
-                    if (state is MessagesLoaded) {
-                      return _MessagesList();
-                    }
-                    return Container();
-                  },
-                ),
-              ),
-            ),
+                        if (state is MessagesLoaded) {
+                          messagesStateController
+                              .updateMessages(state.messages);
+                        }
+                      },
+                      child: BlocBuilder<GetMessagesBloc, MessageState>(
+                        builder: (context, state) {
+                          if (state is MessagesLoaded) {
+                            print(
+                                'buildBloc=======================================');
+                            return _MessagesList();
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
+                  )
+                : _MessagesList(),
           ),
         ),
       ),
@@ -113,76 +115,64 @@ class _MessagePageState extends State<MessagePage> {
 class _MessagesList extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = useProvider(counterStateControllerProvider.notifier);
-    final data =
-        useProvider(counterStateControllerProvider.select((value) => value));
+    final messagesStateData =
+        useProvider(messagesStateControllerProvider.select((value) => value));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      // children: messages.messages
-      //     .map(
-      //       (messageDetail) => _MessagesListItem(
-      //         messageDetail: messageDetail,
-      //       ),
-      //     )
-      //     .toList(),
-      children: [Text(data.count.toString()), Text(data.count10.toString())],
+      children: messagesStateData.messages
+          .map(
+            (messageDetail) => _MessagesListItem(
+              messageDetail: messageDetail,
+            ),
+          )
+          .toList(),
     );
   }
 }
 
-class _MessagesListItem extends StatefulWidget {
-  const _MessagesListItem({required this.messageDetail});
+class _MessagesListItem extends HookWidget {
+  _MessagesListItem({required this.messageDetail});
   final MessageDetail messageDetail;
-
-  @override
-  _MessagesListItemState createState() => _MessagesListItemState();
-}
-
-class _MessagesListItemState extends State<_MessagesListItem> {
   late GetPowerPlantBloc _getPowerPlantsBloc;
   late ReadMessageBloc _readMessageBloc;
 
   @override
-  void initState() {
-    super.initState();
-
-    _getPowerPlantsBloc = GetPowerPlantBloc(
-      const PowerPlantStateInitial(),
-      GetPowerPlant(
-        PowerPlantRepositoryImpl(
-          powerPlantDataSource: PowerPlantDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-    _getPowerPlantsBloc
-        .add(GetPowerPlantEvent(plantId: widget.messageDetail.plantId));
-
-    _readMessageBloc = ReadMessageBloc(
-      const MessageInitial(),
-      ReadMessage(
-        MessageRepositoryImpl(
-          dataSource: MessageDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _getPowerPlantsBloc.close();
-    _readMessageBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final dd =
-        DateTime.fromMillisecondsSinceEpoch(widget.messageDetail.created);
+    useEffect(() {
+      _getPowerPlantsBloc = GetPowerPlantBloc(
+        const PowerPlantStateInitial(),
+        GetPowerPlant(
+          PowerPlantRepositoryImpl(
+            powerPlantDataSource: PowerPlantDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+      _getPowerPlantsBloc
+          .add(GetPowerPlantEvent(plantId: messageDetail.plantId));
+
+      _readMessageBloc = ReadMessageBloc(
+        const MessageInitial(),
+        ReadMessage(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+      return () {
+        _getPowerPlantsBloc.close();
+        _readMessageBloc.close();
+      };
+    });
+
+    final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
+    final messagesStateController =
+        useProvider(messagesStateControllerProvider.notifier);
+
     return BlocProvider.value(
       value: _getPowerPlantsBloc,
       child: BlocListener<GetPowerPlantBloc, PowerPlantState>(
@@ -198,17 +188,18 @@ class _MessagesListItemState extends State<_MessagesListItem> {
             if (state is PowerPlantLoaded) {
               return GestureDetector(
                 onTap: () {
-                  _readMessageBloc.add(ReadMessageEvent(
-                      messageId: widget.messageDetail.messageId));
-                  if (widget.messageDetail.messageType == '1') {
+                  _readMessageBloc.add(
+                      ReadMessageEvent(messageId: messageDetail.messageId));
+
+                  messagesStateController.readMessage(messageDetail.messageId);
+                  if (messageDetail.messageType == '1') {
                     MindenMessageDialog(
-                            context: context,
-                            messageDetail: widget.messageDetail)
+                            context: context, messageDetail: messageDetail)
                         .showDialog();
                   } else {
                     PowerPlantMessageDialog(
                       context: context,
-                      messageDetail: widget.messageDetail,
+                      messageDetail: messageDetail,
                       powerPlantName: state.powerPlant.name ?? '',
                     ).showDialog();
                   }
@@ -229,7 +220,7 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (widget.messageDetail.image == null)
+                          if (messageDetail.image == null)
                             Container(
                               width: 64,
                               height: 64,
@@ -254,7 +245,7 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                 borderRadius: BorderRadius.circular(9),
                               ),
                               child: CachedNetworkImage(
-                                imageUrl: widget.messageDetail.image!,
+                                imageUrl: messageDetail.image!,
                                 placeholder: (context, url) {
                                   return Image.asset(
                                     'assets/images/power_plant/power_plant_header_bg.png',
@@ -282,7 +273,7 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      if (widget.messageDetail.read)
+                                      if (messageDetail.read)
                                         Text(
                                           '',
                                           style: TextStyle(
@@ -307,8 +298,7 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                                 calcLetterSpacing(letter: 0.5),
                                           ),
                                         ),
-                                      if (widget.messageDetail.messageType ==
-                                          '1')
+                                      if (messageDetail.messageType == '1')
                                         Flexible(
                                           child: Container(
                                             padding:
@@ -356,7 +346,7 @@ class _MessagesListItemState extends State<_MessagesListItem> {
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    widget.messageDetail.title,
+                                    messageDetail.title,
                                     style: const TextStyle(
                                       color: Color(0xFF787877),
                                       fontSize: 13,
