@@ -9,7 +9,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';

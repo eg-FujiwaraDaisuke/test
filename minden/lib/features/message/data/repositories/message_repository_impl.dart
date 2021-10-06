@@ -4,7 +4,7 @@ import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/repositories/message_repository.dart';
 

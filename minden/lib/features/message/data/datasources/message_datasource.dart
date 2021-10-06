@@ -6,7 +6,7 @@ import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/features/message/data/model/message_detail_model.dart';
 import 'package:minden/features/message/data/model/message_model.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';

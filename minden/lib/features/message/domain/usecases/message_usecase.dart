@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/success/success.dart';
 import 'package:minden/core/usecase/usecase.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/repositories/message_repository.dart';
 

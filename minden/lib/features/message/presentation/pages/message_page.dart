@@ -1,21 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
-import 'package:minden/features/login/presentation/bloc/logout_event.dart';
-import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/features/message/presentation/viewmodel/counter_controller_provider.dart';
+import 'package:minden/features/message/presentation/viewmodel/messages_view_model.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -73,12 +75,14 @@ class _MessagePageState extends State<MessagePage> {
                     return;
                   }
                   Loading.hide();
+
+                  if (state is MessagesLoaded) {}
                 },
                 // TODO 下まで行ったら次の20件を取得する
                 child: BlocBuilder<GetMessagesBloc, MessageState>(
                   builder: (context, state) {
                     if (state is MessagesLoaded) {
-                      return _MessagesList(messages: state.messages);
+                      return _MessagesList();
                     }
                     return Container();
                   },
@@ -106,21 +110,23 @@ class _MessagePageState extends State<MessagePage> {
   }
 }
 
-class _MessagesList extends StatelessWidget {
-  const _MessagesList({required this.messages});
-  final Messages messages;
-
+class _MessagesList extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = useProvider(counterStateControllerProvider.notifier);
+    final data =
+        useProvider(counterStateControllerProvider.select((value) => value));
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: messages.messages
-          .map(
-            (message) => _MessagesListItem(
-              messageDetail: message,
-            ),
-          )
-          .toList(),
+      // children: messages.messages
+      //     .map(
+      //       (messageDetail) => _MessagesListItem(
+      //         messageDetail: messageDetail,
+      //       ),
+      //     )
+      //     .toList(),
+      children: [Text(data.count.toString()), Text(data.count10.toString())],
     );
   }
 }
