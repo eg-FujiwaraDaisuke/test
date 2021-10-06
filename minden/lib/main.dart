@@ -10,9 +10,6 @@ import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
 import 'package:minden/injection_container.dart' as di;
 
-import 'features/message/domain/entities/messages.dart';
-import 'features/message/presentation/viewmodel/messages_view_model.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   const env = String.fromEnvironment('DEFINE_BUILD_ENV');
