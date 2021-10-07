@@ -125,25 +125,11 @@ class _MessagesList extends HookWidget {
 class _MessagesListItem extends HookWidget {
   _MessagesListItem({required this.messageDetail});
   final MessageDetail messageDetail;
-  late GetPowerPlantBloc _getPowerPlantsBloc;
   late ReadMessageBloc _readMessageBloc;
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      _getPowerPlantsBloc = GetPowerPlantBloc(
-        const PowerPlantStateInitial(),
-        GetPowerPlant(
-          PowerPlantRepositoryImpl(
-            powerPlantDataSource: PowerPlantDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
-      );
-      _getPowerPlantsBloc
-          .add(GetPowerPlantEvent(plantId: messageDetail.plantId));
-
       _readMessageBloc = ReadMessageBloc(
         const MessageInitial(),
         ReadMessage(
@@ -155,7 +141,6 @@ class _MessagesListItem extends HookWidget {
         ),
       );
       return () {
-        _getPowerPlantsBloc.close();
         _readMessageBloc.close();
       };
     });
@@ -164,242 +149,182 @@ class _MessagesListItem extends HookWidget {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
 
-    return BlocProvider.value(
-      value: _getPowerPlantsBloc,
-      child: BlocListener<GetPowerPlantBloc, PowerPlantState>(
-        listener: (context, state) {
-          if (state is PowerPlantLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
-          builder: (context, state) {
-            if (state is PowerPlantLoaded) {
-              return GestureDetector(
-                onTap: () {
-                  _readMessageBloc.add(
-                      ReadMessageEvent(messageId: messageDetail.messageId));
+    return GestureDetector(
+      onTap: () {
+        _readMessageBloc
+            .add(ReadMessageEvent(messageId: messageDetail.messageId));
 
-                  messagesStateController.readMessage(messageDetail.messageId);
-                  if (messageDetail.messageType == '1') {
-                    MindenMessageDialog(
-                            context: context, messageDetail: messageDetail)
-                        .showDialog();
-                  } else {
-                    PowerPlantMessageDialog(
-                      context: context,
-                      messageDetail: messageDetail,
-                      powerPlantName: state.powerPlant.name ?? '',
-                    ).showDialog();
-                  }
-                },
-                child: Container(
-                  width: 288,
-                  margin: const EdgeInsets.only(top: 25),
-                  padding: const EdgeInsets.only(bottom: 13),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xFFC4C4C4),
+        messagesStateController.readMessage(messageDetail.messageId);
+        if (messageDetail.messageType == '1') {
+          MindenMessageDialog(context: context, messageDetail: messageDetail)
+              .showDialog();
+        } else {
+          PowerPlantMessageDialog(
+            context: context,
+            messageDetail: messageDetail,
+            powerPlantName: messageDetail.plantId,
+          ).showDialog();
+        }
+      },
+      child: Container(
+        width: 288,
+        margin: const EdgeInsets.only(top: 25),
+        padding: const EdgeInsets.only(bottom: 13),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Color(0xFFC4C4C4),
+            ),
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (messageDetail.image == null)
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFDCF6DA),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/message/minden_thumbnail.png',
+                        width: 57,
+                        height: 54,
                       ),
                     ),
+                  )
+                else
+                  Container(
+                    width: 64,
+                    height: 64,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: messageDetail.image!,
+                      placeholder: (context, url) {
+                        return Image.asset(
+                          'assets/images/power_plant/power_plant_header_bg.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/power_plant/power_plant_header_bg.png',
+                        fit: BoxFit.cover,
+                      ),
+                      width: 64,
+                      height: 64,
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                SizedBox(
+                  width: 200,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (messageDetail.image == null)
-                            Container(
-                              width: 64,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFDCF6DA),
-                                borderRadius: BorderRadius.circular(9),
-                              ),
-                              child: Center(
-                                child: Image.asset(
-                                  'assets/images/message/minden_thumbnail.png',
-                                  width: 57,
-                                  height: 54,
+                      SizedBox(
+                        width: 200,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (messageDetail.read)
+                              Text(
+                                '',
+                                style: TextStyle(
+                                  color: const Color(0xFFFF8C00),
+                                  fontSize: 12,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: calcLetterSpacing(letter: 0.5),
+                                ),
+                              )
+                            else
+                              Text(
+                                i18nTranslate(context, 'thanks_message_new'),
+                                style: TextStyle(
+                                  color: const Color(0xFFFF8C00),
+                                  fontSize: 12,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: calcLetterSpacing(letter: 0.5),
                                 ),
                               ),
-                            )
-                          else
-                            Container(
-                              width: 64,
-                              height: 64,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(9),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl: messageDetail.image!,
-                                placeholder: (context, url) {
-                                  return Image.asset(
-                                    'assets/images/power_plant/power_plant_header_bg.png',
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                  'assets/images/power_plant/power_plant_header_bg.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                width: 64,
-                                height: 64,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          SizedBox(
-                            width: 200,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  width: 200,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      if (messageDetail.read)
-                                        Text(
-                                          '',
-                                          style: TextStyle(
-                                            color: const Color(0xFFFF8C00),
-                                            fontSize: 12,
-                                            fontFamily: 'NotoSansJP',
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing:
-                                                calcLetterSpacing(letter: 0.5),
-                                          ),
-                                        )
-                                      else
-                                        Text(
-                                          i18nTranslate(
-                                              context, 'thanks_message_new'),
-                                          style: TextStyle(
-                                            color: const Color(0xFFFF8C00),
-                                            fontSize: 12,
-                                            fontFamily: 'NotoSansJP',
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing:
-                                                calcLetterSpacing(letter: 0.5),
-                                          ),
-                                        ),
-                                      if (messageDetail.messageType == '1')
-                                        Flexible(
-                                          child: Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 30),
-                                            child: Text(
-                                              i18nTranslate(
-                                                  context, 'news_from_minden'),
-                                              style: TextStyle(
-                                                color: const Color(0xFF787877),
-                                                fontSize: 10,
-                                                fontFamily: 'NotoSansJP',
-                                                fontWeight: FontWeight.w700,
-                                                letterSpacing:
-                                                    calcLetterSpacing(
-                                                        letter: 0.5),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      else
-                                        Flexible(
-                                          child: Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 30),
-                                            child: Text(
-                                              state.powerPlant.name!,
-                                              style: TextStyle(
-                                                color: const Color(0xFF787877),
-                                                fontSize: 10,
-                                                fontFamily: 'NotoSansJP',
-                                                fontWeight: FontWeight.w700,
-                                                letterSpacing:
-                                                    calcLetterSpacing(
-                                                        letter: 0.5),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                SizedBox(
-                                  width: 200,
+                            if (messageDetail.messageType == '1')
+                              Flexible(
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 30),
                                   child: Text(
-                                    messageDetail.title,
-                                    style: const TextStyle(
-                                      color: Color(0xFF787877),
-                                      fontSize: 13,
+                                    i18nTranslate(context, 'news_from_minden'),
+                                    style: TextStyle(
+                                      color: const Color(0xFF787877),
+                                      fontSize: 10,
                                       fontFamily: 'NotoSansJP',
                                       fontWeight: FontWeight.w700,
+                                      letterSpacing:
+                                          calcLetterSpacing(letter: 0.5),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                Text(
-                                  '${dd.year}/${dd.month}',
-                                  style: const TextStyle(
-                                    color: Color(0xFFC4C4C4),
-                                    fontSize: 10,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
+                              )
+                            else
+                              Flexible(
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    messageDetail.plantId,
+                                    style: TextStyle(
+                                      color: const Color(0xFF787877),
+                                      fontSize: 10,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing:
+                                          calcLetterSpacing(letter: 0.5),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
+                              )
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            }
-
-            //プレースホルダー
-            return Container(
-              width: 288,
-              margin: const EdgeInsets.only(top: 25),
-              padding: const EdgeInsets.only(bottom: 13),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Color(0xFFC4C4C4),
-                  ),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFDCF6DA),
-                          borderRadius: BorderRadius.circular(9),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          messageDetail.title,
+                          style: const TextStyle(
+                            color: Color(0xFF787877),
+                            fontSize: 13,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Text(
+                        '${dd.year}/${dd.month}',
+                        style: const TextStyle(
+                          color: Color(0xFFC4C4C4),
+                          fontSize: 10,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
-            );
-          },
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
