@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/entities/messages.dart';
-
 import 'messages_state.dart';
 
 class MessagesStateController extends StateNotifier<MessagesState> {

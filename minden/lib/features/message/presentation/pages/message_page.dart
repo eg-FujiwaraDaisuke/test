@@ -31,12 +31,13 @@ class MessagePage extends HookWidget {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
 
-    final messagesStateData =
-        useProvider(messagesStateControllerProvider.select((value) => value));
+    final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-      _getMessagesBloc.add(GetMessagesEvent('1'));
+      if (messagesStateData.messages.isEmpty) {
+        _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+        _getMessagesBloc.add(GetMessagesEvent('1'));
+      }
     });
     return Scaffold(
       backgroundColor: Colors.white,
