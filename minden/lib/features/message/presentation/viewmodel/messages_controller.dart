@@ -18,7 +18,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   readMessage(int messageId) {
     state = state.copyWith(
       messages: state.messages.map((messageDetail) {
-        final readedMessage = messageDetail.messageId == messageId
+        return messageDetail.messageId == messageId
             ? MessageDetail(
                 messageId: messageDetail.messageId,
                 userId: messageDetail.userId,
@@ -30,12 +30,6 @@ class MessagesStateController extends StateNotifier<MessagesState> {
                 importance: messageDetail.importance,
                 messageType: messageDetail.messageType)
             : messageDetail;
-
-        if (messageDetail.messageId == messageId) {
-          print(readedMessage.read);
-        }
-
-        return readedMessage;
       }).toList(),
     );
   }

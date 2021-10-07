@@ -106,8 +106,7 @@ class MessagePage extends HookWidget {
 class _MessagesList extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final messagesStateData =
-        useProvider(messagesStateControllerProvider.select((value) => value));
+    final messagesStateData = useProvider(messagesStateControllerProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
