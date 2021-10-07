@@ -11,7 +11,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/domain/entities/messages.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
@@ -32,6 +32,7 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
+import 'package:collection/collection.dart';
 
 enum MenuType {
   common,
@@ -425,9 +426,15 @@ class _MenuMessageItem extends HookWidget {
   Widget _buildMessageNav() {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
-    if (messagesStateData.messages != []) {
-      _getPowerPlantsBloc.add(
-          GetPowerPlantEvent(plantId: messagesStateData.messages[0].plantId));
+    if (messagesStateData.messages.isNotEmpty) {
+      // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
+      final latestUnreadMessageDetail = messagesStateData.messages
+          .firstWhereOrNull((messageDetail) => messageDetail.read == false);
+
+      if (latestUnreadMessageDetail != null) {
+        _getPowerPlantsBloc.add(
+            GetPowerPlantEvent(plantId: latestUnreadMessageDetail.plantId));
+      }
     }
 
     return Column(
@@ -485,6 +492,7 @@ class _MenuMessageItem extends HookWidget {
                     if (state is PowerPlantLoaded) {
                       return Flexible(
                         child: Text(
+                          // TODO 未読の最新にする
                           '${messagesStateData.messages[0].messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
                           style: TextStyle(
                             color: const Color(0xFFFF8C00),
