@@ -14,6 +14,25 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
+  addMessages(Messages messages) {
+    state = state.copyWith(
+      showBadge: messages.showBadge,
+      page: messages.page,
+      total: messages.total,
+      // メッセージの重複削除
+      messages: [
+        ...{...state.messages, ...messages.messages}
+      ],
+    );
+  }
+
+  updateShowBadge(Messages messages) {
+    state = state.copyWith(
+      showBadge: messages.showBadge,
+      total: messages.total,
+    );
+  }
+
   readMessage(int messageId) {
     state = state.copyWith(
       messages: state.messages.map((messageDetail) {
