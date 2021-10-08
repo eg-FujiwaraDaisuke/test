@@ -15,12 +15,6 @@ import 'package:minden/features/message/presentation/pages/minden_message_dialog
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
-import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
-import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
-import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
-import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
-import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
-import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
@@ -30,7 +24,6 @@ class MessagePage extends HookWidget {
   Widget build(BuildContext context) {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
-
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
@@ -57,11 +50,10 @@ class MessagePage extends HookWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Center(
           child: Container(
             color: Colors.white,
-            margin: const EdgeInsets.only(top: 100),
-            width: MediaQuery.of(context).size.width,
+            width: 288,
             // messagesStateにデータが入ってない場合apiから取得する
             child: messagesStateData.messages.isEmpty
                 ? BlocProvider.value(
@@ -107,17 +99,35 @@ class MessagePage extends HookWidget {
 class _MessagesList extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    late ScrollController _scrollController;
     final messagesStateData = useProvider(messagesStateControllerProvider);
+    useEffect(() {
+      _scrollController = ScrollController();
+      _scrollController.addListener(() {
+        final maxScrollExtent = _scrollController.position.maxScrollExtent;
+        final currentPosition = _scrollController.position.pixels;
+        print(currentPosition);
+        print(maxScrollExtent);
+        if (maxScrollExtent > 0 && maxScrollExtent <= currentPosition) {
+          print('取得');
+        }
+      });
+      return () {
+        _scrollController.dispose();
+      };
+    });
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: messagesStateData.messages
-          .map(
-            (messageDetail) => _MessagesListItem(
-              messageDetail: messageDetail,
-            ),
-          )
-          .toList(),
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: messagesStateData.messages.length,
+        itemBuilder: (context, index) {
+          return _MessagesListItem(
+            messageDetail: messagesStateData.messages[index],
+          );
+        },
+      ),
     );
   }
 }
@@ -151,10 +161,12 @@ class _MessagesListItem extends HookWidget {
 
     return GestureDetector(
       onTap: () {
-        _readMessageBloc
-            .add(ReadMessageEvent(messageId: messageDetail.messageId));
+        if (!messageDetail.read) {
+          _readMessageBloc
+              .add(ReadMessageEvent(messageId: messageDetail.messageId));
+          messagesStateController.readMessage(messageDetail.messageId);
+        }
 
-        messagesStateController.readMessage(messageDetail.messageId);
         if (messageDetail.messageType == '1') {
           MindenMessageDialog(context: context, messageDetail: messageDetail)
               .showDialog();
@@ -162,12 +174,10 @@ class _MessagesListItem extends HookWidget {
           PowerPlantMessageDialog(
             context: context,
             messageDetail: messageDetail,
-            powerPlantName: messageDetail.plantId,
           ).showDialog();
         }
       },
       child: Container(
-        width: 288,
         margin: const EdgeInsets.only(top: 25),
         padding: const EdgeInsets.only(bottom: 13),
         decoration: const BoxDecoration(
@@ -233,28 +243,19 @@ class _MessagesListItem extends HookWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (messageDetail.read)
-                              Text(
-                                '',
-                                style: TextStyle(
-                                  color: const Color(0xFFFF8C00),
-                                  fontSize: 12,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: calcLetterSpacing(letter: 0.5),
-                                ),
-                              )
-                            else
-                              Text(
-                                i18nTranslate(context, 'thanks_message_new'),
-                                style: TextStyle(
-                                  color: const Color(0xFFFF8C00),
-                                  fontSize: 12,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: calcLetterSpacing(letter: 0.5),
-                                ),
+                            Text(
+                              messageDetail.read
+                                  ? ''
+                                  : i18nTranslate(
+                                      context, 'thanks_message_new'),
+                              style: TextStyle(
+                                color: const Color(0xFFFF8C00),
+                                fontSize: 12,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: calcLetterSpacing(letter: 0.5),
                               ),
+                            ),
                             if (messageDetail.messageType == '1')
                               Flexible(
                                 child: Container(
@@ -277,7 +278,7 @@ class _MessagesListItem extends HookWidget {
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 30),
                                   child: Text(
-                                    messageDetail.plantId,
+                                    messageDetail.title,
                                     style: TextStyle(
                                       color: const Color(0xFF787877),
                                       fontSize: 10,
@@ -298,7 +299,9 @@ class _MessagesListItem extends HookWidget {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          messageDetail.title,
+                          messageDetail.body,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 13,
