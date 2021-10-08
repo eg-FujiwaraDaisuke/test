@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
@@ -9,9 +11,10 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
+import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -29,6 +32,7 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
+import 'package:collection/collection.dart';
 
 enum MenuType {
   common,
@@ -351,8 +355,8 @@ class _MenuItem extends StatelessWidget {
   }
 }
 
-class _MenuMessageItem extends StatefulWidget {
-  const _MenuMessageItem({
+class _MenuMessageItem extends HookWidget {
+  _MenuMessageItem({
     required this.title,
     required this.icon,
     required this.routeName,
@@ -360,41 +364,36 @@ class _MenuMessageItem extends StatefulWidget {
   final String title;
   final String icon;
   final String routeName;
-
-  @override
-  _MenuMessageItemState createState() => _MenuMessageItemState();
-}
-
-class _MenuMessageItemState extends State<_MenuMessageItem> {
   late GetMessagesBloc _getMessagesBloc;
   late GetPowerPlantBloc _getPowerPlantsBloc;
 
   @override
-  void initState() {
-    super.initState();
-    _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-    _getMessagesBloc.add(GetMessagesEvent('1'));
+  Widget build(BuildContext context) {
+    final messagesStateController =
+        useProvider(messagesStateControllerProvider.notifier);
+    final messagesStateData = useProvider(messagesStateControllerProvider);
 
-    _getPowerPlantsBloc = GetPowerPlantBloc(
-      const PowerPlantStateInitial(),
-      GetPowerPlant(
-        PowerPlantRepositoryImpl(
-          powerPlantDataSource: PowerPlantDataSourceImpl(
-            client: http.Client(),
+    useEffect(() {
+      if (messagesStateData.messages.isEmpty) {
+        _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+        _getMessagesBloc.add(GetMessagesEvent('1'));
+      }
+
+      _getPowerPlantsBloc = GetPowerPlantBloc(
+        const PowerPlantStateInitial(),
+        GetPowerPlant(
+          PowerPlantRepositoryImpl(
+            powerPlantDataSource: PowerPlantDataSourceImpl(
+              client: http.Client(),
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
+      return () {
+        _getPowerPlantsBloc.close();
+      };
+    });
 
-  @override
-  void dispose() {
-    _getPowerPlantsBloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -402,33 +401,40 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
           builder: (context) => MessagePage(),
           settings: const RouteSettings(name: '/user/message'),
         );
-
         Navigator.push(context, route);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22),
-        height: 56,
-        width: MediaQuery.of(context).size.width,
-        child: BlocProvider.value(
-          value: _getMessagesBloc,
-          child: BlocBuilder<GetMessagesBloc, MessageState>(
-            builder: (context, state) {
-              if (state is MessagesLoaded) {
-                if (state.messages.messages != []) {
-                  _getPowerPlantsBloc.add(GetPowerPlantEvent(
-                      plantId: state.messages.messages[0].plantId));
-                }
-                return _buildMessageNav(state.messages);
-              }
-              return Container();
-            },
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 22),
+          height: 56,
+          width: MediaQuery.of(context).size.width,
+          child: messagesStateData.messages.isEmpty
+              ? BlocProvider.value(
+                  value: _getMessagesBloc,
+                  child: BlocListener<GetMessagesBloc, MessageState>(
+                    listener: (context, state) {
+                      if (state is MessagesLoaded) {
+                        messagesStateController.updateMessages(state.messages);
+                      }
+                    },
+                    child: _buildMessageNav(),
+                  ),
+                )
+              : _buildMessageNav()),
     );
   }
 
-  Widget _buildMessageNav(Messages messages) {
+  Widget _buildMessageNav() {
+    final messagesStateData = useProvider(messagesStateControllerProvider);
+
+    // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
+    final latestUnreadMessageDetail = messagesStateData.messages
+        .firstWhereOrNull((messageDetail) => messageDetail.read == false);
+
+    if (latestUnreadMessageDetail != null) {
+      _getPowerPlantsBloc
+          .add(GetPowerPlantEvent(plantId: latestUnreadMessageDetail.plantId));
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -439,7 +445,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
               children: [
                 Positioned(
                   child: SvgPicture.asset(
-                    'assets/images/user/${widget.icon}.svg',
+                    'assets/images/user/$icon.svg',
                     color: const Color(0xFF575292),
                   ),
                 ),
@@ -447,7 +453,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
                   right: -6,
                   top: -3,
                   child: Opacity(
-                    opacity: messages.showBadge ? 1 : 0,
+                    opacity: messagesStateData.showBadge ? 1 : 0,
                     child: Container(
                       width: 14,
                       height: 14,
@@ -466,7 +472,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
             ),
             const SizedBox(width: 17.5),
             Text(
-              widget.title,
+              title,
               style: TextStyle(
                 color: const Color(0xFF575292),
                 fontSize: 12,
@@ -476,7 +482,8 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
               ),
             ),
             const SizedBox(width: 22),
-            if (messages.showBadge)
+            if (messagesStateData.showBadge &&
+                latestUnreadMessageDetail != null)
               BlocProvider.value(
                 value: _getPowerPlantsBloc,
                 child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
@@ -484,7 +491,7 @@ class _MenuMessageItemState extends State<_MenuMessageItem> {
                     if (state is PowerPlantLoaded) {
                       return Flexible(
                         child: Text(
-                          '${messages.messages[0].messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
+                          '${latestUnreadMessageDetail.messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
                           style: TextStyle(
                             color: const Color(0xFFFF8C00),
                             fontSize: 9,

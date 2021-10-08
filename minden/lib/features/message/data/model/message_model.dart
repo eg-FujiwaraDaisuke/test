@@ -1,4 +1,4 @@
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 
 class MessagesModel extends Messages {
   const MessagesModel({

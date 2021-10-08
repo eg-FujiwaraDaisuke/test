@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/success/success.dart';
-import 'package:minden/features/message/domain/entities/message.dart';
+import 'package:minden/features/message/domain/entities/messages.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 
 abstract class MessageRepository {

@@ -29,7 +29,7 @@ void main() async {
 }
 
 Widget wrapApplication() {
-  return ProviderScope(
+  return const ProviderScope(
     child: Application(),
   );
 }
