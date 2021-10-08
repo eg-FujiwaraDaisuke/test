@@ -27,7 +27,6 @@ class HomeMypageTabNavigation extends HookWidget {
 
     useEffect(() {
       if (messagesStateData.messages.isEmpty) {
-        print('useEffect');
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
