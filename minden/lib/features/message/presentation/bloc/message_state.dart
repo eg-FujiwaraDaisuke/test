@@ -22,6 +22,12 @@ class MessageDetailLoading extends MessageState {
   List<Object> get props => [];
 }
 
+class ShowBadgeLoading extends MessageState {
+  const ShowBadgeLoading();
+  @override
+  List<Object> get props => [];
+}
+
 class MessageReading extends MessageState {
   const MessageReading();
   @override
@@ -38,6 +44,13 @@ class MessagesLoaded extends MessageState {
 class MessageDetailLoaded extends MessageState {
   const MessageDetailLoaded(this.messageDetail);
   final MessageDetail messageDetail;
+  @override
+  List<Object> get props => [];
+}
+
+class ShowBadgeLoaded extends MessageState {
+  const ShowBadgeLoaded(this.messages);
+  final Messages messages;
   @override
   List<Object> get props => [];
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
@@ -30,7 +30,7 @@ class HomeMypageTabNavigation extends HookWidget {
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
-    });
+    }, [messagesStateData]);
 
     return BottomNavigationBar(
       backgroundColor: Colors.white,
@@ -107,8 +107,6 @@ class HomeMypageTabNavigation extends HookWidget {
               child: BlocListener<GetMessagesBloc, MessageState>(
                 listener: (context, state) {
                   if (state is MessagesLoaded) {
-                    print('=================MessagesLoaded=================');
-                    print(state.messages.messages[0].plantId);
                     messagesStateController.updateMessages(state.messages);
                   }
                 },

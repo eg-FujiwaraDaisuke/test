@@ -24,6 +24,17 @@ class GetMessageDetailEvent extends MessageEvent {
   List<Object> get props => [messageId];
 }
 
+class GetShowBadgeEvent extends MessageEvent {
+  GetShowBadgeEvent(
+    this.page,
+  );
+
+  String? page;
+
+  @override
+  List<Object> get props => [];
+}
+
 class ReadMessageEvent extends MessageEvent {
   const ReadMessageEvent({required this.messageId});
 

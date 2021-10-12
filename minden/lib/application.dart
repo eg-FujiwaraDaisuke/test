@@ -97,6 +97,18 @@ class Application extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        BlocProvider<GetShowBadgeBloc>(
+          create: (BuildContext context) => GetShowBadgeBloc(
+            const MessageInitial(),
+            GetMessages(
+              MessageRepositoryImpl(
+                dataSource: MessageDataSourceImpl(
+                  client: http.Client(),
+                ),
+              ),
+            ),
+          ),
         )
       ],
       child: MaterialApp(

@@ -66,6 +66,35 @@ class GetMessageDetailBloc extends Bloc<MessageEvent, MessageState> {
   }
 }
 
+class GetShowBadgeBloc extends Bloc<MessageEvent, MessageState> {
+  GetShowBadgeBloc(MessageState initialState, this.usecase)
+      : super(initialState);
+  final GetMessages usecase;
+
+  @override
+  Stream<MessageState> mapEventToState(
+    MessageEvent event,
+  ) async* {
+    if (event is GetShowBadgeEvent) {
+      try {
+        yield const ShowBadgeLoading();
+
+        final failureOrUser =
+            await usecase(GetMessagesParams(event.page ?? '1'));
+
+        yield failureOrUser.fold<MessageState>(
+          (failure) => throw failure,
+          (messages) => ShowBadgeLoaded(messages),
+        );
+      } on RefreshTokenExpiredException catch (e) {
+        yield MessageError(message: e.toString(), needLogin: true);
+      } catch (e) {
+        yield MessageError(message: e.toString(), needLogin: false);
+      }
+    }
+  }
+}
+
 class ReadMessageBloc extends Bloc<MessageEvent, MessageState> {
   ReadMessageBloc(MessageState initialState, this.usecase)
       : super(initialState);
