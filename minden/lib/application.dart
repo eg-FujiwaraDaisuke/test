@@ -7,7 +7,6 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/features/debug/debug_page.dart';
-import 'package:minden/features/debug/debug_push_message_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
 import 'package:minden/features/localize/data/repositories/localized_info_repository_impl.dart';
@@ -28,6 +27,7 @@ import 'package:minden/features/message/data/datasources/message_datasource.dart
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
+import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
@@ -176,7 +176,7 @@ class Application extends StatelessWidget {
       '/my_page/matching': (_) => MatchingPage(),
       '/user': (_) => UserPage(),
       '/user/profile/edit': (_) => ProfileEditPage(),
-      '/message': (_) => MessageView(),
+      '/user/message': (_) => MessagePage(),
     };
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,9 +18,28 @@ import 'package:http/http.dart' as http;
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/utile.dart';
 
+class MessageArguments {
+  MessageArguments(this.message, this.openedApplication);
+
+  /// The RemoteMessage
+  final RemoteMessage message;
+
+  /// Whether this message caused the application to open.
+  final bool openedApplication;
+}
+
 class MessagePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as MessageArguments;
+    print(args.message.notification);
+
+    useEffect(() {
+      if (args != null) {
+        print(args);
+      }
+    }, []);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
