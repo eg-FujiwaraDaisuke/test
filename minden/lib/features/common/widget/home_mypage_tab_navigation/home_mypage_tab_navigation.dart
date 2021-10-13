@@ -5,10 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
+import 'package:minden/features/user/presentation/pages/user_page.dart';
 
 class HomeMypageTabNavigation extends HookWidget {
   HomeMypageTabNavigation({
@@ -55,9 +57,33 @@ class HomeMypageTabNavigation extends HookWidget {
         fontWeight: FontWeight.w500,
       ),
       selectedItemColor: const Color(0xFFFF8C00),
-      onTap: (index) => onSelectTab(
-        TabItem.values[index],
-      ),
+      onTap: (index) {
+        onSelectTab(
+          TabItem.values[index],
+        );
+        if (TabItem.values[index] == TabItem.home) {
+          // TODO タブを押したら発電所一覧のページに飛びたい
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //   settings: const RouteSettings(
+          //     name: '/home/top',
+          //   ),
+          //   builder: (BuildContext context) {
+          //     return HomePage();
+          //   },
+          // ));
+        }
+        if (TabItem.values[index] == TabItem.mypage) {
+          // TODO タブを押したらマイページのメニュー一覧のページに飛びたい
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //   settings: const RouteSettings(
+          //     name: '/user',
+          //   ),
+          //   builder: (BuildContext context) {
+          //     return UserPage();
+          //   },
+          // ));
+        }
+      },
       currentIndex: currentTab.index,
     );
   }

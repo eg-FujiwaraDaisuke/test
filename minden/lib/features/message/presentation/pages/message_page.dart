@@ -22,7 +22,7 @@ class MessageArguments {
   MessageArguments(this.message, this.openedApplication);
 
   /// The RemoteMessage
-  final RemoteMessage message;
+  final RemoteMessage? message;
 
   /// Whether this message caused the application to open.
   final bool openedApplication;
@@ -32,7 +32,7 @@ class MessagePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as MessageArguments;
-    print(args.message.notification);
+    print(args.message!.notification);
 
     useEffect(() {
       if (args != null) {
@@ -150,7 +150,7 @@ class _MessagesList extends HookWidget {
         ],
         child: Container(
           height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100),
           child: ListView.builder(
             controller: _scrollController,
             itemCount: messagesStateData.messages.length,

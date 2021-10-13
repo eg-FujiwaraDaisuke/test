@@ -61,7 +61,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     Future(() async {
-      const initializationSettingsAndroid = AndroidInitializationSettings('');
+      const initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
       const initializationSettingsIOS = IOSInitializationSettings();
 
       const initializationSettings = InitializationSettings(
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
       // プッシュ通知メッセージを表示することができない為、
       // ローカル通知で擬似的に通知メッセージを表示
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        debugPrint('フォアグラウンド状態からプッシュ通知をタップした');
+        debugPrint('フォアグラウンド状態からプッシュ通知受け取った');
         logD('${message}');
 
         final notification = message.notification;
@@ -156,8 +157,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future onSelectNotification(String? payload) async {
-    print('onSelectNotification');
-    print(payload);
+    debugPrint('フォアグラウンド状態からプッシュ通知をタップした');
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        settings: RouteSettings(
+            name: '/user/message', arguments: MessageArguments(null, false)),
+        builder: (BuildContext context) {
+          return MessagePage();
+        },
+      ),
+    );
   }
 
   @override
