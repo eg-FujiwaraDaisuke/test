@@ -61,51 +61,51 @@ class _HomePageState extends State<HomePage> {
     );
 
     Future(() async {
-      // const initializationSettingsAndroid = AndroidInitializationSettings('');
-      // const initializationSettingsIOS = IOSInitializationSettings();
+      const initializationSettingsAndroid = AndroidInitializationSettings('');
+      const initializationSettingsIOS = IOSInitializationSettings();
 
-      // const initializationSettings = InitializationSettings(
-      //     android: initializationSettingsAndroid,
-      //     iOS: initializationSettingsIOS);
+      const initializationSettings = InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS);
 
-      // await si<FlutterLocalNotificationsPlugin>().initialize(
-      //     initializationSettings,
-      //     onSelectNotification: onSelectNotification);
+      await si<FlutterLocalNotificationsPlugin>().initialize(
+          initializationSettings,
+          onSelectNotification: onSelectNotification);
 
-      // // フォアグラウンド状態の通知
-      // // Android ではアプリがフォアグラウンド状態で画面上部に
-      // // プッシュ通知メッセージを表示することができない為、
-      // // ローカル通知で擬似的に通知メッセージを表示
-      // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //   debugPrint('フォアグラウンド状態からプッシュ通知をタップした');
-      //   logD('${message}');
+      // フォアグラウンド状態の通知
+      // Android ではアプリがフォアグラウンド状態で画面上部に
+      // プッシュ通知メッセージを表示することができない為、
+      // ローカル通知で擬似的に通知メッセージを表示
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('フォアグラウンド状態からプッシュ通知をタップした');
+        logD('${message}');
 
-      //   final notification = message.notification;
-      //   final android = message.notification?.android;
-      //   const channel = AndroidNotificationChannel(
-      //     'high_importance_channel',
-      //     'High Importance Notifications',
-      //     'This channel is used for important notifications.',
-      //     importance: Importance.high,
-      //   );
+        final notification = message.notification;
+        final android = message.notification?.android;
+        const channel = AndroidNotificationChannel(
+          'high_importance_channel',
+          'High Importance Notifications',
+          'This channel is used for important notifications.',
+          importance: Importance.high,
+        );
 
-      //   if (notification != null && android != null) {
-      //     si<FlutterLocalNotificationsPlugin>().show(
-      //       notification.hashCode,
-      //       notification.title,
-      //       notification.body,
-      //       NotificationDetails(
-      //         android: AndroidNotificationDetails(
-      //           channel.id,
-      //           channel.name,
-      //           channel.description,
-      //           icon: 'launch_background',
-      //         ),
-      //       ),
-      //       payload: notification.body,
-      //     );
-      //   }
-      // });
+        if (notification != null && android != null) {
+          si<FlutterLocalNotificationsPlugin>().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                icon: 'launch_background',
+              ),
+            ),
+            payload: notification.body,
+          );
+        }
+      });
 
       await si<FirebaseMessaging>().getToken().then(_postToken);
       si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
