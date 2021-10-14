@@ -14,6 +14,17 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
+  updateMessagesPushNotify(Messages messages) {
+    print('updateMessagesPushNotify');
+    state = state.copyWith(
+      showBadge: messages.showBadge,
+      total: messages.total,
+      messages: [
+        ...{...messages.messages, ...state.messages}
+      ],
+    );
+  }
+
   addMessages(Messages messages) {
     state = state.copyWith(
       showBadge: messages.showBadge,

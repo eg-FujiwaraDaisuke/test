@@ -430,6 +430,7 @@ class _MenuMessageItem extends HookWidget {
     final latestUnreadMessageDetail = messagesStateData.messages
         .firstWhereOrNull((messageDetail) => messageDetail.read == false);
 
+    // TODO ここいらないので消す
     if (latestUnreadMessageDetail != null) {
       _getPowerPlantsBloc
           .add(GetPowerPlantEvent(plantId: latestUnreadMessageDetail.plantId));
