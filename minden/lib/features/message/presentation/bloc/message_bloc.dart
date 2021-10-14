@@ -122,3 +122,32 @@ class ReadMessageBloc extends Bloc<MessageEvent, MessageState> {
     }
   }
 }
+
+class GetMessagePushNotifyBloc extends Bloc<MessageEvent, MessageState> {
+  GetMessagePushNotifyBloc(MessageState initialState, this.usecase)
+      : super(initialState);
+  final GetMessages usecase;
+
+  @override
+  Stream<MessageState> mapEventToState(
+    MessageEvent event,
+  ) async* {
+    if (event is GetMessagesEvent) {
+      try {
+        yield const MessagesLoading();
+
+        final failureOrUser =
+            await usecase(GetMessagesParams(event.page ?? '1'));
+
+        yield failureOrUser.fold<MessageState>(
+          (failure) => throw failure,
+          (messages) => MessagesPushNotifyLoaded(messages),
+        );
+      } on RefreshTokenExpiredException catch (e) {
+        yield MessageError(message: e.toString(), needLogin: true);
+      } catch (e) {
+        yield MessageError(message: e.toString(), needLogin: false);
+      }
+    }
+  }
+}

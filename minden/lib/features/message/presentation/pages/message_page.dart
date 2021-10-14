@@ -31,14 +31,14 @@ class MessageArguments {
 class MessagePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as MessageArguments;
-    print(args.message!.notification);
+    // final args = ModalRoute.of(context)!.settings.arguments as MessageArguments;
+    // print(args.message!.notification);
 
-    useEffect(() {
-      if (args != null) {
-        print(args);
-      }
-    }, []);
+    // useEffect(() {
+    //   if (args != null) {
+    //     print(args);
+    //   }
+    // }, []);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -62,7 +62,6 @@ class MessagePage extends HookWidget {
           child: Container(
             color: Colors.white,
             width: 288,
-            // messagesStateにデータが入ってない場合apiから取得する
             child: _MessagesList(),
           ),
         ),

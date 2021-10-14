@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +11,9 @@ import 'package:minden/features/fcm/data/datasources/fcm_token_data_source.dart'
 import 'package:minden/features/fcm/data/repositories/fcm_token_repository_impl.dart';
 import 'package:minden/features/fcm/domain/usecases/update_fcm_token.dart';
 import 'package:minden/features/fcm/pages/bloc/fcm_bloc.dart';
+import 'package:minden/features/message/data/datasources/message_datasource.dart';
+import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
+import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
@@ -31,8 +33,8 @@ class HomePage extends HookWidget {
   Widget build(BuildContext context) {
     final _currentTab = useState<TabItem>(TabItem.home);
 
-    late UpdateFcmTokenBloc _bloc;
-    late GetMessagesBloc _getMessagesBloc;
+    late UpdateFcmTokenBloc _updateFcmTokenBloc;
+    late GetMessagePushNotifyBloc _getMessagePushNotifyBloc;
 
     void _selectTab(TabItem tabItem) => _currentTab.value = tabItem;
     final messagesStateController =
@@ -45,7 +47,7 @@ class HomePage extends HookWidget {
         return;
       }
 
-      _bloc.add(UpdateFcmTokenEvent(token));
+      _updateFcmTokenBloc.add(UpdateFcmTokenEvent(token));
     }
 
     Future _onSelectNotification(String? payload) async {
@@ -63,18 +65,27 @@ class HomePage extends HookWidget {
 
     Future<void> _firebaseMessagingBackgroundHandler(
         RemoteMessage message) async {
-      _getMessagesBloc.add(GetMessagesEvent('1'));
+      _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
     }
 
     useEffect(() {
-      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-      _getMessagesBloc.stream.listen((state) async {
-        if (state is MessagesLoaded) {
+      _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
+        const MessageInitial(),
+        GetMessages(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+      _getMessagePushNotifyBloc.stream.listen((state) async {
+        if (state is MessagesPushNotifyLoaded) {
           messagesStateController.updateMessagesPushNotify(state.messages);
         }
       });
 
-      _bloc = UpdateFcmTokenBloc(
+      _updateFcmTokenBloc = UpdateFcmTokenBloc(
         FcmStateInitial(),
         UpdateFcmToken(
           FcmTokenRepositoryImpl(
@@ -104,7 +115,7 @@ class HomePage extends HookWidget {
         // ローカル通知で擬似的に通知メッセージを表示
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
           debugPrint('フォアグラウンド状態からプッシュ通知受け取った');
-          _getMessagesBloc.add(GetMessagesEvent('1'));
+          _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
           logD('${message}');
 
           final notification = message.notification;
@@ -180,7 +191,8 @@ class HomePage extends HookWidget {
       });
 
       return () {
-        _bloc.close();
+        _updateFcmTokenBloc.close();
+        _getMessagePushNotifyBloc.close();
       };
     }, []);
 
