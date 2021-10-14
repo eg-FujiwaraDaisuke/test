@@ -55,7 +55,8 @@ class HomePage extends HookWidget {
       await Navigator.of(context).push(
         MaterialPageRoute(
           settings: RouteSettings(
-              name: '/user/message', arguments: MessageArguments(null, false)),
+            name: '/user/message',
+          ),
           builder: (BuildContext context) {
             return MessagePage();
           },
@@ -163,8 +164,8 @@ class HomePage extends HookWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 settings: RouteSettings(
-                    name: '/user/message',
-                    arguments: MessageArguments(message, true)),
+                  name: '/user/message',
+                ),
                 builder: (BuildContext context) {
                   return MessagePage();
                 },
@@ -180,8 +181,8 @@ class HomePage extends HookWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               settings: RouteSettings(
-                  name: '/user/message',
-                  arguments: MessageArguments(message, true)),
+                name: '/user/message',
+              ),
               builder: (BuildContext context) {
                 return MessagePage();
               },
