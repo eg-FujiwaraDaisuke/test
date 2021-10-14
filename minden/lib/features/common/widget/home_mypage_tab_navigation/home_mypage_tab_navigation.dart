@@ -28,7 +28,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (messagesStateData.messages.isEmpty) {
+      if (!messagesStateData.isInitialed) {
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
@@ -109,7 +109,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final color = currentTab == tabItem
         ? const Color(0xFFFF8C00)
         : const Color(0xFFA7A7A7);
-    final tabTitle = i18nTranslate(context, 'tab_navigation_home');
+    final tabTitle = i18nTranslate(context, 'tab_navigation_mypage');
     const tabIcon = 'mypage';
     return BottomNavigationBarItem(
       icon: Stack(
@@ -121,7 +121,7 @@ class HomeMypageTabNavigation extends HookWidget {
               color: color,
             ),
           ),
-          if (messagesStateData.messages.isEmpty)
+          if (!messagesStateData.isInitialed)
             BlocProvider.value(
               value: _bloc,
               child: BlocListener<GetMessagesBloc, MessageState>(

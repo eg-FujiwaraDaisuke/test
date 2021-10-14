@@ -11,7 +11,6 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
@@ -19,7 +18,6 @@ import 'package:minden/features/power_plant/data/datasources/power_plant_data_so
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
-import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
@@ -374,7 +372,7 @@ class _MenuMessageItem extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (messagesStateData.messages.isEmpty) {
+      if (!messagesStateData.isInitialed) {
         _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
         _getMessagesBloc.add(GetMessagesEvent('1'));
       }
@@ -407,7 +405,7 @@ class _MenuMessageItem extends HookWidget {
           padding: const EdgeInsets.symmetric(horizontal: 22),
           height: 56,
           width: MediaQuery.of(context).size.width,
-          child: messagesStateData.messages.isEmpty
+          child: !messagesStateData.isInitialed
               ? BlocProvider.value(
                   value: _getMessagesBloc,
                   child: BlocListener<GetMessagesBloc, MessageState>(
