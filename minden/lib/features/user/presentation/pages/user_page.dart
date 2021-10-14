@@ -372,7 +372,7 @@ class _MenuMessageItem extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (!messagesStateData.isInitialed) {
+      if (!messagesStateData.hasEverGetMessage) {
         _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
         _getMessagesBloc.add(GetMessagesEvent('1'));
       }
@@ -405,7 +405,7 @@ class _MenuMessageItem extends HookWidget {
           padding: const EdgeInsets.symmetric(horizontal: 22),
           height: 56,
           width: MediaQuery.of(context).size.width,
-          child: !messagesStateData.isInitialed
+          child: !messagesStateData.hasEverGetMessage
               ? BlocProvider.value(
                   value: _getMessagesBloc,
                   child: BlocListener<GetMessagesBloc, MessageState>(

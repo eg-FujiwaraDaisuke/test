@@ -28,7 +28,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (!messagesStateData.isInitialed) {
+      if (!messagesStateData.hasEverGetMessage) {
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
@@ -121,7 +121,7 @@ class HomeMypageTabNavigation extends HookWidget {
               color: color,
             ),
           ),
-          if (!messagesStateData.isInitialed)
+          if (!messagesStateData.hasEverGetMessage)
             BlocProvider.value(
               value: _bloc,
               child: BlocListener<GetMessagesBloc, MessageState>(

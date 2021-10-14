@@ -21,13 +21,13 @@ class _$MessagesStateTearOff {
   const _$MessagesStateTearOff();
 
   _MessagesState call(
-      {bool isInitialed = false,
+      {bool hasEverGetMessage = false,
       bool showBadge = false,
       int page = 0,
       int total = 0,
       List<MessageDetail> messages = const []}) {
     return _MessagesState(
-      isInitialed: isInitialed,
+      hasEverGetMessage: hasEverGetMessage,
       showBadge: showBadge,
       page: page,
       total: total,
@@ -45,7 +45,7 @@ const $MessagesState = _$MessagesStateTearOff();
 
 /// @nodoc
 mixin _$MessagesState {
-  bool get isInitialed => throw _privateConstructorUsedError;
+  bool get hasEverGetMessage => throw _privateConstructorUsedError;
   bool get showBadge => throw _privateConstructorUsedError;
   int get page => throw _privateConstructorUsedError;
   int get total => throw _privateConstructorUsedError;
@@ -63,7 +63,7 @@ abstract class $MessagesStateCopyWith<$Res> {
           MessagesState value, $Res Function(MessagesState) then) =
       _$MessagesStateCopyWithImpl<$Res>;
   $Res call(
-      {bool isInitialed,
+      {bool hasEverGetMessage,
       bool showBadge,
       int page,
       int total,
@@ -81,16 +81,16 @@ class _$MessagesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isInitialed = freezed,
+    Object? hasEverGetMessage = freezed,
     Object? showBadge = freezed,
     Object? page = freezed,
     Object? total = freezed,
     Object? messages = freezed,
   }) {
     return _then(_value.copyWith(
-      isInitialed: isInitialed == freezed
-          ? _value.isInitialed
-          : isInitialed // ignore: cast_nullable_to_non_nullable
+      hasEverGetMessage: hasEverGetMessage == freezed
+          ? _value.hasEverGetMessage
+          : hasEverGetMessage // ignore: cast_nullable_to_non_nullable
               as bool,
       showBadge: showBadge == freezed
           ? _value.showBadge
@@ -120,7 +120,7 @@ abstract class _$MessagesStateCopyWith<$Res>
       __$MessagesStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {bool isInitialed,
+      {bool hasEverGetMessage,
       bool showBadge,
       int page,
       int total,
@@ -140,16 +140,16 @@ class __$MessagesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isInitialed = freezed,
+    Object? hasEverGetMessage = freezed,
     Object? showBadge = freezed,
     Object? page = freezed,
     Object? total = freezed,
     Object? messages = freezed,
   }) {
     return _then(_MessagesState(
-      isInitialed: isInitialed == freezed
-          ? _value.isInitialed
-          : isInitialed // ignore: cast_nullable_to_non_nullable
+      hasEverGetMessage: hasEverGetMessage == freezed
+          ? _value.hasEverGetMessage
+          : hasEverGetMessage // ignore: cast_nullable_to_non_nullable
               as bool,
       showBadge: showBadge == freezed
           ? _value.showBadge
@@ -176,7 +176,7 @@ class __$MessagesStateCopyWithImpl<$Res>
 /// @nodoc
 class _$_MessagesState implements _MessagesState {
   const _$_MessagesState(
-      {this.isInitialed = false,
+      {this.hasEverGetMessage = false,
       this.showBadge = false,
       this.page = 0,
       this.total = 0,
@@ -187,7 +187,7 @@ class _$_MessagesState implements _MessagesState {
 
   @JsonKey(defaultValue: false)
   @override
-  final bool isInitialed;
+  final bool hasEverGetMessage;
   @JsonKey(defaultValue: false)
   @override
   final bool showBadge;
@@ -203,16 +203,16 @@ class _$_MessagesState implements _MessagesState {
 
   @override
   String toString() {
-    return 'MessagesState(isInitialed: $isInitialed, showBadge: $showBadge, page: $page, total: $total, messages: $messages)';
+    return 'MessagesState(hasEverGetMessage: $hasEverGetMessage, showBadge: $showBadge, page: $page, total: $total, messages: $messages)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _MessagesState &&
-            (identical(other.isInitialed, isInitialed) ||
+            (identical(other.hasEverGetMessage, hasEverGetMessage) ||
                 const DeepCollectionEquality()
-                    .equals(other.isInitialed, isInitialed)) &&
+                    .equals(other.hasEverGetMessage, hasEverGetMessage)) &&
             (identical(other.showBadge, showBadge) ||
                 const DeepCollectionEquality()
                     .equals(other.showBadge, showBadge)) &&
@@ -228,7 +228,7 @@ class _$_MessagesState implements _MessagesState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isInitialed) ^
+      const DeepCollectionEquality().hash(hasEverGetMessage) ^
       const DeepCollectionEquality().hash(showBadge) ^
       const DeepCollectionEquality().hash(page) ^
       const DeepCollectionEquality().hash(total) ^
@@ -247,7 +247,7 @@ class _$_MessagesState implements _MessagesState {
 
 abstract class _MessagesState implements MessagesState {
   const factory _MessagesState(
-      {bool isInitialed,
+      {bool hasEverGetMessage,
       bool showBadge,
       int page,
       int total,
@@ -257,7 +257,7 @@ abstract class _MessagesState implements MessagesState {
       _$_MessagesState.fromJson;
 
   @override
-  bool get isInitialed => throw _privateConstructorUsedError;
+  bool get hasEverGetMessage => throw _privateConstructorUsedError;
   @override
   bool get showBadge => throw _privateConstructorUsedError;
   @override

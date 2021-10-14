@@ -6,7 +6,7 @@ part 'messages_state.g.dart';
 @freezed
 abstract class MessagesState with _$MessagesState {
   const factory MessagesState({
-    @Default(false) bool isInitialed,
+    @Default(false) bool hasEverGetMessage,
     @Default(false) bool showBadge,
     @Default(0) int page,
     @Default(0) int total,

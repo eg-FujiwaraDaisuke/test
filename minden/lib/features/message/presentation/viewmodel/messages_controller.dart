@@ -8,7 +8,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   updateMessages(Messages messages) {
     print('updateMessages');
     state = state.copyWith(
-      isInitialed: true,
+      hasEverGetMessage: true,
       showBadge: messages.showBadge,
       page: messages.page,
       total: messages.total,
@@ -19,7 +19,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   updateMessagesPushNotify(Messages messages) {
     print('updateMessagesPushNotify');
     state = state.copyWith(
-      isInitialed: true,
+      hasEverGetMessage: true,
       showBadge: messages.showBadge,
       total: messages.total,
       messages: [
@@ -32,7 +32,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   addMessages(Messages messages) {
     print('addMessages');
     state = state.copyWith(
-      isInitialed: true,
+      hasEverGetMessage: true,
       showBadge: messages.showBadge,
       page: messages.page,
       total: messages.total,

@@ -8,7 +8,7 @@ part of 'messages_state.dart';
 
 _$_MessagesState _$_$_MessagesStateFromJson(Map<String, dynamic> json) {
   return _$_MessagesState(
-    isInitialed: json['isInitialed'] as bool? ?? false,
+    hasEverGetMessage: json['hasEverGetMessage'] as bool? ?? false,
     showBadge: json['showBadge'] as bool? ?? false,
     page: json['page'] as int? ?? 0,
     total: json['total'] as int? ?? 0,
@@ -21,7 +21,7 @@ _$_MessagesState _$_$_MessagesStateFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_MessagesStateToJson(_$_MessagesState instance) =>
     <String, dynamic>{
-      'isInitialed': instance.isInitialed,
+      'hasEverGetMessage': instance.hasEverGetMessage,
       'showBadge': instance.showBadge,
       'page': instance.page,
       'total': instance.total,
