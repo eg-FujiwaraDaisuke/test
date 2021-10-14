@@ -26,6 +26,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
         ...{...messages.messages, ...state.messages}
       ],
     );
+    print(state.messages.length);
   }
 
   addMessages(Messages messages) {
