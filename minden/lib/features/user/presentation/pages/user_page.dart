@@ -416,25 +416,19 @@ class _MenuMessageItem extends HookWidget {
                         messagesStateController.updateMessages(state.messages);
                       }
                     },
-                    child: _buildMessageNav(),
+                    child: _buildMessageNav(context),
                   ),
                 )
-              : _buildMessageNav()),
+              : _buildMessageNav(context)),
     );
   }
 
-  Widget _buildMessageNav() {
+  Widget _buildMessageNav(BuildContext context) {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
     final latestUnreadMessageDetail = messagesStateData.messages
         .firstWhereOrNull((messageDetail) => messageDetail.read == false);
-
-    // TODO ここいらないので消す
-    if (latestUnreadMessageDetail != null) {
-      _getPowerPlantsBloc
-          .add(GetPowerPlantEvent(plantId: latestUnreadMessageDetail.plantId));
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -485,28 +479,18 @@ class _MenuMessageItem extends HookWidget {
             const SizedBox(width: 22),
             if (messagesStateData.showBadge &&
                 latestUnreadMessageDetail != null)
-              BlocProvider.value(
-                value: _getPowerPlantsBloc,
-                child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
-                  builder: (context, state) {
-                    if (state is PowerPlantLoaded) {
-                      return Flexible(
-                        child: Text(
-                          '${latestUnreadMessageDetail.messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
-                          style: TextStyle(
-                            color: const Color(0xFFFF8C00),
-                            fontSize: 9,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: calcLetterSpacing(letter: 0.5),
-                          ),
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+              Flexible(
+                child: Text(
+                  '${latestUnreadMessageDetail.messageType == '1' ? i18nTranslate(context, 'minden') : latestUnreadMessageDetail.title}${i18nTranslate(context, 'thanks_message_notification')}',
+                  style: TextStyle(
+                    color: const Color(0xFFFF8C00),
+                    fontSize: 9,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
+                  ),
                 ),
-              ),
+              )
           ],
         ),
       ],
