@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class PowerPlantHomeTabData {
   PowerPlantHomeTabData({
@@ -13,14 +15,40 @@ class PowerPlantHomeTabData {
 }
 
 /// ホーム - トップ
-class PowerPlantHomePage extends StatelessWidget {
+class PowerPlantHomePage extends StatefulWidget {
   PowerPlantHomePage({Key? key}) : super(key: key);
+
+  @override
+  _PowerPlantHomePageState createState() => _PowerPlantHomePageState();
+}
+
+class _PowerPlantHomePageState extends State<PowerPlantHomePage> {
+  late TransitionScreenBloc _transitionScreenBloc;
 
   final tabs = [
     PowerPlantHomeTabData(tabName: '発電所一覧', tabPage: (_) => PowerPlantList()),
     PowerPlantHomeTabData(
         tabName: '発電所を探す', tabPage: (_) => const PowerPlantSearchByTag()),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
+    _transitionScreenBloc.stream.listen((event) {
+      if (event is TransitionScreenStart) {
+        if (event.screen == 'PowerPlantHomePage') {
+          print('PowerPlantHomePage');
+          final route = MaterialPageRoute(
+            builder: (context) => PowerPlantHomePage(),
+            settings: RouteSettings(name: '/home/top'),
+          );
+          Navigator.pushReplacement(context, route);
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

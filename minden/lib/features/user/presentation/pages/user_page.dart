@@ -20,6 +20,7 @@ import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
@@ -59,13 +60,14 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late GetProfileBloc _bloc;
+  late GetProfileBloc _getProfileBloc;
+  late TransitionScreenBloc _transitionScreenBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetProfileBloc(
+    _getProfileBloc = GetProfileBloc(
       const ProfileStateInitial(),
       GetProfile(
         ProfileRepositoryImpl(
@@ -76,19 +78,42 @@ class _UserPageState extends State<UserPage> {
       ),
     );
 
-    _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+    _getProfileBloc.add(GetProfileEvent(userId: si<Account>().userId));
+
+    _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
+    _transitionScreenBloc.stream.listen((event) {
+      if (event is TransitionScreenStart) {
+        if (event.screen == 'MessagePage') {
+          print('messagePageに遷移させる');
+          final route = MaterialPageRoute(
+            builder: (context) => MessagePage(),
+            settings: RouteSettings(name: '/user/message'),
+          );
+          Navigator.push(context, route);
+        }
+
+        if (event.screen == 'UserPage') {
+          print('UserPageに遷移させる');
+          final route = MaterialPageRoute(
+            builder: (context) => UserPage(),
+            settings: RouteSettings(name: '/user'),
+          );
+          Navigator.pushReplacement(context, route);
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getProfileBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _bloc,
+      value: _getProfileBloc,
       child: BlocListener<GetProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileLoading) {

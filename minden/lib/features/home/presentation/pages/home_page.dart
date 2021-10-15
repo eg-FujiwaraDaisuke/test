@@ -16,8 +16,8 @@ import 'package:minden/features/message/data/datasources/message_datasource.dart
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
-import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/injection_container.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,7 +36,8 @@ class HomePage extends HookWidget {
 
     late UpdateFcmTokenBloc _updateFcmTokenBloc;
     late GetMessagePushNotifyBloc _getMessagePushNotifyBloc;
-    late GetMessagesBloc _getMessagesBloc;
+    late GetMessageBackGroundPushNotifyBloc _getMessageBackGroundPushNotifyBloc;
+    late TransitionScreenBloc _transitionScreenBloc;
 
     void _selectTab(TabItem tabItem) => _currentTab.value = tabItem;
     final messagesStateController =
@@ -53,21 +54,13 @@ class HomePage extends HookWidget {
     }
 
     Future _onSelectNotification(String? payload) async {
-      debugPrint('フォアグラウンド状態からプッシュ通知をタップした');
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          settings: RouteSettings(
-            name: '/user/message',
-          ),
-          builder: (BuildContext context) {
-            return MessagePage();
-          },
-        ),
-      );
+      print('フォアグラウンド状態からプッシュ通知をタップした');
+      _transitionScreenBloc.add(TransitionScreenEvent('MessagePage'));
     }
 
     useEffect(() {
-      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+      _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
+
       _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
         const MessageInitial(),
         GetMessages(
@@ -84,7 +77,18 @@ class HomePage extends HookWidget {
         }
       });
 
-      _getMessagesBloc.stream.listen((state) async {
+      _getMessageBackGroundPushNotifyBloc = GetMessageBackGroundPushNotifyBloc(
+        const MessageInitial(),
+        GetMessages(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
+      _getMessageBackGroundPushNotifyBloc.stream.listen((state) async {
         if (state is MessagesLoaded) {
           messagesStateController.updateMessages(state.messages);
         }
@@ -115,11 +119,9 @@ class HomePage extends HookWidget {
             onSelectNotification: _onSelectNotification);
 
         // フォアグラウンド状態の通知
-        // Android ではアプリがフォアグラウンド状態で画面上部に
-        // プッシュ通知メッセージを表示することができない為、
-        // ローカル通知で擬似的に通知メッセージを表示
+        // Android ではアプリがフォアグラウンド状態で画面上部にプッシュ通知メッセージを表示することができない為、ローカル通知で擬似的に通知メッセージを表示
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          debugPrint('フォアグラウンド状態からプッシュ通知受け取った');
+          print('フォアグラウンド状態からプッシュ通知受け取った');
           _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
           logD('${message}');
 
@@ -159,43 +161,25 @@ class HomePage extends HookWidget {
             .getInitialMessage()
             .then((RemoteMessage? message) {
           logD('${message}');
-          debugPrint('ターミネイト状態からプッシュ通知をタップした');
+          print('ターミネイト状態からプッシュ通知をタップした');
           if (message != null) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                settings: RouteSettings(
-                  name: '/user/message',
-                ),
-                builder: (BuildContext context) {
-                  return MessagePage();
-                },
-              ),
-            );
+            _transitionScreenBloc.add(TransitionScreenEvent('MessagePage'));
           }
         });
 
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          debugPrint('バックグラウンド状態からプッシュ通知をタップした');
+          print('バックグラウンド状態からプッシュ通知をタップした');
           logD('${message}');
-          _getMessagesBloc.add(GetMessagesEvent('1'));
-
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              settings: RouteSettings(
-                name: '/user/message',
-              ),
-              builder: (BuildContext context) {
-                return MessagePage();
-              },
-            ),
-          );
+          _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
+          _transitionScreenBloc.add(TransitionScreenEvent('MessagePage'));
         });
       });
 
       return () {
         _updateFcmTokenBloc.close();
         _getMessagePushNotifyBloc.close();
+        _getMessageBackGroundPushNotifyBloc.close();
       };
     }, []);
 

@@ -38,6 +38,7 @@ import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
+import 'features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
@@ -108,6 +109,11 @@ class Application extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+        BlocProvider<TransitionScreenBloc>(
+          create: (BuildContext context) => TransitionScreenBloc(
+            const TransitionScreenInitial(),
           ),
         )
       ],
