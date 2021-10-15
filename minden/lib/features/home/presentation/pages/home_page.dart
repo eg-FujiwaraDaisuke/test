@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -35,6 +36,7 @@ class HomePage extends HookWidget {
 
     late UpdateFcmTokenBloc _updateFcmTokenBloc;
     late GetMessagePushNotifyBloc _getMessagePushNotifyBloc;
+    late GetMessagesBloc _getMessagesBloc;
 
     void _selectTab(TabItem tabItem) => _currentTab.value = tabItem;
     final messagesStateController =
@@ -64,12 +66,8 @@ class HomePage extends HookWidget {
       );
     }
 
-    Future<void> _firebaseMessagingBackgroundHandler(
-        RemoteMessage message) async {
-      _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
-    }
-
     useEffect(() {
+      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
       _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
         const MessageInitial(),
         GetMessages(
@@ -83,6 +81,12 @@ class HomePage extends HookWidget {
       _getMessagePushNotifyBloc.stream.listen((state) async {
         if (state is MessagesPushNotifyLoaded) {
           messagesStateController.updateMessagesPushNotify(state.messages);
+        }
+      });
+
+      _getMessagesBloc.stream.listen((state) async {
+        if (state is MessagesLoaded) {
+          messagesStateController.updateMessages(state.messages);
         }
       });
 
@@ -146,10 +150,6 @@ class HomePage extends HookWidget {
           }
         });
 
-        // バックグラウンド状態の通知
-        FirebaseMessaging.onBackgroundMessage(
-            _firebaseMessagingBackgroundHandler);
-
         await si<FirebaseMessaging>().getToken().then(_postToken);
         si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
 
@@ -178,6 +178,8 @@ class HomePage extends HookWidget {
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
           debugPrint('バックグラウンド状態からプッシュ通知をタップした');
           logD('${message}');
+          _getMessagesBloc.add(GetMessagesEvent('1'));
+
           Navigator.of(context).push(
             MaterialPageRoute(
               settings: RouteSettings(
