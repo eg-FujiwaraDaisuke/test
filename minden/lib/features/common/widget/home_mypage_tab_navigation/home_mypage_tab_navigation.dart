@@ -76,7 +76,6 @@ class HomeMypageTabNavigation extends HookWidget {
       onTap: (index) {
         // activeなタブを再度選んだら
         if (TabItem.values[index] == currentTab) {
-          print('TransitionScreenEvent');
           if (currentTab == TabItem.home) {
             _transitionScreenBloc
                 .add(TransitionScreenEvent('PowerPlantHomePage'));

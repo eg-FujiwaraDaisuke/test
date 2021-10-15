@@ -93,12 +93,7 @@ class _UserPageState extends State<UserPage> {
         }
 
         if (event.screen == 'UserPage') {
-          print('UserPageに遷移させる');
-          final route = MaterialPageRoute(
-            builder: (context) => UserPage(),
-            settings: RouteSettings(name: '/user'),
-          );
-          Navigator.pushReplacement(context, route);
+          Navigator.popUntil(context, (route) => route.isFirst);
         }
       }
     });
