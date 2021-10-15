@@ -84,6 +84,7 @@ class _UserPageState extends State<UserPage> {
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
         if (event.screen == 'MessagePage') {
+          // TODO MessagePageにいるなら遷移させない
           print('messagePageに遷移させる');
           final route = MaterialPageRoute(
             builder: (context) => MessagePage(),
