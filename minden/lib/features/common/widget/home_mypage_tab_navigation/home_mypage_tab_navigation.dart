@@ -36,16 +36,16 @@ class HomeMypageTabNavigation extends HookWidget {
       _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
       _transitionScreenBloc.stream.listen((event) {
         if (event is TransitionScreenStart) {
-          if (event.screen == 'MessagePage') {
-            onSelectTab(
-              TabItem.mypage,
-            );
-          }
           if (event.screen == 'PowerPlantHomePage') {
             onSelectTab(
               TabItem.home,
             );
           }
+        }
+        if (event is TransitionMessagePageStart) {
+          onSelectTab(
+            TabItem.mypage,
+          );
         }
       });
     }, []);

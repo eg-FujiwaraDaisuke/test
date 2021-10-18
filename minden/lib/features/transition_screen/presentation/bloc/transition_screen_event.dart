@@ -13,3 +13,13 @@ class TransitionScreenEvent extends TransitionEvent {
   @override
   List<Object> get props => [];
 }
+
+class TransitionMessagePageEvent extends TransitionEvent {
+  TransitionMessagePageEvent(
+    this.messageId,
+  );
+
+  String messageId;
+  @override
+  List<Object> get props => [];
+}

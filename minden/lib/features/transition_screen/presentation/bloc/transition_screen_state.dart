@@ -17,6 +17,13 @@ class TransitionScreenStart extends TransitionState {
   List<Object> get props => [];
 }
 
+class TransitionMessagePageStart extends TransitionState {
+  const TransitionMessagePageStart(this.messageId);
+  final String messageId;
+  @override
+  List<Object> get props => [];
+}
+
 class TransitionScreenCompleted extends TransitionState {
   const TransitionScreenCompleted();
 

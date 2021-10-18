@@ -3,15 +3,19 @@ import 'package:equatable/equatable.dart';
 part 'transition_screen_event.dart';
 part 'transition_screen_state.dart';
 
-class TransitionScreenBloc
-    extends Bloc<TransitionScreenEvent, TransitionState> {
+class TransitionScreenBloc extends Bloc<TransitionEvent, TransitionState> {
   TransitionScreenBloc(TransitionState initialState) : super(initialState);
   @override
   Stream<TransitionState> mapEventToState(
-    TransitionScreenEvent event,
+    TransitionEvent event,
   ) async* {
     if (event is TransitionScreenEvent) {
       yield TransitionScreenStart(event.screen);
+      yield const TransitionScreenCompleted();
+    }
+
+    if (event is TransitionMessagePageEvent) {
+      yield TransitionMessagePageStart(event.messageId);
       yield const TransitionScreenCompleted();
     }
   }

@@ -27,7 +27,7 @@ class MessageRepositoryImpl
 
   @override
   Future<Either<Failure, MessageDetail>> getMessageDetail(
-      {required int messageId}) async {
+      {required String messageId}) async {
     try {
       final messageDetail = await retryRequest(
           () => dataSource.getMessageDetail(messageId: messageId));

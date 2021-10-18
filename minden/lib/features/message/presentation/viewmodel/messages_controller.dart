@@ -6,7 +6,6 @@ import 'messages_state.dart';
 class MessagesStateController extends StateNotifier<MessagesState> {
   MessagesStateController() : super(const MessagesState());
   updateMessages(Messages messages) {
-    print('updateMessages');
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,
@@ -17,7 +16,6 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   }
 
   updateMessagesPushNotify(Messages messages) {
-    print('updateMessagesPushNotify');
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,
@@ -26,11 +24,9 @@ class MessagesStateController extends StateNotifier<MessagesState> {
         ...{...messages.messages, ...state.messages}
       ],
     );
-    print(state.messages.length);
   }
 
   addMessages(Messages messages) {
-    print('addMessages');
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,

@@ -83,19 +83,18 @@ class _UserPageState extends State<UserPage> {
     _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
-        if (event.screen == 'MessagePage') {
-          // TODO MessagePageにいるなら遷移させない
-          print('messagePageに遷移させる');
-          final route = MaterialPageRoute(
-            builder: (context) => MessagePage(),
-            settings: RouteSettings(name: '/user/message'),
-          );
-          Navigator.push(context, route);
-        }
-
         if (event.screen == 'UserPage') {
           Navigator.popUntil(context, (route) => route.isFirst);
         }
+      }
+
+      if (event is TransitionMessagePageStart) {
+        // TODO メッセージページにいるならpushしない
+        final route = MaterialPageRoute(
+          builder: (context) => MessagePage(showMessageId: event.messageId),
+          settings: RouteSettings(name: '/user/message'),
+        );
+        Navigator.push(context, route);
       }
     });
   }

@@ -18,8 +18,70 @@ import 'package:minden/features/message/presentation/viewmodel/messages_controll
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
+  MessagePage({this.showMessageId});
+  String? showMessageId;
+
   @override
   Widget build(BuildContext context) {
+    late GetMessageDetailBloc _getMessageDetailBloc;
+    late ReadMessageBloc _readMessageBloc;
+
+    useEffect(() {
+      if (showMessageId != null) {
+        _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
+            ),
+          ),
+        );
+
+        _getMessageDetailBloc = GetMessageDetailBloc(
+          const MessageInitial(),
+          GetMessageDetail(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
+            ),
+          ),
+        );
+
+        _getMessageDetailBloc.stream.listen((event) async {
+          if (event is MessageDetailLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+
+          if (event is MessageDetailLoaded) {
+            _readMessageBloc.add(
+                ReadMessageEvent(messageId: event.messageDetail.messageId));
+
+            if (event.messageDetail.messageType == '1') {
+              MindenMessageDialog(
+                      context: context, messageDetail: event.messageDetail)
+                  .showDialog();
+            } else {
+              PowerPlantMessageDialog(
+                context: context,
+                messageDetail: event.messageDetail,
+              ).showDialog();
+            }
+          }
+        });
+        _getMessageDetailBloc
+            .add(GetMessageDetailEvent(messageId: showMessageId!));
+      }
+      return () {
+        _getMessageDetailBloc.close();
+        _readMessageBloc.close();
+      };
+    }, []);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
