@@ -55,16 +55,13 @@ class HomeMypageTabNavigation extends HookWidget {
       ),
       selectedItemColor: const Color(0xFFFF8C00),
       onTap: (index) {
-        // activeなタブを再度選んだら
-        if (TabItem.values[index] == currentTab) {
-          if (currentTab == TabItem.home) {
-            BlocProvider.of<TransitionScreenBloc>(context)
-                .add(TransitionScreenEvent('PowerPlantHomePage'));
-          }
-          if (currentTab == TabItem.mypage) {
-            BlocProvider.of<TransitionScreenBloc>(context)
-                .add(TransitionScreenEvent('UserPage'));
-          }
+        if (TabItem.values[index] == TabItem.home) {
+          BlocProvider.of<TransitionScreenBloc>(context)
+              .add(TransitionScreenEvent('PowerPlantHomePage'));
+        }
+        if (TabItem.values[index] == TabItem.mypage) {
+          BlocProvider.of<TransitionScreenBloc>(context)
+              .add(TransitionScreenEvent('UserPage'));
         }
       },
       currentIndex: currentTab.index,

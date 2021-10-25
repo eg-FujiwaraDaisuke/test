@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
@@ -19,7 +20,6 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/injection_container.dart';
-import 'package:http/http.dart' as http;
 
 // FCMプッシュ通知の遷移周りの初期化を行っています。
 // bottomNavigationBarの出し分けを行います
@@ -67,14 +67,19 @@ class HomePage extends HookWidget {
               TabItem.home,
             );
           }
+          if (event.screen == 'UserPage') {
+            _selectTab(
+              TabItem.mypage,
+            );
+          }
         }
+        // 
         if (event is TransitionMessagePageStart) {
           _selectTab(
             TabItem.mypage,
           );
         }
       });
-
       _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
         const MessageInitial(),
         GetMessages(
