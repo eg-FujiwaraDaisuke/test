@@ -14,12 +14,9 @@ import 'package:minden/features/transition_screen/presentation/bloc/transition_s
 class HomeMypageTabNavigation extends HookWidget {
   HomeMypageTabNavigation({
     required this.currentTab,
-    required this.onSelectTab,
   }) : super();
   final TabItem currentTab;
-  final Function onSelectTab;
   late GetMessagesBloc _bloc;
-  late TransitionScreenBloc _transitionScreenBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +29,6 @@ class HomeMypageTabNavigation extends HookWidget {
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
-
-      _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
-      _transitionScreenBloc.stream.listen((event) {
-        if (event is TransitionScreenStart) {
-          if (event.screen == 'PowerPlantHomePage') {
-            onSelectTab(
-              TabItem.home,
-            );
-          }
-        }
-        if (event is TransitionMessagePageStart) {
-          onSelectTab(
-            TabItem.mypage,
-          );
-        }
-      });
     }, []);
 
     return BottomNavigationBar(
@@ -77,17 +58,14 @@ class HomeMypageTabNavigation extends HookWidget {
         // activeなタブを再度選んだら
         if (TabItem.values[index] == currentTab) {
           if (currentTab == TabItem.home) {
-            _transitionScreenBloc
+            BlocProvider.of<TransitionScreenBloc>(context)
                 .add(TransitionScreenEvent('PowerPlantHomePage'));
           }
           if (currentTab == TabItem.mypage) {
-            _transitionScreenBloc.add(TransitionScreenEvent('UserPage'));
+            BlocProvider.of<TransitionScreenBloc>(context)
+                .add(TransitionScreenEvent('UserPage'));
           }
         }
-
-        onSelectTab(
-          TabItem.values[index],
-        );
       },
       currentIndex: currentTab.index,
     );

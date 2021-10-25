@@ -60,6 +60,20 @@ class HomePage extends HookWidget {
 
     useEffect(() {
       _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
+      _transitionScreenBloc.stream.listen((event) {
+        if (event is TransitionScreenStart) {
+          if (event.screen == 'PowerPlantHomePage') {
+            _selectTab(
+              TabItem.home,
+            );
+          }
+        }
+        if (event is TransitionMessagePageStart) {
+          _selectTab(
+            TabItem.mypage,
+          );
+        }
+      });
 
       _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
         const MessageInitial(),
@@ -199,7 +213,6 @@ class HomePage extends HookWidget {
         ),
         bottomNavigationBar: HomeMypageTabNavigation(
           currentTab: _currentTab.value,
-          onSelectTab: _selectTab,
         ),
       ),
     );
