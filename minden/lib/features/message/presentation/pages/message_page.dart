@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
@@ -13,43 +14,41 @@ import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
-import 'package:http/http.dart' as http;
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
   MessagePage({this.showMessageId});
+
   String? showMessageId;
 
   @override
   Widget build(BuildContext context) {
-    late GetMessageDetailBloc _getMessageDetailBloc;
-    late ReadMessageBloc _readMessageBloc;
-
     useEffect(() {
+
+      final _getMessageDetailBloc = GetMessageDetailBloc(
+        const MessageInitial(),
+        GetMessageDetail(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
+      final _readMessageBloc = ReadMessageBloc(
+        const MessageInitial(),
+        ReadMessage(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
       if (showMessageId != null) {
-        _readMessageBloc = ReadMessageBloc(
-          const MessageInitial(),
-          ReadMessage(
-            MessageRepositoryImpl(
-              dataSource: MessageDataSourceImpl(
-                client: http.Client(),
-              ),
-            ),
-          ),
-        );
-
-        _getMessageDetailBloc = GetMessageDetailBloc(
-          const MessageInitial(),
-          GetMessageDetail(
-            MessageRepositoryImpl(
-              dataSource: MessageDataSourceImpl(
-                client: http.Client(),
-              ),
-            ),
-          ),
-        );
-
         _getMessageDetailBloc.stream.listen((event) async {
           if (event is MessageDetailLoading) {
             Loading.show(context);
@@ -209,6 +208,7 @@ class _MessagesList extends HookWidget {
 
 class _MessagesListItem extends HookWidget {
   _MessagesListItem({required this.messageDetail});
+
   final MessageDetail messageDetail;
   late ReadMessageBloc _readMessageBloc;
   late GetShowBadgeBloc _getShowBadgeBloc;
