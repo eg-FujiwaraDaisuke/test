@@ -120,6 +120,7 @@
 "user_menu_profile" : "プロフィール",
 "user_menu_support_power_plant" : "応援した発電所",
 "user_mypage" : "マイページ",
+"user_name_length_error" : "ユーザー名は2文字以上で入力してください",
 "user_support_plant" : "応援中の電力会社",
 "violate_be_useful" : "頂いた情報はみんな電力アプリコミュニティをより安全なものにするために役立てさせていただきます。",
 "violate_inappropriate" : "不適切または攻撃的な内容を含んでいる",

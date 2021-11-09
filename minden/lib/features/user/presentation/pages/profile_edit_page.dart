@@ -629,8 +629,8 @@ class _ProfileNameEditForm extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
             validator: (value) {
-              if ((value?.length ?? 0) < 3) {
-                return i18nTranslate(context, 'ユーザーネームは2文字以上で入力してください');
+              if ((value?.length ?? 0) < 2) {
+                return i18nTranslate(context, 'user_name_length_error');
               }
             },
             onSaved: (value) {

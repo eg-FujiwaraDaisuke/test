@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/button/button.dart';
+import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_icon_page.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -142,11 +142,15 @@ class _NameInputState extends State<_NameInput> {
           Form(
             key: widget.formKey,
             child: TextFormField(
-              onSaved: (value) => widget.onSaved(value),
+              onSaved: (value) {
+                if (value != null) {
+                  widget.onSaved(value);
+                }
+              },
               maxLength: 20,
               validator: (value) {
-                if ((value?.length ?? 0) < 3) {
-                  return i18nTranslate(context, 'ユーザーネームは2文字以上で入力してください');
+                if ((value?.length ?? 0) < 2) {
+                  return i18nTranslate(context, 'user_name_length_error');
                 }
               },
               decoration: InputDecoration(
