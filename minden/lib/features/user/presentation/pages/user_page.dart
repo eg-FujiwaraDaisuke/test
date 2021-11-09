@@ -90,8 +90,7 @@ class _UserPageState extends State<UserPage> {
       }
 
       if (event is TransitionMessagePageStart) {
-        // TODO メッセージページにいるならpushしない
-
+        // メッセージページにいるとき、メッセージページの上にメッセージページがpushされてしまうが一旦仕様として正にする
         final route = MaterialPageRoute(
           builder: (context) => MessagePage(showMessageId: event.messageId),
           settings: RouteSettings(name: '/user/message'),
