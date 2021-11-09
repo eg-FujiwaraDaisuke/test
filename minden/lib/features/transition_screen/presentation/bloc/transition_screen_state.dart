@@ -11,8 +11,9 @@ class TransitionScreenInitial extends TransitionState {
 }
 
 class TransitionScreenStart extends TransitionState {
-  const TransitionScreenStart(this.screen);
+  const TransitionScreenStart(this.screen, this.isFirst);
   final String screen;
+  final bool isFirst;
   @override
   List<Object> get props => [];
 }

@@ -10,7 +10,7 @@ class TransitionScreenBloc extends Bloc<TransitionEvent, TransitionState> {
     TransitionEvent event,
   ) async* {
     if (event is TransitionScreenEvent) {
-      yield TransitionScreenStart(event.screen);
+      yield TransitionScreenStart(event.screen, event.isFirst);
       yield const TransitionScreenCompleted();
     }
 

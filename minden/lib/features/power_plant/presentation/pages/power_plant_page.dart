@@ -39,7 +39,8 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage> {
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
         if (event.screen == 'PowerPlantHomePage') {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          if (event.isFirst)
+            Navigator.popUntil(context, (route) => route.isFirst);
         }
       }
     });

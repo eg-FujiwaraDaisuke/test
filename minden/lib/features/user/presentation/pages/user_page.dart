@@ -84,12 +84,14 @@ class _UserPageState extends State<UserPage> {
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
         if (event.screen == 'UserPage') {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          if (event.isFirst)
+            Navigator.popUntil(context, (route) => route.isFirst);
         }
       }
 
       if (event is TransitionMessagePageStart) {
         // TODO メッセージページにいるならpushしない
+
         final route = MaterialPageRoute(
           builder: (context) => MessagePage(showMessageId: event.messageId),
           settings: RouteSettings(name: '/user/message'),

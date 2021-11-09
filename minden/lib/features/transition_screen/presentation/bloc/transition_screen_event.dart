@@ -5,11 +5,10 @@ abstract class TransitionEvent extends Equatable {
 }
 
 class TransitionScreenEvent extends TransitionEvent {
-  TransitionScreenEvent(
-    this.screen,
-  );
+  TransitionScreenEvent(this.screen, this.isFirst);
 
   String screen;
+  bool isFirst;
   @override
   List<Object> get props => [];
 }
