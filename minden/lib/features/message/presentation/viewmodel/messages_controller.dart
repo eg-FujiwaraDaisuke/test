@@ -7,6 +7,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
   MessagesStateController() : super(const MessagesState());
   updateMessages(Messages messages) {
     state = state.copyWith(
+      hasEverGetMessage: true,
       showBadge: messages.showBadge,
       page: messages.page,
       total: messages.total,
@@ -14,8 +15,20 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
+  updateMessagesPushNotify(Messages messages) {
+    state = state.copyWith(
+      hasEverGetMessage: true,
+      showBadge: messages.showBadge,
+      total: messages.total,
+      messages: [
+        ...{...messages.messages, ...state.messages}
+      ],
+    );
+  }
+
   addMessages(Messages messages) {
     state = state.copyWith(
+      hasEverGetMessage: true,
       showBadge: messages.showBadge,
       page: messages.page,
       total: messages.total,
