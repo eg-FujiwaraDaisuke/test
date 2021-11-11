@@ -32,6 +32,7 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum MenuType {
   common,
@@ -257,8 +258,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
         icon: 'contact',
-        // TODO routeは仮
-        routeName: '',
+        routeName: '/contact',
         type: MenuType.common,
       ),
     ];
@@ -315,6 +315,9 @@ class _MenuItem extends StatelessWidget {
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);
+            break;
+          case '/contact' :
+            await launch('https://portal.minden.co.jp/contact/guest');
             break;
           case '/logout':
             handler?.call();
