@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
@@ -26,10 +27,13 @@ import 'package:minden/features/violate/presentation/violate_report_complete_dia
 import 'package:minden/features/violate/presentation/violate_report_dialog.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({required this.userId});
+
   final String userId;
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -401,8 +405,13 @@ class _ProfileBio extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 338,
-      child: Text(
-        bio ?? '',
+      child: Linkify(
+        onOpen: (link) async {
+          if (await canLaunch(link.url)) {
+            await launch(link.url);
+          }
+        },
+        text: bio ?? '',
         style: TextStyle(
           color: const Color(0xFF787877),
           fontSize: 12,
@@ -411,6 +420,7 @@ class _ProfileBio extends StatelessWidget {
           letterSpacing: calcLetterSpacing(letter: 0.5),
           height: calcFontHeight(lineHeight: 22, fontSize: 12),
         ),
+        linkStyle: const TextStyle(color: Colors.blueAccent),
       ),
     );
   }
