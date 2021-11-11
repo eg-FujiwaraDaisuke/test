@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,7 +12,6 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
@@ -32,7 +32,6 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
-import 'package:collection/collection.dart';
 
 enum MenuType {
   common,
@@ -181,7 +180,9 @@ class _UserPageState extends State<UserPage> {
                           routeName: '/logout',
                           handler: () async {
                             await _showAlert(
-                                message: "ログアウトしますか？", actionName: "Logout");
+                                message:
+                                    i18nTranslate(context, "confirm_logout"),
+                                actionName: i18nTranslate(context, "YES"));
                           },
                         ),
                       ],
@@ -215,7 +216,7 @@ class _UserPageState extends State<UserPage> {
               TextButton(
                 onPressed: () =>
                     Navigator.of(context, rootNavigator: true).pop(false),
-                child: Text("Cancel"),
+                child: Text(i18nTranslate(context, "NO")),
               ),
             ],
           );

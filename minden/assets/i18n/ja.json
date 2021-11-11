@@ -1,10 +1,13 @@
 {
+"NO" : "いいえ",
+"YES" : "はい",
 "biomass_power_generate" : "バイオマス発電",
 "bracket_after" : "」",
 "bracket_before" : "「",
 "cancel" : "Cancel",
 "cancel_katakana" : "キャンセル",
 "complete" : "完了",
+"confirm_logout" : "ログアウトしますか？",
 "decide" : "決定する",
 "discard" : "破棄",
 "forgot_password_reset" : "パスワードリセット",
