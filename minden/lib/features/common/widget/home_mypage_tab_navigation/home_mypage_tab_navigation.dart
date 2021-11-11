@@ -9,14 +9,13 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class HomeMypageTabNavigation extends HookWidget {
   HomeMypageTabNavigation({
     required this.currentTab,
-    required this.onSelectTab,
   }) : super();
   final TabItem currentTab;
-  final ValueChanged<TabItem> onSelectTab;
   late GetMessagesBloc _bloc;
 
   @override
@@ -26,11 +25,11 @@ class HomeMypageTabNavigation extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (messagesStateData.messages.isEmpty) {
+      if (!messagesStateData.hasEverGetMessage) {
         _bloc = BlocProvider.of<GetMessagesBloc>(context);
         _bloc.add(GetMessagesEvent('1'));
       }
-    }, [messagesStateData]);
+    }, []);
 
     return BottomNavigationBar(
       backgroundColor: Colors.white,
@@ -55,9 +54,31 @@ class HomeMypageTabNavigation extends HookWidget {
         fontWeight: FontWeight.w500,
       ),
       selectedItemColor: const Color(0xFFFF8C00),
-      onTap: (index) => onSelectTab(
-        TabItem.values[index],
-      ),
+      onTap: (index) {
+        if (TabItem.values[index] == TabItem.home) {
+          // 前にいたtabがhomeで次いきたいのもhomeならisFirstさせる
+          if (TabItem.values[currentTab.index] == TabItem.home) {
+            BlocProvider.of<TransitionScreenBloc>(context)
+                .add(TransitionScreenEvent('PowerPlantHomePage', true));
+            return;
+          }
+
+          BlocProvider.of<TransitionScreenBloc>(context)
+              .add(TransitionScreenEvent('PowerPlantHomePage', false));
+        }
+
+        if (TabItem.values[index] == TabItem.mypage) {
+          // 前にいたtabがmypageで次いきたいのもmypageならisFirstさせる
+          if (TabItem.values[currentTab.index] == TabItem.mypage) {
+            BlocProvider.of<TransitionScreenBloc>(context)
+                .add(TransitionScreenEvent('UserPage', true));
+            return;
+          }
+
+          BlocProvider.of<TransitionScreenBloc>(context)
+              .add(TransitionScreenEvent('UserPage', false));
+        }
+      },
       currentIndex: currentTab.index,
     );
   }
@@ -89,7 +110,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final color = currentTab == tabItem
         ? const Color(0xFFFF8C00)
         : const Color(0xFFA7A7A7);
-    final tabTitle = i18nTranslate(context, 'tab_navigation_home');
+    final tabTitle = i18nTranslate(context, 'tab_navigation_mypage');
     const tabIcon = 'mypage';
     return BottomNavigationBarItem(
       icon: Stack(
@@ -101,7 +122,7 @@ class HomeMypageTabNavigation extends HookWidget {
               color: color,
             ),
           ),
-          if (messagesStateData.messages.isEmpty)
+          if (!messagesStateData.hasEverGetMessage)
             BlocProvider.value(
               value: _bloc,
               child: BlocListener<GetMessagesBloc, MessageState>(

@@ -6,9 +6,10 @@ part 'messages_state.g.dart';
 @freezed
 abstract class MessagesState with _$MessagesState {
   const factory MessagesState({
+    @Default(false) bool hasEverGetMessage,
     @Default(false) bool showBadge,
-    @Default(1) int page,
-    @Default(1) int total,
+    @Default(0) int page,
+    @Default(0) int total,
     @Default([]) List<MessageDetail> messages,
   }) = _MessagesState;
 

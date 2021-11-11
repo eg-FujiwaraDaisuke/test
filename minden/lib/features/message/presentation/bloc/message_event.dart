@@ -18,7 +18,7 @@ class GetMessagesEvent extends MessageEvent {
 class GetMessageDetailEvent extends MessageEvent {
   const GetMessageDetailEvent({required this.messageId});
 
-  final int messageId;
+  final String messageId;
 
   @override
   List<Object> get props => [messageId];

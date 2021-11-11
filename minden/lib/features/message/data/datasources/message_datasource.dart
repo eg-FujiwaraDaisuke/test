@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 abstract class MessageDataSource {
   Future<Messages> getMessages(String page);
-  Future<MessageDetail> getMessageDetail({required int messageId});
+  Future<MessageDetail> getMessageDetail({required String messageId});
   Future<Success> readMessage({required int messageId});
 }
 
@@ -51,9 +51,11 @@ class MessageDataSourceImpl implements MessageDataSource {
   }
 
   @override
-  Future<MessageDetailModel> getMessageDetail({required int messageId}) async {
+  Future<MessageDetailModel> getMessageDetail(
+      {required String messageId}) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
     final url = Uri.parse(endpoint + _messageDetailPath);
 

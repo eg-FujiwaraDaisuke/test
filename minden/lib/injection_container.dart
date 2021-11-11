@@ -21,7 +21,6 @@ final si = GetIt.instance;
 
 Future<void> init() async {
   final firebaseApp = await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   final remoteConfig = RemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -59,7 +58,6 @@ Future<void> init() async {
 
   if (!kIsWeb) {
     /// Create an Android Notification Channel.
-    ///
     /// We use this channel in the `AndroidManifest.xml` file to override the
     /// default FCM channel to enable heads up notifications.
     await flutterLocalNotificationsPlugin
@@ -74,33 +72,6 @@ Future<void> init() async {
       badge: true,
       sound: true,
     );
-
-    // フォアグラウンド状態の通知
-    // Android ではアプリがフォアグラウンド状態で画面上部に
-    // プッシュ通知メッセージを表示することができない為、
-    // ローカル通知で擬似的に通知メッセージを表示
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('フォアグラウンドでメッセージを受け取りました');
-
-      final notification = message.notification;
-      final android = message.notification?.android;
-
-      if (notification != null && android != null) {
-        debugPrint('表示');
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                icon: 'launch_background',
-              ),
-            ));
-      }
-    });
   }
 
   final directory = await getApplicationDocumentsDirectory();
@@ -113,6 +84,7 @@ Future<void> init() async {
   final account = Account();
   si
     ..registerLazySingleton(() => firebaseApp)
+    ..registerLazySingleton(() => flutterLocalNotificationsPlugin)
     ..registerLazySingleton(() => remoteConfig)
     ..registerLazySingleton(() => firebaseAnalyticsObserver)
     ..registerLazySingleton(() => botToastNavigatorObserver)
@@ -120,13 +92,4 @@ Future<void> init() async {
     ..registerLazySingleton(() => firebaseMessaging)
     ..registerLazySingleton(() => encryptionTokenDataSource)
     ..registerLazySingleton(() => account);
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background,
-  // such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  debugPrint('バックグラウンドでメッセージを受け取りました');
-  debugPrint('Handling a background message ${message.messageId}');
 }

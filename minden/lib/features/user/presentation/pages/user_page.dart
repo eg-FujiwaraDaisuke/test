@@ -19,9 +19,9 @@ import 'package:minden/features/power_plant/data/datasources/power_plant_data_so
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
-import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
@@ -61,13 +61,14 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late GetProfileBloc _bloc;
+  late GetProfileBloc _getProfileBloc;
+  late TransitionScreenBloc _transitionScreenBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetProfileBloc(
+    _getProfileBloc = GetProfileBloc(
       const ProfileStateInitial(),
       GetProfile(
         ProfileRepositoryImpl(
@@ -78,19 +79,38 @@ class _UserPageState extends State<UserPage> {
       ),
     );
 
-    _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+    _getProfileBloc.add(GetProfileEvent(userId: si<Account>().userId));
+
+    _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
+    _transitionScreenBloc.stream.listen((event) {
+      if (event is TransitionScreenStart) {
+        if (event.screen == 'UserPage') {
+          if (event.isFirst)
+            Navigator.popUntil(context, (route) => route.isFirst);
+        }
+      }
+
+      if (event is TransitionMessagePageStart) {
+        // メッセージページにいるとき、メッセージページの上にメッセージページがpushされてしまうが一旦仕様として正にする
+        final route = MaterialPageRoute(
+          builder: (context) => MessagePage(showMessageId: event.messageId),
+          settings: RouteSettings(name: '/user/message'),
+        );
+        Navigator.push(context, route);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getProfileBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _bloc,
+      value: _getProfileBloc,
       child: BlocListener<GetProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileLoading) {
@@ -378,7 +398,7 @@ class _MenuMessageItem extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
-      if (messagesStateData.messages.isEmpty) {
+      if (!messagesStateData.hasEverGetMessage) {
         _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
         _getMessagesBloc.add(GetMessagesEvent('1'));
       }
@@ -411,7 +431,7 @@ class _MenuMessageItem extends HookWidget {
           padding: const EdgeInsets.symmetric(horizontal: 22),
           height: 56,
           width: MediaQuery.of(context).size.width,
-          child: messagesStateData.messages.isEmpty
+          child: !messagesStateData.hasEverGetMessage
               ? BlocProvider.value(
                   value: _getMessagesBloc,
                   child: BlocListener<GetMessagesBloc, MessageState>(
@@ -420,24 +440,19 @@ class _MenuMessageItem extends HookWidget {
                         messagesStateController.updateMessages(state.messages);
                       }
                     },
-                    child: _buildMessageNav(),
+                    child: _buildMessageNav(context),
                   ),
                 )
-              : _buildMessageNav()),
+              : _buildMessageNav(context)),
     );
   }
 
-  Widget _buildMessageNav() {
+  Widget _buildMessageNav(BuildContext context) {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
     final latestUnreadMessageDetail = messagesStateData.messages
         .firstWhereOrNull((messageDetail) => messageDetail.read == false);
-
-    if (latestUnreadMessageDetail != null) {
-      _getPowerPlantsBloc
-          .add(GetPowerPlantEvent(plantId: latestUnreadMessageDetail.plantId));
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -488,28 +503,18 @@ class _MenuMessageItem extends HookWidget {
             const SizedBox(width: 22),
             if (messagesStateData.showBadge &&
                 latestUnreadMessageDetail != null)
-              BlocProvider.value(
-                value: _getPowerPlantsBloc,
-                child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
-                  builder: (context, state) {
-                    if (state is PowerPlantLoaded) {
-                      return Flexible(
-                        child: Text(
-                          '${latestUnreadMessageDetail.messageType == '1' ? i18nTranslate(context, 'minden') : state.powerPlant.name!}${i18nTranslate(context, 'thanks_message_notification')}',
-                          style: TextStyle(
-                            color: const Color(0xFFFF8C00),
-                            fontSize: 9,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: calcLetterSpacing(letter: 0.5),
-                          ),
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+              Flexible(
+                child: Text(
+                  '${latestUnreadMessageDetail.messageType == '1' ? i18nTranslate(context, 'minden') : latestUnreadMessageDetail.title}${i18nTranslate(context, 'thanks_message_notification')}',
+                  style: TextStyle(
+                    color: const Color(0xFFFF8C00),
+                    fontSize: 9,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
+                  ),
                 ),
-              ),
+              )
           ],
         ),
       ],

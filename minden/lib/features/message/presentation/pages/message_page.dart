@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
@@ -13,13 +14,73 @@ import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
-import 'package:http/http.dart' as http;
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
+  MessagePage({this.showMessageId});
+
+  String? showMessageId;
+
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+
+      final _getMessageDetailBloc = GetMessageDetailBloc(
+        const MessageInitial(),
+        GetMessageDetail(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
+      final _readMessageBloc = ReadMessageBloc(
+        const MessageInitial(),
+        ReadMessage(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
+      if (showMessageId != null) {
+        _getMessageDetailBloc.stream.listen((event) async {
+          if (event is MessageDetailLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+
+          if (event is MessageDetailLoaded) {
+            _readMessageBloc.add(
+                ReadMessageEvent(messageId: event.messageDetail.messageId));
+
+            if (event.messageDetail.messageType == '1') {
+              MindenMessageDialog(
+                      context: context, messageDetail: event.messageDetail)
+                  .showDialog();
+            } else {
+              PowerPlantMessageDialog(
+                context: context,
+                messageDetail: event.messageDetail,
+              ).showDialog();
+            }
+          }
+        });
+        _getMessageDetailBloc
+            .add(GetMessageDetailEvent(messageId: showMessageId!));
+      }
+      return () {
+        _getMessageDetailBloc.close();
+        _readMessageBloc.close();
+      };
+    }, []);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,7 +103,6 @@ class MessagePage extends HookWidget {
           child: Container(
             color: Colors.white,
             width: 288,
-            // messagesStateにデータが入ってない場合apiから取得する
             child: _MessagesList(),
           ),
         ),
@@ -130,7 +190,7 @@ class _MessagesList extends HookWidget {
         ],
         child: Container(
           height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100),
           child: ListView.builder(
             controller: _scrollController,
             itemCount: messagesStateData.messages.length,
@@ -148,6 +208,7 @@ class _MessagesList extends HookWidget {
 
 class _MessagesListItem extends HookWidget {
   _MessagesListItem({required this.messageDetail});
+
   final MessageDetail messageDetail;
   late ReadMessageBloc _readMessageBloc;
   late GetShowBadgeBloc _getShowBadgeBloc;

@@ -61,6 +61,20 @@ class MessageReaded extends MessageState {
   List<Object> get props => [];
 }
 
+class MessagesPushNotifyLoaded extends MessageState {
+  const MessagesPushNotifyLoaded(this.messages);
+  final Messages messages;
+  @override
+  List<Object> get props => [];
+}
+
+class MessagesBackgroundPushNotifyLoaded extends MessageState {
+  const MessagesBackgroundPushNotifyLoaded(this.messages);
+  final Messages messages;
+  @override
+  List<Object> get props => [];
+}
+
 class MessageError extends MessageState {
   const MessageError({
     required this.message,
