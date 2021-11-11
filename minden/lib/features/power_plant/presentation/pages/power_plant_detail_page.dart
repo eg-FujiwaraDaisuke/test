@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
@@ -34,6 +36,7 @@ import 'package:minden/features/support_plant/presentation/support_plant_decisio
 import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injection_container.dart';
 
@@ -666,13 +669,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   Widget _generateExpandableText(String message, String title) {
     return ExpandableNotifier(
-      // <-- Provides ExpandableController to its children
       child: Column(
         children: [
           Expandable(
-            // <-- Driven by ExpandableController from ExpandableNotifier
             collapsed: ExpandableButton(
-              // <-- Expands when tapped on the cover photo
               child: Column(
                 children: [
                   Row(
@@ -744,8 +744,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ],
               ),
               const SizedBox(height: 4),
-              Text(
-                message,
+              Linkify(
+                onOpen: (link) async {
+                  if (await canLaunch(link.url)) {
+                    await launch(link.url);
+                  }
+                },
+                text: message,
                 style: const TextStyle(
                   fontSize: 14,
                   fontFamily: 'NotoSansJP',
@@ -753,6 +758,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   color: Color(0xFF7D7E7F),
                   height: 1.6,
                 ),
+                linkStyle: const TextStyle(color: Colors.blueAccent),
               ),
             ]),
           ),

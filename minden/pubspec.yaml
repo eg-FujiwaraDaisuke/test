@@ -88,6 +88,8 @@ dependencies:
 
   collection: ^1.15.0
 
+  flutter_linkify: ^5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
