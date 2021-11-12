@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -31,7 +32,7 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
-import 'package:collection/collection.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum MenuType {
   common,
@@ -200,7 +201,9 @@ class _UserPageState extends State<UserPage> {
                           routeName: '/logout',
                           handler: () async {
                             await _showAlert(
-                                message: "ログアウトしますか？", actionName: "Logout");
+                                message:
+                                    i18nTranslate(context, "confirm_logout"),
+                                actionName: i18nTranslate(context, "YES"));
                           },
                         ),
                       ],
@@ -234,7 +237,7 @@ class _UserPageState extends State<UserPage> {
               TextButton(
                 onPressed: () =>
                     Navigator.of(context, rootNavigator: true).pop(false),
-                child: Text("Cancel"),
+                child: Text(i18nTranslate(context, "NO")),
               ),
             ],
           );
@@ -275,8 +278,7 @@ class _MenuListView extends StatelessWidget {
       _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
         icon: 'contact',
-        // TODO routeは仮
-        routeName: '',
+        routeName: '/contact',
         type: MenuType.common,
       ),
     ];
@@ -333,6 +335,9 @@ class _MenuItem extends StatelessWidget {
               settings: RouteSettings(name: routeName),
             );
             await Navigator.push(context, route);
+            break;
+          case '/contact' :
+            await launch('https://portal.minden.co.jp/contact/guest');
             break;
           case '/logout':
             handler?.call();
