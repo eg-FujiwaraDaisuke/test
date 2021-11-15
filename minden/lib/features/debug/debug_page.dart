@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
@@ -61,8 +62,8 @@ class DebugPageState extends State<DebugPage> {
                     context, 'ホーム', (context) => HomePage(), '/home/top'),
 
                 // TODO 納品後もとに戻す
-                // _generateNavigatorPush(context, 'ログイン パスワードリセット',
-                //     (context) => ResetPasswordPage(), '/login/resetPassword'),
+                _generateNavigatorPush(context, 'ログイン パスワードリセット',
+                    (context) => ForgotPasswordPage(), '/login/forgotPassword'),
                 // _generateNavigatorPush(context, 'マイページ - top',
                 //     (context) => UserPage(), '/user/matching'),
                 // _generateNavigatorPush(context, 'マイページ - プロフィール',
