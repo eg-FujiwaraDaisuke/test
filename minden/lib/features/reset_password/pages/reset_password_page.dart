@@ -18,6 +18,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _isShowInputPassword = false;
   bool _isShowReinputPassword = false;
 
+  @override
+  void initState() {
+    super.initState();
+    final newPas = '1';
+    RegExp reg = RegExp(r'^([0-9a-zA-Z]{8,})+$');
+    print(reg.hasMatch(newPas));
+  }
+
   void _onInputChangedDecideCode(value) {
     setState(() {
       _decideCode = value;

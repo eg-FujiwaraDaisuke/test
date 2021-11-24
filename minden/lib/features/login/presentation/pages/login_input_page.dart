@@ -5,8 +5,8 @@ import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
-import 'package:minden/features/forgot_password/pages/forgot_password_page.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
+import 'package:minden/features/reset_password/pages/forgot_password_page.dart';
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
