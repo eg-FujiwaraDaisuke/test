@@ -35,6 +35,11 @@ class DebugPageState extends State<DebugPage> {
   void initState() {
     super.initState();
     si<Account>().prepare();
+
+    final email = '1';
+
+    RegExp reg = RegExp(r'^([0-9a-zA-Z]{8,})+$');
+    print(reg.hasMatch('12345678abcdefg'));
   }
 
   @override
