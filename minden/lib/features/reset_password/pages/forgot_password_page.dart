@@ -21,6 +21,7 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   late ResetPasswordBloc _passwordBloc;
   String _userLoginId = '';
+  bool _isErorr = false;
 
   void _onInputChangedId(value) {
     setState(() {
@@ -63,6 +64,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           settings: const RouteSettings(name: '/login/forgotPasswordMessage'),
         );
         Navigator.pushReplacement(context, route);
+      }
+      if (event is ResetPasswordError) {
+        setState(() {
+          _isErorr = true;
+        });
       }
     });
   }
@@ -118,6 +124,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onChanged: _onInputChangedId,
                 onReset: _onInputResetId,
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              if (_isErorr) const Text('エラー'),
               const SizedBox(
                 height: 43,
               ),
