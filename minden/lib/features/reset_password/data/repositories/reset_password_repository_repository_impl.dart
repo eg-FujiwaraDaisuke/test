@@ -21,12 +21,12 @@ class ResetPasswordRepositoryImpl implements ResetPasswordRepository {
   }
 
   @override
-  Future<Either<Failure, Success>> updataPassword(
+  Future<Either<Failure, Success>> updatePassword(
       {required String loginId,
       required String confirmationCode,
       required String newPassword}) async {
     try {
-      final success = await dataSource.updataPassword(
+      final success = await dataSource.updatePassword(
           loginId: loginId,
           confirmationCode: confirmationCode,
           newPassword: newPassword);

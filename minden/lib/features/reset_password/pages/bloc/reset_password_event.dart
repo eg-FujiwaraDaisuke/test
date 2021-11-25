@@ -13,8 +13,8 @@ class ResetPasswordEvent extends PasswordEvent {
   List<Object> get props => [loginId];
 }
 
-class UpdataPasswordEvent extends PasswordEvent {
-  const UpdataPasswordEvent({
+class UpdatePasswordEvent extends PasswordEvent {
+  const UpdatePasswordEvent({
     required this.loginId,
     required this.confirmationCode,
     required this.newPassword,

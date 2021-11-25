@@ -15,13 +15,13 @@ class ResetPassword extends UseCase<Success, ResetPasswordParams> {
   }
 }
 
-class UpdataPassword extends UseCase<Success, UpdataPasswordParams> {
-  UpdataPassword(this.repository);
+class UpdatePassword extends UseCase<Success, UpdatePasswordParams> {
+  UpdatePassword(this.repository);
   final ResetPasswordRepository repository;
 
   @override
-  Future<Either<Failure, Success>> call(UpdataPasswordParams params) async {
-    return await repository.updataPassword(
+  Future<Either<Failure, Success>> call(UpdatePasswordParams params) async {
+    return await repository.updatePassword(
       loginId: params.loginId,
       confirmationCode: params.confirmationCode,
       newPassword: params.newPassword,
@@ -37,8 +37,8 @@ class ResetPasswordParams extends Equatable {
   List<Object> get props => [loginId];
 }
 
-class UpdataPasswordParams extends Equatable {
-  const UpdataPasswordParams(
+class UpdatePasswordParams extends Equatable {
+  const UpdatePasswordParams(
       {required this.loginId,
       required this.confirmationCode,
       required this.newPassword});

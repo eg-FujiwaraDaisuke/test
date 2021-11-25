@@ -58,12 +58,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (event is ResetPasswordLoaded) {
         // 変更用のメールアドレスを置くたらページ遷移
         final route = NoAnimationMaterialPageRoute(
-          builder: (context) => ForgotPasswordMessagePage(),
+          builder: (context) =>
+              ForgotPasswordMessagePage(loginId: _userLoginId),
           settings: const RouteSettings(name: '/login/forgotPasswordMessage'),
         );
         Navigator.pushReplacement(context, route);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _passwordBloc.close();
+    super.dispose();
   }
 
   @override
@@ -118,10 +125,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onTap: () {
                   RegExp reg = RegExp(
                       r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$');
-                  if (reg.hasMatch(_userLoginId)) {
-                    _passwordBloc
-                        .add(ResetPasswordEvent(loginId: _userLoginId));
+                  if (!reg.hasMatch(_userLoginId)) {
+                    return;
                   }
+                  _passwordBloc.add(ResetPasswordEvent(loginId: _userLoginId));
                 },
                 text: i18nTranslate(context, 'forgot_password_send_reset_link'),
                 size: ButtonSize.L,

@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/reset_password/data/datasources/reset_password_repository_datasource.dart';
+import 'package:minden/features/reset_password/data/repositories/reset_password_repository_repository_impl.dart';
+import 'package:minden/features/reset_password/domain/usecases/reset_password_repository_usecase.dart';
+import 'package:minden/features/reset_password/pages/bloc/reset_password_bloc.dart';
 import 'package:minden/utile.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({required this.loginId});
+  final String loginId;
   @override
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  late UpdatePasswordBloc _updatePasswordBloc;
   String _decideCode = '';
   String _inputPassword = '';
   String _reinputPassword = '';
@@ -21,9 +31,40 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   void initState() {
     super.initState();
-    final newPas = '1';
-    RegExp reg = RegExp(r'^([0-9a-zA-Z]{8,})+$');
-    print(reg.hasMatch(newPas));
+    _updatePasswordBloc = UpdatePasswordBloc(
+      const PasswordInitial(),
+      UpdatePassword(
+        ResetPasswordRepositoryImpl(
+          dataSource: ResetPasswordDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _updatePasswordBloc.stream.listen((event) {
+      if (event is PasswordUpdataing) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+
+      if (event is PasswordUpdated) {
+        // 変更用のメールアドレスを置くたらログイン画面に飛ばす
+        final route = NoAnimationMaterialPageRoute(
+          builder: (context) => LoginPage(),
+          settings: const RouteSettings(name: '/login'),
+        );
+        Navigator.pushReplacement(context, route);
+      }
+      if (event is ResetPasswordError) {}
+    });
+  }
+
+  @override
+  void dispose() {
+    _updatePasswordBloc.close();
+    super.dispose();
   }
 
   void _onInputChangedDecideCode(value) {
@@ -113,7 +154,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               Button(
                   onTap: () {
                     // TODO ここでパスワード変更APIを叩く
-                    logD(_decideCode);
+                    //英数6桁
+                    RegExp codeReg = RegExp(r'^([0-9a-zA-Z]{6,})+$');
+                    //英数８文字以上32文字以下、数字または英字最低２つ以上
+                    RegExp passwordReg = RegExp(
+                        r'^(?=.*?[A-Za-z].*?[A-Za-z])(?=.*?[0-9].*?[0-9])[A-Za-z0-9]{8,32}$');
+
+                    if (!codeReg.hasMatch(_decideCode)) return;
+                    if (!passwordReg.hasMatch(_inputPassword)) return;
+                    if (_inputPassword != _reinputPassword) return;
+                    if (widget.loginId.isEmpty) return;
+
+                    print('リセット');
+
+                    _updatePasswordBloc.add(UpdatePasswordEvent(
+                      loginId: widget.loginId,
+                      confirmationCode: _decideCode,
+                      newPassword: _inputPassword,
+                    ));
                   },
                   text: i18nTranslate(context, 'profile_setting_complete'),
                   size: ButtonSize.L)

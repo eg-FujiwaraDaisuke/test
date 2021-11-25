@@ -4,7 +4,7 @@ import 'package:minden/core/success/success.dart';
 
 abstract class ResetPasswordRepository {
   Future<Either<Failure, Success>> resetPassword({required String loginId});
-  Future<Either<Failure, Success>> updataPassword(
+  Future<Either<Failure, Success>> updatePassword(
       {required String loginId,
       required String confirmationCode,
       required String newPassword});

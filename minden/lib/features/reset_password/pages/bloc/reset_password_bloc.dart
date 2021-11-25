@@ -31,19 +31,19 @@ class ResetPasswordBloc extends Bloc<PasswordEvent, PasswordState> {
   }
 }
 
-class UpdataPasswordBloc extends Bloc<PasswordEvent, PasswordState> {
-  UpdataPasswordBloc(PasswordState initialState, this.usecase)
+class UpdatePasswordBloc extends Bloc<PasswordEvent, PasswordState> {
+  UpdatePasswordBloc(PasswordState initialState, this.usecase)
       : super(initialState);
-  final UpdataPassword usecase;
+  final UpdatePassword usecase;
 
   @override
   Stream<PasswordState> mapEventToState(
     PasswordEvent event,
   ) async* {
-    if (event is UpdataPasswordEvent) {
+    if (event is UpdatePasswordEvent) {
       try {
         yield const PasswordUpdataing();
-        final failureOrSuccess = await usecase(UpdataPasswordParams(
+        final failureOrSuccess = await usecase(UpdatePasswordParams(
             loginId: event.loginId,
             confirmationCode: event.confirmationCode,
             newPassword: event.newPassword));

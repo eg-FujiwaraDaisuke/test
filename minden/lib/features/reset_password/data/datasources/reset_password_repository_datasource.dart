@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 abstract class ResetPasswordDataSource {
   Future<Success> resetPassword({required String loginId});
-  Future<Success> updataPassword(
+  Future<Success> updatePassword(
       {required String loginId,
       required String confirmationCode,
       required String newPassword});
@@ -18,7 +18,7 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
   final http.Client client;
 
   String get _resetPasswordPath => '/api/v1/password/reset';
-  String get _updataPasswordPath => '/api/v1/password';
+  String get _updatePasswordPath => '/api/v1/password';
 
   @override
   Future<Success> resetPassword({required String loginId}) async {
@@ -41,7 +41,7 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
   }
 
   @override
-  Future<Success> updataPassword(
+  Future<Success> updatePassword(
       {required String loginId,
       required String confirmationCode,
       required String newPassword}) async {
@@ -55,7 +55,7 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
       'newPassword': newPassword
     });
 
-    final response = await client.put(Uri.parse(endpoint + _updataPasswordPath),
+    final response = await client.put(Uri.parse(endpoint + _updatePasswordPath),
         headers: headers, body: body);
 
     if (response.statusCode == 200) {
