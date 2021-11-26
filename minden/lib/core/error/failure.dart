@@ -19,6 +19,23 @@ class RenewTokenFailure extends Failure {}
 /// 顔の見える発電性情報取得エラー
 class PowerPlantFailure extends Failure {}
 
+// パスワードリセットエラー
+class ResetPasswordFailure extends Failure {
+  ResetPasswordFailure({
+    required this.statusCode,
+    required this.message,
+  });
+
+  final int statusCode;
+  final String message;
+
+  @override
+  List<Object> get props => [
+        statusCode,
+        message,
+      ];
+}
+
 class SupportVersionFailure extends Failure {
   SupportVersionFailure({
     required this.actionUrl,

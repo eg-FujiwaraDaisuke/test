@@ -6,6 +6,16 @@ class RefreshTokenExpiredException implements Exception {}
 
 class LocalCacheException implements Exception {}
 
+class ResetPasswordException implements Exception {
+  ResetPasswordException({
+    required this.statusCode,
+    required this.message,
+  });
+
+  final int statusCode;
+  final String message;
+}
+
 class SupportVersionException implements Exception {
   SupportVersionException({
     required this.storeUrl,

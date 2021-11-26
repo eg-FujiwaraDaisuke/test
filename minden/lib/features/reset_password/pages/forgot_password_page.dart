@@ -21,7 +21,7 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   late ResetPasswordBloc _passwordBloc;
   String _userLoginId = '';
-  bool _isErorr = false;
+  String _erorrText = '';
 
   void _onInputChangedId(value) {
     setState(() {
@@ -67,7 +67,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       }
       if (event is ResetPasswordError) {
         setState(() {
-          _isErorr = true;
+          _erorrText = event.message;
         });
       }
     });
@@ -127,17 +127,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               const SizedBox(
                 height: 20,
               ),
-              if (_isErorr) const Text('エラー'),
+              Text(
+                _erorrText,
+                style: const TextStyle(
+                  color: Color(0xFFFF0000),
+                  fontSize: 12,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               const SizedBox(
                 height: 43,
               ),
               Button(
                 onTap: () {
-                  RegExp reg = RegExp(
-                      r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$');
-                  if (!reg.hasMatch(_userLoginId)) {
-                    return;
-                  }
                   _passwordBloc.add(ResetPasswordEvent(loginId: _userLoginId));
                 },
                 text: i18nTranslate(context, 'forgot_password_send_reset_link'),

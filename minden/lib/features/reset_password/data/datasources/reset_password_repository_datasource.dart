@@ -33,8 +33,9 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
 
     if (response.statusCode == 200) {
       return Success();
-    } else if (response.statusCode == 401) {
-      throw TokenExpiredException();
+    } else if (response.statusCode == 400) {
+      throw ResetPasswordException(
+          statusCode: response.statusCode, message: response.body.message);
     } else {
       throw ServerException();
     }
@@ -60,8 +61,9 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
 
     if (response.statusCode == 200) {
       return Success();
-    } else if (response.statusCode == 401) {
-      throw TokenExpiredException();
+    } else if (response.statusCode == 400) {
+      throw ResetPasswordException(
+          statusCode: response.statusCode, message: response.body);
     } else {
       throw ServerException();
     }

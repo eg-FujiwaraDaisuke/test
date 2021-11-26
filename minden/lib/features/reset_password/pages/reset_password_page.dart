@@ -27,7 +27,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   bool _isShowInputPassword = false;
   bool _isShowReinputPassword = false;
-  bool _isErorr = false;
+  String _erorrText = '';
 
   @override
   void initState() {
@@ -59,9 +59,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         Navigator.pushReplacement(context, route);
       }
       if (event is ResetPasswordError) {
-        print(event.message);
         setState(() {
-          _isErorr = true;
+          _erorrText = event.message;
         });
       }
     });
@@ -157,36 +156,27 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   onShowPassword: _onShowReinputPassword,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
-                if (_isErorr) const Text('エラー'),
+                Text(
+                  _erorrText,
+                  style: const TextStyle(
+                    color: Color(0xFFFF0000),
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 Button(
                     onTap: () {
-                      // TODO ここでパスワード変更APIを叩く
-                      //英数6桁
-                      RegExp codeReg = RegExp(r'^([0-9a-zA-Z]{6,})+$');
-                      //英数８文字以上32文字以下、数字または英字最低２つ以上
-                      RegExp passwordReg = RegExp(
-                          r'^(?=.*?[A-Za-z].*?[A-Za-z])(?=.*?[0-9].*?[0-9])[A-Za-z0-9]{8,32}$');
-
-                      if (codeReg.hasMatch(_decideCode) &&
-                          passwordReg.hasMatch(_inputPassword) &&
-                          _inputPassword == _reinputPassword &&
-                          !widget.loginId.isEmpty) {
-                        _updatePasswordBloc.add(UpdatePasswordEvent(
-                          loginId: widget.loginId,
-                          confirmationCode: _decideCode,
-                          newPassword: _inputPassword,
-                        ));
-                        return;
-                      }
-
-                      setState(() {
-                        _isErorr = true;
-                      });
+                      _updatePasswordBloc.add(UpdatePasswordEvent(
+                        loginId: widget.loginId,
+                        confirmationCode: _decideCode,
+                        newPassword: _inputPassword,
+                      ));
                     },
                     text: i18nTranslate(context, 'profile_setting_complete'),
                     size: ButtonSize.L)

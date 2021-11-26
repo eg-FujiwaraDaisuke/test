@@ -25,6 +25,7 @@ class ResetPasswordBloc extends Bloc<PasswordEvent, PasswordState> {
           (success) => const ResetPasswordLoaded(),
         );
       } catch (e) {
+        print(e);
         yield ResetPasswordError(message: e.toString());
       }
     }

@@ -15,8 +15,9 @@ class ResetPasswordRepositoryImpl implements ResetPasswordRepository {
     try {
       final success = await dataSource.resetPassword(loginId: loginId);
       return Right(success);
-    } on ServerException {
-      return Left(ServerFailure());
+    } on ResetPasswordException catch (e) {
+      return Left(
+          ResetPasswordFailure(statusCode: e.statusCode, message: e.message));
     }
   }
 
