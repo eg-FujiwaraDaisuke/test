@@ -59,6 +59,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         Navigator.pushReplacement(context, route);
       }
       if (event is ResetPasswordError) {
+        print(event.message);
         setState(() {
           _isErorr = true;
         });
@@ -111,83 +112,86 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 21),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                i18nTranslate(context, 'forgot_password_reset'),
-                style: const TextStyle(
-                  color: Color(0xFF575292),
-                  fontSize: 20,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 21),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              DecideCodeInput(
-                hintText: i18nTranslate(context, 'reset_password_decide_code'),
-                onChanged: _onInputChangedDecideCode,
-              ),
-              const SizedBox(
-                height: 47,
-              ),
-              PasswordInput(
-                hintText: i18nTranslate(context, 'reset_password_hint_text'),
-                isShowPassword: _isShowInputPassword,
-                onChanged: _onInputChangedPassword,
-                onShowPassword: _onShowInputPassword,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              PasswordInput(
-                hintText: i18nTranslate(context, 'reset_password_re_input'),
-                isShowPassword: _isShowReinputPassword,
-                onChanged: _onReInputChangedPassword,
-                onShowPassword: _onShowReinputPassword,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (_isErorr) const Text('エラー'),
-              const SizedBox(
-                height: 50,
-              ),
-              Button(
-                  onTap: () {
-                    // TODO ここでパスワード変更APIを叩く
-                    //英数6桁
-                    RegExp codeReg = RegExp(r'^([0-9a-zA-Z]{6,})+$');
-                    //英数８文字以上32文字以下、数字または英字最低２つ以上
-                    RegExp passwordReg = RegExp(
-                        r'^(?=.*?[A-Za-z].*?[A-Za-z])(?=.*?[0-9].*?[0-9])[A-Za-z0-9]{8,32}$');
+                Text(
+                  i18nTranslate(context, 'forgot_password_reset'),
+                  style: const TextStyle(
+                    color: Color(0xFF575292),
+                    fontSize: 20,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                DecideCodeInput(
+                  hintText:
+                      i18nTranslate(context, 'reset_password_decide_code'),
+                  onChanged: _onInputChangedDecideCode,
+                ),
+                const SizedBox(
+                  height: 47,
+                ),
+                PasswordInput(
+                  hintText: i18nTranslate(context, 'reset_password_hint_text'),
+                  isShowPassword: _isShowInputPassword,
+                  onChanged: _onInputChangedPassword,
+                  onShowPassword: _onShowInputPassword,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                PasswordInput(
+                  hintText: i18nTranslate(context, 'reset_password_re_input'),
+                  isShowPassword: _isShowReinputPassword,
+                  onChanged: _onReInputChangedPassword,
+                  onShowPassword: _onShowReinputPassword,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                if (_isErorr) const Text('エラー'),
+                const SizedBox(
+                  height: 50,
+                ),
+                Button(
+                    onTap: () {
+                      // TODO ここでパスワード変更APIを叩く
+                      //英数6桁
+                      RegExp codeReg = RegExp(r'^([0-9a-zA-Z]{6,})+$');
+                      //英数８文字以上32文字以下、数字または英字最低２つ以上
+                      RegExp passwordReg = RegExp(
+                          r'^(?=.*?[A-Za-z].*?[A-Za-z])(?=.*?[0-9].*?[0-9])[A-Za-z0-9]{8,32}$');
 
-                    if (codeReg.hasMatch(_decideCode) &&
-                        passwordReg.hasMatch(_inputPassword) &&
-                        _inputPassword == _reinputPassword &&
-                        !widget.loginId.isEmpty) {
-                      _updatePasswordBloc.add(UpdatePasswordEvent(
-                        loginId: widget.loginId,
-                        confirmationCode: _decideCode,
-                        newPassword: _inputPassword,
-                      ));
-                      return;
-                    }
+                      if (codeReg.hasMatch(_decideCode) &&
+                          passwordReg.hasMatch(_inputPassword) &&
+                          _inputPassword == _reinputPassword &&
+                          !widget.loginId.isEmpty) {
+                        _updatePasswordBloc.add(UpdatePasswordEvent(
+                          loginId: widget.loginId,
+                          confirmationCode: _decideCode,
+                          newPassword: _inputPassword,
+                        ));
+                        return;
+                      }
 
-                    setState(() {
-                      _isErorr = true;
-                    });
-                  },
-                  text: i18nTranslate(context, 'profile_setting_complete'),
-                  size: ButtonSize.L)
-            ],
+                      setState(() {
+                        _isErorr = true;
+                      });
+                    },
+                    text: i18nTranslate(context, 'profile_setting_complete'),
+                    size: ButtonSize.L)
+              ],
+            ),
           ),
         ),
       ),
