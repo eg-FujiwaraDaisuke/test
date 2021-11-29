@@ -7,6 +7,8 @@ import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_name_page.dart';
+import 'package:minden/features/reset_password/pages/forgot_password_message_page.dart';
+import 'package:minden/features/reset_password/pages/forgot_password_page.dart';
 import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/fcm_debug_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
@@ -61,8 +63,14 @@ class DebugPageState extends State<DebugPage> {
                     context, 'ホーム', (context) => HomePage(), '/home/top'),
 
                 // TODO 納品後もとに戻す
-                // _generateNavigatorPush(context, 'ログイン パスワードリセット',
-                //     (context) => ResetPasswordPage(), '/login/resetPassword'),
+                _generateNavigatorPush(context, 'ログイン パスワードリセット',
+                    (context) => ForgotPasswordPage(), '/login/forgotPassword'),
+                // TODO 納品後もとに戻す
+                _generateNavigatorPush(
+                    context,
+                    'ログイン パスワードリセットメッセージ',
+                    (context) => ForgotPasswordMessagePage(loginId: 'debug'),
+                    '/login/forgotPasswordMessage'),
                 // _generateNavigatorPush(context, 'マイページ - top',
                 //     (context) => UserPage(), '/user/matching'),
                 // _generateNavigatorPush(context, 'マイページ - プロフィール',

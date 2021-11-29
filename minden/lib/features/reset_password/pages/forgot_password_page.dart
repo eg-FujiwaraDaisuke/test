@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
-import 'package:minden/features/forgot_password/pages/forgot_password_message_page.dart';
+import 'package:minden/features/reset_password/data/datasources/reset_password_repository_datasource.dart';
+import 'package:minden/features/reset_password/data/repositories/reset_password_repository_repository_impl.dart';
+import 'package:minden/features/reset_password/domain/usecases/reset_password_repository_usecase.dart';
+import 'package:minden/features/reset_password/pages/bloc/reset_password_bloc.dart';
+import 'package:minden/features/reset_password/pages/forgot_password_message_page.dart';
 import 'package:minden/utile.dart';
+import 'package:http/http.dart' as http;
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -13,7 +19,9 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  late ResetPasswordBloc _passwordBloc;
   String _userLoginId = '';
+  String _erorrText = '';
 
   void _onInputChangedId(value) {
     setState(() {
@@ -25,6 +33,50 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() {
       _userLoginId = '';
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordBloc = ResetPasswordBloc(
+      const PasswordInitial(),
+      ResetPassword(
+        ResetPasswordRepositoryImpl(
+          dataSource: ResetPasswordDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _passwordBloc.stream.listen((event) {
+      if (event is ResetPasswordLoading) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+
+      if (event is ResetPasswordLoaded) {
+        // 変更用のメールアドレスを置くたらページ遷移
+        final route = NoAnimationMaterialPageRoute(
+          builder: (context) =>
+              ForgotPasswordMessagePage(loginId: _userLoginId),
+          settings: const RouteSettings(name: '/login/forgotPasswordMessage'),
+        );
+        Navigator.pushReplacement(context, route);
+      }
+      if (event is ResetPasswordError) {
+        setState(() {
+          _erorrText = event.message;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _passwordBloc.close();
+    super.dispose();
   }
 
   @override
@@ -73,16 +125,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 onReset: _onInputResetId,
               ),
               const SizedBox(
+                height: 20,
+              ),
+              Text(
+                _erorrText,
+                style: const TextStyle(
+                  color: Color(0xFFFF0000),
+                  fontSize: 12,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
                 height: 43,
               ),
               Button(
                 onTap: () {
-                  final route = NoAnimationMaterialPageRoute(
-                    builder: (context) => ForgotPasswordMessagePage(),
-                    settings: const RouteSettings(
-                        name: '/login/forgotPasswordMessage'),
-                  );
-                  Navigator.pushReplacement(context, route);
+                  _passwordBloc.add(ResetPasswordEvent(loginId: _userLoginId));
                 },
                 text: i18nTranslate(context, 'forgot_password_send_reset_link'),
                 size: ButtonSize.L,

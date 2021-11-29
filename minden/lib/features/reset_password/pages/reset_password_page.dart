@@ -1,22 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/reset_password/data/datasources/reset_password_repository_datasource.dart';
+import 'package:minden/features/reset_password/data/repositories/reset_password_repository_repository_impl.dart';
+import 'package:minden/features/reset_password/domain/usecases/reset_password_repository_usecase.dart';
+import 'package:minden/features/reset_password/pages/bloc/reset_password_bloc.dart';
 import 'package:minden/utile.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({required this.loginId});
+  final String loginId;
   @override
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  late UpdatePasswordBloc _updatePasswordBloc;
   String _decideCode = '';
   String _inputPassword = '';
   String _reinputPassword = '';
 
   bool _isShowInputPassword = false;
   bool _isShowReinputPassword = false;
+  String _erorrText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _updatePasswordBloc = UpdatePasswordBloc(
+      const PasswordInitial(),
+      UpdatePassword(
+        ResetPasswordRepositoryImpl(
+          dataSource: ResetPasswordDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _updatePasswordBloc.stream.listen((event) {
+      if (event is PasswordUpdataing) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+
+      if (event is PasswordUpdated) {
+        // 変更用のメールアドレスを置くたらログイン画面に飛ばす
+        final route = NoAnimationMaterialPageRoute(
+          builder: (context) => LoginPage(),
+          settings: const RouteSettings(name: '/login'),
+        );
+        Navigator.pushReplacement(context, route);
+      }
+      if (event is ResetPasswordError) {
+        setState(() {
+          _erorrText = event.message;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _updatePasswordBloc.close();
+    super.dispose();
+  }
 
   void _onInputChangedDecideCode(value) {
     setState(() {
@@ -57,59 +111,77 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 21),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                i18nTranslate(context, 'forgot_password_reset'),
-                style: const TextStyle(
-                  color: Color(0xFF575292),
-                  fontSize: 20,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 21),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              DecideCodeInput(
-                hintText: i18nTranslate(context, 'reset_password_decide_code'),
-                onChanged: _onInputChangedDecideCode,
-              ),
-              const SizedBox(
-                height: 47,
-              ),
-              PasswordInput(
-                hintText: i18nTranslate(context, 'reset_password_hint_text'),
-                isShowPassword: _isShowInputPassword,
-                onChanged: _onInputChangedPassword,
-                onShowPassword: _onShowInputPassword,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              PasswordInput(
-                hintText: i18nTranslate(context, 'reset_password_re_input'),
-                isShowPassword: _isShowReinputPassword,
-                onChanged: _onReInputChangedPassword,
-                onShowPassword: _onShowReinputPassword,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Button(
-                  onTap: () {
-                    // TODO ここでパスワード変更APIを叩く
-                    logD(_decideCode);
-                  },
-                  text: i18nTranslate(context, 'profile_setting_complete'),
-                  size: ButtonSize.L)
-            ],
+                Text(
+                  i18nTranslate(context, 'forgot_password_reset'),
+                  style: const TextStyle(
+                    color: Color(0xFF575292),
+                    fontSize: 20,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                DecideCodeInput(
+                  hintText:
+                      i18nTranslate(context, 'reset_password_decide_code'),
+                  onChanged: _onInputChangedDecideCode,
+                ),
+                const SizedBox(
+                  height: 47,
+                ),
+                PasswordInput(
+                  hintText: i18nTranslate(context, 'reset_password_hint_text'),
+                  isShowPassword: _isShowInputPassword,
+                  onChanged: _onInputChangedPassword,
+                  onShowPassword: _onShowInputPassword,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                PasswordInput(
+                  hintText: i18nTranslate(context, 'reset_password_re_input'),
+                  isShowPassword: _isShowReinputPassword,
+                  onChanged: _onReInputChangedPassword,
+                  onShowPassword: _onShowReinputPassword,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  _erorrText,
+                  style: const TextStyle(
+                    color: Color(0xFFFF0000),
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Button(
+                    onTap: () {
+                      _updatePasswordBloc.add(UpdatePasswordEvent(
+                        loginId: widget.loginId,
+                        confirmationCode: _decideCode,
+                        newPassword: _inputPassword,
+                      ));
+                    },
+                    text: i18nTranslate(context, 'profile_setting_complete'),
+                    size: ButtonSize.L)
+              ],
+            ),
           ),
         ),
       ),
