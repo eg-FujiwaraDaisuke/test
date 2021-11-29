@@ -10,7 +10,8 @@ class ResetPassword extends UseCase<Success, ResetPasswordParams> {
   final ResetPasswordRepository repository;
 
   @override
-  Future<Either<Failure, Success>> call(ResetPasswordParams params) async {
+  Future<Either<ResetPasswordFailure, Success>> call(
+      ResetPasswordParams params) async {
     return await repository.resetPassword(loginId: params.loginId);
   }
 }
@@ -20,7 +21,8 @@ class UpdatePassword extends UseCase<Success, UpdatePasswordParams> {
   final ResetPasswordRepository repository;
 
   @override
-  Future<Either<Failure, Success>> call(UpdatePasswordParams params) async {
+  Future<Either<ResetPasswordFailure, Success>> call(
+      UpdatePasswordParams params) async {
     return await repository.updatePassword(
       loginId: params.loginId,
       confirmationCode: params.confirmationCode,

@@ -34,8 +34,10 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 400) {
+      final responseBody = json.decode(response.body);
+
       throw ResetPasswordException(
-          statusCode: response.statusCode, message: response.body.message);
+          statusCode: response.statusCode, message: responseBody['message']);
     } else {
       throw ServerException();
     }
@@ -62,8 +64,9 @@ class ResetPasswordDataSourceImpl implements ResetPasswordDataSource {
     if (response.statusCode == 200) {
       return Success();
     } else if (response.statusCode == 400) {
+      final responseBody = json.decode(response.body);
       throw ResetPasswordException(
-          statusCode: response.statusCode, message: response.body);
+          statusCode: response.statusCode, message: responseBody['message']);
     } else {
       throw ServerException();
     }

@@ -10,7 +10,7 @@ class ResetPasswordRepositoryImpl implements ResetPasswordRepository {
   final ResetPasswordDataSource dataSource;
 
   @override
-  Future<Either<Failure, Success>> resetPassword(
+  Future<Either<ResetPasswordFailure, Success>> resetPassword(
       {required String loginId}) async {
     try {
       final success = await dataSource.resetPassword(loginId: loginId);
@@ -22,7 +22,7 @@ class ResetPasswordRepositoryImpl implements ResetPasswordRepository {
   }
 
   @override
-  Future<Either<Failure, Success>> updatePassword(
+  Future<Either<ResetPasswordFailure, Success>> updatePassword(
       {required String loginId,
       required String confirmationCode,
       required String newPassword}) async {
@@ -32,8 +32,9 @@ class ResetPasswordRepositoryImpl implements ResetPasswordRepository {
           confirmationCode: confirmationCode,
           newPassword: newPassword);
       return Right(success);
-    } on ServerException {
-      return Left(ServerFailure());
+    } on ResetPasswordException catch (e) {
+      return Left(
+          ResetPasswordFailure(statusCode: e.statusCode, message: e.message));
     }
   }
 }
