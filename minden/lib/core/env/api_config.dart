@@ -29,8 +29,8 @@ class ApiConfig {
     final appToken = si<Account>().appToken;
     final refreshToken = si<Account>().refreshToken;
     return {
-      'appToken': appToken,
-      'refreshToken': refreshToken,
+      'appToken': appToken ?? '',
+      'refreshToken': refreshToken ?? '',
     };
   }
 }

@@ -10,9 +10,9 @@ class Account {
   String? _refreshToken = '';
   User? _me;
 
-  String get appToken => _appToken!;
+  String? get appToken => _appToken;
 
-  String get refreshToken => _refreshToken!;
+  String? get refreshToken => _refreshToken;
 
   String get userId => _me?.profile.userId ?? '';
 

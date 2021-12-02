@@ -42,11 +42,6 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
-
-    () async {
-      await si<Account>().prepare();
-    }();
-
     // ローカライズの初期化
     StreamSubscription? localizedSubscription;
     localizedSubscription =
@@ -185,22 +180,24 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       return;
     }
 
-    if (si<Account>().appToken.isEmpty) {
-      // チュートリアルはみたが、ログインしないユーザー
+    si<Account>().prepare().then((value) {
+      if (si<Account>().appToken?.isEmpty ?? true) {
+        // チュートリアルはみたが、ログインしないユーザー
+        final route = NoAnimationMaterialPageRoute(
+          builder: (context) => LoginPage(),
+          settings: const RouteSettings(name: '/login'),
+        );
+        Navigator.pushReplacement(context, route);
+        return;
+      }
+
+      // ログインしてて、チュートリアルもみたユーザー
       final route = NoAnimationMaterialPageRoute(
-        builder: (context) => LoginPage(),
-        settings: const RouteSettings(name: '/login'),
+        builder: (context) => HomePage(),
+        settings: const RouteSettings(name: '/home'),
       );
       Navigator.pushReplacement(context, route);
-      return;
-    }
-
-    // ログインしてて、チュートリアルもみたユーザー
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => HomePage(),
-      settings: const RouteSettings(name: '/home'),
-    );
-    Navigator.pushReplacement(context, route);
+    });
   }
 
   @override
