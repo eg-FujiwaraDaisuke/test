@@ -9,7 +9,7 @@ class PowerPlantModel extends PowerPlant {
     required String voltageType,
     required String powerGenerationMethod,
     required String renewableType,
-    required int generationCapacity,
+    required double generationCapacity,
     required int displayOrder,
     required bool isRecommend,
     required String ownerName,

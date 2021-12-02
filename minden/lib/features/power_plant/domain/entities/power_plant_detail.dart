@@ -72,7 +72,7 @@ class PowerPlantDetail extends Equatable {
   final String renewableType;
 
   /// 発電設備容量（kW）
-  final int generationCapacity;
+  final double generationCapacity;
 
   /// 表示順
   /// 発電所の作成日時の順(MP番号の昇順)で
