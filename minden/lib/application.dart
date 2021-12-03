@@ -29,6 +29,7 @@ import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
+import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
@@ -168,9 +169,8 @@ class Application extends StatelessWidget {
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
       '/': (_) {
-        // TODO 納品後もとに戻す
         if (kReleaseMode) {
-          return DebugPage();
+          return InitialPage();
         } else {
           return DebugPage();
         }
