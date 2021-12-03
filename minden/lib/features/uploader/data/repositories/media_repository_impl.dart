@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:mime/mime.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/repository/retry_process_mixin.dart';
@@ -20,8 +21,10 @@ class MediaRepositoryImpl with RetryProcessMixin implements MediaRepository {
   @override
   Future<Either<Failure, Media>> upload(File file) async {
     try {
+      final mimeType = lookupMimeType(file.path);
       final bytes = await file.readAsBytes();
-      final media = await retryRequest(() => dataSource.upload(bytes: bytes));
+      final media = await retryRequest(
+          () => dataSource.upload(bytes: bytes, contentType: mimeType));
       return Right(media);
     } on ServerException {
       return Left(ServerFailure());
