@@ -347,7 +347,7 @@ class ProfileIcon extends StatelessWidget {
       width: 99,
       height: 99,
       decoration: const BoxDecoration(
-        color: Color(0xFFFF8C00),
+        color: Color(0xFFFFFFFF),
         shape: BoxShape.circle,
       ),
       child: Center(
