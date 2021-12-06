@@ -39,6 +39,7 @@ import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injection_container.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
@@ -232,6 +233,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   Widget _generateDetail(
     PowerPlantDetail detail,
   ) {
+    logD('detail : ${detail.toJson()}');
     return Column(
       children: [
         Padding(

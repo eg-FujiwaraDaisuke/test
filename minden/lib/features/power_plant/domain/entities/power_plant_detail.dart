@@ -173,6 +173,47 @@ class PowerPlantDetail extends Equatable {
   /// 応援のお礼イメージ
   final String? thankYouImage;
 
+  Map<String, dynamic> toJson() {
+    return {
+      'plantId': plantId,
+      'areaCode': areaCode,
+      'name': name,
+      'viewAddress': viewAddress,
+      'voltageType': voltageType,
+      'powerGenerationMethod': powerGenerationMethod,
+      'renewableType': renewableType,
+      'generationCapacity': generationCapacity,
+      'displayOrder': displayOrder,
+      'isRecommend': isRecommend,
+      'ownerName': ownerName,
+      'startDate': startDate,
+      'endDate': endDate,
+      'projectName': projectName,
+      'url': url,
+      'ownerMessage': ownerMessage,
+      'aboutPlant': aboutPlant,
+      'prospect': prospect,
+      'twitter': twitter,
+      'facebook': facebook,
+      'plantImage1': plantImage1,
+      'plantImage2': plantImage2,
+      'plantImage3': plantImage3,
+      'plantImage4': plantImage4,
+      'limitedIntroducerId': limitedIntroducerId,
+      'supportGiftName': supportGiftName,
+      'explanation': explanation,
+      'image1': image1,
+      'image2': image2,
+      'image3': image3,
+      'image4': image4,
+      'image5': image5,
+      'shortCatchphrase': shortCatchphrase,
+      'catchphrase': catchphrase,
+      'thankYouMessage': thankYouMessage,
+      'thankYouImage': thankYouImage,
+    };
+  }
+
   @override
   List<Object> get props => [
         plantId,
