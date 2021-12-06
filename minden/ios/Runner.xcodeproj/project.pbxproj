@@ -281,7 +281,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ $DEFINE_BUILD_ENV == *\"dev\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Dev.plist $PRODUCT_NAME/GoogleService-Info.plist\nelif [[ $DEFINE_BUILD_ENV == *\"prod\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Prod.plist $PRODUCT_NAME/GoogleService-Info.plist\nelif [[ $DEFINE_BUILD_ENV == *\"staging\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Staging.plist $PRODUCT_NAME/GoogleService-Info.plist\nelse\n    echo \"configuration didn't match to 'dev' or 'prod' or 'staging'\"\n    echo \"Your DEFINE_BUILD_ENV is '$DEFINE_BUILD_ENV'\"\n    exit 1\nfi\n";
+			shellScript = "echo \"Your DEFINE_BUILD_ENV is '$DEFINE_BUILD_ENV'\"\n\nif [[ $DEFINE_BUILD_ENV == *\"dev\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Dev.plist $PRODUCT_NAME/GoogleService-Info.plist\nelif [[ $DEFINE_BUILD_ENV == *\"prod\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Prod.plist $PRODUCT_NAME/GoogleService-Info.plist\nelif [[ $DEFINE_BUILD_ENV == *\"staging\"* ]]; then\n    cp $PRODUCT_NAME/Firebase/GoogleService-Info-Staging.plist $PRODUCT_NAME/GoogleService-Info.plist\nelse\n    echo \"configuration didn't match to 'dev' or 'prod' or 'staging'\"\n    echo \"Your DEFINE_BUILD_ENV is '$DEFINE_BUILD_ENV'\"\n    exit 1\nfi\n";
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
