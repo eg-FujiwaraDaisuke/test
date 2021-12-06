@@ -370,14 +370,16 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                         begin: FractionalOffset.topCenter,
                         end: FractionalOffset.bottomCenter,
                         colors: [
-                          isArtistPowerPlant
-                              ? Color(0xFF5CD2F8)
-                              : Color(0xFFFF8C00),
-                          isArtistPowerPlant
-                              ? Color(0xFF5CD2F8)
-                              : Color(0xFFFFC277),
+                          if (isArtistPowerPlant)
+                            const Color(0xFF5CD2F8)
+                          else
+                            const Color(0xFFFF8C00),
+                          if (isArtistPowerPlant)
+                            const Color(0xFF5CD2F8)
+                          else
+                            const Color(0xFFFFC277),
                         ],
-                        stops: [
+                        stops: const [
                           0.0,
                           1.0,
                         ],
