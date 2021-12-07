@@ -9,8 +9,8 @@ import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/utile.dart';
 
-class SupportPlantSelectDialog {
-  SupportPlantSelectDialog({
+class SupportPowerPlantSelectDialog {
+  SupportPowerPlantSelectDialog({
     required this.context,
     required this.selectPowerPlant,
     required this.registPowerPlants,

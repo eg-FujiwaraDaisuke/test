@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:minden/features/support_plant/domain/entities/support.dart';
+import 'package:minden/features/login/domain/entities/support.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class User extends Equatable {
@@ -60,7 +60,7 @@ class User extends Equatable {
   final String loginId;
   final String accountId;
   final String contractor;
-  final String limitedPlantId;
+  final String? limitedPlantId;
   final int supportableNumber;
   final Profile profile;
   final List<Support> supports;

@@ -13,7 +13,6 @@ import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/fcm_debug_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/features/violate/presentation/violate_dialog_debug_page.dart';
@@ -77,11 +76,6 @@ class DebugPageState extends State<DebugPage> {
                 //     (context) => ProfilePage(), '/user/profile'),
                 // _generateNavigatorPush(context, 'push通知FCM取得',
                 //     (context) => FCMDebugPage(), '/fcm_debug'),
-                // _generateNavigatorPush(
-                //     context,
-                //     '応援ダイアログ',
-                //     (context) => SupportPlantDialogDebugPage(),
-                //     '/supportPlantDialogDebugPage'),
                 // _generateNavigatorPush(
                 //     context,
                 //     '通報デバックページ',

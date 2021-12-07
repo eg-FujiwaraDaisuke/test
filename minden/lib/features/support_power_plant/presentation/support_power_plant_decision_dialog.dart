@@ -9,8 +9,8 @@ import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/utile.dart';
 
-class SupportPlantDecisionDialog {
-  SupportPlantDecisionDialog({
+class SupportPowerPlantDecisionDialog {
+  SupportPowerPlantDecisionDialog({
     required this.context,
     required this.selectPowerPlant,
     required this.registPowerPlants,
@@ -69,7 +69,8 @@ class SupportPlantDecisionDialog {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: selectPowerPlant.name,
+                                    // TODO 発電所の名前が入ってないので一旦ID入れる
+                                    text: selectPowerPlant.plantId,
                                     style: const TextStyle(
                                       color: Color(0xFFFF8C00),
                                       fontSize: 18,
@@ -234,7 +235,8 @@ class SupportPlantDecisionDialog {
               SizedBox(
                 width: 157,
                 child: Text(
-                  powerPlant.name,
+                  // TODO 発電所の名前が入ってないので一旦ID入れる
+                  powerPlant.plantId,
                   style: TextStyle(
                     color: const Color(0xFF575292),
                     fontSize: 13,

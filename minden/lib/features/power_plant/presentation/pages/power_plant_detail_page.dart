@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,8 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -213,7 +212,18 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           ),
                           _generateDetail(detail),
                           // この発電所を応援する
-                          _buildSupportButton(detail)
+                          FutureBuilder(
+                            future: _getUserjson(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData) {
+                                return _buildSupportButton(
+                                    detail, snapshot.data);
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -221,13 +231,20 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ),
               );
             }
-            return Scaffold(
+            return const Scaffold(
               backgroundColor: Colors.white,
             );
           },
         ),
       ),
     );
+  }
+
+  dynamic _getUserjson() async {
+    final userJsonData =
+        await si<EncryptionTokenDataSourceImpl>().restoreUser();
+    final userJson = json.decode(userJsonData);
+    return User.fromJson(userJson);
   }
 
   Widget _generateDetail(
@@ -243,7 +260,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             children: [
               // 発電所名
               Text(
-                detail.name ?? '',
+                // TODO すべての発電所名がNullになってるので一旦ID入れておく
+                detail.plantId,
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'NotoSansJP',
@@ -325,10 +343,12 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     );
   }
 
-  Widget _buildSupportButton(PowerPlantDetail detail) {
+  Widget _buildSupportButton(PowerPlantDetail detail, User user) {
     final isArtistPowerPlant = detail.limitedIntroducerId == 'ARTIST';
-    // 　TODO アーティスト電力を応援できるか
-    final canSupportArtistPowerPlant = false;
+    final supportableNumber = user.supportableNumber;
+    final canSupportArtistPowerPlant =
+        user.limitedPlantId == null ? true : false;
+
     return BlocProvider.value(
       value: _historyBloc,
       child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
@@ -400,14 +420,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
                                   // 普通の発電所
                                   if (!isArtistPowerPlant) {
-                                    final jsonData = await si<
-                                            EncryptionTokenDataSourceImpl>()
-                                        .restoreUser();
-                                    final userJson = json.decode(jsonData);
-                                    final user = User.fromJson(userJson);
-                                    final supportableNumber =
-                                        user.supportableNumber;
-
                                     setState(() {
                                       _registPowerPlants = state
                                           .powerPlants.powerPlants
@@ -419,10 +431,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                           .toList();
                                     });
 
-                                    // 契約件数１応援０の場合
+                                    // 契約件数が現在の応援件数より少ない場合
                                     if (supportableNumber >
                                         state.powerPlants.powerPlants.length) {
-                                      await SupportPlantDecisionDialog(
+                                      await SupportPowerPlantDecisionDialog(
                                         context: context,
                                         selectPowerPlant: selectPowerPlant,
                                         registPowerPlants: _registPowerPlants,
@@ -431,7 +443,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                     } else {
                                       // 応援プラントを選択する
                                       final isSelected =
-                                          await SupportPlantSelectDialog(
+                                          await SupportPowerPlantSelectDialog(
                                         context: context,
                                         selectPowerPlant: selectPowerPlant,
                                         registPowerPlants: _registPowerPlants,
@@ -458,7 +470,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
                                       // 応援プラントを選択した場合、確定ダイアログに飛ばす
                                       isSelected!
-                                          ? await SupportPlantDecisionDialog(
+                                          ? await SupportPowerPlantDecisionDialog(
                                               context: context,
                                               selectPowerPlant:
                                                   selectPowerPlant,

@@ -1,5 +1,5 @@
 import 'package:minden/features/login/domain/entities/user.dart';
-import 'package:minden/features/support_plant/domain/entities/support.dart';
+import 'package:minden/features/login/domain/entities/support.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
 
 class UserModel extends User {
@@ -7,7 +7,7 @@ class UserModel extends User {
     required String loginId,
     required String accountId,
     required String contractor,
-    required String limitedPlantId,
+    required String? limitedPlantId,
     required int supportableNumber,
     required bool isNewbie,
     required Profile profile,
