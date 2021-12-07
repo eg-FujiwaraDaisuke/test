@@ -131,7 +131,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
-    _historyBloc.add(GetPowerPlantsEvent(historyType: 'reservation'));
+    _getPowerPlantsHistory();
+  }
+
+  void _getPowerPlantsHistory() {
+    _historyBloc.add(GetPowerPlantsEvent(historyType: 'history'));
   }
 
   @override
@@ -349,6 +353,23 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     final canSupportArtistPowerPlant =
         user.limitedPlantId == null ? true : false;
 
+    final selectPowerPlant = PowerPlant(
+      plantId: detail.plantId,
+      areaCode: detail.areaCode,
+      name: detail.name ?? '',
+      viewAddress: detail.viewAddress ?? '',
+      voltageType: detail.voltageType,
+      powerGenerationMethod: detail.powerGenerationMethod ?? '',
+      renewableType: detail.renewableType,
+      generationCapacity: detail.generationCapacity,
+      displayOrder: detail.displayOrder,
+      isRecommend: detail.isRecommend,
+      ownerName: detail.ownerMessage ?? '',
+      startDate: detail.startDate,
+      endDate: detail.endDate,
+      plantImage1: detail.plantImage1,
+    );
+
     return BlocProvider.value(
       value: _historyBloc,
       child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
@@ -362,23 +383,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantsLoaded) {
-              final selectPowerPlant = PowerPlant(
-                plantId: detail.plantId,
-                areaCode: detail.areaCode,
-                name: detail.name ?? '',
-                viewAddress: detail.viewAddress ?? '',
-                voltageType: detail.voltageType,
-                powerGenerationMethod: detail.powerGenerationMethod ?? '',
-                renewableType: detail.renewableType,
-                generationCapacity: detail.generationCapacity,
-                displayOrder: detail.displayOrder,
-                isRecommend: detail.isRecommend,
-                ownerName: detail.ownerMessage ?? '',
-                startDate: detail.startDate,
-                endDate: detail.endDate,
-                plantImage1: detail.plantImage1,
-              );
-
               final isSupport = state.powerPlants.powerPlants
                   .map((powerPlant) => powerPlant.plantId)
                   .contains(selectPowerPlant.plantId);
@@ -434,12 +438,18 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                     // 契約件数が現在の応援件数より少ない場合
                                     if (supportableNumber >
                                         state.powerPlants.powerPlants.length) {
-                                      await SupportPowerPlantDecisionDialog(
+                                      final isUpdate =
+                                          await SupportPowerPlantDecisionDialog(
                                         context: context,
                                         selectPowerPlant: selectPowerPlant,
                                         registPowerPlants: _registPowerPlants,
                                         user: user,
                                       ).showDialog();
+
+                                      // TODO isUpdateがnullになって返ってくる問題がある
+                                      if (isUpdate ?? true) {
+                                        _getPowerPlantsHistory();
+                                      }
                                     } else {
                                       // 応援プラントを選択する
                                       final isSelected =
@@ -450,47 +460,38 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                         user: user,
                                       ).showDialog();
 
-                                      // 応援プラントを選択しなかった場合、stateの中身をリセット
-                                      isSelected ??
-                                          setState(
-                                            () {
-                                              _registPowerPlants =
-                                                  state.powerPlants.powerPlants
-                                                      .map(
-                                                        (selectedPowerPlant) =>
-                                                            RegistPowerPlant(
-                                                          isRegist: true,
-                                                          powerPlant:
-                                                              selectedPowerPlant,
-                                                        ),
-                                                      )
-                                                      .toList();
-                                            },
-                                          );
-
                                       // 応援プラントを選択した場合、確定ダイアログに飛ばす
-                                      isSelected!
-                                          ? await SupportPowerPlantDecisionDialog(
-                                              context: context,
-                                              selectPowerPlant:
-                                                  selectPowerPlant,
-                                              registPowerPlants:
-                                                  _registPowerPlants,
-                                              user: user,
-                                            ).showDialog()
-                                          : setState(() {
-                                              _registPowerPlants =
-                                                  state.powerPlants.powerPlants
-                                                      .map(
-                                                        (selectedPowerPlant) =>
-                                                            RegistPowerPlant(
-                                                          isRegist: true,
-                                                          powerPlant:
-                                                              selectedPowerPlant,
-                                                        ),
-                                                      )
-                                                      .toList();
-                                            });
+                                      if (isSelected ?? false) {
+                                        final isUpdate =
+                                            await SupportPowerPlantDecisionDialog(
+                                          context: context,
+                                          selectPowerPlant: selectPowerPlant,
+                                          registPowerPlants: _registPowerPlants,
+                                          user: user,
+                                        ).showDialog();
+
+                                        // TODO isUpdateがnullになって返ってくる問題がある
+                                        if (isUpdate ?? true) {
+                                          _getPowerPlantsHistory();
+                                        }
+                                      } else {
+                                        // 応援プラントを選択しなかった場合、stateの中身をリセット
+                                        setState(
+                                          () {
+                                            _registPowerPlants =
+                                                state.powerPlants.powerPlants
+                                                    .map(
+                                                      (selectedPowerPlant) =>
+                                                          RegistPowerPlant(
+                                                        isRegist: true,
+                                                        powerPlant:
+                                                            selectedPowerPlant,
+                                                      ),
+                                                    )
+                                                    .toList();
+                                          },
+                                        );
+                                      }
                                     }
                                   }
                                 },

@@ -22,7 +22,7 @@ class SupportPowerPlantSelectDialog {
   List<RegistPowerPlant> registPowerPlants;
   final User user;
 
-  Future<bool?> showDialog() {
+  Future<bool?> showDialog() async {
     return Navigator.push(
       context,
       CustomDialogOverlay(
@@ -74,7 +74,9 @@ class SupportPowerPlantSelectDialog {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: registPowerPlants[0].powerPlant.name,
+                                    text: registPowerPlants[0]
+                                        .powerPlant
+                                        .plantId, // TODO 一旦ID
                                     style: const TextStyle(
                                       color: Color(0xFF575292),
                                       fontSize: 18,
@@ -114,7 +116,7 @@ class SupportPowerPlantSelectDialog {
                               height: 6,
                             ),
                             Text(
-                              '「${selectPowerPlant.name}」',
+                              '「${selectPowerPlant.plantId}」', // TODO 一旦ID
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Color(0xFFFF8C00),
@@ -321,7 +323,7 @@ class SupportPowerPlantSelectDialog {
               SizedBox(
                 width: 153,
                 child: Text(
-                  registPowerPlant.powerPlant.name,
+                  registPowerPlant.powerPlant.plantId, // TODO 一旦ID
                   style: const TextStyle(
                     color: Color(0xFF575292),
                     fontSize: 13,
@@ -423,7 +425,7 @@ class SupportPowerPlantSelectDialog {
           SizedBox(
             width: 157,
             child: Text(
-              selectPowerPlant.name,
+              selectPowerPlant.plantId, // TODO 一旦ID
               style: TextStyle(
                 color: const Color(0xFF575292),
                 fontSize: 13,
