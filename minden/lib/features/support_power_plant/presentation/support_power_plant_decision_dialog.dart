@@ -63,6 +63,7 @@ class SupportPowerPlantDecisionDialog {
             }
             Loading.hide();
             if (event is SupportPowerPlantUpdated) {
+              _updateSupportPowerPlantBloc.close();
               Navigator.pop(context, true);
               return;
             }

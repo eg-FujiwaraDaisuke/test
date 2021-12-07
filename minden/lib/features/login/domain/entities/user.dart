@@ -7,7 +7,7 @@ class User extends Equatable {
     required this.loginId,
     required this.accountId,
     required this.contractor,
-    required this.limitedPlantId,
+    required this.limitedPlantId, //null以外の値が入ってる人はアーティストプラン
     required this.supportableNumber,
     required this.profile,
     required this.isNewbie,
