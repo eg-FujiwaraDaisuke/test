@@ -74,9 +74,7 @@ class SupportPowerPlantSelectDialog {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: registPowerPlants[0]
-                                        .powerPlant
-                                        .plantId, // TODO 一旦ID
+                                    text: registPowerPlants[0].powerPlant.name,
                                     style: const TextStyle(
                                       color: Color(0xFF575292),
                                       fontSize: 18,
@@ -116,7 +114,7 @@ class SupportPowerPlantSelectDialog {
                               height: 6,
                             ),
                             Text(
-                              '「${selectPowerPlant.plantId}」', // TODO 一旦ID
+                              '「${selectPowerPlant.name}」',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Color(0xFFFF8C00),
@@ -323,7 +321,7 @@ class SupportPowerPlantSelectDialog {
               SizedBox(
                 width: 153,
                 child: Text(
-                  registPowerPlant.powerPlant.plantId, // TODO 一旦ID
+                  registPowerPlant.powerPlant.name,
                   style: const TextStyle(
                     color: Color(0xFF575292),
                     fontSize: 13,
@@ -425,7 +423,7 @@ class SupportPowerPlantSelectDialog {
           SizedBox(
             width: 157,
             child: Text(
-              selectPowerPlant.plantId, // TODO 一旦ID
+              selectPowerPlant.name,
               style: TextStyle(
                 color: const Color(0xFF575292),
                 fontSize: 13,

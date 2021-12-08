@@ -98,8 +98,7 @@ class SupportPowerPlantDecisionDialog {
                                     ),
                                   ),
                                   TextSpan(
-                                    // TODO 発電所の名前が入ってないので一旦ID入れる
-                                    text: selectPowerPlant.plantId,
+                                    text: selectPowerPlant.name,
                                     style: const TextStyle(
                                       color: Color(0xFFFF8C00),
                                       fontSize: 18,
@@ -273,8 +272,7 @@ class SupportPowerPlantDecisionDialog {
               SizedBox(
                 width: 157,
                 child: Text(
-                  // TODO 発電所の名前が入ってないので一旦ID入れる
-                  powerPlant.plantId,
+                  powerPlant.name,
                   style: TextStyle(
                     color: const Color(0xFF575292),
                     fontSize: 13,

@@ -334,8 +334,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             children: [
               // 発電所名
               Text(
-                // TODO すべての発電所名がNullになってるので一旦ID入れておく
-                detail.plantId,
+                detail.projectName ?? '',
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'NotoSansJP',
