@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
-import 'package:minden/features/support_plant/domain/entities/support.dart';
+import 'package:minden/features/login/domain/entities/support.dart';
 
 class Profile extends Equatable {
   const Profile({

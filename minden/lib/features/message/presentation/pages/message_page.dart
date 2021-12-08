@@ -25,7 +25,6 @@ class MessagePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-
       final _getMessageDetailBloc = GetMessageDetailBloc(
         const MessageInitial(),
         GetMessageDetail(

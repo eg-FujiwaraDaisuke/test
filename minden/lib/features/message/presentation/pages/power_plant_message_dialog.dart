@@ -23,6 +23,7 @@ class PowerPlantMessageDialog {
               child: SizedBox(
                 width: 344,
                 height: 515,
+                // TODO 出し分けが必要
                 child: Image.asset(
                   'assets/images/message/letter_bg.png',
                   width: 344,

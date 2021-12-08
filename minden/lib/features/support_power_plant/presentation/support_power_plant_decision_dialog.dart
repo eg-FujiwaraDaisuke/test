@@ -1,18 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_dialog_debug_page.dart';
+import 'package:minden/features/support_power_plant/data/datasources/support_power_plant_datasources.dart';
+import 'package:minden/features/support_power_plant/data/repositories/support_power_plant_repository_impl.dart';
+import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
+import 'package:minden/features/support_power_plant/presentation/bloc/support_power_plant_bloc.dart';
 import 'package:minden/utile.dart';
+import 'package:http/http.dart' as http;
 
-class SupportPlantDecisionDialog {
-  SupportPlantDecisionDialog({
+class SupportPowerPlantDecisionDialog {
+  SupportPowerPlantDecisionDialog({
     required this.context,
     required this.selectPowerPlant,
     required this.registPowerPlants,
@@ -23,8 +27,18 @@ class SupportPlantDecisionDialog {
   final PowerPlant selectPowerPlant;
   final List<RegistPowerPlant> registPowerPlants;
   final User user;
+  final _updateSupportPowerPlantBloc = UpdateSupportPowerPlantBloc(
+    const SupportPowerPlantInitial(),
+    UpdateSupportPowerPlant(
+      SupportPowerPlantRepositoryImpl(
+        dataSource: SupportPowerPlantDataSourceImpl(
+          client: http.Client(),
+        ),
+      ),
+    ),
+  );
 
-  Future<void> showDialog() async {
+  Future<bool?> showDialog() async {
     await Navigator.push(
       context,
       CustomDialogOverlay(
@@ -41,6 +55,19 @@ class SupportPlantDecisionDialog {
                 .toList(),
             selectPowerPlant
           ];
+
+          _updateSupportPowerPlantBloc.stream.listen((event) {
+            if (event is SupportPowerPlantUpdating) {
+              Loading.show(context);
+              return;
+            }
+            Loading.hide();
+            if (event is SupportPowerPlantUpdated) {
+              _updateSupportPowerPlantBloc.close();
+              Navigator.pop(context, true);
+              return;
+            }
+          });
 
           return Stack(
             children: [
@@ -149,8 +176,15 @@ class SupportPlantDecisionDialog {
                       ),
                       Button(
                           onTap: () {
-                            // TODO ここで応援APIを叩く
-                            _hideDialog();
+                            final plantIdList = {
+                              'plantIdList': newRegistPowerPlants
+                                  .map((powerPlant) =>
+                                      {'plantId': powerPlant.plantId})
+                                  .toList()
+                            };
+
+                            _updateSupportPowerPlantBloc
+                                .add(UpdateSupportPowerPlantEvent(plantIdList));
                           },
                           text: i18nTranslate(context, 'decide'),
                           size: ButtonSize.S),
@@ -161,7 +195,7 @@ class SupportPlantDecisionDialog {
                         onTap: () {
                           registPowerPlants.forEach((registPowerPlant) =>
                               registPowerPlant.isRegist = true);
-                          _hideDialog();
+                          Navigator.pop(context, false);
                         },
                         child: Text(
                           i18nTranslate(context, 'cancel_katakana'),
@@ -181,7 +215,9 @@ class SupportPlantDecisionDialog {
                 top: 25,
                 right: 27,
                 child: GestureDetector(
-                  onTap: _hideDialog,
+                  onTap: () {
+                    Navigator.pop(context, false);
+                  },
                   child: const Icon(Icons.close),
                 ),
               ),
@@ -251,12 +287,5 @@ class SupportPlantDecisionDialog {
         ),
       ],
     );
-  }
-
-  /*
-   * 非表示
-   */
-  void _hideDialog() {
-    Navigator.of(context).pop();
   }
 }

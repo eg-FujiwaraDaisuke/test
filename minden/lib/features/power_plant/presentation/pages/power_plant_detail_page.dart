@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +31,8 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_decision_dialog.dart';
-import 'package:minden/features/support_plant/presentation/support_plant_select_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,6 +65,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPlantTagsBloc _plantTagsBloc;
   late GetPowerPlantsHistoryBloc _historyBloc;
   List<RegistPowerPlant> _registPowerPlants = [];
+  late List<PowerPlant> _supportHistory = [];
+  late bool _isLoadedSupportHistroy = false;
 
   @override
   void initState() {
@@ -95,8 +96,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       }
     });
 
-    _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
-
     _participantBloc = GetParticipantBloc(
       const PowerPlantStateInitial(),
       GetPowerPlantParticipant(
@@ -107,7 +106,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
-    _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
 
     _plantTagsBloc = GetPlantTagsBloc(
       const TagStateInitial(),
@@ -119,7 +117,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
-    _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
 
     _historyBloc = GetPowerPlantsHistoryBloc(
       const PowerPlantStateInitial(),
@@ -131,13 +128,38 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         ),
       ),
     );
-    _historyBloc.add(GetPowerPlantsEvent(historyType: 'reservation'));
+
+    _historyBloc.stream.listen((event) {
+      if (event is PowerPlantLoading) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is PowerPlantsLoaded) {
+        setState(() {
+          _isLoadedSupportHistroy = true;
+          _supportHistory = event.powerPlants.powerPlants;
+        });
+      }
+    });
+
+    _getPowerPlantsHistory();
+    _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
+    _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
+    _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
+  }
+
+  void _getPowerPlantsHistory() {
+    // TODO 応援予約APIがなにも返さないので一旦応援履歴から取得する
+    _historyBloc.add(GetPowerPlantsEvent(historyType: 'history'));
   }
 
   @override
   void dispose() {
     _plantBloc.close();
     _participantBloc.close();
+    _historyBloc.close();
+    _plantTagsBloc.close();
     super.dispose();
   }
 
@@ -158,6 +180,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             if (state is PowerPlantLoaded) {
               final images = <String>[];
               final detail = state.powerPlant;
+              final isSupport = _supportHistory
+                  .map((powerPlant) => powerPlant.plantId)
+                  .contains(detail.plantId);
+
               if (detail.plantImage1.isNotEmpty) {
                 images.add(detail.plantImage1);
               }
@@ -176,11 +202,39 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 body: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: PowerPlantPickup(
-                          images: images,
+                      flexibleSpace: Stack(children: [
+                        FlexibleSpaceBar(
+                          background: PowerPlantPickup(
+                            images: images,
+                          ),
                         ),
-                      ),
+                        if (isSupport && _isLoadedSupportHistroy)
+                          Positioned(
+                            top: 266,
+                            left: 0,
+                            child: Container(
+                              width: 91,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(14),
+                                    bottomRight: Radius.circular(14)),
+                                color: const Color(0xFFFF8C00).withOpacity(0.6),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '応援中',
+                                  style: TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontSize: 18,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ]),
                       expandedHeight: 270,
                       backgroundColor: Colors.transparent,
                     ),
@@ -212,7 +266,39 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           ),
                           _generateDetail(detail),
                           // この発電所を応援する
-                          _buildSupportButton(detail)
+                          FutureBuilder(
+                            future: _getUserjson(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData) {
+                                final isArtistPowerPlant =
+                                    detail.limitedIntroducerId == 'ARTIST';
+
+                                final isArtistPlan =
+                                    snapshot.data.limitedPlantId != null;
+
+                                // アーティスト発電所でアーティストプランの場合
+                                if (isArtistPowerPlant && isArtistPlan) {
+                                  return Container();
+                                }
+                                // 普通の発電所でアーティストプランの場合
+                                if (!isArtistPowerPlant && isArtistPlan) {
+                                  return Container();
+                                }
+
+                                if (isSupport) {
+                                  return Container();
+                                }
+                                if (!_isLoadedSupportHistroy) {
+                                  return Container();
+                                }
+
+                                return _buildSupportButton(detail, isArtistPlan,
+                                    snapshot.data, _supportHistory);
+                              }
+                              return Container();
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -220,13 +306,20 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ),
               );
             }
-            return Scaffold(
+            return const Scaffold(
               backgroundColor: Colors.white,
             );
           },
         ),
       ),
     );
+  }
+
+  dynamic _getUserjson() async {
+    final userJsonData =
+        await si<EncryptionTokenDataSourceImpl>().restoreUser();
+    final userJson = json.decode(userJsonData);
+    return User.fromJson(userJson);
   }
 
   Widget _generateDetail(
@@ -241,7 +334,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             children: [
               // 発電所名
               Text(
-                detail.name ?? '',
+                detail.projectName ?? '',
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: 'NotoSansJP',
@@ -272,8 +365,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   ),
                 ],
               ),
-              // 発電方法
               const SizedBox(height: 14),
+              // 発電方法
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -323,212 +416,173 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     );
   }
 
-  Widget _buildSupportButton(PowerPlantDetail detail) {
+  Widget _buildSupportButton(
+    PowerPlantDetail detail,
+    bool isArtistPlan,
+    User user,
+    List<PowerPlant> powerPlants,
+  ) {
     final isArtistPowerPlant = detail.limitedIntroducerId == 'ARTIST';
-    // 　TODO アーティスト電力を応援できるか
-    final canSupportArtistPowerPlant = false;
-    return BlocProvider.value(
-      value: _historyBloc,
-      child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
-        listener: (context, state) {
-          if (state is PowerPlantLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
-          builder: (context, state) {
-            if (state is PowerPlantsLoaded) {
-              final selectPowerPlant = PowerPlant(
-                plantId: detail.plantId,
-                areaCode: detail.areaCode,
-                name: detail.name ?? '',
-                viewAddress: detail.viewAddress ?? '',
-                voltageType: detail.voltageType,
-                powerGenerationMethod: detail.powerGenerationMethod ?? '',
-                renewableType: detail.renewableType,
-                generationCapacity: detail.generationCapacity,
-                displayOrder: detail.displayOrder,
-                isRecommend: detail.isRecommend,
-                ownerName: detail.ownerMessage ?? '',
-                startDate: detail.startDate,
-                endDate: detail.endDate,
-                plantImage1: detail.plantImage1,
-              );
+    final supportableNumber = user.supportableNumber;
 
-              final isSupport = state.powerPlants.powerPlants
-                  .map((powerPlant) => powerPlant.plantId)
-                  .contains(selectPowerPlant.plantId);
+    final selectPowerPlant = PowerPlant(
+      plantId: detail.plantId,
+      areaCode: detail.areaCode,
+      name: detail.name ?? '',
+      viewAddress: detail.viewAddress ?? '',
+      voltageType: detail.voltageType,
+      powerGenerationMethod: detail.powerGenerationMethod ?? '',
+      renewableType: detail.renewableType,
+      generationCapacity: detail.generationCapacity,
+      displayOrder: detail.displayOrder,
+      isRecommend: detail.isRecommend,
+      ownerName: detail.ownerMessage ?? '',
+      startDate: detail.startDate,
+      endDate: detail.endDate,
+      plantImage1: detail.plantImage1,
+    );
 
-              return isSupport
-                  ? Container()
-                  : Container(
-                      padding: const EdgeInsets.only(top: 11, bottom: 20),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: [
-                          isArtistPowerPlant
-                              ? Color(0xFF5CD2F8)
-                              : Color(0xFFFF8C00),
-                          isArtistPowerPlant
-                              ? Color(0xFF5CD2F8)
-                              : Color(0xFFFFC277),
-                        ],
-                        stops: [
-                          0.0,
-                          1.0,
-                        ],
-                      )),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            InkWell(
-                              child: OutlinedButton(
-                                onPressed: () async {
-                                  // TODO アーティスト発電所でアーティストをサポートできる場合の処理
-                                  if (isArtistPowerPlant &&
-                                      canSupportArtistPowerPlant) {
-                                    return;
-                                  }
+    return Container(
+      padding: const EdgeInsets.only(top: 11, bottom: 20),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: FractionalOffset.topCenter,
+        end: FractionalOffset.bottomCenter,
+        colors: [
+          if (isArtistPowerPlant)
+            const Color(0xFF5CD2F8)
+          else
+            const Color(0xFFFF8C00),
+          if (isArtistPowerPlant)
+            const Color(0xFF5CD2F8)
+          else
+            const Color(0xFFFFC277),
+        ],
+        stops: const [
+          0.0,
+          1.0,
+        ],
+      )),
+      child: Center(
+        child: Column(
+          children: [
+            InkWell(
+              child: OutlinedButton(
+                onPressed: () async {
+                  //  アーティスト発電所でアーティストをサポートしてる場合
+                  if (isArtistPowerPlant && isArtistPlan) {
+                    return;
+                  }
 
-                                  // 普通の発電所
-                                  if (!isArtistPowerPlant) {
-                                    final jsonData = await si<
-                                            EncryptionTokenDataSourceImpl>()
-                                        .restoreUser();
-                                    final userJson = json.decode(jsonData);
-                                    final user = User.fromJson(userJson);
-                                    final supportableNumber =
-                                        user.supportableNumber;
+                  // 通常の発電所
+                  if (!isArtistPowerPlant) {
+                    setState(() {
+                      _registPowerPlants = powerPlants
+                          .map((selectedPowerPlant) => RegistPowerPlant(
+                              isRegist: true, powerPlant: selectedPowerPlant))
+                          .toList();
+                    });
 
-                                    setState(() {
-                                      _registPowerPlants = state
-                                          .powerPlants.powerPlants
-                                          .map((selectedPowerPlant) =>
-                                              RegistPowerPlant(
-                                                  isRegist: true,
-                                                  powerPlant:
-                                                      selectedPowerPlant))
-                                          .toList();
-                                    });
+                    // 契約件数が現在の応援件数より少ない場合
+                    if (supportableNumber > powerPlants.length) {
+                      final isUpdate = await SupportPowerPlantDecisionDialog(
+                        context: context,
+                        selectPowerPlant: selectPowerPlant,
+                        registPowerPlants: _registPowerPlants,
+                        user: user,
+                      ).showDialog();
 
-                                    // 契約件数１応援０の場合
-                                    if (supportableNumber >
-                                        state.powerPlants.powerPlants.length) {
-                                      await SupportPlantDecisionDialog(
-                                        context: context,
-                                        selectPowerPlant: selectPowerPlant,
-                                        registPowerPlants: _registPowerPlants,
-                                        user: user,
-                                      ).showDialog();
-                                    } else {
-                                      // 応援プラントを選択する
-                                      final isSelected =
-                                          await SupportPlantSelectDialog(
-                                        context: context,
-                                        selectPowerPlant: selectPowerPlant,
-                                        registPowerPlants: _registPowerPlants,
-                                        user: user,
-                                      ).showDialog();
+                      // TODO isUpdateがnullになって返ってくる問題がある
+                      if (isUpdate ?? true) {
+                        _getPowerPlantsHistory();
+                      }
+                    } else {
+                      // 応援プラントを選択する
+                      final isSelected = await SupportPowerPlantSelectDialog(
+                        context: context,
+                        selectPowerPlant: selectPowerPlant,
+                        registPowerPlants: _registPowerPlants,
+                        user: user,
+                      ).showDialog();
 
-                                      // 応援プラントを選択しなかった場合、stateの中身をリセット
-                                      isSelected ??
-                                          setState(
-                                            () {
-                                              _registPowerPlants =
-                                                  state.powerPlants.powerPlants
-                                                      .map(
-                                                        (selectedPowerPlant) =>
-                                                            RegistPowerPlant(
-                                                          isRegist: true,
-                                                          powerPlant:
-                                                              selectedPowerPlant,
-                                                        ),
-                                                      )
-                                                      .toList();
-                                            },
-                                          );
+                      // 応援プラントを選択した場合、確定ダイアログに飛ばす
+                      if (isSelected ?? false) {
+                        final isUpdate = await SupportPowerPlantDecisionDialog(
+                          context: context,
+                          selectPowerPlant: selectPowerPlant,
+                          registPowerPlants: _registPowerPlants,
+                          user: user,
+                        ).showDialog();
 
-                                      // 応援プラントを選択した場合、確定ダイアログに飛ばす
-                                      isSelected!
-                                          ? await SupportPlantDecisionDialog(
-                                              context: context,
-                                              selectPowerPlant:
-                                                  selectPowerPlant,
-                                              registPowerPlants:
-                                                  _registPowerPlants,
-                                              user: user,
-                                            ).showDialog()
-                                          : setState(() {
-                                              _registPowerPlants =
-                                                  state.powerPlants.powerPlants
-                                                      .map(
-                                                        (selectedPowerPlant) =>
-                                                            RegistPowerPlant(
-                                                          isRegist: true,
-                                                          powerPlant:
-                                                              selectedPowerPlant,
-                                                        ),
-                                                      )
-                                                      .toList();
-                                            });
-                                    }
-                                  }
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(42),
+                        // TODO isUpdateがnullになって返ってくる問題がある
+                        if (isUpdate ?? true) {
+                          _getPowerPlantsHistory();
+                        }
+                      } else {
+                        // 応援プラントを選択しなかった場合、stateの中身をリセット
+                        setState(
+                          () {
+                            _registPowerPlants = powerPlants
+                                .map(
+                                  (selectedPowerPlant) => RegistPowerPlant(
+                                    isRegist: true,
+                                    powerPlant: selectedPowerPlant,
                                   ),
-                                  side: const BorderSide(
-                                      color: Colors.white, width: 2),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 48, vertical: 12),
-                                  child: Text(
-                                    _getSupportButtonText(isArtistPowerPlant,
-                                        canSupportArtistPowerPlant),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      height: 1.48,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            if (isArtistPowerPlant)
-                              Container(
-                                padding: const EdgeInsets.only(top: 9),
-                                width: 310,
-                                child: Text(
-                                  i18nTranslate(context,
-                                      'power_plant_detail_add_expectant_artist'),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                    height: calcFontHeight(
-                                        fontSize: 13, lineHeight: 18),
-                                  ),
-                                ),
-                              )
-                            else
-                              Container()
-                          ],
-                        ),
-                      ),
-                    );
-            }
-            return Container();
-          },
+                                )
+                                .toList();
+                          },
+                        );
+                      }
+                    }
+                  }
+                },
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(42),
+                  ),
+                  side: const BorderSide(color: Colors.white, width: 2),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+                  child: Text(
+                    _getSupportButtonText(isArtistPowerPlant, isArtistPlan),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'NotoSansJP',
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      height: 1.48,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // 普通の発電所でアーティストプランの場合
+            if (!isArtistPowerPlant && isArtistPlan) Container(),
+
+            // アーティスト発電所でアーティストプランではない場合
+            if (isArtistPowerPlant && !isArtistPlan)
+              Container(
+                padding: const EdgeInsets.only(top: 9),
+                width: 310,
+                child: Text(
+                  i18nTranslate(
+                      context, 'power_plant_detail_add_expectant_artist'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    height: calcFontHeight(fontSize: 13, lineHeight: 18),
+                  ),
+                ),
+              ),
+            // アーティスト発電所でアーティストプランの場合
+            if (isArtistPowerPlant && isArtistPlan) Container(),
+          ],
         ),
       ),
     );
@@ -552,58 +606,54 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   Widget _generateDetailParticipant() {
-    return BlocProvider.value(
-      value: _participantBloc,
-      child: BlocListener<GetParticipantBloc, PowerPlantState>(
-        listener: (context, state) {},
-        child: BlocBuilder<GetParticipantBloc, PowerPlantState>(
-          builder: (context, state) {
-            if (state is ParticipantLoaded) {
-              return Column(
-                children: [
-                  const Divider(
-                    height: 1,
-                    color: Color(0xFFE2E2E2),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    i18nTranslate(
-                        context, 'power_plant_detail_everyone_important'),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF575292),
-                      height: 1.43,
-                    ),
-                  ),
-                  // 応援ユーザー
-                  GestureDetector(
-                    onTap: () {
-                      SupportParticipantsDialog(
-                        context: context,
-                        participants: state.participant,
-                      ).showDialog();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ParticipantUserIconGroup(
-                            participant: state.participant),
-                      ],
-                    ),
-                  ),
-                  // 大切にしていることタグ
-                  const SizedBox(height: 16),
-                  _generateTag(),
-                  const SizedBox(height: 16),
-                ],
-              );
-            }
-            return Container();
-          },
+    return Column(
+      children: [
+        const Divider(
+          height: 1,
+          color: Color(0xFFE2E2E2),
         ),
-      ),
+        const SizedBox(height: 10),
+        Text(
+          i18nTranslate(context, 'power_plant_detail_everyone_important'),
+          style: const TextStyle(
+            fontSize: 15,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF575292),
+            height: 1.43,
+          ),
+        ),
+        BlocProvider.value(
+          value: _participantBloc,
+          child: BlocListener<GetParticipantBloc, PowerPlantState>(
+            listener: (context, state) {},
+            child: BlocBuilder<GetParticipantBloc, PowerPlantState>(
+                builder: (context, state) {
+              if (state is ParticipantLoaded) {
+                return GestureDetector(
+                  onTap: () {
+                    SupportParticipantsDialog(
+                      context: context,
+                      participants: state.participant,
+                    ).showDialog();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ParticipantUserIconGroup(participant: state.participant),
+                    ],
+                  ),
+                );
+              }
+              return Container();
+            }),
+          ),
+        ),
+        // 大切にしていることタグ
+        const SizedBox(height: 16),
+        _generateTag(),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
