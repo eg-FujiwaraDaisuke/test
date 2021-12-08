@@ -66,6 +66,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPowerPlantsHistoryBloc _historyBloc;
   List<RegistPowerPlant> _registPowerPlants = [];
   late List<PowerPlant> _supportHistory = [];
+  late bool _isLoadedSupportHistroy = false;
 
   @override
   void initState() {
@@ -136,6 +137,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       Loading.hide();
       if (event is PowerPlantsLoaded) {
         setState(() {
+          _isLoadedSupportHistroy = true;
           _supportHistory = event.powerPlants.powerPlants;
         });
       }
@@ -206,7 +208,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                             images: images,
                           ),
                         ),
-                        if (isSupport)
+                        if (isSupport && _isLoadedSupportHistroy)
                           Positioned(
                             top: 266,
                             left: 0,
@@ -285,6 +287,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                 }
 
                                 if (isSupport) {
+                                  return Container();
+                                }
+                                if (!_isLoadedSupportHistroy) {
                                   return Container();
                                 }
 
@@ -602,58 +607,54 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   Widget _generateDetailParticipant() {
-    return BlocProvider.value(
-      value: _participantBloc,
-      child: BlocListener<GetParticipantBloc, PowerPlantState>(
-        listener: (context, state) {},
-        child: BlocBuilder<GetParticipantBloc, PowerPlantState>(
-          builder: (context, state) {
-            if (state is ParticipantLoaded) {
-              return Column(
-                children: [
-                  const Divider(
-                    height: 1,
-                    color: Color(0xFFE2E2E2),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    i18nTranslate(
-                        context, 'power_plant_detail_everyone_important'),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF575292),
-                      height: 1.43,
-                    ),
-                  ),
-                  // 応援ユーザー
-                  GestureDetector(
-                    onTap: () {
-                      SupportParticipantsDialog(
-                        context: context,
-                        participants: state.participant,
-                      ).showDialog();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ParticipantUserIconGroup(
-                            participant: state.participant),
-                      ],
-                    ),
-                  ),
-                  // 大切にしていることタグ
-                  const SizedBox(height: 16),
-                  _generateTag(),
-                  const SizedBox(height: 16),
-                ],
-              );
-            }
-            return Container();
-          },
+    return Column(
+      children: [
+        const Divider(
+          height: 1,
+          color: Color(0xFFE2E2E2),
         ),
-      ),
+        const SizedBox(height: 10),
+        Text(
+          i18nTranslate(context, 'power_plant_detail_everyone_important'),
+          style: const TextStyle(
+            fontSize: 15,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF575292),
+            height: 1.43,
+          ),
+        ),
+        BlocProvider.value(
+          value: _participantBloc,
+          child: BlocListener<GetParticipantBloc, PowerPlantState>(
+            listener: (context, state) {},
+            child: BlocBuilder<GetParticipantBloc, PowerPlantState>(
+                builder: (context, state) {
+              if (state is ParticipantLoaded) {
+                return GestureDetector(
+                  onTap: () {
+                    SupportParticipantsDialog(
+                      context: context,
+                      participants: state.participant,
+                    ).showDialog();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ParticipantUserIconGroup(participant: state.participant),
+                    ],
+                  ),
+                );
+              }
+              return Container();
+            }),
+          ),
+        ),
+        // 大切にしていることタグ
+        const SizedBox(height: 16),
+        _generateTag(),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
