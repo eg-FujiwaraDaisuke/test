@@ -27,3 +27,14 @@ class GetPowerPlantEvent extends PowerPlantEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetSupportHistoryEvent extends PowerPlantEvent {
+  GetSupportHistoryEvent({
+    required this.historyType,
+  });
+
+  String historyType;
+
+  @override
+  List<Object> get props => [];
+}

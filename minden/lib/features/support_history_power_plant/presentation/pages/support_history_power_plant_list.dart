@@ -23,13 +23,13 @@ class SupportHistoryPowerPlantList extends StatefulWidget {
 
 class _SupportHistoryPowerPlantListState
     extends State<SupportHistoryPowerPlantList> {
-  late GetPowerPlantsHistoryBloc _bloc;
+  late GetPowerPlantsHistoryBloc _historyBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetPowerPlantsHistoryBloc(
+    _historyBloc = GetPowerPlantsHistoryBloc(
       const PowerPlantStateInitial(),
       GetPowerPlantsHistory(
         PowerPlantRepositoryImpl(
@@ -40,22 +40,22 @@ class _SupportHistoryPowerPlantListState
       ),
     );
 
-    _bloc.add(GetPowerPlantsEvent(historyType: widget.historyType));
+    _historyBloc.add(GetSupportHistoryEvent(historyType: widget.historyType));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _historyBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _bloc,
+      value: _historyBloc,
       child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
         listener: (context, state) {
-          if (state is PowerPlantLoading) {
+          if (state is HistoryLoading) {
             Loading.show(context);
             return;
           }
@@ -63,25 +63,29 @@ class _SupportHistoryPowerPlantListState
         },
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
-            if (state is PowerPlantsLoaded) {
-              return ListView.builder(
-                itemCount: state.powerPlants.powerPlants.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final powerPlant = state.powerPlants.powerPlants[index];
-                  final direction = searchDirectionByIndex(index);
+            if (state is HistoryLoaded) {
+              print('state.history');
+              print(state.history);
+              print('state.history');
+              // return ListView.builder(
+              //   itemCount: state.history.powerPlants.length,
+              //   itemBuilder: (BuildContext context, int index) {
+              //     final supportHistoryPowerPlant =
+              //         state.history.powerPlants[index];
+              //     final direction = searchDirectionByIndex(index);
 
-                  return PowerPlantListItem(
-                    key: ValueKey(powerPlant.plantId),
-                    powerPlant: powerPlant,
-                    direction: direction,
-                    isShowCatchphras: false,
-                    aspectRatio: 340 / 289,
-                    thumbnailImageHeight: 226,
-                    supportedData: '2021年8月',
-                    reservedDate: '2021年9月',
-                  );
-                },
-              );
+              //     return PowerPlantListItem(
+              //       key: ValueKey(supportHistoryPowerPlant.plantId),
+              //       powerPlant: supportHistoryPowerPlant,
+              //       direction: direction,
+              //       isShowCatchphras: false,
+              //       aspectRatio: 340 / 289,
+              //       thumbnailImageHeight: 226,
+              //       supportedData: '2021年8月',
+              //       reservedDate: '2021年9月',
+              //     );
+              //   },
+              // );
             }
             return Container();
           },
