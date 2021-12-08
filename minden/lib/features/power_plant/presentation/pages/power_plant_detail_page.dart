@@ -65,7 +65,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPlantTagsBloc _plantTagsBloc;
   late GetPowerPlantsHistoryBloc _historyBloc;
   List<RegistPowerPlant> _registPowerPlants = [];
-  late List<PowerPlant> _powerPlantsHistory = [];
+  late List<PowerPlant> _supportHistory = [];
 
   @override
   void initState() {
@@ -136,7 +136,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       Loading.hide();
       if (event is PowerPlantsLoaded) {
         setState(() {
-          _powerPlantsHistory = event.powerPlants.powerPlants;
+          _supportHistory = event.powerPlants.powerPlants;
         });
       }
     });
@@ -148,6 +148,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   void _getPowerPlantsHistory() {
+    // TODO 応援予約APIがなにも返さないので一旦応援履歴から取得する
     _historyBloc.add(GetPowerPlantsEvent(historyType: 'history'));
   }
 
@@ -177,7 +178,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             if (state is PowerPlantLoaded) {
               final images = <String>[];
               final detail = state.powerPlant;
-              final isSupport = _powerPlantsHistory
+              final isSupport = _supportHistory
                   .map((powerPlant) => powerPlant.plantId)
                   .contains(detail.plantId);
 
@@ -263,52 +264,35 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           ),
                           _generateDetail(detail),
                           // この発電所を応援する
-                          BlocProvider.value(
-                            value: _historyBloc,
-                            child: BlocListener<GetPowerPlantsHistoryBloc,
-                                PowerPlantState>(
-                              listener: (context, state) {
-                                if (state is PowerPlantLoading) {
-                                  Loading.show(context);
-                                  return;
-                                }
-                                Loading.hide();
-                              },
-                              child: FutureBuilder(
-                                future: _getUserjson(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  if (snapshot.hasData) {
-                                    final isArtistPowerPlant =
-                                        detail.limitedIntroducerId == 'ARTIST';
+                          FutureBuilder(
+                            future: _getUserjson(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData) {
+                                final isArtistPowerPlant =
+                                    detail.limitedIntroducerId == 'ARTIST';
 
-                                    final isArtistPlan =
-                                        snapshot.data.limitedPlantId == null
-                                            ? false
-                                            : true;
-                                    // アーティスト発電所でアーティストプランの場合
-                                    if (isArtistPowerPlant && isArtistPlan) {
-                                      return Container();
-                                    }
-                                    // 普通の発電所でアーティストプランの場合
-                                    if (!isArtistPowerPlant && isArtistPlan) {
-                                      return Container();
-                                    }
+                                final isArtistPlan =
+                                    snapshot.data.limitedPlantId != null;
 
-                                    if (isSupport) {
-                                      return Container();
-                                    }
-
-                                    return _buildSupportButton(
-                                        detail,
-                                        isArtistPlan,
-                                        snapshot.data,
-                                        _powerPlantsHistory);
-                                  }
+                                // アーティスト発電所でアーティストプランの場合
+                                if (isArtistPowerPlant && isArtistPlan) {
                                   return Container();
-                                },
-                              ),
-                            ),
+                                }
+                                // 普通の発電所でアーティストプランの場合
+                                if (!isArtistPowerPlant && isArtistPlan) {
+                                  return Container();
+                                }
+
+                                if (isSupport) {
+                                  return Container();
+                                }
+
+                                return _buildSupportButton(detail, isArtistPlan,
+                                    snapshot.data, _supportHistory);
+                              }
+                              return Container();
+                            },
                           ),
                         ],
                       ),
