@@ -29,7 +29,7 @@ class SendIssueReportParams extends Equatable {
 
   final String userId;
   final String targetUserId;
-  final List<int>? issueType;
+  final List<String>? issueType;
   final String message;
 
   @override

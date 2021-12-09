@@ -6,7 +6,7 @@ import 'package:minden/core/success/success.dart';
 import 'package:http/http.dart' as http;
 
 abstract class IssueReportDataSource {
-  Future<Success> sendViolateReport({
+  Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
     List<String>? issueType,
@@ -22,7 +22,7 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
   String get _issueReportPath => '/api/v1/issue_report';
 
   @override
-  Future<Success> sendViolateReport({
+  Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
     List<String>? issueType,
