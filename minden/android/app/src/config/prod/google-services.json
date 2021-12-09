@@ -1,40 +1,40 @@
 {
   "project_info": {
-    "project_number": "587283047081",
-    "project_id": "cl-minden",
-    "storage_bucket": "cl-minden.appspot.com"
+    "project_number": "444345760847",
+    "project_id": "minapp-22f2e",
+    "storage_bucket": "minapp-22f2e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587283047081:android:9b1bf222b73887ce033fb8",
+        "mobilesdk_app_id": "1:444345760847:android:df112e9d1b0cc0824b3e3a",
         "android_client_info": {
-          "package_name": "jp.co.minden.prod"
+          "package_name": "jp.co.minden.MinApp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+          "client_id": "444345760847-tt3j8smfcschip7ktf6vt6sjocaclic1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBBKmU2ci-vsFx2mprZbmJJjKqpDVWgIcs"
+          "current_key": "AIzaSyDgeXLhUrKQAHBhnYovi2cWsn6bR2h7ZK8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+              "client_id": "444345760847-tt3j8smfcschip7ktf6vt6sjocaclic1.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg.apps.googleusercontent.com",
+              "client_id": "444345760847-bcal7nfpobs29uqsgpbkncqn66ee450t.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "jp.co.minden.prod"
+                "bundle_id": "jp.co.minden.MinApp"
               }
             }
           ]

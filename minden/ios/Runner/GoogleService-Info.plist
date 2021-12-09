@@ -3,32 +3,32 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg.apps.googleusercontent.com</string>
+	<string>444345760847-bcal7nfpobs29uqsgpbkncqn66ee450t.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg</string>
+	<string>com.googleusercontent.apps.444345760847-bcal7nfpobs29uqsgpbkncqn66ee450t</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAQR9-LJmrlEvYIENnHE3vs44PJwEkC4Z4</string>
+	<string>AIzaSyAVyL_z8-Nr4BLN8mm9UyWtq9oHBUC4fNk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>587283047081</string>
+	<string>444345760847</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>jp.co.minden.prod</string>
+	<string>jp.co.minden.MinApp</string>
 	<key>PROJECT_ID</key>
-	<string>cl-minden</string>
+	<string>minapp-22f2e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cl-minden.appspot.com</string>
+	<string>minapp-22f2e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:587283047081:ios:64214b08a9e28e2d033fb8</string>
+	<string>1:444345760847:ios:ff195b02b7a017414b3e3a</string>
 </dict>
 </plist>
