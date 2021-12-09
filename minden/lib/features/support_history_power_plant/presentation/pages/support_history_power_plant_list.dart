@@ -10,8 +10,6 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
-import 'package:minden/core/ext/logger_ext.dart';
-import 'package:intl/intl.dart';
 
 class SupportHistoryPowerPlantList extends StatefulWidget {
   const SupportHistoryPowerPlantList(this.historyType);
@@ -67,8 +65,9 @@ class _SupportHistoryPowerPlantListState
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is HistoryLoaded) {
-              logV('${state.history.toJson()}');
               return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: state.history.powerPlants.length,
                 itemBuilder: (BuildContext context, int index) {
                   final supportHistoryPowerPlant =
