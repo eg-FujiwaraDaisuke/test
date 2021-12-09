@@ -14,6 +14,7 @@ import 'package:minden/features/localize/presentation/bloc/localized_bloc.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_event.dart';
 import 'package:minden/features/localize/presentation/bloc/localized_state.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/profile_setting/presentation/pages/profile_setting_name_page.dart';
 import 'package:minden/features/startup/data/datasources/startup_info_datasource.dart';
 import 'package:minden/features/startup/data/repositories/startup_repository_impl.dart';
 import 'package:minden/features/startup/domain/usecases/startup_usecase.dart';
@@ -22,6 +23,7 @@ import 'package:minden/features/startup/presentation/bloc/startup_event.dart';
 import 'package:minden/features/startup/presentation/bloc/startup_state.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InitialPage extends StatefulWidget {
@@ -180,12 +182,23 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       return;
     }
 
-    si<Account>().prepare().then((value) {
+    si<Account>().prepare().then((value) async {
       if (si<Account>().appToken?.isEmpty ?? true) {
         // チュートリアルはみたが、ログインしないユーザー
         final route = NoAnimationMaterialPageRoute(
           builder: (context) => LoginPage(),
           settings: const RouteSettings(name: '/login'),
+        );
+        Navigator.pushReplacement(context, route);
+        return;
+      }
+
+      final sharedPreferences = await SharedPreferences.getInstance();
+      final hasProfile = sharedPreferences.getBool('has_profile') ?? false;
+      if (!hasProfile) {
+        final route = NoAnimationMaterialPageRoute(
+          builder: (context) => ProfileSettingNamePage(),
+          settings: const RouteSettings(name: '/profileSetting/name'),
         );
         Navigator.pushReplacement(context, route);
         return;
