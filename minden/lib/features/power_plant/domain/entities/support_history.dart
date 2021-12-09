@@ -8,8 +8,8 @@ class SupportHistory extends Equatable {
     required this.powerPlants,
   });
 
-  final String page;
-  final String total;
+  final int page;
+  final int total;
   final String historyType;
   final List<SupportHistoryPowerPlant> powerPlants;
 

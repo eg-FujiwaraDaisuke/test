@@ -207,8 +207,8 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
   ) async {
     try {
       final data = SupportHistory(
-        page: '1',
-        total: '1',
+        page: 1,
+        total: 1,
         historyType: 'historyType',
         powerPlants: [
           SupportHistoryPowerPlantModel(

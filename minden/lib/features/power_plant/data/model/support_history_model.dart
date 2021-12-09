@@ -4,8 +4,8 @@ import 'package:minden/features/power_plant/domain/entities/support_history.dart
 
 class SupportHistoryModel extends SupportHistory {
   const SupportHistoryModel({
-    required String page,
-    required String total,
+    required int page,
+    required int total,
     required String historyType,
     required List<SupportHistoryPowerPlant> powerPlants,
   }) : super(
@@ -91,8 +91,8 @@ class SupportHistoryPowerPlantModel extends SupportHistoryPowerPlant {
       displayOrder: json['displayOrder'],
       isRecommend: json['isRecommend'],
       ownerName: json['ownerName'],
-      startDate: json['startDate'],
-      endDate: json['endDate'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
       plantImage1: json['plantImage1'],
       supportGiftName: json['supportGiftName'],
       shortCatchphrase: json['shortCatchphrase'],
