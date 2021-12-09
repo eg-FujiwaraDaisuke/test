@@ -14,11 +14,12 @@ class IssueReportRepositoryImpl
   final IssueReportDataSource dataSource;
 
   @override
-  Future<Either<Failure, Success>> sendIssueReport(
-      {required String userId,
-      required String targetUserId,
-      List<int>? issueType,
-      required String message}) async {
+  Future<Either<Failure, Success>> sendIssueReport({
+    required String userId,
+    required String targetUserId,
+    List<int>? issueType,
+    required String message,
+  }) async {
     try {
       final success = await retryRequest(
         () => dataSource.sendIssueReport(

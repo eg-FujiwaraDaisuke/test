@@ -4,6 +4,13 @@ abstract class IssueReportState extends Equatable {
   const IssueReportState();
 }
 
+class IssueReportInit extends IssueReportState {
+  const IssueReportInit();
+
+  @override
+  List<Object> get props => [];
+}
+
 class IssueReportSending extends IssueReportState {
   const IssueReportSending();
 

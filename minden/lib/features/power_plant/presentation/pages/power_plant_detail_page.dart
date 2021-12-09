@@ -562,6 +562,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
             // 普通の発電所でアーティストプランの場合
             if (!isArtistPowerPlant && isArtistPlan) Container(),
 
+            // アーティスト発電所でアーティストプランの場合
+            if (isArtistPowerPlant && isArtistPlan) Container(),
+
             // アーティスト発電所でアーティストプランではない場合
             if (isArtistPowerPlant && !isArtistPlan)
               Container(
@@ -580,8 +583,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   ),
                 ),
               ),
-            // アーティスト発電所でアーティストプランの場合
-            if (isArtistPowerPlant && isArtistPlan) Container(),
           ],
         ),
       ),

@@ -24,8 +24,10 @@ class _IssueReportDialogDebugPageState
                     await IssueReportDialog(context: context).showDialog();
 
                 final isReport = isShowReport!
-                    ? await IssueReportMessageDialog(context: context)
-                        .showDialog()
+                    ? await IssueReportMessageDialog(
+                        context: context,
+                        targetUserId: 'test',
+                      ).showDialog()
                     : false;
 
                 isReport!

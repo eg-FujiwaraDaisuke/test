@@ -176,20 +176,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     else
                       GestureDetector(
                         onTap: () async {
-                          // ユーザーの通報
-                          final isShowReport =
-                              await IssueReportDialog(context: context)
-                                  .showDialog();
+                          // // ユーザーの通報
+                          // final isShowReport =
+                          //     await IssueReportDialog(context: context)
+                          //         .showDialog();
 
-                          final isReport = isShowReport!
-                              ? await IssueReportMessageDialog(context: context)
-                                  .showDialog()
-                              : false;
+                          // final isReport = isShowReport!
+                          //     ? await IssueReportMessageDialog(context: context)
+                          //         .showDialog()
+                          //     : false;
 
-                          isReport!
-                              ? IssueReportCompleteDialog(context: context)
-                                  .showDialog()
-                              : null;
+                          // isReport!
+                          //     ? IssueReportCompleteDialog(context: context)
+                          //         .showDialog()
+                          //     : null;
                         },
                         child: Container(
                           width: 44,

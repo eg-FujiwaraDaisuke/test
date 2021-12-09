@@ -1,21 +1,50 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/Issue_report/data/datasources/issue_report_datasource.dart';
+import 'package:minden/features/Issue_report/data/repositories/issue_report_repository_impl.dart';
+import 'package:minden/features/Issue_report/domain/usecases/issue_report_usecase.dart';
+import 'package:minden/features/Issue_report/presentation/bloc/issue_report_bloc.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
+import 'package:minden/features/login/domain/entities/user.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import '../../../injection_container.dart';
 
 class IssueReportMessageDialog {
   IssueReportMessageDialog({
     required this.context,
+    required this.targetUserId,
   }) : super();
 
   late String reportText = '';
   late bool isInappropriate = false;
-  late bool isSelfInjury = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late bool isSelfHarm = false;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final String targetUserId;
   final BuildContext context;
+
+  final _sendIssueReportBloc = SendIssueReportBloc(
+    const IssueReportInit(),
+    SendIssueReport(
+      IssueReportRepositoryImpl(
+        dataSource: IssueReportDataSourceImpl(
+          client: http.Client(),
+        ),
+      ),
+    ),
+  );
+
   Future<bool?> showDialog() async {
     return Navigator.push(
       context,
@@ -24,6 +53,29 @@ class IssueReportMessageDialog {
           context,
           setState,
         ) {
+          _sendIssueReportBloc.stream.listen((event) async {
+            if (event is IssueReportSending) {
+              Loading.show(context);
+              return;
+            }
+            if (event is IssueReportSended) {
+              _sendIssueReportBloc.close();
+              Navigator.pop(context, true);
+              return;
+            }
+            if (event is IssueReportError) {
+              if (event.needLogin) {
+                _sendIssueReportBloc.close();
+                BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+                await Navigator.of(context, rootNavigator: true)
+                    .pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                        (_) => false);
+              }
+            }
+          });
           return Stack(
             clipBehavior: Clip.none,
             children: [
@@ -81,7 +133,7 @@ class IssueReportMessageDialog {
                       ),
                       CheckboxListTile(
                         checkColor: Colors.white,
-                        activeColor: Color(0xFF7D7E7F),
+                        activeColor: const Color(0xFF7D7E7F),
                         title: Text(
                           i18nTranslate(context, 'violate_inappropriate'),
                           style: const TextStyle(
@@ -101,7 +153,7 @@ class IssueReportMessageDialog {
                       ),
                       CheckboxListTile(
                         checkColor: Colors.white,
-                        activeColor: Color(0xFF7D7E7F),
+                        activeColor: const Color(0xFF7D7E7F),
                         title: Text(
                           i18nTranslate(context, 'violate_self_injury'),
                           style: const TextStyle(
@@ -112,10 +164,10 @@ class IssueReportMessageDialog {
                           ),
                         ),
                         controlAffinity: ListTileControlAffinity.leading,
-                        value: isSelfInjury,
+                        value: isSelfHarm,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            isSelfInjury = newValue!;
+                            isSelfHarm = newValue!;
                           });
                         },
                       ),
@@ -161,12 +213,10 @@ class IssueReportMessageDialog {
                               ),
                               border: OutlineInputBorder(),
                             ),
-                            onSaved: (value) {
-                              if (value != null) {
-                                setState(() {
-                                  reportText = value;
-                                });
-                              }
+                            onChanged: (value) {
+                              setState(() {
+                                reportText = value;
+                              });
                             },
                             style: TextStyle(
                               color: const Color(0xFFA7A7A7),
@@ -195,25 +245,47 @@ class IssueReportMessageDialog {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          Text(
-                            i18nTranslate(context, 'violate_rules_here'),
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.lightGreen[200],
-                              fontSize: 13,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
+                          GestureDetector(
+                            onTap: () async {
+                              await launch(
+                                  'https://minden.co.jp/personal/terms-of-service');
+                            },
+                            child: Text(
+                              i18nTranslate(context, 'violate_rules_here'),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.lightGreen[200],
+                                fontSize: 13,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                       const SizedBox(
                         height: 40,
                       ),
-                      if (isInappropriate || isSelfInjury)
+                      // 通報の具体的な内容が書かれていない場合通報できない
+                      if (reportText != '')
                         Button(
-                          onTap: () {
-                            Navigator.pop(context, true);
+                          onTap: () async {
+                            final List<int> issueType = [];
+                            if (isSelfHarm) issueType.add(1);
+                            if (isInappropriate) issueType.add(2);
+
+                            final userJsonData =
+                                await si<EncryptionTokenDataSourceImpl>()
+                                    .restoreUser();
+                            final userJson = json.decode(userJsonData);
+                            final user = User.fromJson(userJson);
+
+                            _sendIssueReportBloc.add(SendIssueReportEvent(
+                              userId: user.accountId,
+                              targetUserId: targetUserId,
+                              issueType: issueType,
+                              message: reportText,
+                            ));
                           },
                           text: i18nTranslate(context, 'reporting'),
                           size: ButtonSize.S,
@@ -227,7 +299,6 @@ class IssueReportMessageDialog {
                         ),
                       TextButton(
                         onPressed: () {
-                          // TODO ここでAPIを叩く
                           Navigator.pop(context, false);
                         },
                         child: Text(
@@ -253,9 +324,5 @@ class IssueReportMessageDialog {
         isAndroidBackEnable: false,
       ),
     );
-  }
-
-  void _hideDialog() {
-    Navigator.of(context).pop();
   }
 }

@@ -39,7 +39,6 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
       'message': message
     });
 
-    logD(body);
     final response = await client.post(
       url,
       headers: headers,
