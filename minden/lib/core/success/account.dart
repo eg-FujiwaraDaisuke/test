@@ -33,9 +33,11 @@ class Account {
     logD('_refreshToken : $_refreshToken');
 
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
-    final userJson = json.decode(jsonData);
+    final Map<String, dynamic> userJson = json.decode(jsonData);
 
-    _me = User.fromJson(userJson);
+    if (userJson.isNotEmpty) {
+      _me = User.fromJson(userJson);
+    }
     logD('### ${_me?.toJson()}');
     if (_me?.loginId == null) {
       logD('#### you need login ####');
