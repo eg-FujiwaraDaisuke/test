@@ -9,7 +9,7 @@ abstract class IssueReportDataSource {
   Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
-    List<String>? issueType,
+    List<int>? issueType,
     required String message,
   });
 }
@@ -25,7 +25,7 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
   Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
-    List<String>? issueType,
+    List<int>? issueType,
     required String message,
   }) async {
     final endpoint = ApiConfig.apiEndpoint();
