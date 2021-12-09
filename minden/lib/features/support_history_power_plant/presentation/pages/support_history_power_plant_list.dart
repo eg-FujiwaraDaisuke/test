@@ -11,6 +11,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:intl/intl.dart';
 
 class SupportHistoryPowerPlantList extends StatefulWidget {
   const SupportHistoryPowerPlantList(this.historyType);
@@ -74,6 +75,12 @@ class _SupportHistoryPowerPlantListState
                       state.history.powerPlants[index];
                   final direction = searchDirectionByIndex(index);
 
+                  final year =
+                      supportHistoryPowerPlant.yearMonth.substring(0, 4);
+                  final day =
+                      int.parse(supportHistoryPowerPlant.yearMonth.substring(4))
+                          .toString();
+
                   return PowerPlantListItem(
                     key: ValueKey(supportHistoryPowerPlant.plantId),
                     powerPlant:
@@ -82,8 +89,12 @@ class _SupportHistoryPowerPlantListState
                     isShowCatchphras: false,
                     aspectRatio: 340 / 289,
                     thumbnailImageHeight: 226,
-                    supportedData: '2021年8月',
-                    reservedDate: '2021年9月',
+                    fromApp: supportHistoryPowerPlant.fromApp,
+                    supportedData:
+                        widget.historyType == 'history' ? '$year年$day日' : null,
+                    reservedDate: widget.historyType == 'reservation'
+                        ? '$year年$day日'
+                        : null,
                   );
                 },
               );

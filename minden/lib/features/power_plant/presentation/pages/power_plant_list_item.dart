@@ -24,6 +24,7 @@ class PowerPlantListItem extends StatelessWidget {
       this.aspectRatio = 340 / 320,
       this.thumbnailImageHeight = 280,
       this.isShowCatchphras = true,
+      this.fromApp = false,
       this.supportedData,
       this.reservedDate})
       : super(key: key);
@@ -37,6 +38,7 @@ class PowerPlantListItem extends StatelessWidget {
   final double aspectRatio;
   final String? supportedData;
   final String? reservedDate;
+  final bool fromApp;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +136,7 @@ class PowerPlantListItem extends StatelessWidget {
                               Text(
                                 supportedData == null
                                     ? ''
-                                    : '${supportedData}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
+                                    : '${supportedData}${!fromApp ? 'WEB' : ''}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'NotoSansJP',
