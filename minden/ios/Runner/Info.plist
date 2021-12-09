@@ -23,11 +23,11 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSCameraUsageDescription</key>
-		<string>カメラにアクセス</string>
+		<string>カメラにアクセスしますか?</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>マイクにアクセス</string>
+		<string>マイクにアクセスしますか?</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>ライブラリにアクセスするよ</string>
+		<string>ライブラリにアクセスしますか?</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
