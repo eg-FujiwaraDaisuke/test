@@ -50,15 +50,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final url = Uri.parse(endpoint + _powerPlantsPath);
     final response = await client.get(
       url.replace(queryParameters: {
-        // TODO fix
-        'tagId': '0',
+        'tagId': tagId,
       }),
       headers: headers,
     );
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      // logD(responseBody);
+      logW(responseBody);
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
@@ -159,9 +158,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     final responseBody = utf8.decode(response.bodyBytes);
     if (response.statusCode == 200) {
-      print('====================================================');
-      logD('${json.decode(responseBody)}');
-      print('++++++++++++++++++++++++++++++++++++++++++++++++++++');
+      logI('${responseBody}');
       return SupportHistoryModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();

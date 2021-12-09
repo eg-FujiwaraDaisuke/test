@@ -35,19 +35,6 @@ class DebugPageState extends State<DebugPage> {
   void initState() {
     super.initState();
     si<Account>().prepare();
-    final int bgNum = DateTime.now().month;
-    print(1 % 4);
-    print(2 % 4);
-    print(3 % 4);
-    print(4 % 4);
-    print(5 % 4);
-    print(6 % 4);
-    print(7 % 4);
-    print(8 % 4);
-    print(9 % 4);
-    print(10 % 4);
-    print(11 % 4);
-    print(12 % 4);
   }
 
   @override

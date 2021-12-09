@@ -4,11 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 
 class SupportHistoryPowerPlantList extends StatefulWidget {
   const SupportHistoryPowerPlantList(this.historyType);
@@ -64,28 +66,27 @@ class _SupportHistoryPowerPlantListState
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is HistoryLoaded) {
-              print('state.history');
-              print(state.history);
-              print('state.history');
-              // return ListView.builder(
-              //   itemCount: state.history.powerPlants.length,
-              //   itemBuilder: (BuildContext context, int index) {
-              //     final supportHistoryPowerPlant =
-              //         state.history.powerPlants[index];
-              //     final direction = searchDirectionByIndex(index);
+              logV('${state.history.toJson()}');
+              return ListView.builder(
+                itemCount: state.history.powerPlants.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final supportHistoryPowerPlant =
+                      state.history.powerPlants[index];
+                  final direction = searchDirectionByIndex(index);
 
-              //     return PowerPlantListItem(
-              //       key: ValueKey(supportHistoryPowerPlant.plantId),
-              //       powerPlant: supportHistoryPowerPlant,
-              //       direction: direction,
-              //       isShowCatchphras: false,
-              //       aspectRatio: 340 / 289,
-              //       thumbnailImageHeight: 226,
-              //       supportedData: '2021年8月',
-              //       reservedDate: '2021年9月',
-              //     );
-              //   },
-              // );
+                  return PowerPlantListItem(
+                    key: ValueKey(supportHistoryPowerPlant.plantId),
+                    powerPlant:
+                        PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
+                    direction: direction,
+                    isShowCatchphras: false,
+                    aspectRatio: 340 / 289,
+                    thumbnailImageHeight: 226,
+                    supportedData: '2021年8月',
+                    reservedDate: '2021年9月',
+                  );
+                },
+              );
             }
             return Container();
           },

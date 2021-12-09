@@ -22,11 +22,10 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
         final failureOrUser =
             await usecase(GetPowerPlantParams(tagId: event.tagId));
 
-        yield failureOrUser.fold<PowerPlantState>((failure) {
-          throw failure;
-        }, (plants) {
-          return PowerPlantsLoaded(plants);
-        });
+        yield failureOrUser.fold<PowerPlantState>(
+          (failure) => throw failure,
+          (plants) => PowerPlantsLoaded(plants),
+        );
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
@@ -45,7 +44,7 @@ class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   Stream<PowerPlantState> mapEventToState(
     PowerPlantEvent event,
   ) async* {
-    if (event is GetPowerPlantsEvent) {
+    if (event is GetSupportHistoryEvent) {
       try {
         yield const HistoryLoading();
 
