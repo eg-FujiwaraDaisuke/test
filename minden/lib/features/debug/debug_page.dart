@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/features/Issue_report/presentation/issue_report_dialog_debug_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
@@ -15,7 +16,6 @@ import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
-import 'package:minden/features/violate/presentation/violate_dialog_debug_page.dart';
 import 'package:minden/injection_container.dart';
 
 /// デバッグ用画面
@@ -76,11 +76,11 @@ class DebugPageState extends State<DebugPage> {
                 //     (context) => ProfilePage(), '/user/profile'),
                 // _generateNavigatorPush(context, 'push通知FCM取得',
                 //     (context) => FCMDebugPage(), '/fcm_debug'),
-                // _generateNavigatorPush(
-                //     context,
-                //     '通報デバックページ',
-                //     (context) => ViolateDialogDebugPage(),
-                //     '/violate_dialog_debug'),
+                _generateNavigatorPush(
+                    context,
+                    '通報デバックページ',
+                    (context) => IssueReportDialogDebugPage(),
+                    '/violate_dialog_debug'),
               ],
             ),
           ),

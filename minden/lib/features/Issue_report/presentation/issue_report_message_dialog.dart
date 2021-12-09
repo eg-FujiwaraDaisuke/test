@@ -5,8 +5,8 @@ import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/utile.dart';
 
-class ViolateReportDialog {
-  ViolateReportDialog({
+class IssueReportMessageDialog {
+  IssueReportMessageDialog({
     required this.context,
   }) : super();
 
