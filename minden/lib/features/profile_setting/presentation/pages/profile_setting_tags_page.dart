@@ -9,9 +9,6 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
-import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
-import 'package:minden/features/login/presentation/bloc/logout_event.dart';
-import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
@@ -22,18 +19,24 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
+import 'package:collection/collection.dart';
 
 class ProfileSettingTagsPage extends StatefulWidget {
-  const ProfileSettingTagsPage({required this.isRouteToPop});
+  ProfileSettingTagsPage({
+    required this.isRouteToPop,
+    this.profileSelectedTag,
+  });
 
+  // isRouteToPopがtrueの場合、このページ内でtagの更新APIを叩かない
   final bool isRouteToPop;
+  final List<Tag>? profileSelectedTag;
 
   @override
   _ProfileSettingTagsPageState createState() => _ProfileSettingTagsPageState();
 }
 
 class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
-  final List<Tag?> _selectedTags = [];
+  final List<Tag> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
   late GetTagsBloc _tagBloc;
   late UpdateTagBloc _updateTagBloc;
@@ -94,6 +97,10 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       Loading.hide();
       if (event is TagGetSucceed) {
         setState(() {
+          if (widget.isRouteToPop) {
+            _selectedTags.addAll(widget.profileSelectedTag!);
+            return;
+          }
           _selectedTags.addAll(event.tags);
         });
       }
@@ -109,23 +116,24 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _onSelectTag(Tag tag) {
-    final foundTag = _selectedTags.firstWhere((element) {
-      return element?.tagId == tag.tagId;
-    }, orElse: () => null);
+    // 選択した選んだタグがすでに選択済みなのか判断する
+    final foundTag = _selectedTags.firstWhereOrNull(
+      (element) {
+        return element.tagId == tag.tagId;
+      },
+    );
+
+    // 選択済みなら解除する
     if (foundTag != null) {
       setState(() {
         _selectedTags.remove(foundTag);
       });
-    } else {
-      if (_selectedTags.length >= 4) {
-        // TODO タグは4つ以下 alertを表示する
-        return;
-      }
-
-      setState(() {
-        _selectedTags.add(tag);
-      });
+      return;
     }
+
+    setState(() {
+      _selectedTags.add(tag);
+    });
   }
 
   @override
@@ -322,7 +330,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 ),
               ),
               const SizedBox(height: 28),
-              if (_selectedTags.isEmpty)
+              if (_selectedTags.isEmpty || _selectedTags.length > 4)
                 Button(
                   onTap: () => {},
                   text: i18nTranslate(context, 'to_next'),
@@ -344,6 +352,10 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   }
 
   void _prev() {
+    if (widget.isRouteToPop) {
+      Navigator.pop(context, widget.profileSelectedTag);
+      return;
+    }
     Navigator.pop(context, _selectedTags);
   }
 
@@ -353,7 +365,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       return;
     }
     _updateTagBloc
-        .add(UpdateTagEvent(tags: _selectedTags.map((e) => e!.tagId).toList()));
+        .add(UpdateTagEvent(tags: _selectedTags.map((e) => e.tagId).toList()));
   }
 }
 

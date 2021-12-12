@@ -73,7 +73,7 @@ class HomePage extends HookWidget {
             );
           }
         }
-        // 
+        //
         if (event is TransitionMessagePageStart) {
           _selectTab(
             TabItem.mypage,

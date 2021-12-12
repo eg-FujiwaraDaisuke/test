@@ -81,137 +81,130 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final isMe = si<Account>().isMe(widget.userId);
-    return BlocProvider.value(
-      value: _bloc,
-      child: BlocListener<GetProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetProfileBloc, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileLoaded) {
-              return Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  centerTitle: true,
-                  leading: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44,
+              height: 44,
+            ),
+          ),
+        ),
+        actions: [
+          if (isMe)
+            GestureDetector(
+              onTap: () async {
+                await Navigator.push<bool>(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ProfileEditPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return const FadeUpwardsPageTransitionsBuilder()
+                          .buildTransitions(
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileEditPage(),
+                                  settings: const RouteSettings(
+                                      name: '/user/profile/edit')),
+                              context,
+                              animation,
+                              secondaryAnimation,
+                              child);
                     },
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'assets/images/common/leading_back.svg',
-                        fit: BoxFit.fill,
-                        width: 44,
-                        height: 44,
-                      ),
-                    ),
                   ),
-                  actions: [
-                    if (isMe)
-                      GestureDetector(
-                        onTap: () async {
-                          await Navigator.push<bool>(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      ProfileEditPage(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return const FadeUpwardsPageTransitionsBuilder()
-                                    .buildTransitions(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfileEditPage(),
-                                            settings: const RouteSettings(
-                                                name: '/user/profile/edit')),
-                                        context,
-                                        animation,
-                                        secondaryAnimation,
-                                        child);
-                              },
-                            ),
-                          );
+                );
 
-                          // 常にリロード
-                          _bloc.add(
-                              GetProfileEvent(userId: si<Account>().userId));
-                        },
-                        child: Container(
-                          width: 90,
-                          height: 44,
-                          margin: const EdgeInsets.only(
-                              right: 8, top: 6, bottom: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            color: Colors.white,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/images/user/edit.svg'),
-                              const SizedBox(
-                                width: 9,
-                              ),
-                              Text(
-                                i18nTranslate(context, 'user_edit'),
-                                style: const TextStyle(
-                                  color: Color(0xFF575292),
-                                  fontSize: 12,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: () async {
-                          // ユーザーの通報
-                          final isShowReport =
-                              await ViolateDialog(context: context)
-                                  .showDialog();
-
-                          final isReport = isShowReport!
-                              ? await ViolateReportDialog(context: context)
-                                  .showDialog()
-                              : false;
-
-                          isReport!
-                              ? ViolateReportCompleteDialog(context: context)
-                                  .showDialog()
-                              : null;
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          margin: const EdgeInsets.only(
-                              right: 8, top: 6, bottom: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            color: Colors.black.withOpacity(0.2),
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.more_horiz),
-                          ),
-                        ),
+                // 常にリロード
+                _bloc.add(GetProfileEvent(userId: si<Account>().userId));
+              },
+              child: Container(
+                width: 90,
+                height: 44,
+                margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(22),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/images/user/edit.svg'),
+                    const SizedBox(
+                      width: 9,
+                    ),
+                    Text(
+                      i18nTranslate(context, 'user_edit'),
+                      style: const TextStyle(
+                        color: Color(0xFF575292),
+                        fontSize: 12,
+                        fontFamily: 'NotoSansJP',
+                        fontWeight: FontWeight.w500,
                       ),
+                    )
                   ],
                 ),
-                extendBodyBehindAppBar: true,
-                body: SafeArea(
-                  top: false,
-                  child: SingleChildScrollView(
-                    child: Center(
+              ),
+            )
+          else
+            GestureDetector(
+              onTap: () async {
+                // ユーザーの通報
+                final isShowReport =
+                    await ViolateDialog(context: context).showDialog();
+
+                final isReport = isShowReport!
+                    ? await ViolateReportDialog(context: context).showDialog()
+                    : false;
+
+                isReport!
+                    ? ViolateReportCompleteDialog(context: context).showDialog()
+                    : null;
+              },
+              child: Container(
+                width: 44,
+                height: 44,
+                margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(22),
+                  color: Colors.black.withOpacity(0.2),
+                ),
+                child: const Center(
+                  child: Icon(Icons.more_horiz),
+                ),
+              ),
+            )
+        ],
+      ),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: BlocProvider.value(
+            value: _bloc,
+            child: BlocListener<GetProfileBloc, ProfileState>(
+              listener: (context, state) {
+                if (state is ProfileLoading) {
+                  Loading.show(context);
+                  return;
+                }
+                Loading.hide();
+              },
+              child: BlocBuilder<GetProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  if (state is ProfileLoaded) {
+                    return Center(
                       child: Column(
                         children: [
                           Stack(
@@ -279,13 +272,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   state.profile.selectedPowerPlants)
                         ],
                       ),
-                    ),
-                  ),
-                ),
-              );
-            }
-            return PlaceHolderProfile();
-          },
+                    );
+                  }
+                  return PlaceHolderProfile();
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -295,42 +288,28 @@ class _ProfilePageState extends State<ProfilePage> {
 class PlaceHolderProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 173,
-                        color: const Color(0xFFFFFB92)),
-                    CustomPaint(
-                      size: Size(MediaQuery.of(context).size.width, 173),
-                      painter: WallPaperArcPainter(color: Colors.white),
-                    ),
-                    const Positioned(
-                      bottom: -44,
-                      child: ProfileIcon(icon: ''),
-                    )
-                  ],
-                ),
-              ],
-            ),
+    return Center(
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 173,
+                  color: const Color(0xFFFFFB92)),
+              CustomPaint(
+                size: Size(MediaQuery.of(context).size.width, 173),
+                painter: WallPaperArcPainter(color: Colors.white),
+              ),
+              const Positioned(
+                bottom: -44,
+                child: ProfileIcon(icon: ''),
+              )
+            ],
           ),
-        ),
+        ],
       ),
     );
   }
