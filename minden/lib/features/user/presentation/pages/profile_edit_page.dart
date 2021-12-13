@@ -27,6 +27,7 @@ import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
@@ -50,11 +51,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   late GetProfileBloc _getProfileBloc;
   late UpdateTagBloc _updateTagBloc;
 
-  late String _wallPaperUrl;
-  late String _iconUrl;
-  late String _name;
-  late String _bio;
+  late String? _wallPaperUrl;
+  late String? _iconUrl;
+  late String? _name;
+  late String? _bio;
   late List<Tag> _tags;
+  late Profile _profile;
 
   @override
   void initState() {
@@ -73,10 +75,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     _getProfileBloc.stream.listen((event) {
       if (event is ProfileLoaded) {
         setState(() {
-          _name = event.profile.name ?? '';
-          _bio = event.profile.bio ?? '';
-          _wallPaperUrl = event.profile.wallPaper ?? '';
-          _iconUrl = event.profile.icon ?? '';
+          _profile = event.profile;
+          _name = event.profile.name;
+          _bio = event.profile.bio;
+          _wallPaperUrl = event.profile.wallPaper;
+          _iconUrl = event.profile.icon;
           _tags = event.profile.tags;
         });
       }
@@ -220,18 +223,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 _ProfileWallPaperEdit(
                                   imageUrl: _wallPaperUrl,
                                   imageHandler: (value) {
-                                    setState(() {
-                                      _wallPaperUrl = value;
-                                    });
+                                    _wallPaperUrl = value;
                                   },
                                 ),
                                 Positioned(
                                   child: _ProfileIconEdit(
                                     imageUrl: _iconUrl,
                                     imageHandler: (value) {
-                                      setState(() {
-                                        _iconUrl = value;
-                                      });
+                                      _iconUrl = value;
                                     },
                                   ),
                                 ),
@@ -286,11 +285,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   bool _isDirty() {
-    return _iconUrl.isNotEmpty ||
-        _wallPaperUrl.isNotEmpty ||
-        _name.isNotEmpty ||
-        _bio.isNotEmpty ||
-        _tags.isNotEmpty;
+    return _iconUrl != _profile.icon ||
+        _wallPaperUrl != _profile.wallPaper ||
+        _name != _profile.name ||
+        _bio != _profile.bio ||
+        _tags != _profile.tags;
   }
 
   Future<void> _prev(BuildContext context) async {
@@ -363,8 +362,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   void _complete(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      // TODO bioに空文字を入れるとなぜかbioだけ更新されない
       _updateBloc.add(UpdateProfileEvent(
-          name: _name, icon: _iconUrl, bio: _bio, wallPaper: _wallPaperUrl));
+          name: _name!,
+          icon: _iconUrl!,
+          bio: _bio!,
+          wallPaper: _wallPaperUrl!));
     }
   }
 }
@@ -579,7 +583,7 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                         BlocProvider.of<UploadBloc>(context)
                             .add(UploadMediaEvent(value));
                       },
-                      cropStyle: CropStyle.rectangle,
+                      cropStyle: CropStyle.circle,
                     );
                   },
                   child: Container(
@@ -648,11 +652,7 @@ class _ProfileNameEditForm extends StatelessWidget {
                 return i18nTranslate(context, 'user_name_length_error');
               }
             },
-            onSaved: (value) {
-              if (value != null) {
-                textHandler(value);
-              }
-            },
+            onChanged: textHandler,
           ),
         ),
       ],
@@ -710,11 +710,7 @@ class _ProfileBioEditForm extends StatelessWidget {
               letterSpacing: calcLetterSpacing(letter: 0.5),
               height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
             ),
-            onSaved: (value) {
-              if (value != null) {
-                textHandler(value);
-              }
-            },
+            onChanged: textHandler,
           ),
         ),
       ],
