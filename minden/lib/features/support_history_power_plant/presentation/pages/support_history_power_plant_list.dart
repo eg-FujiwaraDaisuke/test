@@ -65,38 +65,32 @@ class _SupportHistoryPowerPlantListState
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is HistoryLoaded) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.history.powerPlants.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final supportHistoryPowerPlant =
-                      state.history.powerPlants[index];
-                  final direction = searchDirectionByIndex(index);
-
-                  final year =
-                      supportHistoryPowerPlant.yearMonth.substring(0, 4);
-                  final day =
-                      int.parse(supportHistoryPowerPlant.yearMonth.substring(4))
-                          .toString();
-
-                  return PowerPlantListItem(
-                    key: ValueKey(supportHistoryPowerPlant.plantId),
-                    powerPlant:
-                        PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
-                    direction: direction,
-                    isShowCatchphras: false,
-                    aspectRatio: 340 / 289,
-                    thumbnailImageHeight: 226,
-                    fromApp: supportHistoryPowerPlant.fromApp,
-                    supportedData:
-                        widget.historyType == 'history' ? '$year年$day日' : null,
-                    reservedDate: widget.historyType == 'reservation'
-                        ? '$year年$day日'
-                        : null,
-                  );
-                },
-              );
+              var index = 0;
+              return Column(
+                  children:
+                      state.history.powerPlants.map((supportHistoryPowerPlant) {
+                final direction = searchDirectionByIndex(index);
+                final year = supportHistoryPowerPlant.yearMonth.substring(0, 4);
+                final day =
+                    int.parse(supportHistoryPowerPlant.yearMonth.substring(4))
+                        .toString();
+                index++;
+                return PowerPlantListItem(
+                  key: ValueKey(supportHistoryPowerPlant.plantId),
+                  powerPlant:
+                      PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
+                  direction: direction,
+                  isShowCatchphras: false,
+                  aspectRatio: 340 / 289,
+                  thumbnailImageHeight: 226,
+                  fromApp: supportHistoryPowerPlant.fromApp,
+                  supportedData:
+                      widget.historyType == 'history' ? '$year年$day日' : null,
+                  reservedDate: widget.historyType == 'reservation'
+                      ? '$year年$day日'
+                      : null,
+                );
+              }).toList());
             }
             return Container();
           },
