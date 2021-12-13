@@ -32,27 +32,19 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   @override
   Future<ProfileModel> update({
-    required String name,
-    required String icon,
-    required String bio,
-    required String wallPaper,
+    required String? name,
+    required String? icon,
+    required String? bio,
+    required String? wallPaper,
   }) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final param = {};
-    if (name.isNotEmpty) {
-      param['name'] = name;
-    }
-    if (icon.isNotEmpty) {
-      param['icon'] = icon;
-    }
-    if (bio.isNotEmpty) {
-      param['bio'] = bio;
-    }
-    if (wallPaper.isNotEmpty) {
-      param['wallPaper'] = wallPaper;
-    }
+    param['name'] = name;
+    param['icon'] = icon;
+    param['bio'] = bio;
+    param['wallPaper'] = wallPaper;
 
     final body = json.encode(param);
     final response = await client.post(Uri.parse(endpoint + _updatePath),
