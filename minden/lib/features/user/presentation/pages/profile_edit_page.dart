@@ -27,6 +27,7 @@ import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/entities/profile.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
@@ -47,31 +48,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late UpdateProfileBloc _updateBloc;
-  late GetProfileBloc _getBloc;
+  late GetProfileBloc _getProfileBloc;
   late UpdateTagBloc _updateTagBloc;
 
-  late String _wallPaperUrl;
-  late String _iconUrl;
-  late String _name;
-  late String _bio;
-  late bool _isDirtyName;
-  late bool _isDirtyBio;
-  late List<Tag?> _tags;
+  late String? _wallPaperUrl;
+  late String? _iconUrl;
+  late String? _name;
+  late String? _bio;
+  late List<Tag> _tags;
+  late Profile _profile;
 
   @override
   void initState() {
     super.initState();
 
-    _isDirtyName = false;
-    _isDirtyBio = false;
-
-    _name = '';
-    _bio = '';
-    _wallPaperUrl = '';
-    _iconUrl = '';
-    _tags = [];
-
-    _getBloc = GetProfileBloc(
+    _getProfileBloc = GetProfileBloc(
       const ProfileStateInitial(),
       GetProfile(
         ProfileRepositoryImpl(
@@ -81,6 +72,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
       ),
     );
+    _getProfileBloc.stream.listen((event) {
+      if (event is ProfileLoaded) {
+        setState(() {
+          _profile = event.profile;
+          _name = event.profile.name;
+          _bio = event.profile.bio;
+          _wallPaperUrl = event.profile.wallPaper;
+          _iconUrl = event.profile.icon;
+          _tags = event.profile.tags;
+        });
+      }
+    });
 
     _updateBloc = UpdateProfileBloc(
       const ProfileStateInitial(),
@@ -102,7 +105,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         if (_tags.isNotEmpty) {
           _tags.removeWhere((element) => element == null);
           _updateTagBloc
-              .add(UpdateTagEvent(tags: _tags.map((e) => e!.tagId).toList()));
+              .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
           return;
         }
         Navigator.pop(context, true);
@@ -125,13 +128,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       }
     });
 
-    _getBloc.add(GetProfileEvent(userId: si<Account>().userId));
+    _getProfileBloc.add(GetProfileEvent(userId: si<Account>().userId));
   }
 
   @override
   void dispose() {
     _updateBloc.close();
-    _getBloc.close();
+    _getProfileBloc.close();
     _updateTagBloc.close();
     super.dispose();
   }
@@ -139,7 +142,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _getBloc,
+      value: _getProfileBloc,
       child: BlocListener<GetProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileLoading) {
@@ -218,14 +221,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               clipBehavior: Clip.antiAlias,
                               children: [
                                 _ProfileWallPaperEdit(
-                                  imageUrl: state.profile.wallPaper,
+                                  imageUrl: _wallPaperUrl,
                                   imageHandler: (value) {
                                     _wallPaperUrl = value;
                                   },
                                 ),
                                 Positioned(
                                   child: _ProfileIconEdit(
-                                    imageUrl: state.profile.icon,
+                                    imageUrl: _iconUrl,
                                     imageHandler: (value) {
                                       _iconUrl = value;
                                     },
@@ -237,29 +240,33 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               height: 17,
                             ),
                             _ProfileNameEditForm(
-                              name: state.profile.name,
+                              name: _name,
                               textHandler: (value) {
-                                _isDirtyName = true;
-                                _name = value;
+                                setState(() {
+                                  _name = value;
+                                });
                               },
                             ),
                             const SizedBox(
                               height: 33,
                             ),
                             _ProfileBioEditForm(
-                              bio: state.profile.bio,
+                              bio: _bio,
                               textHandler: (value) {
-                                _isDirtyBio = true;
-                                _bio = value;
+                                setState(() {
+                                  _bio = value;
+                                });
                               },
                             ),
                             const SizedBox(
                               height: 30,
                             ),
                             _ImportantTagsList(
-                              tagsList: state.profile.tags,
+                              tagsList: _tags,
                               tagHandler: (tags) {
-                                _tags = tags;
+                                setState(() {
+                                  _tags = tags;
+                                });
                               },
                             ),
                           ],
@@ -278,13 +285,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   bool _isDirty() {
-    return _iconUrl.isNotEmpty ||
-        _wallPaperUrl.isNotEmpty ||
-        _name.isNotEmpty ||
-        _isDirtyName ||
-        _bio.isNotEmpty ||
-        _isDirtyBio ||
-        _tags.isNotEmpty;
+    return _iconUrl != _profile.icon ||
+        _wallPaperUrl != _profile.wallPaper ||
+        _name != _profile.name ||
+        _bio != _profile.bio ||
+        _tags != _profile.tags;
   }
 
   Future<void> _prev(BuildContext context) async {
@@ -358,7 +363,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _updateBloc.add(UpdateProfileEvent(
-          name: _name, icon: _iconUrl, bio: _bio, wallPaper: _wallPaperUrl));
+          name: _name!,
+          icon: _iconUrl!,
+          bio: _bio!,
+          wallPaper: _wallPaperUrl!));
     }
   }
 }
@@ -643,11 +651,6 @@ class _ProfileNameEditForm extends StatelessWidget {
                 return i18nTranslate(context, 'user_name_length_error');
               }
             },
-            onSaved: (value) {
-              if (value != null) {
-                textHandler(value);
-              }
-            },
             onChanged: textHandler,
           ),
         ),
@@ -706,11 +709,6 @@ class _ProfileBioEditForm extends StatelessWidget {
               letterSpacing: calcLetterSpacing(letter: 0.5),
               height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
             ),
-            onSaved: (value) {
-              if (value != null) {
-                textHandler(value);
-              }
-            },
             onChanged: textHandler,
           ),
         ),
@@ -726,7 +724,7 @@ class _ImportantTagsList extends StatefulWidget {
   });
 
   final List<Tag> tagsList;
-  final Function(List<Tag?> url) tagHandler;
+  final Function(List<Tag> url) tagHandler;
 
   @override
   State<StatefulWidget> createState() {
@@ -735,12 +733,9 @@ class _ImportantTagsList extends StatefulWidget {
 }
 
 class _ImportantTagsListState extends State<_ImportantTagsList> {
-  late List<Tag?> _tagsList;
-
   @override
   void initState() {
     super.initState();
-    _tagsList = widget.tagsList;
   }
 
   @override
@@ -765,35 +760,47 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final ret = await Navigator.push<List<Tag?>>(
+                  final ret = await Navigator.push<List<Tag>>(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const ProfileSettingTagsPage(
+                      pageBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                      ) =>
+                          ProfileSettingTagsPage(
                         isRouteToPop: true,
+                        profileSelectedTag: widget.tagsList,
                       ),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) {
                         return const FadeUpwardsPageTransitionsBuilder()
                             .buildTransitions(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProfileSettingTagsPage(
-                                          isRouteToPop: true,
-                                        ),
-                                    settings: const RouteSettings(
-                                        name: '/profileSetting/tag')),
-                                context,
-                                animation,
-                                secondaryAnimation,
-                                child);
+                          MaterialPageRoute(
+                            builder: (context) => ProfileSettingTagsPage(
+                              isRouteToPop: true,
+                              profileSelectedTag: widget.tagsList,
+                            ),
+                            settings: const RouteSettings(
+                              name: '/profileSetting/tag',
+                            ),
+                          ),
+                          context,
+                          animation,
+                          secondaryAnimation,
+                          child,
+                        );
                       },
                     ),
                   );
-                  if (ret?.isNotEmpty ?? false) {
+
+                  if (ret!.isNotEmpty) {
                     setState(() {
-                      _tagsList = ret!;
-                      widget.tagHandler(_tagsList);
+                      widget.tagHandler(ret);
                     });
                   }
                 },
@@ -825,7 +832,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
           Wrap(
             spacing: 5,
             runSpacing: 10,
-            children: _tagsList
+            children: widget.tagsList
                 .map((tag) => TagListItem(
                       tag: tag,
                       onSelect: (tag) {},

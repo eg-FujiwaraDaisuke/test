@@ -41,15 +41,14 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final param = {};
+
     if (name.isNotEmpty) {
       param['name'] = name;
     }
     if (icon.isNotEmpty) {
       param['icon'] = icon;
     }
-    if (bio.isNotEmpty) {
-      param['bio'] = bio;
-    }
+    param['bio'] = bio;
     if (wallPaper.isNotEmpty) {
       param['wallPaper'] = wallPaper;
     }
