@@ -15,7 +15,7 @@ class PowerPlantParticipantUser extends Equatable {
   final String userId;
 
   /// ユーザー名
-  final String name;
+  final String? name;
 
   /// 契約者名
   final String contractor;

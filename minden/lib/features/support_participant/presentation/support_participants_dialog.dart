@@ -210,7 +210,7 @@ class SupportParticipantsDialog {
           SizedBox(
             width: 66,
             child: Text(
-              participant.name,
+              participant.name ?? '',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Color(0xFFFF8C00),

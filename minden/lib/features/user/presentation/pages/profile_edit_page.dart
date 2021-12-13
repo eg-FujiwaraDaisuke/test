@@ -54,11 +54,16 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   late String _iconUrl;
   late String _name;
   late String _bio;
+  late bool _isDirtyName;
+  late bool _isDirtyBio;
   late List<Tag?> _tags;
 
   @override
   void initState() {
     super.initState();
+
+    _isDirtyName = false;
+    _isDirtyBio = false;
 
     _name = '';
     _bio = '';
@@ -234,6 +239,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             _ProfileNameEditForm(
                               name: state.profile.name,
                               textHandler: (value) {
+                                _isDirtyName = true;
                                 _name = value;
                               },
                             ),
@@ -243,6 +249,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             _ProfileBioEditForm(
                               bio: state.profile.bio,
                               textHandler: (value) {
+                                _isDirtyBio = true;
                                 _bio = value;
                               },
                             ),
@@ -274,7 +281,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     return _iconUrl.isNotEmpty ||
         _wallPaperUrl.isNotEmpty ||
         _name.isNotEmpty ||
+        _isDirtyName ||
         _bio.isNotEmpty ||
+        _isDirtyBio ||
         _tags.isNotEmpty;
   }
 
@@ -610,7 +619,7 @@ class _ProfileNameEditForm extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           height: 54,
           width: 339,
           decoration: BoxDecoration(
@@ -619,12 +628,13 @@ class _ProfileNameEditForm extends StatelessWidget {
           ),
           child: TextFormField(
             initialValue: name,
+            maxLength: 20,
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
             style: const TextStyle(
               color: Color(0xFF7C7C7C),
-              fontSize: 18,
+              fontSize: 16,
               fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.w700,
             ),
@@ -638,6 +648,7 @@ class _ProfileNameEditForm extends StatelessWidget {
                 textHandler(value);
               }
             },
+            onChanged: textHandler,
           ),
         ),
       ],
@@ -689,17 +700,18 @@ class _ProfileBioEditForm extends StatelessWidget {
             ),
             style: TextStyle(
               color: const Color(0xFF7C7C7C),
-              fontSize: 12,
+              fontSize: 16,
               fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.w400,
               letterSpacing: calcLetterSpacing(letter: 0.5),
-              height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+              height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
             ),
             onSaved: (value) {
               if (value != null) {
                 textHandler(value);
               }
             },
+            onChanged: textHandler,
           ),
         ),
       ],

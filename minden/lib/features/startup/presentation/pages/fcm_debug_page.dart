@@ -13,7 +13,7 @@ class FCMDebugPage extends StatefulWidget {
 class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
   late NotificationSettings _settings;
   late String _token = '';
-  late Stream<String> _tokenStream;
+  late String _desciption = '';
 
   Future<void> _requestPermissions() async {
     final settings = await si<FirebaseMessaging>().requestPermission(
@@ -45,6 +45,41 @@ class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
     si<FirebaseMessaging>().onTokenRefresh.listen((event) {
       if (mounted) setToken(event);
     });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('バックグラウンド状態からプッシュ通知をタップした');
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('バックグラウンド状態からプッシュ通知をタップした');
+      logD('${message.toString()}');
+
+      setState(() {
+        _desciption = 'message.senderId: ${message.senderId.toString()},\n'
+            'message.category: ${message.category.toString()},\n'
+            'message.collapseKey: ${message.collapseKey.toString()},\n'
+            'message.contentAvailable: ${message.contentAvailable.toString()},\n\n'
+
+            'message.data: ${message.data.toString()},\n\n'
+            'message.from: ${message.from.toString()},\n'
+            'message.messageId: ${message.messageId.toString()},\n'
+            'message.messageType: ${message.messageType.toString()},\n'
+            'message.mutableContent: ${message.mutableContent.toString()},\n'
+            'message.notification.title: ${message.notification?.title.toString()},\n'
+            'message.notification.body: ${message.notification?.body.toString()},\n'
+            'message.sentTime: ${message.sentTime.toString()},\n'
+            'message.threadId: ${message.threadId.toString()},\n'
+            'message.ttl: ${message.ttl.toString()},\n';
+      });
+    });
+
+    () async {
+      await si<FirebaseMessaging>()
+          .getInitialMessage()
+          .then((RemoteMessage? message) {
+        print('ターミネイト状態からプッシュ通知をタップした');
+        logD('${message?.data}');
+      });
+    }();
   }
 
   @override
@@ -58,31 +93,38 @@ class _FCMDebugPage extends State<FCMDebugPage> with AfterLayoutMixin {
             }),
       ),
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () async {
-            final data = ClipboardData(text: _token);
-            await Clipboard.setData(data);
-            await showDialog<bool>(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return AlertDialog(
-                    content: Text('FCM token copied!'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text('OK'),
-                      ),
-                    ],
-                  );
-                });
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(_token),
+          child: Column(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              final data = ClipboardData(text: _token);
+              await Clipboard.setData(data);
+              await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return AlertDialog(
+                      content: Text('FCM token copied!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(_token),
+            ),
           ),
-        ),
-      ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(_desciption),
+          ),
+        ],
+      )),
     );
   }
 

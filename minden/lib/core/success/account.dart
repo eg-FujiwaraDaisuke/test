@@ -25,21 +25,25 @@ class Account {
   }
 
   Future<void> prepare() async {
-    logD("appToken : ${_appToken ?? ""}");
     _appToken = await si<EncryptionTokenDataSourceImpl>().getAppToken();
     logD('appToken : $_appToken');
-    logD("_refreshToken : ${_refreshToken ?? ""}");
+
     _refreshToken = await si<EncryptionTokenDataSourceImpl>().getRefreshToken();
     logD('_refreshToken : $_refreshToken');
 
     final jsonData = await si<EncryptionTokenDataSourceImpl>().restoreUser();
-    final userJson = json.decode(jsonData);
+    if (jsonData.isEmpty) {
+      logD('#### you need login ####');
+      return;
+    }
+    final Map<String, dynamic> userJson = json.decode(jsonData);
+    if (userJson.isEmpty) {
+      logD('#### you need login ####');
+      return;
+    }
 
     _me = User.fromJson(userJson);
-    logD('### ${_me?.toJson()}');
-    if (_me?.loginId == null) {
-      logD('#### you need login ####');
-    }
+    logD('${_me?.toJson()}');
     logD('$_appToken, $_refreshToken, ${_me?.toJson()}');
   }
 }
