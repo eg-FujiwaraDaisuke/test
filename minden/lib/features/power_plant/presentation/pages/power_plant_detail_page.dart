@@ -847,10 +847,10 @@ class ParticipantUserIconGroup extends StatelessWidget {
   static const maxIconCount = 4;
 
   /// アイコン同士の重なり度合い
-  static const overlapLength = 22.0;
+  static const overlapLength = 36.0;
 
   /// アイコンサイズ（直径）
-  static const iconSize = 30.0;
+  static const iconSize = 52.0;
 
   final PowerPlantParticipant participant;
 
