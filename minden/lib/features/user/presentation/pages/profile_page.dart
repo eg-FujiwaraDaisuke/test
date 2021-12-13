@@ -11,9 +11,8 @@ import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
@@ -267,9 +266,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(
                             height: 37,
                           ),
-                          _SelectedPlantList(
-                              selectedPlantList:
-                                  state.profile.selectedPowerPlants)
+                          const _SupportPowerPlant(),
                         ],
                       ),
                     );
@@ -448,11 +445,14 @@ class _TagsList extends StatelessWidget {
   }
 }
 
-class _SelectedPlantList extends StatelessWidget {
-  const _SelectedPlantList({required this.selectedPlantList});
+class _SupportPowerPlant extends StatefulWidget {
+  const _SupportPowerPlant();
 
-  final List<PowerPlant> selectedPlantList;
+  @override
+  _SupportPowerPlantState createState() => _SupportPowerPlantState();
+}
 
+class _SupportPowerPlantState extends State<_SupportPowerPlant> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -476,16 +476,7 @@ class _SelectedPlantList extends StatelessWidget {
         const SizedBox(
           height: 7,
         ),
-        ...selectedPlantList
-            .map((e) => PowerPlantListItem(
-                  key: ValueKey(e.plantId),
-                  powerPlant: e,
-                  direction: Direction.topLeft,
-                  isShowCatchphras: false,
-                  aspectRatio: 340 / 298,
-                  thumbnailImageHeight: 226,
-                ))
-            .toList()
+        const SupportHistoryPowerPlantList('reservation'),
       ],
     );
   }

@@ -2,11 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
+import 'package:minden/features/power_plant/data/model/support_history_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 import 'package:minden/features/profile_setting/data/models/tag_model.dart';
@@ -199,14 +201,19 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
   }
 
   /// [historyType] 応援予約 or 応援履歴
-  Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlantHistory(
+  @override
+  Future<Either<PowerPlantFailure, SupportHistory>> getPowerPlantHistory(
     String historyType,
   ) async {
     try {
-      final data = PowerPlantsResponse(
-        tag: const TagModel(tagId: 1, tagName: 'テストタグ', colorCode: '1'),
+      final data = SupportHistory(
+        page: 1,
+        total: 1,
+        historyType: 'historyType',
         powerPlants: [
-          PowerPlantModel(
+          SupportHistoryPowerPlantModel(
+            yearMonth: '202102',
+            fromApp: true,
             plantId: '1',
             areaCode: '1',
             name: 'ABC発電所',
@@ -226,7 +233,9 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
             catchphrase: 'キャッチフレーズ',
             thankYouMessage: '1',
           ),
-          PowerPlantModel(
+          SupportHistoryPowerPlantModel(
+            yearMonth: '202102',
+            fromApp: true,
             plantId: '2',
             areaCode: '1',
             name: 'DEF発電所',
@@ -246,7 +255,9 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
             catchphrase: 'キャッチフレーズ',
             thankYouMessage: '1',
           ),
-          PowerPlantModel(
+          SupportHistoryPowerPlantModel(
+            yearMonth: '202102',
+            fromApp: true,
             plantId: '3',
             areaCode: '1',
             name: 'GHI発電所',

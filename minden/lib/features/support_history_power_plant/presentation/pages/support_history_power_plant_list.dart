@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
@@ -23,13 +24,13 @@ class SupportHistoryPowerPlantList extends StatefulWidget {
 
 class _SupportHistoryPowerPlantListState
     extends State<SupportHistoryPowerPlantList> {
-  late GetPowerPlantsHistoryBloc _bloc;
+  late GetPowerPlantsHistoryBloc _historyBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetPowerPlantsHistoryBloc(
+    _historyBloc = GetPowerPlantsHistoryBloc(
       const PowerPlantStateInitial(),
       GetPowerPlantsHistory(
         PowerPlantRepositoryImpl(
@@ -40,22 +41,22 @@ class _SupportHistoryPowerPlantListState
       ),
     );
 
-    _bloc.add(GetPowerPlantsEvent(historyType: widget.historyType));
+    _historyBloc.add(GetSupportHistoryEvent(historyType: widget.historyType));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _historyBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _bloc,
+      value: _historyBloc,
       child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
         listener: (context, state) {
-          if (state is PowerPlantLoading) {
+          if (state is HistoryLoading) {
             Loading.show(context);
             return;
           }
@@ -63,25 +64,33 @@ class _SupportHistoryPowerPlantListState
         },
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
-            if (state is PowerPlantsLoaded) {
-              return ListView.builder(
-                itemCount: state.powerPlants.powerPlants.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final powerPlant = state.powerPlants.powerPlants[index];
-                  final direction = searchDirectionByIndex(index);
-
-                  return PowerPlantListItem(
-                    key: ValueKey(powerPlant.plantId),
-                    powerPlant: powerPlant,
-                    direction: direction,
-                    isShowCatchphras: false,
-                    aspectRatio: 340 / 289,
-                    thumbnailImageHeight: 226,
-                    supportedData: '2021年8月',
-                    reservedDate: '2021年9月',
-                  );
-                },
-              );
+            if (state is HistoryLoaded) {
+              var index = 0;
+              return Column(
+                  children:
+                      state.history.powerPlants.map((supportHistoryPowerPlant) {
+                final direction = searchDirectionByIndex(index);
+                final year = supportHistoryPowerPlant.yearMonth.substring(0, 4);
+                final day =
+                    int.parse(supportHistoryPowerPlant.yearMonth.substring(4))
+                        .toString();
+                index++;
+                return PowerPlantListItem(
+                  key: ValueKey(supportHistoryPowerPlant.plantId),
+                  powerPlant:
+                      PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
+                  direction: direction,
+                  isShowCatchphras: false,
+                  aspectRatio: 340 / 289,
+                  thumbnailImageHeight: 226,
+                  fromApp: supportHistoryPowerPlant.fromApp,
+                  supportedData:
+                      widget.historyType == 'history' ? '$year年$day日' : null,
+                  reservedDate: widget.historyType == 'reservation'
+                      ? '$year年$day日'
+                      : null,
+                );
+              }).toList());
             }
             return Container();
           },

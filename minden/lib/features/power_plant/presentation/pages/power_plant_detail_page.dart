@@ -19,6 +19,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
+import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
@@ -65,7 +66,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPlantTagsBloc _plantTagsBloc;
   late GetPowerPlantsHistoryBloc _historyBloc;
   List<RegistPowerPlant> _registPowerPlants = [];
-  late List<PowerPlant> _supportHistory = [];
+  late List<SupportHistoryPowerPlant> _supportHistory = [];
   late bool _isLoadedSupportHistroy = false;
 
   @override
@@ -130,15 +131,15 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     );
 
     _historyBloc.stream.listen((event) {
-      if (event is PowerPlantLoading) {
+      if (event is HistoryLoading) {
         Loading.show(context);
         return;
       }
       Loading.hide();
-      if (event is PowerPlantsLoaded) {
+      if (event is HistoryLoaded) {
         setState(() {
           _isLoadedSupportHistroy = true;
-          _supportHistory = event.powerPlants.powerPlants;
+          _supportHistory = event.history.powerPlants;
         });
       }
     });
@@ -151,7 +152,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   void _getPowerPlantsHistory() {
     // TODO 応援予約APIがなにも返さないので一旦応援履歴から取得する
-    _historyBloc.add(GetPowerPlantsEvent(historyType: 'history'));
+    _historyBloc.add(GetSupportHistoryEvent(historyType: 'history'));
   }
 
   @override
@@ -420,7 +421,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     PowerPlantDetail detail,
     bool isArtistPlan,
     User user,
-    List<PowerPlant> powerPlants,
+    List<SupportHistoryPowerPlant> powerPlants,
   ) {
     final isArtistPowerPlant = detail.limitedIntroducerId == 'ARTIST';
     final supportableNumber = user.supportableNumber;
@@ -478,8 +479,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   if (!isArtistPowerPlant) {
                     setState(() {
                       _registPowerPlants = powerPlants
-                          .map((selectedPowerPlant) => RegistPowerPlant(
-                              isRegist: true, powerPlant: selectedPowerPlant))
+                          .map((powerPlant) => RegistPowerPlant(
+                                isRegist: true,
+                                powerPlant:
+                                    PowerPlant.fromJson(powerPlant.toJson()),
+                              ))
                           .toList();
                     });
 
@@ -526,7 +530,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                 .map(
                                   (selectedPowerPlant) => RegistPowerPlant(
                                     isRegist: true,
-                                    powerPlant: selectedPowerPlant,
+                                    powerPlant: PowerPlant.fromJson(
+                                        selectedPowerPlant.toJson()),
                                   ),
                                 )
                                 .toList();
@@ -847,10 +852,10 @@ class ParticipantUserIconGroup extends StatelessWidget {
   static const maxIconCount = 4;
 
   /// アイコン同士の重なり度合い
-  static const overlapLength = 22.0;
+  static const overlapLength = 36.0;
 
   /// アイコンサイズ（直径）
-  static const iconSize = 30.0;
+  static const iconSize = 52.0;
 
   final PowerPlantParticipant participant;
 

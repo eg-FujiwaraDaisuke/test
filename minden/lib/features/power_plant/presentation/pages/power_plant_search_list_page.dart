@@ -43,7 +43,6 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
         ),
       ),
     );
-
     _bloc.add(GetPowerPlantsEvent(tagId: widget.selectTag.tagId.toString()));
   }
 

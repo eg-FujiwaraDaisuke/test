@@ -5,24 +5,35 @@ abstract class PowerPlantEvent extends Equatable {
 }
 
 class GetPowerPlantsEvent extends PowerPlantEvent {
-  GetPowerPlantsEvent({
+  const GetPowerPlantsEvent({
     this.tagId,
     this.historyType,
   });
 
-  String? tagId;
-  String? historyType;
+  final String? tagId;
+  final String? historyType;
 
   @override
   List<Object> get props => [];
 }
 
 class GetPowerPlantEvent extends PowerPlantEvent {
-  GetPowerPlantEvent({
+  const GetPowerPlantEvent({
     this.plantId,
   });
 
-  String? plantId;
+  final String? plantId;
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetSupportHistoryEvent extends PowerPlantEvent {
+  const GetSupportHistoryEvent({
+    required this.historyType,
+  });
+
+  final String historyType;
 
   @override
   List<Object> get props => [];
