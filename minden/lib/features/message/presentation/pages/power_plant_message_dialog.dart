@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 
@@ -10,6 +11,7 @@ class PowerPlantMessageDialog {
   }) : super();
   final BuildContext context;
   final MessageDetail messageDetail;
+  final int bgNum = DateTime.now().month % 4;
 
   void showDialog() {
     Navigator.push(
@@ -23,9 +25,8 @@ class PowerPlantMessageDialog {
               child: SizedBox(
                 width: 344,
                 height: 515,
-                // TODO 出し分けが必要
                 child: Image.asset(
-                  'assets/images/message/letter_bg.png',
+                  'assets/images/message/letter_bg_${bgNum.toString()}.png',
                   width: 344,
                   height: 515,
                 ),

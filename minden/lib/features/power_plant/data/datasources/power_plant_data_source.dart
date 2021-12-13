@@ -8,6 +8,7 @@ import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
+import 'package:minden/features/power_plant/data/model/support_history_model.dart';
 import 'package:minden/features/power_plant/data/model/tag_response_model.dart';
 
 final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
@@ -22,7 +23,7 @@ abstract class PowerPlantDataSource {
 
   Future<TagResponseModel> getPowerPlantTags(String plantId);
 
-  Future<PowerPlantsResponseModel> getPowerPlantHistory(String historyType);
+  Future<SupportHistoryModel> getPowerPlantHistory(String historyType);
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -49,15 +50,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final url = Uri.parse(endpoint + _powerPlantsPath);
     final response = await client.get(
       url.replace(queryParameters: {
-        // TODO fix
-        'tagId': '0',
+        'tagId': tagId,
       }),
       headers: headers,
     );
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      // logD(responseBody);
+      logW(responseBody);
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
@@ -143,8 +143,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   }
 
   @override
-  Future<PowerPlantsResponseModel> getPowerPlantHistory(
-      String historyType) async {
+  Future<SupportHistoryModel> getPowerPlantHistory(String historyType) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
@@ -158,9 +157,9 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     final responseBody = utf8.decode(response.bodyBytes);
-    logD(responseBody);
     if (response.statusCode == 200) {
-      return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
+      logI('${responseBody}');
+      return SupportHistoryModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {

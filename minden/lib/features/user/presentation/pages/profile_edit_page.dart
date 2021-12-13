@@ -573,7 +573,7 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                         BlocProvider.of<UploadBloc>(context)
                             .add(UploadMediaEvent(value));
                       },
-                      cropStyle: CropStyle.rectangle,
+                      cropStyle: CropStyle.circle,
                     );
                   },
                   child: Container(
