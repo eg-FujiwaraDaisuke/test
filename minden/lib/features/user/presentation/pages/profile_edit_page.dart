@@ -365,9 +365,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
       _updateBloc.add(UpdateProfileEvent(
         name: _name!,
-        icon: _iconUrl!,
+        icon: _iconUrl ?? '',
         bio: _bio!,
-        wallPaper: _wallPaperUrl!,
+        wallPaper: _wallPaperUrl ?? '',
       ));
     }
   }
