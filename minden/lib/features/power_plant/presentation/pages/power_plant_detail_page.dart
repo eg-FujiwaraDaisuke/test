@@ -19,6 +19,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
+import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
@@ -690,6 +691,7 @@ class SupportButton extends StatefulWidget {
 class _SupportButtonState extends State<SupportButton> {
   late GetPowerPlantsHistoryBloc _historyBloc;
   List<RegistPowerPlant> _registPowerPlants = [];
+  List<SupportHistoryPowerPlant> _historyPowerPlants = [];
 
   @override
   void initState() {
@@ -712,7 +714,12 @@ class _SupportButtonState extends State<SupportButton> {
         return;
       }
       Loading.hide();
+      if (event is HistoryLoaded) {
+        _historyPowerPlants = event.history.powerPlants;
+      }
     });
+
+    _historyBloc.add(const GetSupportHistoryEvent(historyType: 'reservation'));
   }
 
   @override
@@ -771,70 +778,62 @@ class _SupportButtonState extends State<SupportButton> {
               child: OutlinedButton(
                 onPressed: () async {
                   if (widget.supportAction != 'available') return;
-                  _historyBloc.add(
-                      const GetSupportHistoryEvent(historyType: 'reservation'));
 
-                  _historyBloc.stream.listen((event) async {
-                    if (event is HistoryLoaded) {
-                      _registPowerPlants = event.history.powerPlants
-                          .map((powerPlant) => RegistPowerPlant(
-                                isRegist: true,
-                                powerPlant:
-                                    PowerPlant.fromJson(powerPlant.toJson()),
-                              ))
+                  _registPowerPlants = _historyPowerPlants
+                      .map((powerPlant) => RegistPowerPlant(
+                            isRegist: true,
+                            powerPlant:
+                                PowerPlant.fromJson(powerPlant.toJson()),
+                          ))
+                      .toList();
+
+                  // 通常の発電所
+                  // 契約件数が現在の応援件数より少ない場合
+                  if (supportableNumber > _historyPowerPlants.length) {
+                    await SupportPowerPlantDecisionDialog(
+                      context: context,
+                      selectPowerPlant: selectPowerPlant,
+                      registPowerPlants: _registPowerPlants,
+                      user: widget.user,
+                    ).showDialog();
+                    widget.getSupportAction();
+                    return;
+                  }
+
+                  // 契約件数を超えてるため、応援プラントを選択する
+                  if (supportableNumber <= _historyPowerPlants.length) {
+                    // ignore: use_build_context_synchronously
+                    final isSelected = await SupportPowerPlantSelectDialog(
+                      context: context,
+                      selectPowerPlant: selectPowerPlant,
+                      registPowerPlants: _registPowerPlants,
+                      user: widget.user,
+                    ).showDialog();
+
+                    // 応援プラントを選択した場合、確定ダイアログに飛ばす
+                    if (isSelected ?? false) {
+                      // ignore: use_build_context_synchronously
+                      await SupportPowerPlantDecisionDialog(
+                        context: context,
+                        selectPowerPlant: selectPowerPlant,
+                        registPowerPlants: _registPowerPlants,
+                        user: widget.user,
+                      ).showDialog();
+                      widget.getSupportAction();
+                    } else {
+                      // 応援プラントを選択しなかった場合、stateの中身をリセット
+                      _registPowerPlants = _historyPowerPlants
+                          .map(
+                            (selectedPowerPlant) => RegistPowerPlant(
+                              isRegist: true,
+                              powerPlant: PowerPlant.fromJson(
+                                  selectedPowerPlant.toJson()),
+                            ),
+                          )
                           .toList();
-
-                      // 通常の発電所
-                      // 契約件数が現在の応援件数より少ない場合
-                      if (supportableNumber >
-                          event.history.powerPlants.length) {
-                        await SupportPowerPlantDecisionDialog(
-                          context: context,
-                          selectPowerPlant: selectPowerPlant,
-                          registPowerPlants: _registPowerPlants,
-                          user: widget.user,
-                        ).showDialog();
-                        widget.getSupportAction();
-                        return;
-                      }
-
-                      // 契約件数を超えてるため、応援プラントを選択する
-                      if (supportableNumber <=
-                          event.history.powerPlants.length) {
-                        // ignore: use_build_context_synchronously
-                        final isSelected = await SupportPowerPlantSelectDialog(
-                          context: context,
-                          selectPowerPlant: selectPowerPlant,
-                          registPowerPlants: _registPowerPlants,
-                          user: widget.user,
-                        ).showDialog();
-
-                        // 応援プラントを選択した場合、確定ダイアログに飛ばす
-                        if (isSelected ?? false) {
-                          // ignore: use_build_context_synchronously
-                          await SupportPowerPlantDecisionDialog(
-                            context: context,
-                            selectPowerPlant: selectPowerPlant,
-                            registPowerPlants: _registPowerPlants,
-                            user: widget.user,
-                          ).showDialog();
-                          widget.getSupportAction();
-                        } else {
-                          // 応援プラントを選択しなかった場合、stateの中身をリセット
-                          _registPowerPlants = event.history.powerPlants
-                              .map(
-                                (selectedPowerPlant) => RegistPowerPlant(
-                                  isRegist: true,
-                                  powerPlant: PowerPlant.fromJson(
-                                      selectedPowerPlant.toJson()),
-                                ),
-                              )
-                              .toList();
-                        }
-                        return;
-                      }
                     }
-                  });
+                    return;
+                  }
                 },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
