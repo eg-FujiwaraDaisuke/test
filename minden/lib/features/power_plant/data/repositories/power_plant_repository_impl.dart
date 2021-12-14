@@ -8,6 +8,7 @@ import 'package:minden/features/power_plant/data/repositories/power_plant_reposi
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
@@ -91,6 +92,19 @@ class PowerPlantRepositoryImpl
       final history = await retryRequest(
           () => powerPlantDataSource.getPowerPlantHistory(historyType));
       return Right(history);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, SupportAction>> getSupportAction(
+    String plantId,
+  ) async {
+    try {
+      final supportAction = await retryRequest(
+          () => powerPlantDataSource.getSupportAction(plantId));
+      return Right(supportAction);
     } on ServerException {
       return left(PowerPlantFailure());
     }

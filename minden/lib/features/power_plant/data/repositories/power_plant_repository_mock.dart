@@ -2,12 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
+import 'package:minden/features/power_plant/data/model/support_action_model.dart';
 import 'package:minden/features/power_plant/data/model/support_history_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
@@ -317,5 +319,11 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, List<PowerPlant>>> getPowerPlant_(
       String? tagId) async {
     return const Right([]);
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, SupportAction>> getSupportAction(
+      String plantId) async {
+    return const Right(SupportActionModel(support_action: 'none'));
   }
 }

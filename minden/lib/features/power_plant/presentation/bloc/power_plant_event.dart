@@ -38,3 +38,14 @@ class GetSupportHistoryEvent extends PowerPlantEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetSupportActionEvent extends PowerPlantEvent {
+  const GetSupportActionEvent({
+    required this.plantId,
+  });
+
+  final String plantId;
+
+  @override
+  List<Object> get props => [];
+}
