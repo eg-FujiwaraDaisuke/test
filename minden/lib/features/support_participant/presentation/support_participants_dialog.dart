@@ -44,7 +44,8 @@ class SupportParticipantsDialog {
                             ),
                           ),
                           TextSpan(
-                            text: participants.total.toString(),
+                            text:
+                                '${participants.total.toString()}${i18nTranslate(context, 'support_participants_people')}',
                             style: const TextStyle(
                               color: Color(0xFF787877),
                               fontSize: 16,
@@ -116,7 +117,7 @@ class SupportParticipantsDialog {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                // ここにWEBから応援している人数が入る
+                                // TODO ここにWEBから応援している人数が入る
                                 text: '0',
                                 style: const TextStyle(
                                   color: Color(0xFFFF8C00),

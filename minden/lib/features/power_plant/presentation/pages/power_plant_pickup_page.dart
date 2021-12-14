@@ -48,7 +48,7 @@ class PowerPlantPickupState extends State<PowerPlantPickup> {
 
   CarouselOptions _generateCarouselOpts(Function(int index) onPageChanged) {
     return CarouselOptions(
-      height: 294,
+      height: 270,
       aspectRatio: 16 / 9,
       viewportFraction: 1.0,
       initialPage: 0,
