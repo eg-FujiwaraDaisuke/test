@@ -46,8 +46,14 @@ class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       try {
         yield const ProfileLoading();
 
-        final failureOrUser = await usecase(UpdateProfileParams(
-            event.name, event.icon, event.bio, event.wallPaper));
+        final failureOrUser = await usecase(
+          UpdateProfileParams(
+            event.name,
+            event.icon,
+            event.bio,
+            event.wallPaper,
+          ),
+        );
 
         yield failureOrUser.fold<ProfileState>(
           (failure) => throw failure,

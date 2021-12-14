@@ -362,11 +362,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   void _complete(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
       _updateBloc.add(UpdateProfileEvent(
-          name: _name!,
-          icon: _iconUrl!,
-          bio: _bio!,
-          wallPaper: _wallPaperUrl!));
+        name: _name!,
+        icon: _iconUrl ?? '',
+        bio: _bio!,
+        wallPaper: _wallPaperUrl ?? '',
+      ));
     }
   }
 }
@@ -627,8 +629,9 @@ class _ProfileNameEditForm extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          height: 54,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
           width: 339,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

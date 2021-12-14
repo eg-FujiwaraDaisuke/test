@@ -107,6 +107,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        if (_currentIndex == tutorialData.length - 1) return;
                         await _toLogin();
                       },
                       child: Opacity(
