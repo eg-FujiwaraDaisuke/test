@@ -162,7 +162,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 // // ユーザーの通報
                 final isShowReport =
                     await IssueReportDialog(context: context).showDialog();
-
                 final isReport = isShowReport!
                     ? await IssueReportMessageDialog(
                         context: context,
