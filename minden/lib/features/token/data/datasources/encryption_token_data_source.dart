@@ -44,22 +44,22 @@ class EncryptionTokenDataSourceImpl implements EncryptionTokenDataSource {
   @override
   Future<String> getAppToken() async {
     final box = await _getEncryptedBox();
-    final String appToken = box.get(_appTokenKey);
-    return appToken;
+    final String? appToken = box.get(_appTokenKey);
+    return appToken ?? '';
   }
 
   @override
   Future<String> getRefreshToken() async {
     final box = await _getEncryptedBox();
-    final String refreshToken = box.get(_refreshTokenKey);
-    return refreshToken;
+    final String? refreshToken = box.get(_refreshTokenKey);
+    return refreshToken ?? '';
   }
 
   @override
   Future<String> restoreUser() async {
     final box = await _getEncryptedBox();
-    final String userJson = box.get(_userKey);
-    return userJson;
+    final String? userJson = box.get(_userKey);
+    return userJson ?? '';
   }
 
   @override

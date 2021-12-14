@@ -5,6 +5,7 @@ import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 
@@ -21,13 +22,13 @@ class GetPowerPlants extends UseCase<PowerPlantsResponse, GetPowerPlantParams> {
 }
 
 class GetPowerPlantsHistory
-    extends UseCase<PowerPlantsResponse, GetPowerPlantParams> {
+    extends UseCase<SupportHistory, GetPowerPlantParams> {
   GetPowerPlantsHistory(this.repository);
 
   final PowerPlantRepository repository;
 
   @override
-  Future<Either<Failure, PowerPlantsResponse>> call(
+  Future<Either<Failure, SupportHistory>> call(
       GetPowerPlantParams params) async {
     return await repository.getPowerPlantHistory(params.historyType!);
   }

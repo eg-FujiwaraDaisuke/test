@@ -17,6 +17,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileSettingTagsDecisionPage extends StatefulWidget {
   @override
@@ -141,7 +142,12 @@ class _ProfileSettingTagsDecisionPageState
               ),
               const SizedBox(height: 112),
               Button(
-                onTap: () => {_decide(context)},
+                onTap: () async {
+                  final sharedPreferences =
+                      await SharedPreferences.getInstance();
+                  await sharedPreferences.setBool('has_profile', true);
+                  _decide(context);
+                },
                 text: i18nTranslate(context, 'decide'),
                 size: ButtonSize.S,
               ),

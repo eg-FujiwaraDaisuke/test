@@ -12,20 +12,20 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlants usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
     if (event is GetPowerPlantsEvent) {
       try {
         yield const PowerPlantLoading();
 
         final failureOrUser =
-        await usecase(GetPowerPlantParams(tagId: event.tagId));
+            await usecase(GetPowerPlantParams(tagId: event.tagId));
 
-        yield failureOrUser.fold<PowerPlantState>((failure) {
-          throw failure;
-        },
-                (plants) {
-              return PowerPlantsLoaded(plants);
-            });
+        yield failureOrUser.fold<PowerPlantState>(
+          (failure) => throw failure,
+          (plants) => PowerPlantsLoaded(plants),
+        );
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
@@ -41,18 +41,20 @@ class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlantsHistory usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
-    if (event is GetPowerPlantsEvent) {
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
+    if (event is GetSupportHistoryEvent) {
       try {
-        yield const PowerPlantLoading();
+        yield const HistoryLoading();
 
         final failureOrUser =
-        await usecase(GetPowerPlantParams(historyType: event.historyType));
+            await usecase(GetPowerPlantParams(historyType: event.historyType));
 
-        yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
-                (plants) {
-              return PowerPlantsLoaded(plants);
-            });
+        yield failureOrUser.fold<PowerPlantState>(
+          (failure) => throw failure,
+          (history) => HistoryLoaded(history),
+        );
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
@@ -68,18 +70,20 @@ class GetPowerPlantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlant usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
     if (event is GetPowerPlantEvent) {
       try {
         yield const PowerPlantLoading();
 
         final failureOrUser =
-        await usecase(GetPowerPlantParams(plantId: event.plantId));
+            await usecase(GetPowerPlantParams(plantId: event.plantId));
 
         yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
-                (plant) {
-              return PowerPlantLoaded(plant);
-            });
+            (plant) {
+          return PowerPlantLoaded(plant);
+        });
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {
@@ -95,18 +99,20 @@ class GetParticipantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   final GetPowerPlantParticipant usecase;
 
   @override
-  Stream<PowerPlantState> mapEventToState(PowerPlantEvent event,) async* {
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
     if (event is GetPowerPlantEvent) {
       try {
         yield const PowerPlantLoading();
 
         final failureOrUser =
-        await usecase(GetPowerPlantParams(plantId: event.plantId));
+            await usecase(GetPowerPlantParams(plantId: event.plantId));
 
         yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
-                (participant) {
-              return ParticipantLoaded(participant);
-            });
+            (participant) {
+          return ParticipantLoaded(participant);
+        });
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);
       } catch (e) {

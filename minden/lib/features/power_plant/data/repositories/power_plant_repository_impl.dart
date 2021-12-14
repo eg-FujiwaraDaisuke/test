@@ -8,6 +8,7 @@ import 'package:minden/features/power_plant/data/repositories/power_plant_reposi
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
 
@@ -83,14 +84,13 @@ class PowerPlantRepositoryImpl
 
   /// [historyType] 応援予約 or 応援履歴
   @override
-  Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlantHistory(
+  Future<Either<PowerPlantFailure, SupportHistory>> getPowerPlantHistory(
     String historyType,
   ) async {
     try {
-      final plants = await retryRequest(
+      final history = await retryRequest(
           () => powerPlantDataSource.getPowerPlantHistory(historyType));
-
-      return Right(plants);
+      return Right(history);
     } on ServerException {
       return left(PowerPlantFailure());
     }
