@@ -271,9 +271,11 @@ class IssueReportMessageDialog {
                       if (reportText != '')
                         Button(
                           onTap: () async {
-                            final List<int> issueType = [];
+                            final issueType = [];
                             if (isSelfHarm) issueType.add(1);
                             if (isInappropriate) issueType.add(2);
+
+                            print(issueType.isNotEmpty);
 
                             final userJsonData =
                                 await si<EncryptionTokenDataSourceImpl>()
@@ -281,12 +283,12 @@ class IssueReportMessageDialog {
                             final userJson = json.decode(userJsonData);
                             final user = User.fromJson(userJson);
 
-                            _sendIssueReportBloc.add(SendIssueReportEvent(
-                              userId: user.accountId,
-                              targetUserId: targetUserId,
-                              issueType: issueType,
-                              message: reportText,
-                            ));
+                            // _sendIssueReportBloc.add(SendIssueReportEvent(
+                            //   userId: user.accountId,
+                            //   targetUserId: targetUserId,
+                            //   issueType: issueType,
+                            //   message: reportText,
+                            // ));
                           },
                           text: i18nTranslate(context, 'reporting'),
                           size: ButtonSize.S,

@@ -32,13 +32,16 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
     final url = Uri.parse(endpoint + _issueReportPath);
-    final body = json.encode({
-      'userId': userId,
-      'targetUserId': targetUserId,
-      'issueType': issueType,
-      'message': message
-    });
 
+    final param = {};
+    param['userId'] = userId;
+    param['targetUserId'] = targetUserId;
+    param['message'] = message;
+    if (issueType!.isNotEmpty) {
+      param['issueType'] = issueType;
+    }
+
+    final body = json.encode(param);
     final response = await client.post(
       url,
       headers: headers,
