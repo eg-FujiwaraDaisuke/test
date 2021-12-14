@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
@@ -54,6 +53,8 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     }
 
     final body = json.encode(param);
+    logD(body);
+
     final response = await client.post(Uri.parse(endpoint + _updatePath),
         headers: headers, body: body);
 

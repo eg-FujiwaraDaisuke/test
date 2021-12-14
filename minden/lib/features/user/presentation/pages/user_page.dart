@@ -336,7 +336,7 @@ class _MenuItem extends StatelessWidget {
             );
             await Navigator.push(context, route);
             break;
-          case '/contact' :
+          case '/contact':
             await launch('https://portal.minden.co.jp/contact/guest');
             break;
           case '/logout':
