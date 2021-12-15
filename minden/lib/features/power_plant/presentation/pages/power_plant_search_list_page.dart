@@ -32,6 +32,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
   @override
   void initState() {
     super.initState();
+    Loading.hide();
 
     _bloc = GetPowerPlantsBloc(
       const PowerPlantStateInitial(),
@@ -49,6 +50,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
   @override
   void dispose() {
     _bloc.close();
+    Loading.hide();
     super.dispose();
   }
 
