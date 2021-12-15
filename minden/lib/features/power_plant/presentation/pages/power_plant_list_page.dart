@@ -85,7 +85,6 @@ class PowerPlantListState extends State<PowerPlantList> {
                   final powerPlant = state.powerPlants.powerPlants[index];
                   final direction = searchDirectionByIndex(index);
                   return PowerPlantListItem(
-                    key: ValueKey(powerPlant.plantId),
                     powerPlant: powerPlant,
                     direction: direction,
                   );

@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
@@ -18,16 +17,14 @@ enum Direction {
 /// 発電所一覧要素
 class PowerPlantListItem extends StatelessWidget {
   const PowerPlantListItem(
-      {Key? key,
-      required this.powerPlant,
+      {required this.powerPlant,
       required this.direction,
       this.aspectRatio = 340 / 320,
       this.thumbnailImageHeight = 280,
       this.isShowCatchphras = true,
       this.fromApp = false,
       this.supportedData,
-      this.reservedDate})
-      : super(key: key);
+      this.reservedDate});
 
   static const cornerRadius = Radius.circular(11);
 
