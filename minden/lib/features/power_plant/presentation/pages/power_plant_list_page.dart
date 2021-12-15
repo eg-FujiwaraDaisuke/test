@@ -48,10 +48,11 @@ class PowerPlantListState extends State<PowerPlantList> {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (_) => false);
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+            (_) => false,
+          );
         }
       }
     });
@@ -61,6 +62,7 @@ class PowerPlantListState extends State<PowerPlantList> {
   @override
   void dispose() {
     _bloc.close();
+    Loading.hide();
     super.dispose();
   }
 

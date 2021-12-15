@@ -29,7 +29,6 @@ class _SupportHistoryPowerPlantListState
   @override
   void initState() {
     super.initState();
-
     _historyBloc = GetPowerPlantsHistoryBloc(
       const PowerPlantStateInitial(),
       GetPowerPlantsHistory(
@@ -46,6 +45,7 @@ class _SupportHistoryPowerPlantListState
 
   @override
   void dispose() {
+    Loading.hide();
     _historyBloc.close();
     super.dispose();
   }
@@ -80,7 +80,6 @@ class _SupportHistoryPowerPlantListState
                       PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
                   direction: direction,
                   isShowCatchphras: false,
-                  aspectRatio: 340 / 289,
                   thumbnailImageHeight: 226,
                   fromApp: supportHistoryPowerPlant.fromApp,
                   supportedData:

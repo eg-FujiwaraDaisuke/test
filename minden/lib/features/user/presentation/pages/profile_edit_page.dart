@@ -629,9 +629,7 @@ class _ProfileNameEditForm extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
+          padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10),
           width: 339,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
