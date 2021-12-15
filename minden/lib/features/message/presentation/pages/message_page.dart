@@ -101,7 +101,6 @@ class MessagePage extends HookWidget {
         child: Center(
           child: Container(
             color: Colors.white,
-            width: 288,
             child: _MessagesList(),
           ),
         ),
@@ -189,7 +188,7 @@ class _MessagesList extends HookWidget {
         ],
         child: Container(
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: ListView.builder(
             controller: _scrollController,
             itemCount: messagesStateData.messages.length,
@@ -260,11 +259,12 @@ class _MessagesListItem extends HookWidget {
         }
       },
       child: Container(
-        margin: const EdgeInsets.only(top: 25),
+        margin: const EdgeInsets.only(top: 13),
         padding: const EdgeInsets.only(bottom: 13),
         decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(
+              width: 0.5,
               color: Color(0xFFC4C4C4),
             ),
           ),
@@ -315,17 +315,16 @@ class _MessagesListItem extends HookWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                SizedBox(
-                  width: 200,
+                Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: 200,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: Text(
                               messageDetail.read
                                   ? ''
                                   : i18nTranslate(
@@ -338,51 +337,46 @@ class _MessagesListItem extends HookWidget {
                                 letterSpacing: calcLetterSpacing(letter: 0.5),
                               ),
                             ),
-                            if (messageDetail.messageType == '1')
-                              Flexible(
-                                child: Container(
-                                  padding: const EdgeInsets.only(left: 30),
-                                  child: Text(
-                                    i18nTranslate(context, 'news_from_minden'),
-                                    style: TextStyle(
-                                      color: const Color(0xFF787877),
-                                      fontSize: 10,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing:
-                                          calcLetterSpacing(letter: 0.5),
-                                    ),
-                                  ),
+                          ),
+                          if (messageDetail.messageType == '1')
+                            Flexible(
+                              child: Text(
+                                i18nTranslate(context, 'news_from_minden'),
+                                style: TextStyle(
+                                  color: const Color(0xFF787877),
+                                  fontSize: 10,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing:
+                                      calcLetterSpacing(letter: 0.5),
                                 ),
-                              )
-                            else
-                              Flexible(
-                                child: Container(
-                                  padding: const EdgeInsets.only(left: 30),
-                                  child: Text(
-                                    messageDetail.title,
-                                    style: TextStyle(
-                                      color: const Color(0xFF787877),
-                                      fontSize: 10,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing:
-                                          calcLetterSpacing(letter: 0.5),
-                                    ),
-                                  ),
+                              ),
+                            )
+                          else
+                            Flexible(
+                              child: Text(
+                                messageDetail.title,
+                                style: TextStyle(
+                                  color: const Color(0xFF787877),
+                                  fontSize: 10,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing:
+                                      calcLetterSpacing(letter: 0.5),
                                 ),
-                              )
-                          ],
-                        ),
+                              ),
+                            )
+                        ],
                       ),
                       const SizedBox(
                         height: 7,
                       ),
-                      SizedBox(
-                        width: 200,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
                         child: Text(
                           messageDetail.body,
                           maxLines: 1,
+                          textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Color(0xFF787877),
