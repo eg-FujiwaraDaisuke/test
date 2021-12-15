@@ -251,7 +251,6 @@ class _PowerPlantSearchList extends StatelessWidget {
       final direction = searchDirectionByIndex(index);
       index++;
       plants.add(PowerPlantListItem(
-        key: ValueKey(element.plantId),
         powerPlant: element,
         direction: direction,
       ));
