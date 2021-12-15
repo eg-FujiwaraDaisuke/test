@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/core/ext/logger_ext.dart';
@@ -17,17 +16,17 @@ enum Direction {
 
 /// 発電所一覧要素
 class PowerPlantListItem extends StatelessWidget {
-  const PowerPlantListItem(
-      {Key? key,
-      required this.powerPlant,
-      required this.direction,
-      this.aspectRatio = 340 / 320,
-      this.thumbnailImageHeight = 280,
-      this.isShowCatchphras = true,
-      this.fromApp = false,
-      this.supportedData,
-      this.reservedDate})
-      : super(key: key);
+  const PowerPlantListItem({
+    Key? key,
+    required this.powerPlant,
+    required this.direction,
+    this.aspectRatio = 340 / 320,
+    this.thumbnailImageHeight = 280,
+    this.isShowCatchphras = true,
+    this.fromApp = false,
+    this.supportedData,
+    this.reservedDate,
+  }) : super(key: key);
 
   static const cornerRadius = Radius.circular(11);
 
@@ -54,104 +53,102 @@ class PowerPlantListItem extends StatelessWidget {
           );
           Navigator.push(context, route);
         },
-        child: AspectRatio(
-          aspectRatio: aspectRatio,
-          child: Container(
-            decoration: _generateCircularRadius(),
-            child: Column(
-              children: [
-                // ヘッダー画像・キャッチフレーズ
-                _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
-                // 発電署名・所在地
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: _generateCircularRadius(),
+          child: Column(
+            children: [
+              // ヘッダー画像・キャッチフレーズ
+              _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
+              // 発電署名・所在地
+
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              flex: 2,
-                              child: Text(
-                                powerPlant.name,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF575292),
-                                  height: 1.43,
-                                ),
-                                overflow: TextOverflow.visible,
-                                softWrap: true,
-                              ),
+                        Flexible(
+                          flex: 3,
+                          child: Text(
+                            powerPlant.name,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF575292),
+                              height: 1.43,
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 8),
-                                  SvgPicture.asset(
-                                    'assets/images/power_plant/location.svg',
-                                    width: 10,
-                                    height: 12,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Flexible(
-                                    child: Text(
-                                      powerPlant.viewAddress,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        fontFamily: 'NotoSansJP',
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFFA7A7A7),
-                                        height: 1.48,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            overflow: TextOverflow.visible,
+                            softWrap: true,
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        if (reservedDate != null || supportedData != null)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Flexible(
+                          flex: 1,
+                          child: Row(
                             children: [
-                              Text(
-                                reservedDate == null
-                                    ? ''
-                                    : '🚩${reservedDate}${i18nTranslate(context, 'power_plant_support_start_date')}',
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFFF8C00),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                'assets/images/power_plant/location.svg',
+                                width: 10,
+                                height: 12,
+                              ),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  powerPlant.viewAddress,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFFA7A7A7),
+                                    height: 1.48,
+                                  ),
                                 ),
                               ),
-                              Text(
-                                supportedData == null
-                                    ? ''
-                                    : '${supportedData}${!fromApp ? 'WEB' : ''}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFA7A7A7),
-                                ),
-                              )
                             ],
                           ),
+                        ),
                       ],
                     ),
-                  ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    if (reservedDate != null || supportedData != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            reservedDate == null
+                                ? ''
+                                : '🚩${reservedDate}${i18nTranslate(context, 'power_plant_support_start_date')}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFFFF8C00),
+                            ),
+                          ),
+                          Text(
+                            supportedData == null
+                                ? ''
+                                : '${supportedData}${!fromApp ? 'WEB' : ''}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFFA7A7A7),
+                            ),
+                          )
+                        ],
+                      ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -166,7 +163,6 @@ class PowerPlantListItem extends StatelessWidget {
           borderRadius: const BorderRadius.only(
               topLeft: cornerRadius, topRight: cornerRadius),
           child: SizedBox(
-            width: 418,
             height: thumbnailImageHeight,
             child: CachedNetworkImage(
               imageUrl: imageUrl,
