@@ -52,11 +52,14 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final url = Uri.parse(endpoint + _powerPlantsPath);
-    final response = await client.get(
-      url.replace(queryParameters: {
+    var url = Uri.parse(endpoint + _powerPlantsPath);
+    if (tagId?.isNotEmpty ?? false) {
+      url = url.replace(queryParameters: {
         'tagId': tagId,
-      }),
+      });
+    }
+    final response = await client.get(
+      url,
       headers: headers,
     );
 
