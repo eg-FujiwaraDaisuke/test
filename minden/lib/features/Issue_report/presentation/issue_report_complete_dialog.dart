@@ -4,8 +4,8 @@ import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialo
 
 import '../../../utile.dart';
 
-class ViolateReportCompleteDialog {
-  ViolateReportCompleteDialog({
+class IssueReportCompleteDialog {
+  IssueReportCompleteDialog({
     required this.context,
   }) : super();
 

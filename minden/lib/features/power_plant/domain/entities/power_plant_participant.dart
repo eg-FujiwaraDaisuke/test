@@ -4,6 +4,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 /// 応援ユーザー情報
 class PowerPlantParticipant extends Equatable {
   const PowerPlantParticipant({
+    required this.participantSize,
     required this.page,
     required this.total,
     required this.plantId,
@@ -11,10 +12,13 @@ class PowerPlantParticipant extends Equatable {
     required this.userList,
   });
 
+  /// 応援ユーザー総数
+  final int participantSize;
+
   /// ページ
   final String page;
 
-  /// 応援ユーザー総数
+  /// 応援ユーザー総数?
   final int total;
 
   /// MP番号

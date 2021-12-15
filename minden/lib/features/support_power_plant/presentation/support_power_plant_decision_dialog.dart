@@ -39,7 +39,20 @@ class SupportPowerPlantDecisionDialog {
   );
 
   Future<bool?> showDialog() async {
-    await Navigator.push(
+    _updateSupportPowerPlantBloc.stream.listen((event) {
+      if (event is SupportPowerPlantUpdating) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is SupportPowerPlantUpdated) {
+        _updateSupportPowerPlantBloc.close();
+        Navigator.pop(context, true);
+        return;
+      }
+    });
+
+    return Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
@@ -55,19 +68,6 @@ class SupportPowerPlantDecisionDialog {
                 .toList(),
             selectPowerPlant
           ];
-
-          _updateSupportPowerPlantBloc.stream.listen((event) {
-            if (event is SupportPowerPlantUpdating) {
-              Loading.show(context);
-              return;
-            }
-            Loading.hide();
-            if (event is SupportPowerPlantUpdated) {
-              _updateSupportPowerPlantBloc.close();
-              Navigator.pop(context, true);
-              return;
-            }
-          });
 
           return Stack(
             children: [

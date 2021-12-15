@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/Issue_report/presentation/issue_report_complete_dialog.dart';
+import 'package:minden/features/Issue_report/presentation/issue_report_dialog.dart';
+import 'package:minden/features/Issue_report/presentation/issue_report_message_dialog.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
@@ -21,9 +24,6 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
-import 'package:minden/features/violate/presentation/violate_dialog.dart';
-import 'package:minden/features/violate/presentation/violate_report_complete_dialog.dart';
-import 'package:minden/features/violate/presentation/violate_report_dialog.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,10 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (_) => false);
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+            (_) => false,
+          );
         }
       }
     });
@@ -159,16 +160,18 @@ class _ProfilePageState extends State<ProfilePage> {
           else
             GestureDetector(
               onTap: () async {
-                // ユーザーの通報
+                // // ユーザーの通報
                 final isShowReport =
-                    await ViolateDialog(context: context).showDialog();
-
+                    await IssueReportDialog(context: context).showDialog();
                 final isReport = isShowReport!
-                    ? await ViolateReportDialog(context: context).showDialog()
+                    ? await IssueReportMessageDialog(
+                        context: context,
+                        targetUserId: widget.userId,
+                      ).showDialog()
                     : false;
 
                 isReport!
-                    ? ViolateReportCompleteDialog(context: context).showDialog()
+                    ? IssueReportCompleteDialog(context: context).showDialog()
                     : null;
               },
               child: Container(

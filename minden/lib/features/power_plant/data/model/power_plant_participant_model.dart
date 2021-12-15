@@ -4,12 +4,14 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 
 class PowerPlantParticipantModel extends PowerPlantParticipant {
   const PowerPlantParticipantModel({
+    required int participantSize,
     required String page,
     required int total,
     required String plantId,
     required String yearMonth,
     required List<PowerPlantParticipantUser> userList,
   }) : super(
+          participantSize: participantSize,
           page: page,
           total: total,
           plantId: plantId,
@@ -21,6 +23,7 @@ class PowerPlantParticipantModel extends PowerPlantParticipant {
     final Iterable iterable = json['userList'];
 
     return PowerPlantParticipantModel(
+        participantSize: json['participantSize'],
         page: json['page'],
         total: json['total'],
         plantId: json['plantId'],

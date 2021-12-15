@@ -45,7 +45,7 @@ class SupportParticipantsDialog {
                           ),
                           TextSpan(
                             text:
-                                '${participants.total.toString()}${i18nTranslate(context, 'support_participants_people')}',
+                                '${participants.participantSize.toString()}${i18nTranslate(context, 'support_participants_people')}',
                             style: const TextStyle(
                               color: Color(0xFF787877),
                               fontSize: 16,

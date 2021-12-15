@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 
-class ViolateDialog {
-  ViolateDialog({
+class IssueReportDialog {
+  IssueReportDialog({
     required this.context,
   }) : super();
 
