@@ -5,15 +5,16 @@ abstract class IssueReportEvent extends Equatable {
 }
 
 class SendIssueReportEvent extends IssueReportEvent {
-  const SendIssueReportEvent(
-      {required this.userId,
-      required this.targetUserId,
-      this.issueType,
-      required this.message});
+  const SendIssueReportEvent({
+    required this.userId,
+    required this.targetUserId,
+    required this.issueType,
+    required this.message,
+  });
 
   final String userId;
   final String targetUserId;
-  final List<int>? issueType;
+  final List<int> issueType;
   final String message;
 
   @override

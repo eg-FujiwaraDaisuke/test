@@ -6,7 +6,7 @@ abstract class IssueReportRepository {
   Future<Either<Failure, Success>> sendIssueReport({
     required String userId,
     required String targetUserId,
-    List<int>? issueType,
+    required List<int> issueType,
     required String message,
   });
 }

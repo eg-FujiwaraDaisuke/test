@@ -60,10 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-              (_) => false);
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+            (_) => false,
+          );
         }
       }
     });

@@ -23,13 +23,13 @@ class SendIssueReportParams extends Equatable {
   const SendIssueReportParams({
     required this.userId,
     required this.targetUserId,
-    this.issueType,
+    required this.issueType,
     required this.message,
   });
 
   final String userId;
   final String targetUserId;
-  final List<int>? issueType;
+  final List<int> issueType;
   final String message;
 
   @override

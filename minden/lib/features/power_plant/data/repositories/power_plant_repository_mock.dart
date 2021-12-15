@@ -133,6 +133,7 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
       getPowerPlantParticipants(String plantId) async {
     try {
       const data = PowerPlantParticipant(
+          participantSize: 1,
           page: '1',
           total: 4,
           plantId: '1',

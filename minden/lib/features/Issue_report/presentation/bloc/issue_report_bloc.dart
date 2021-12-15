@@ -7,8 +7,10 @@ part 'issue_report_event.dart';
 part 'issue_report_state.dart';
 
 class SendIssueReportBloc extends Bloc<IssueReportEvent, IssueReportState> {
-  SendIssueReportBloc(IssueReportState initialState, this.usecase)
-      : super(initialState);
+  SendIssueReportBloc(
+    IssueReportState initialState,
+    this.usecase,
+  ) : super(initialState);
   final SendIssueReport usecase;
 
   @override

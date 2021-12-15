@@ -58,14 +58,15 @@ class IssueReportMessageDialog {
               Loading.show(context);
               return;
             }
+            Loading.hide();
             if (event is IssueReportSended) {
-              _sendIssueReportBloc.close();
+              await _sendIssueReportBloc.close();
               Navigator.pop(context, true);
               return;
             }
             if (event is IssueReportError) {
               if (event.needLogin) {
-                _sendIssueReportBloc.close();
+                await _sendIssueReportBloc.close();
                 BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
                 await Navigator.of(context, rootNavigator: true)
                     .pushAndRemoveUntil(
@@ -271,11 +272,9 @@ class IssueReportMessageDialog {
                       if (reportText != '')
                         Button(
                           onTap: () async {
-                            final issueType = [];
+                            final List<int> issueType = [];
                             if (isSelfHarm) issueType.add(1);
                             if (isInappropriate) issueType.add(2);
-
-                            print(issueType.isNotEmpty);
 
                             final userJsonData =
                                 await si<EncryptionTokenDataSourceImpl>()
@@ -283,12 +282,12 @@ class IssueReportMessageDialog {
                             final userJson = json.decode(userJsonData);
                             final user = User.fromJson(userJson);
 
-                            // _sendIssueReportBloc.add(SendIssueReportEvent(
-                            //   userId: user.accountId,
-                            //   targetUserId: targetUserId,
-                            //   issueType: issueType,
-                            //   message: reportText,
-                            // ));
+                            _sendIssueReportBloc.add(SendIssueReportEvent(
+                              userId: user.profile.userId!,
+                              targetUserId: targetUserId,
+                              issueType: issueType,
+                              message: reportText,
+                            ));
                           },
                           text: i18nTranslate(context, 'reporting'),
                           size: ButtonSize.S,

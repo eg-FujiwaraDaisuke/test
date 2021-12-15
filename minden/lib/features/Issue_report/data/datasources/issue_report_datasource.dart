@@ -9,7 +9,7 @@ abstract class IssueReportDataSource {
   Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
-    List<int>? issueType,
+    required List<int> issueType,
     required String message,
   });
 }
@@ -25,7 +25,7 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
   Future<Success> sendIssueReport({
     required String userId,
     required String targetUserId,
-    List<int>? issueType,
+    required List<int> issueType,
     required String message,
   }) async {
     final endpoint = ApiConfig.apiEndpoint();
@@ -37,16 +37,20 @@ class IssueReportDataSourceImpl implements IssueReportDataSource {
     param['userId'] = userId;
     param['targetUserId'] = targetUserId;
     param['message'] = message;
-    if (issueType!.isNotEmpty) {
+    if (issueType.isNotEmpty) {
       param['issueType'] = issueType;
     }
 
     final body = json.encode(param);
+
     final response = await client.post(
       url,
       headers: headers,
       body: body,
     );
+
+    print(body);
+    print(response);
 
     if (response.statusCode == 200) {
       return Success();
