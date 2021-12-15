@@ -8,6 +8,7 @@ import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
+import 'package:minden/features/power_plant/data/model/support_action_model.dart';
 import 'package:minden/features/power_plant/data/model/support_history_model.dart';
 import 'package:minden/features/power_plant/data/model/tag_response_model.dart';
 
@@ -24,6 +25,8 @@ abstract class PowerPlantDataSource {
   Future<TagResponseModel> getPowerPlantTags(String plantId);
 
   Future<SupportHistoryModel> getPowerPlantHistory(String historyType);
+
+  Future<SupportActionModel> getSupportAction(String plantId);
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -41,17 +44,22 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   final _powerPlantHistory = '/api/v1/support_history';
 
+  final _supportAction = '/api/v1/power_plant/support_action';
+
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
-    final url = Uri.parse(endpoint + _powerPlantsPath);
-    final response = await client.get(
-      url.replace(queryParameters: {
+    var url = Uri.parse(endpoint + _powerPlantsPath);
+    if (tagId?.isNotEmpty ?? false) {
+      url = url.replace(queryParameters: {
         'tagId': tagId,
-      }),
+      });
+    }
+    final response = await client.get(
+      url,
       headers: headers,
     );
 
@@ -160,6 +168,32 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     if (response.statusCode == 200) {
       logI('${responseBody}');
       return SupportHistoryModel.fromJson(json.decode(responseBody));
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
+    } else {
+      logW('${response.statusCode}: ${response.body}');
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<SupportActionModel> getSupportAction(String plantId) async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
+
+    final url = Uri.parse(endpoint + _supportAction);
+    final response = await client.get(
+      url.replace(queryParameters: {
+        'plantId': plantId,
+      }),
+      headers: headers,
+    );
+
+    final responseBody = utf8.decode(response.bodyBytes);
+    if (response.statusCode == 200) {
+      logD('${responseBody}');
+      return SupportActionModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();
     } else {

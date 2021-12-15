@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 
 abstract class PowerPlantState extends Equatable {
@@ -42,6 +43,15 @@ class HistoryLoaded extends PowerPlantState {
   List<Object> get props => [];
 }
 
+class SupportActionLoaded extends PowerPlantState {
+  const SupportActionLoaded(this.supportAction);
+
+  final SupportAction supportAction;
+
+  @override
+  List<Object> get props => [];
+}
+
 class HistoryLoading extends PowerPlantState {
   const HistoryLoading();
 
@@ -60,6 +70,13 @@ class ParticipantLoaded extends PowerPlantState {
 
 class PowerPlantLoading extends PowerPlantState {
   const PowerPlantLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SupportActionLoading extends PowerPlantState {
+  const SupportActionLoading();
 
   @override
   List<Object> get props => [];

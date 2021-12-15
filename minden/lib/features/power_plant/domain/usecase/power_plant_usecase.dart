@@ -5,6 +5,7 @@ import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
+import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/entities/tag_response.dart';
 import 'package:minden/features/power_plant/domain/repositories/power_plant_repository.dart';
@@ -67,6 +68,18 @@ class GetPowerPlantTags extends UseCase<TagResponse, GetPowerPlantParams> {
   @override
   Future<Either<Failure, TagResponse>> call(GetPowerPlantParams params) async {
     return await repository.getPowerPlantTags(params.plantId!);
+  }
+}
+
+class GetSupportAction extends UseCase<SupportAction, GetPowerPlantParams> {
+  GetSupportAction(this.repository);
+
+  final PowerPlantRepository repository;
+
+  @override
+  Future<Either<Failure, SupportAction>> call(
+      GetPowerPlantParams params) async {
+    return await repository.getSupportAction(params.plantId!);
   }
 }
 

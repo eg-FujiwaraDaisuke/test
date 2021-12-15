@@ -54,8 +54,9 @@ class HomePage extends HookWidget {
     }
 
     Future _onSelectNotification(String? payload) async {
-      // TODO メッセージIDを渡してダイアログを表示させる
-      _transitionScreenBloc.add(TransitionMessagePageEvent('38220'));
+      if (payload?.isNotEmpty ?? false) {
+        _transitionScreenBloc.add(TransitionMessagePageEvent(payload!));
+      }
     }
 
     useEffect(() {
@@ -138,11 +139,12 @@ class HomePage extends HookWidget {
             onSelectNotification: _onSelectNotification);
 
         // フォアグラウンド状態の通知
-        // Android ではアプリがフォアグラウンド状態で画面上部にプッシュ通知メッセージを表示することができない為、ローカル通知で擬似的に通知メッセージを表示
+        // Android ではアプリがフォアグラウンド状態で
+        // 画面上部にプッシュ通知メッセージを表示することができない為、
+        // ローカル通知で擬似的に通知メッセージを表示
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print('フォアグラウンド状態からプッシュ通知受け取った');
+          logD('フォアグラウンド状態からプッシュ通知受け取った ${message.data}');
           _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
-          logD('${message}');
 
           final notification = message.notification;
           final android = message.notification?.android;
@@ -154,7 +156,14 @@ class HomePage extends HookWidget {
           );
 
           if (notification != null && android != null) {
-            logD('${message.data}');
+            var payload = '';
+            if (message.data.isNotEmpty){
+              final String? messageId = message.data['messageId'];
+              if (messageId?.isNotEmpty ?? false) {
+                payload = messageId!;
+              }
+            }
+
             si<FlutterLocalNotificationsPlugin>().show(
               notification.hashCode,
               notification.title,
@@ -167,8 +176,7 @@ class HomePage extends HookWidget {
                   icon: 'launch_background',
                 ),
               ),
-              // TODO メッセージIDを入れる
-              payload: '38220',
+              payload: payload,
             );
           }
         });
@@ -177,25 +185,29 @@ class HomePage extends HookWidget {
         si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
 
         // プッシュ通知初期化
-        //ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
+        // ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         await si<FirebaseMessaging>()
             .getInitialMessage()
             .then((RemoteMessage? message) {
-          print('ターミネイト状態からプッシュ通知をタップした');
-          if (message != null) {
-            logD('${message.data}');
-            // TODO メッセージIDを入れる
-            _transitionScreenBloc.add(TransitionMessagePageEvent('38220'));
+          logD('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
+          if (message?.data.isNotEmpty ?? false){
+            final String? messageId = message?.data['messageId'];
+            if (messageId?.isNotEmpty ?? false) {
+              _transitionScreenBloc.add(TransitionMessagePageEvent(messageId!));
+            }
           }
         });
 
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          print('バックグラウンド状態からプッシュ通知をタップした');
-          logD('${message.data}');
-          _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
-          // TODO メッセージIDを渡してダイアログを表示させる
-          _transitionScreenBloc.add(TransitionMessagePageEvent('38220'));
+          logD('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
+          if (message.data.isNotEmpty){
+            final String? messageId = message.data['messageId'];
+            if (messageId?.isNotEmpty ?? false) {
+              _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
+              _transitionScreenBloc.add(TransitionMessagePageEvent(messageId!));
+            }
+          }
         });
       });
 

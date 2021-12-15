@@ -14,11 +14,12 @@ class GetProfileEvent extends ProfileEvent {
 }
 
 class UpdateProfileEvent extends ProfileEvent {
-  const UpdateProfileEvent(
-      {required this.name,
-      required this.icon,
-      required this.bio,
-      required this.wallPaper});
+  const UpdateProfileEvent({
+    required this.name,
+    required this.icon,
+    required this.bio,
+    required this.wallPaper,
+  });
 
   final String name;
   final String icon;
