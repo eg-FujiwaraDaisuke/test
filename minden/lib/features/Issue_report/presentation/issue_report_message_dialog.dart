@@ -71,13 +71,10 @@ class IssueReportMessageDialog {
       }
     });
 
-    await Navigator.push(
+    return Navigator.push(
       context,
       CustomDialogOverlay(
-        StatefulBuilder(builder: (
-          context,
-          setState,
-        ) {
+        StatefulBuilder(builder: (context, setState) {
           return Stack(
             clipBehavior: Clip.none,
             children: [

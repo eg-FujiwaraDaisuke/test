@@ -52,7 +52,7 @@ class SupportPowerPlantDecisionDialog {
       }
     });
 
-    await Navigator.push(
+    return Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
