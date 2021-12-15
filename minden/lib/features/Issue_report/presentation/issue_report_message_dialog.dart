@@ -46,38 +46,38 @@ class IssueReportMessageDialog {
   );
 
   Future<bool?> showDialog() async {
-    return Navigator.push(
+    _sendIssueReportBloc.stream.listen((event) async {
+      if (event is IssueReportSending) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+      if (event is IssueReportSended) {
+        await _sendIssueReportBloc.close();
+        Navigator.pop(context, true);
+        return;
+      }
+      if (event is IssueReportError) {
+        if (event.needLogin) {
+          await _sendIssueReportBloc.close();
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+            (_) => false,
+          );
+        }
+      }
+    });
+
+    await Navigator.push(
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (
           context,
           setState,
         ) {
-          _sendIssueReportBloc.stream.listen((event) async {
-            if (event is IssueReportSending) {
-              Loading.show(context);
-              return;
-            }
-            Loading.hide();
-            if (event is IssueReportSended) {
-              await _sendIssueReportBloc.close();
-              Navigator.pop(context, true);
-              return;
-            }
-            if (event is IssueReportError) {
-              if (event.needLogin) {
-                await _sendIssueReportBloc.close();
-                BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-                await Navigator.of(context, rootNavigator: true)
-                    .pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                  (_) => false,
-                );
-              }
-            }
-          });
           return Stack(
             clipBehavior: Clip.none,
             children: [
