@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
@@ -16,17 +15,14 @@ enum Direction {
 
 /// 発電所一覧要素
 class PowerPlantListItem extends StatelessWidget {
-  const PowerPlantListItem({
-    Key? key,
-    required this.powerPlant,
-    required this.direction,
-    this.aspectRatio = 340 / 320,
-    this.thumbnailImageHeight = 280,
-    this.isShowCatchphras = true,
-    this.fromApp = false,
-    this.supportedData,
-    this.reservedDate,
-  }) : super(key: key);
+  const PowerPlantListItem(
+      {required this.powerPlant,
+      required this.direction,
+      this.thumbnailImageHeight = 280,
+      this.isShowCatchphras = true,
+      this.fromApp = false,
+      this.supportedData,
+      this.reservedDate});
 
   static const cornerRadius = Radius.circular(11);
 
@@ -34,7 +30,6 @@ class PowerPlantListItem extends StatelessWidget {
   final Direction direction;
   final bool isShowCatchphras;
   final double thumbnailImageHeight;
-  final double aspectRatio;
   final String? supportedData;
   final String? reservedDate;
   final bool fromApp;
@@ -45,7 +40,6 @@ class PowerPlantListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: InkWell(
         onTap: () {
-          logD('onTapped power plant.');
           final route = MaterialPageRoute(
             builder: (context) =>
                 PowerPlantDetailPage(plantId: powerPlant.plantId),

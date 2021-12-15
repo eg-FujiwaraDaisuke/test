@@ -76,18 +76,16 @@ class _SupportHistoryPowerPlantListState
                         .toString();
                 index++;
                 return PowerPlantListItem(
-                  key: ValueKey(supportHistoryPowerPlant.plantId),
                   powerPlant:
                       PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
                   direction: direction,
                   isShowCatchphras: false,
-                  aspectRatio: 340 / 289,
                   thumbnailImageHeight: 226,
                   fromApp: supportHistoryPowerPlant.fromApp,
                   supportedData:
-                      widget.historyType == 'history' ? '$year年$day日' : null,
+                      widget.historyType == 'history' ? '$year年$day月' : null,
                   reservedDate: widget.historyType == 'reservation'
-                      ? '$year年$day日'
+                      ? '$year年$day月'
                       : null,
                 );
               }).toList());
