@@ -94,6 +94,7 @@ class HomeMypageTabNavigation extends HookWidget {
     const tabIcon = 'home';
 
     return BottomNavigationBarItem(
+      tooltip: '',
       icon: SvgPicture.asset(
         'assets/images/common/$tabIcon.svg',
         color: color,
@@ -113,6 +114,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final tabTitle = i18nTranslate(context, 'tab_navigation_mypage');
     const tabIcon = 'mypage';
     return BottomNavigationBarItem(
+      tooltip: '',
       icon: Stack(
         clipBehavior: Clip.none,
         children: [

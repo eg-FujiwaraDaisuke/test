@@ -166,6 +166,7 @@ class SupportParticipantsDialog {
   Widget _buildPartcipantItem(PowerPlantParticipantUser participant) {
     return GestureDetector(
       onTap: () {
+        Navigator.pop(context);
         final route = MaterialPageRoute(
           builder: (context) => ProfilePage(
             userId: participant.userId,
