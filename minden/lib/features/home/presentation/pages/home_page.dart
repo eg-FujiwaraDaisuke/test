@@ -157,7 +157,7 @@ class HomePage extends HookWidget {
 
           if (notification != null && android != null) {
             var payload = '';
-            if (message.data.isNotEmpty){
+            if (message.data.isNotEmpty) {
               final String? messageId = message.data['messageId'];
               if (messageId?.isNotEmpty ?? false) {
                 payload = messageId!;
@@ -190,7 +190,7 @@ class HomePage extends HookWidget {
             .getInitialMessage()
             .then((RemoteMessage? message) {
           logD('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
-          if (message?.data.isNotEmpty ?? false){
+          if (message?.data.isNotEmpty ?? false) {
             final String? messageId = message?.data['messageId'];
             if (messageId?.isNotEmpty ?? false) {
               _transitionScreenBloc.add(TransitionMessagePageEvent(messageId!));
@@ -201,7 +201,7 @@ class HomePage extends HookWidget {
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
           logD('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
-          if (message.data.isNotEmpty){
+          if (message.data.isNotEmpty) {
             final String? messageId = message.data['messageId'];
             if (messageId?.isNotEmpty ?? false) {
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
