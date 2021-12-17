@@ -8,6 +8,7 @@ import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/login/presentation/pages/login_input_page.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_name_page.dart';
 import 'package:minden/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -38,6 +39,10 @@ class _LoginPageState extends State<LoginPage> {
               );
               Navigator.push(context, route);
               return;
+            } else {
+              final sharedPreferences =
+              await SharedPreferences.getInstance();
+              await sharedPreferences.setBool('has_profile', true);
             }
 
             final route = NoAnimationMaterialPageRoute(
