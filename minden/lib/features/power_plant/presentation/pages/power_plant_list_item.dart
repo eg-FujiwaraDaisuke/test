@@ -15,10 +15,9 @@ enum Direction {
 
 /// 発電所一覧要素
 class PowerPlantListItem extends StatelessWidget {
-  const PowerPlantListItem(
+  PowerPlantListItem(
       {required this.powerPlant,
       required this.direction,
-      this.thumbnailImageHeight = 280,
       this.isShowCatchphras = true,
       this.fromApp = false,
       this.supportedData,
@@ -29,13 +28,17 @@ class PowerPlantListItem extends StatelessWidget {
   final PowerPlant powerPlant;
   final Direction direction;
   final bool isShowCatchphras;
-  final double thumbnailImageHeight;
   final String? supportedData;
   final String? reservedDate;
   final bool fromApp;
 
+  double _thumbnailImageHeight = 0;
+  double _thumbnailImageWidth = 0;
+
   @override
   Widget build(BuildContext context) {
+    _thumbnailImageWidth = MediaQuery.of(context).size.width;
+    _thumbnailImageHeight = _thumbnailImageWidth / 1.28;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: InkWell(
@@ -157,8 +160,8 @@ class PowerPlantListItem extends StatelessWidget {
           borderRadius: const BorderRadius.only(
               topLeft: cornerRadius, topRight: cornerRadius),
           child: SizedBox(
-            height: thumbnailImageHeight,
-            width: thumbnailImageHeight * 1.28,
+            height: _thumbnailImageHeight,
+            width: _thumbnailImageWidth,
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               placeholder: (context, url) {
