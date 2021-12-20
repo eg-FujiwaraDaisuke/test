@@ -5,9 +5,11 @@ import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialo
 class IssueReportDialog {
   IssueReportDialog({
     required this.context,
+    required this.userName,
   }) : super();
 
   final BuildContext context;
+  final String userName;
 
   Future<bool?> showDialog() async {
     return Navigator.push(
@@ -26,7 +28,7 @@ class IssueReportDialog {
                 height: 23,
               ),
               Text(
-                i18nTranslate(context, 'violate_user_name'),
+                userName,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Color(0xFF575292),
