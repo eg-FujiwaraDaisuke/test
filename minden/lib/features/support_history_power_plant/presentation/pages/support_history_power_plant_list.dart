@@ -80,7 +80,6 @@ class _SupportHistoryPowerPlantListState
                       PowerPlant.fromJson(supportHistoryPowerPlant.toJson()),
                   direction: direction,
                   isShowCatchphras: false,
-                  thumbnailImageHeight: 226,
                   fromApp: supportHistoryPowerPlant.fromApp,
                   supportedData:
                       widget.historyType == 'history' ? '$year年$day月' : null,
