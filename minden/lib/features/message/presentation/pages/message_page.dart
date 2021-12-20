@@ -14,7 +14,9 @@ import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
+import 'package:minden/features/message/presentation/viewmodel/messages_controller.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
@@ -24,6 +26,10 @@ class MessagePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final messagesStateData = useProvider(messagesStateControllerProvider);
+    final messagesStateController =
+        useProvider(messagesStateControllerProvider.notifier);
+
     useEffect(() {
       final _getMessageDetailBloc = GetMessageDetailBloc(
         const MessageInitial(),
@@ -56,6 +62,8 @@ class MessagePage extends HookWidget {
           Loading.hide();
 
           if (event is MessageDetailLoaded) {
+            messagesStateController.readMessage(event.messageDetail.messageId);
+
             _readMessageBloc.add(
                 ReadMessageEvent(messageId: event.messageDetail.messageId));
 
@@ -101,7 +109,9 @@ class MessagePage extends HookWidget {
         child: Center(
           child: Container(
             color: Colors.white,
-            child: _MessagesList(),
+            child: _MessagesList(
+                messagesStateData: messagesStateData,
+                messagesStateController: messagesStateController),
           ),
         ),
       ),
@@ -124,15 +134,20 @@ class MessagePage extends HookWidget {
 }
 
 class _MessagesList extends HookWidget {
+  const _MessagesList({
+    required this.messagesStateData,
+    required this.messagesStateController,
+  });
+
+  final MessagesState messagesStateData;
+  final MessagesStateController messagesStateController;
+
   @override
   Widget build(BuildContext context) {
     late ScrollController _scrollController;
     late GetMessagesBloc _getMessagesBloc;
     late GetShowBadgeBloc _getShowBadgeBloc;
 
-    final messagesStateData = useProvider(messagesStateControllerProvider);
-    final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
     final _isLoading = useState<bool>(false);
 
     useEffect(() {
@@ -347,8 +362,7 @@ class _MessagesListItem extends HookWidget {
                                   fontSize: 10,
                                   fontFamily: 'NotoSansJP',
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing:
-                                      calcLetterSpacing(letter: 0.5),
+                                  letterSpacing: calcLetterSpacing(letter: 0.5),
                                 ),
                               ),
                             )
@@ -361,8 +375,7 @@ class _MessagesListItem extends HookWidget {
                                   fontSize: 10,
                                   fontFamily: 'NotoSansJP',
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing:
-                                      calcLetterSpacing(letter: 0.5),
+                                  letterSpacing: calcLetterSpacing(letter: 0.5),
                                 ),
                               ),
                             )
