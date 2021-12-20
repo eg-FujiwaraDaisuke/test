@@ -158,6 +158,7 @@ class PowerPlantListItem extends StatelessWidget {
               topLeft: cornerRadius, topRight: cornerRadius),
           child: SizedBox(
             height: thumbnailImageHeight,
+            width: thumbnailImageHeight * 1.28,
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               placeholder: (context, url) {
