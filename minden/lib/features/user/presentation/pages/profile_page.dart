@@ -293,27 +293,30 @@ class PlaceHolderProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 173,
-                  color: const Color(0xFFFFFB92)),
-              CustomPaint(
-                size: Size(MediaQuery.of(context).size.width, 173),
-                painter: WallPaperArcPainter(color: Colors.white),
-              ),
-              const Positioned(
-                bottom: -44,
-                child: ProfileIcon(icon: ''),
-              )
-            ],
-          ),
-        ],
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 173,
+                    color: const Color(0xFFFFFB92)),
+                CustomPaint(
+                  size: Size(MediaQuery.of(context).size.width, 173),
+                  painter: WallPaperArcPainter(color: Colors.white),
+                ),
+                const Positioned(
+                  bottom: -44,
+                  child: ProfileIcon(icon: ''),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
 
