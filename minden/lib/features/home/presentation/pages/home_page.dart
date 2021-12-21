@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
@@ -33,6 +34,9 @@ class HomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _currentTab = useState<TabItem>(TabItem.home);
+
+    // バックグラウンドorターミネイト状態からプッシュ通知をタップした際のMessageIdを一時保持
+    final _shoWMessageId = useState('');
 
     late UpdateFcmTokenBloc _updateFcmTokenBloc;
     late GetMessagePushNotifyBloc _getMessagePushNotifyBloc;
@@ -74,13 +78,14 @@ class HomePage extends HookWidget {
             );
           }
         }
-        //
+
         if (event is TransitionMessagePageStart) {
           _selectTab(
             TabItem.mypage,
           );
         }
       });
+
       _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
         const MessageInitial(),
         GetMessages(
@@ -91,26 +96,17 @@ class HomePage extends HookWidget {
           ),
         ),
       );
-      _getMessagePushNotifyBloc.stream.listen((state) async {
-        if (state is MessagesPushNotifyLoaded) {
-          messagesStateController.updateMessagesPushNotify(state.messages);
+
+      _getMessagePushNotifyBloc.stream.listen((event) async {
+        if (event is MessagesLoading) {
+          Loading.show(context);
+          return;
         }
-      });
+        Loading.hide();
 
-      _getMessageBackGroundPushNotifyBloc = GetMessageBackGroundPushNotifyBloc(
-        const MessageInitial(),
-        GetMessages(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
-      );
-
-      _getMessageBackGroundPushNotifyBloc.stream.listen((state) async {
-        if (state is MessagesLoaded) {
-          messagesStateController.updateMessages(state.messages);
+        if (event is MessagesPushNotifyLoaded) {
+          logW('_getMessagePushNotifyBloc');
+          messagesStateController.updateMessagesPushNotify(event.messages);
         }
       });
 
@@ -124,6 +120,33 @@ class HomePage extends HookWidget {
           ),
         ),
       );
+
+      _getMessageBackGroundPushNotifyBloc = GetMessageBackGroundPushNotifyBloc(
+        const MessageInitial(),
+        GetMessages(
+          MessageRepositoryImpl(
+            dataSource: MessageDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+      );
+
+      _getMessageBackGroundPushNotifyBloc.stream.listen((event) {
+        if (event is MessagesLoading) {
+          Loading.show(context);
+          return;
+        }
+        Loading.hide();
+
+        if (event is MessagesBackgroundPushNotifyLoaded) {
+          if (_shoWMessageId.value.isEmpty) return;
+          messagesStateController.updateMessages(event.messages);
+          _transitionScreenBloc
+              .add(TransitionMessagePageEvent(_shoWMessageId.value));
+          _shoWMessageId.value = '';
+        }
+      });
 
       Future(() async {
         const initializationSettingsAndroid =
@@ -143,7 +166,6 @@ class HomePage extends HookWidget {
         // 画面上部にプッシュ通知メッセージを表示することができない為、
         // ローカル通知で擬似的に通知メッセージを表示
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          logD('フォアグラウンド状態からプッシュ通知受け取った ${message.data}');
           _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
 
           final notification = message.notification;
@@ -158,6 +180,7 @@ class HomePage extends HookWidget {
           if (notification != null && android != null) {
             var payload = '';
             if (message.data.isNotEmpty) {
+              logW('フォアグラウンド状態からプッシュ通知受け取った ${message.data}');
               final String? messageId = message.data['messageId'];
               if (messageId?.isNotEmpty ?? false) {
                 payload = messageId!;
@@ -184,28 +207,28 @@ class HomePage extends HookWidget {
         await si<FirebaseMessaging>().getToken().then(_postToken);
         si<FirebaseMessaging>().onTokenRefresh.listen(_postToken);
 
-        // プッシュ通知初期化
         // ターミネイト状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         await si<FirebaseMessaging>()
             .getInitialMessage()
             .then((RemoteMessage? message) {
-          logD('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
           if (message?.data.isNotEmpty ?? false) {
             final String? messageId = message?.data['messageId'];
+            _shoWMessageId.value = messageId ?? '';
             if (messageId?.isNotEmpty ?? false) {
-              _transitionScreenBloc.add(TransitionMessagePageEvent(messageId!));
+              logW('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
+              _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
             }
           }
         });
 
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          logD('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
           if (message.data.isNotEmpty) {
             final String? messageId = message.data['messageId'];
+            _shoWMessageId.value = messageId ?? '';
             if (messageId?.isNotEmpty ?? false) {
+              logW('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
-              _transitionScreenBloc.add(TransitionMessagePageEvent(messageId!));
             }
           }
         });
