@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minden/core/util/string_util.dart';
 import 'issue_report_complete_dialog.dart';
 import 'issue_report_dialog.dart';
 import 'issue_report_message_dialog.dart';
@@ -35,7 +36,7 @@ class _IssueReportDialogDebugPageState
                     ? IssueReportCompleteDialog(context: context).showDialog()
                     : null;
               },
-              child: Text('通報する'),
+              child: Text(i18nTranslate(context, 'violate_report')),
             ),
           ],
         ),
