@@ -16,6 +16,8 @@ class Account {
 
   String get userId => _me?.profile.userId ?? '';
 
+  User? get me => _me;
+
   bool isMe(String userId) {
     if (userId.isEmpty) {
       return false;
