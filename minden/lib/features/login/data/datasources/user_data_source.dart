@@ -66,11 +66,11 @@ class UserDataSourceImpl implements UserDataSource {
       headers: headers,
     );
     final responseBody = utf8.decode(response.bodyBytes);
-    logD(responseBody);
     await si<FirebaseMessaging>().deleteToken();
     await si<EncryptionTokenDataSourceImpl>().setAppToken('');
     await si<EncryptionTokenDataSourceImpl>().setRefreshToken('');
     await si<EncryptionTokenDataSourceImpl>().storeUser('{}');
+    logD(responseBody);
     return Success();
   }
 }
