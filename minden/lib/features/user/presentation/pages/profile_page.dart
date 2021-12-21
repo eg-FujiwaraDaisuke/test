@@ -59,12 +59,15 @@ class _ProfilePageState extends State<ProfilePage> {
       if (event is ProfileLoadError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          Loading.show(context);
+          await Future.delayed(const Duration(seconds: 2));
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (_) => false,
-          );
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ), (_) {
+            Loading.hide();
+            return false;
+          });
         }
       }
     });
@@ -82,204 +85,208 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final isMe = si<Account>().isMe(widget.userId);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Center(
-            child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
-              fit: BoxFit.fill,
-              width: 44,
-              height: 44,
-            ),
-          ),
-        ),
-        actions: [
-          if (isMe)
-            GestureDetector(
-              onTap: () async {
-                await Navigator.push<bool>(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ProfileEditPage(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return const FadeUpwardsPageTransitionsBuilder()
-                          .buildTransitions(
-                              MaterialPageRoute(
-                                  builder: (context) => ProfileEditPage(),
-                                  settings: const RouteSettings(
-                                      name: '/user/profile/edit')),
-                              context,
-                              animation,
-                              secondaryAnimation,
-                              child);
-                    },
-                  ),
-                );
-
-                // 常にリロード
-                _bloc.add(GetProfileEvent(userId: si<Account>().userId));
-              },
-              child: Container(
-                width: 90,
-                height: 44,
-                margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/user/edit.svg'),
-                    const SizedBox(
-                      width: 9,
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocListener<GetProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetProfileBloc, ProfileState>(
+            builder: (context, state) {
+          if (state is ProfileLoaded) {
+            return Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                centerTitle: true,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/images/common/leading_back.svg',
+                      fit: BoxFit.fill,
+                      width: 44,
+                      height: 44,
                     ),
-                    Text(
-                      i18nTranslate(context, 'user_edit'),
-                      style: const TextStyle(
-                        color: Color(0xFF575292),
-                        fontSize: 12,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
+                  ),
+                ),
+                actions: [
+                  if (isMe)
+                    GestureDetector(
+                      onTap: () async {
+                        await Navigator.push<bool>(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    ProfileEditPage(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return const FadeUpwardsPageTransitionsBuilder()
+                                  .buildTransitions(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileEditPage(),
+                                          settings: const RouteSettings(
+                                              name: '/user/profile/edit')),
+                                      context,
+                                      animation,
+                                      secondaryAnimation,
+                                      child);
+                            },
+                          ),
+                        );
+
+                        // 常にリロード
+                        _bloc
+                            .add(GetProfileEvent(userId: si<Account>().userId));
+                      },
+                      child: Container(
+                        width: 90,
+                        height: 44,
+                        margin:
+                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('assets/images/user/edit.svg'),
+                            const SizedBox(
+                              width: 9,
+                            ),
+                            Text(
+                              i18nTranslate(context, 'user_edit'),
+                              style: const TextStyle(
+                                color: Color(0xFF575292),
+                                fontSize: 12,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
-                  ],
-                ),
-              ),
-            )
-          else
-            GestureDetector(
-              onTap: () async {
-                // // ユーザーの通報
-                final isShowReport =
-                    await IssueReportDialog(context: context).showDialog();
-                final isReport = isShowReport!
-                    ? await IssueReportMessageDialog(
-                        context: context,
-                        targetUserId: widget.userId,
-                      ).showDialog()
-                    : false;
+                  else
+                    GestureDetector(
+                      onTap: () async {
+                        // // ユーザーの通報
+                        final isShowReport = await IssueReportDialog(
+                                context: context,
+                                userName: state.profile.name ?? '')
+                            .showDialog();
+                        final isReport = isShowReport!
+                            ? await IssueReportMessageDialog(
+                                context: context,
+                                targetUserId: widget.userId,
+                              ).showDialog()
+                            : false;
 
-                isReport!
-                    ? IssueReportCompleteDialog(context: context).showDialog()
-                    : null;
-              },
-              child: Container(
-                width: 44,
-                height: 44,
-                margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: Colors.black.withOpacity(0.2),
-                ),
-                child: const Center(
-                  child: Icon(Icons.more_horiz),
-                ),
+                        isReport!
+                            ? IssueReportCompleteDialog(context: context)
+                                .showDialog()
+                            : null;
+                      },
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        margin:
+                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22),
+                          color: Colors.black.withOpacity(0.2),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.more_horiz),
+                        ),
+                      ),
+                    )
+                ],
               ),
-            )
-        ],
-      ),
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          child: BlocProvider.value(
-            value: _bloc,
-            child: BlocListener<GetProfileBloc, ProfileState>(
-              listener: (context, state) {
-                if (state is ProfileLoading) {
-                  Loading.show(context);
-                  return;
-                }
-                Loading.hide();
-              },
-              child: BlocBuilder<GetProfileBloc, ProfileState>(
-                builder: (context, state) {
-                  if (state is ProfileLoaded) {
-                    return Center(
-                      child: Column(
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            clipBehavior: Clip.none,
-                            children: [
-                              if (state.profile.wallPaper?.isEmpty ?? true)
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 173,
-                                    color: const Color(0xFFFFFB92))
-                              else
-                                CachedNetworkImage(
-                                  imageUrl: state.profile.wallPaper!,
-                                  placeholder: (context, url) {
-                                    return Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 173,
-                                        color: const Color(0xFFFFFB92));
-                                  },
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 173,
-                                    color: const Color(0xFFFFFB92),
-                                  ),
+              extendBodyBehindAppBar: true,
+              body: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            if (state.profile.wallPaper?.isEmpty ?? true)
+                              Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 173,
-                                  fit: BoxFit.cover,
+                                  color: const Color(0xFFFFFB92))
+                            else
+                              CachedNetworkImage(
+                                imageUrl: state.profile.wallPaper!,
+                                placeholder: (context, url) {
+                                  return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 173,
+                                      color: const Color(0xFFFFFB92));
+                                },
+                                errorWidget: (context, url, error) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 173,
+                                  color: const Color(0xFFFFFB92),
                                 ),
-                              CustomPaint(
-                                size: Size(
-                                    MediaQuery.of(context).size.width, 173),
-                                painter:
-                                    WallPaperArcPainter(color: Colors.white),
+                                width: MediaQuery.of(context).size.width,
+                                height: 173,
+                                fit: BoxFit.cover,
                               ),
-                              Positioned(
-                                bottom: -44,
-                                child: ProfileIcon(icon: state.profile.icon),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          ProfileName(
-                            name: state.profile.name,
-                          ),
-                          const SizedBox(
-                            height: 35,
-                          ),
-                          _ProfileBio(bio: state.profile.bio),
-                          const SizedBox(
-                            height: 43,
-                          ),
-                          _TagsList(
-                            tagsList: state.profile.tags,
-                          ),
-                          const SizedBox(
-                            height: 37,
-                          ),
-                          const _SupportPowerPlant(),
-                        ],
-                      ),
-                    );
-                  }
-                  return PlaceHolderProfile();
-                },
+                            CustomPaint(
+                              size:
+                                  Size(MediaQuery.of(context).size.width, 173),
+                              painter: WallPaperArcPainter(color: Colors.white),
+                            ),
+                            Positioned(
+                              bottom: -44,
+                              child: ProfileIcon(icon: state.profile.icon),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        ProfileName(
+                          name: state.profile.name,
+                        ),
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        _ProfileBio(bio: state.profile.bio),
+                        const SizedBox(
+                          height: 43,
+                        ),
+                        _TagsList(
+                          tagsList: state.profile.tags,
+                        ),
+                        const SizedBox(
+                          height: 37,
+                        ),
+                        const _SupportPowerPlant(),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
+            );
+          }
+          return PlaceHolderProfile();
+        }),
       ),
     );
   }
@@ -289,29 +296,153 @@ class PlaceHolderProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 173,
-                  color: const Color(0xFFFFFB92)),
-              CustomPaint(
-                size: Size(MediaQuery.of(context).size.width, 173),
-                painter: WallPaperArcPainter(color: Colors.white),
-              ),
-              const Positioned(
-                bottom: -44,
-                child: ProfileIcon(icon: ''),
-              )
-            ],
-          ),
-        ],
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 173,
+                    color: const Color(0xFFFFFB92)),
+                CustomPaint(
+                  size: Size(MediaQuery.of(context).size.width, 173),
+                  painter: WallPaperArcPainter(color: Colors.white),
+                ),
+                const Positioned(
+                  bottom: -44,
+                  child: ProfileIcon(icon: ''),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
+
+    // return Scaffold(
+    //   backgroundColor: Colors.white,
+    //   appBar: AppBar(
+    //     backgroundColor: Colors.transparent,
+    //     elevation: 0,
+    //     centerTitle: true,
+    //     leading: GestureDetector(
+    //       onTap: () {
+    //         Navigator.pop(context);
+    //       },
+    //       child: Center(
+    //         child: SvgPicture.asset(
+    //           'assets/images/common/leading_back.svg',
+    //           fit: BoxFit.fill,
+    //           width: 44,
+    //           height: 44,
+    //         ),
+    //       ),
+    //     ),
+    //     actions: [
+    //       if (isMe)
+    //         GestureDetector(
+    //           onTap: () {},
+    //           child: Container(
+    //             width: 90,
+    //             height: 44,
+    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+    //             decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(22),
+    //               color: Colors.white,
+    //             ),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 SvgPicture.asset('assets/images/user/edit.svg'),
+    //                 const SizedBox(
+    //                   width: 9,
+    //                 ),
+    //                 Text(
+    //                   i18nTranslate(context, 'user_edit'),
+    //                   style: const TextStyle(
+    //                     color: Color(0xFF575292),
+    //                     fontSize: 12,
+    //                     fontFamily: 'NotoSansJP',
+    //                     fontWeight: FontWeight.w500,
+    //                   ),
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         )
+    //       else
+    //         GestureDetector(
+    //           onTap: () {},
+    //           child: Container(
+    //             width: 44,
+    //             height: 44,
+    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+    //             decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(22),
+    //               color: Colors.black.withOpacity(0.2),
+    //             ),
+    //             child: const Center(
+    //               child: Icon(Icons.more_horiz),
+    //             ),
+    //           ),
+    //         )
+    //     ],
+    //   ),
+    //   extendBodyBehindAppBar: true,
+    //   body: SafeArea(
+    //     top: false,
+    //     child: SingleChildScrollView(
+    //       child: Center(
+    //         child: Column(
+    //           children: [
+    //             Stack(
+    //               alignment: Alignment.center,
+    //               clipBehavior: Clip.none,
+    //               children: [
+    //                 Container(
+    //                     width: MediaQuery.of(context).size.width,
+    //                     height: 173,
+    //                     color: const Color(0xFFFFFB92)),
+    //                 CustomPaint(
+    //                   size: Size(MediaQuery.of(context).size.width, 173),
+    //                   painter: WallPaperArcPainter(color: Colors.white),
+    //                 ),
+    //                 const Positioned(
+    //                   bottom: -44,
+    //                   child: ProfileIcon(icon: null),
+    //                 )
+    //               ],
+    //             ),
+    //             const SizedBox(
+    //               height: 60,
+    //             ),
+    //             const ProfileName(
+    //               name: '',
+    //             ),
+    //             const SizedBox(
+    //               height: 35,
+    //             ),
+    //             const _ProfileBio(bio: ''),
+    //             const SizedBox(
+    //               height: 43,
+    //             ),
+    //             const _TagsList(
+    //               tagsList: [],
+    //             ),
+    //             const SizedBox(
+    //               height: 37,
+    //             ),
+    //             const _SupportPowerPlant(),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
 

@@ -21,7 +21,8 @@ class _IssueReportDialogDebugPageState
             ElevatedButton(
               onPressed: () async {
                 final isShowReport =
-                    await IssueReportDialog(context: context).showDialog();
+                    await IssueReportDialog(context: context, userName: 'test')
+                        .showDialog();
 
                 final isReport = isShowReport!
                     ? await IssueReportMessageDialog(
