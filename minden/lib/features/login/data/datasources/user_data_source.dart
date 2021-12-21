@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
@@ -66,9 +67,9 @@ class UserDataSourceImpl implements UserDataSource {
     );
     final responseBody = utf8.decode(response.bodyBytes);
     logD(responseBody);
+    await si<FirebaseMessaging>().deleteToken();
     await si<EncryptionTokenDataSourceImpl>().setAppToken('');
     await si<EncryptionTokenDataSourceImpl>().setRefreshToken('');
-
     await si<EncryptionTokenDataSourceImpl>().storeUser('{}');
     return Success();
   }

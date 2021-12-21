@@ -47,12 +47,15 @@ class PowerPlantListState extends State<PowerPlantList> {
       if (event is PowerPlantLoadError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          Loading.show(context);
+          await Future.delayed(const Duration(seconds: 2));
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (_) => false,
-          );
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ), (_) {
+            Loading.hide();
+            return false;
+          });
         }
       }
     });
