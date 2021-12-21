@@ -1,3 +1,4 @@
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +54,7 @@ class MessagePage extends HookWidget {
         ),
       );
 
+      // プッシュ通知をバックグラウンドorターミネイトからタップした場合
       if (showMessageId != null) {
         _getMessageDetailBloc.stream.listen((event) async {
           if (event is MessageDetailLoading) {
@@ -220,7 +222,9 @@ class _MessagesList extends HookWidget {
 }
 
 class _MessagesListItem extends HookWidget {
-  _MessagesListItem({required this.messageDetail});
+  _MessagesListItem({
+    required this.messageDetail,
+  });
 
   final MessageDetail messageDetail;
   late ReadMessageBloc _readMessageBloc;
@@ -228,8 +232,21 @@ class _MessagesListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final messagesStateController =
+        useProvider(messagesStateControllerProvider.notifier);
+
+    final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
+
     useEffect(() {
       _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
+      _getShowBadgeBloc.stream.listen((event) {
+        if (event is ShowBadgeLoaded) {
+          // TODO 一回目のタップでイベントが複数回呼ばれてる、二回目以降イベントが流れてこない
+          logW('ShowBadgeLoaded');
+          messagesStateController.updateShowBadge(event.messages);
+        }
+      });
+
       _readMessageBloc = ReadMessageBloc(
         const MessageInitial(),
         ReadMessage(
@@ -243,12 +260,9 @@ class _MessagesListItem extends HookWidget {
 
       return () {
         _readMessageBloc.close();
+        _getShowBadgeBloc.close();
       };
     });
-
-    final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
-    final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
 
     return GestureDetector(
       onTap: () {
