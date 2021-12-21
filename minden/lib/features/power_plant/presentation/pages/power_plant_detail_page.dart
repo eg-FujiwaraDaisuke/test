@@ -219,10 +219,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                         color: const Color(0xFFFF8C00)
                                             .withOpacity(0.6),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                         child: Text(
-                                          '応援中',
-                                          style: TextStyle(
+                                          i18nTranslate(context, 'supporting'),
+                                          style: const TextStyle(
                                             color: Color(0xFFFFFFFF),
                                             fontSize: 18,
                                             fontFamily: 'NotoSansJP',
