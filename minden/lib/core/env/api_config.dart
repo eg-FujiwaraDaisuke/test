@@ -8,8 +8,7 @@ class ApiConfig {
   static final Map<String, dynamic> _endpoint = {
     Config.kDevFlavor: 'https://www.dev.minapp.minden.co.jp',
     Config.kStagingFlavor: 'https://www.stg.minapp.minden.co.jp',
-    // TODO 納品後もとに戻す
-    Config.kProdFlavor: 'https://www.stg.minapp.minden.co.jp',
+    Config.kProdFlavor: 'https://www.minapp.minden.co.jp',
   };
 
   static final contentTypeHeaderApplicationJson = {

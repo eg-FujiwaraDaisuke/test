@@ -61,12 +61,15 @@ class IssueReportMessageDialog {
         if (event.needLogin) {
           await _sendIssueReportBloc.close();
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          Loading.show(context);
+          await Future.delayed(const Duration(seconds: 2));
           await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (_) => false,
-          );
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ), (_) {
+            Loading.hide();
+            return false;
+          });
         }
       }
     });

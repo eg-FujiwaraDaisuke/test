@@ -247,11 +247,15 @@ class _UserPageState extends State<UserPage> {
 
     if (ret) {
       BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+      Loading.show(context);
+      await Future.delayed(const Duration(seconds: 2));
       await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => LoginPage(),
-          ),
-          (_) => false);
+          ), (_) {
+        Loading.hide();
+        return false;
+      });
     }
   }
 }
