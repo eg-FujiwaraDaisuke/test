@@ -168,14 +168,14 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return <String, WidgetBuilder>{
-      // '/': (_) {
-      //   if (kReleaseMode) {
-      //     return InitialPage();
-      //   } else {
-      //     return DebugPage();
-      //   }
-      // },
-      '/': (_) => InitialPage(),
+      '/': (_) {
+        if (kReleaseMode) {
+          return InitialPage();
+        } else {
+          return DebugPage();
+        }
+      },
+      // '/': (_) => InitialPage(),
       '/tutorial': (_) => TutorialPage(),
       '/home': (_) => HomePage(),
       '/login': (_) => LoginPage(),
