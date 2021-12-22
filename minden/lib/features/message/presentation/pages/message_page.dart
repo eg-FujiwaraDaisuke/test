@@ -22,9 +22,12 @@ import 'package:minden/utile.dart';
 class MessagePage extends HookWidget {
   MessagePage({this.showMessageId});
 
+  // 値が入ってる場合、このページに来た時メッセージのダイアログを表示する
   String? showMessageId;
 
   late StreamSubscription _getMessageDetailSubscription;
+  late GetMessageDetailBloc _getMessageDetailBloc;
+  late ReadMessageBloc _readMessageBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class MessagePage extends HookWidget {
 
     useEffect(
       () {
-        final _getMessageDetailBloc = GetMessageDetailBloc(
+        _getMessageDetailBloc = GetMessageDetailBloc(
           const MessageInitial(),
           GetMessageDetail(
             MessageRepositoryImpl(
@@ -44,7 +47,7 @@ class MessagePage extends HookWidget {
           ),
         );
 
-        final _readMessageBloc = ReadMessageBloc(
+        _readMessageBloc = ReadMessageBloc(
           const MessageInitial(),
           ReadMessage(
             MessageRepositoryImpl(
@@ -144,13 +147,14 @@ class MessagePage extends HookWidget {
 
 class _MessagesList extends HookWidget {
   _MessagesList();
+
   late ScrollController _scrollController;
   late GetMessagesBloc _getMessagesBloc;
   late GetShowBadgeBloc _getShowBadgeBloc;
   late ReadMessageBloc _readMessageBloc;
-
   late StreamSubscription _getShowBadgeSubscription;
   late StreamSubscription _readMessageSubscription;
+  late StreamSubscription _getMessagesSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -178,10 +182,23 @@ class _MessagesList extends HookWidget {
         //最新のShowBadgeを取得し,ShowBadgeのviewmodelを更新する
         _getShowBadgeSubscription = _getShowBadgeBloc.stream.listen((event) {
           if (event is ShowBadgeLoaded) {
-            logW('_getShowBadgeSubscription.cancel');
+            logW('_getShowBadgeSubscription');
             _getShowBadgeSubscription.cancel();
             _readMessageSubscription.cancel();
             messagesStateController.updateShowBadge(event.messages);
+          }
+        });
+
+        _getMessagesSubscription = _getMessagesBloc.stream.listen((event) {
+          if (event is MessagesLoading) {
+            Loading.show(context);
+            _isLoading.value = true;
+            return;
+          }
+          Loading.hide();
+          if (event is MessagesLoaded) {
+            _isLoading.value = false;
+            messagesStateController.addMessages(event.messages);
           }
         });
 
@@ -208,6 +225,7 @@ class _MessagesList extends HookWidget {
           }
         });
         return () {
+          _getMessagesSubscription.cancel();
           _readMessageSubscription.cancel();
           _getShowBadgeSubscription.cancel();
           _scrollController.dispose();
@@ -253,11 +271,12 @@ class _MessagesListItem extends HookWidget {
       onTap: () {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
-        if (!messageDetail.read) {
-          readMessageBloc
-              .add(ReadMessageEvent(messageId: messageDetail.messageId));
-          messagesStateController.readMessage(messageDetail.messageId);
-        }
+        // if (!messageDetail.read) {
+        readMessageBloc
+            .add(ReadMessageEvent(messageId: messageDetail.messageId));
+
+        messagesStateController.readMessage(messageDetail.messageId);
+        // }
 
         // messageTypeに応じて表示するダイアログを変える
         if (messageDetail.messageType == '1') {
