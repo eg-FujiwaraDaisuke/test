@@ -197,6 +197,7 @@ class _MessagesList extends HookWidget {
           }
           Loading.hide();
           if (event is MessagesLoaded) {
+            logW('_getMessagesSubscription');
             _isLoading.value = false;
             messagesStateController.addMessages(event.messages);
           }
@@ -205,6 +206,7 @@ class _MessagesList extends HookWidget {
         // メッセージをタップした際に既読APIを叩く、既読APIが終わったら最新のShowBadgeを取得しviewmodelを更新する
         _readMessageSubscription = _readMessageBloc.stream.listen((event) {
           if (event is MessageReaded) {
+            logW('_readMessageSubscription');
             _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
           }
         });
@@ -271,12 +273,11 @@ class _MessagesListItem extends HookWidget {
       onTap: () {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
-        // if (!messageDetail.read) {
-        readMessageBloc
-            .add(ReadMessageEvent(messageId: messageDetail.messageId));
-
-        messagesStateController.readMessage(messageDetail.messageId);
-        // }
+        if (!messageDetail.read) {
+          readMessageBloc
+              .add(ReadMessageEvent(messageId: messageDetail.messageId));
+          messagesStateController.readMessage(messageDetail.messageId);
+        }
 
         // messageTypeに応じて表示するダイアログを変える
         if (messageDetail.messageType == '1') {
