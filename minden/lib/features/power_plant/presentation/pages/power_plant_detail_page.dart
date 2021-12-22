@@ -142,12 +142,41 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       ),
     );
 
-    _getSupportActionBloc.stream.listen((event) {
+    var firstLoad = true;
+    _getSupportActionBloc.stream.listen((event) async {
       if (event is SupportActionLoading) {
         Loading.show(context);
         return;
       }
       Loading.hide();
+
+      if (event is SupportActionLoaded) {
+        if (!firstLoad) {
+          _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
+          _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
+        }
+        firstLoad = false;
+        return;
+      }
+
+      if (event is PowerPlantLoadError) {
+        if (event.needLogin) {
+          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+          Loading.show(context);
+          await Future.delayed(const Duration(seconds: 2));
+          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ), (_) {
+            Loading.hide();
+            return false;
+          });
+        } else {
+          await _showAlert(
+              message: i18nTranslate(context, 'unsupported_error'),
+              actionName: 'OK');
+        }
+      }
     });
 
     _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
@@ -155,6 +184,26 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
     _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
     _historyBloc.add(const GetSupportHistoryEvent(historyType: 'reservation'));
+  }
+
+  Future<void> _showAlert({
+    required String message,
+    required String actionName,
+  }) async {
+    await showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
+                child: Text(actionName),
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -886,10 +935,11 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   Widget _generateParticipant(PowerPlantParticipant participant) {
     final icons = _generateParticipantIcons(participant);
-    if (icons.isEmpty) return Container();
+    final length = (icons.length > maxIconCount) ? maxIconCount : icons.length;
+    if (length <= 0) return Container();
     return Stack(
       children: List.generate(
-        icons.length,
+        length,
         (index) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
