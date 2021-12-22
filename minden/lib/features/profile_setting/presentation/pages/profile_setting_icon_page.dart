@@ -27,7 +27,7 @@ class ProfileSettingIconPage extends StatefulWidget {
 }
 
 class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
-  late UpdateProfileBloc _bloc;
+  late UpdateProfileBloc _updateProfileBloc;
 
   void _setImage(File croppedImage) {
     BlocProvider.of<UploadBloc>(context).add(UploadMediaEvent(croppedImage));
@@ -36,7 +36,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   @override
   void initState() {
     super.initState();
-    _bloc = UpdateProfileBloc(
+    _updateProfileBloc = UpdateProfileBloc(
       const ProfileStateInitial(),
       UpdateProfile(
         ProfileRepositoryImpl(
@@ -46,7 +46,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
         ),
       ),
     );
-    _bloc.stream.listen((event) {
+    _updateProfileBloc.stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -57,7 +57,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
 
   @override
   void dispose() {
-    _bloc.close();
+    _updateProfileBloc.close();
     super.dispose();
   }
 
@@ -107,7 +107,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
           }
           Loading.hide();
           if (state is Uploaded) {
-            _bloc.add(
+            _updateProfileBloc.add(
               UpdateProfileEvent(
                 name: '',
                 icon: state.media.url,

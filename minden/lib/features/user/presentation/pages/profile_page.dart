@@ -38,13 +38,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late GetProfileBloc _bloc;
+  late GetProfileBloc _getProfileBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetProfileBloc(
+    _getProfileBloc = GetProfileBloc(
       const ProfileStateInitial(),
       GetProfile(
         ProfileRepositoryImpl(
@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
 
-    _bloc.stream.listen((event) async {
+    _getProfileBloc.stream.listen((event) async {
       if (event is ProfileLoadError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
@@ -72,12 +72,12 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
 
-    _bloc.add(GetProfileEvent(userId: widget.userId));
+    _getProfileBloc.add(GetProfileEvent(userId: widget.userId));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getProfileBloc.close();
     super.dispose();
   }
 
@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final isMe = si<Account>().isMe(widget.userId);
 
     return BlocProvider.value(
-      value: _bloc,
+      value: _getProfileBloc,
       child: BlocListener<GetProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileLoading) {
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         );
 
                         // 常にリロード
-                        _bloc
+                        _getProfileBloc
                             .add(GetProfileEvent(userId: si<Account>().userId));
                       },
                       child: Container(

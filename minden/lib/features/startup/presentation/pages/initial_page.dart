@@ -32,7 +32,7 @@ class InitialPage extends StatefulWidget {
 }
 
 class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
-  final _bloc = StartupBloc(
+  final _startupBloc = StartupBloc(
     StartupStateEmpty(),
     GetStartupInfo(
       StartupRepositoryImpl(
@@ -55,7 +55,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
       } else if (state is LocalizedStateUpdated) {
         localizedSubscription?.cancel();
         // localizeの取得設定の後、remote configの読み込みを行う。
-        _bloc.add(GetStartupInfoEvent());
+        _startupBloc.add(GetStartupInfoEvent());
       } else if (state is LocalizedStateError) {
         await FlutterI18n.refresh(context, const Locale('ja'));
         BlocProvider.of<LocalizedBloc>(context)
@@ -64,7 +64,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     });
 
     StreamSubscription? startupSubscription;
-    startupSubscription = _bloc.stream.listen((state) {
+    startupSubscription = _startupBloc.stream.listen((state) {
       if (state is StartupStateLoading) {
         Loading.show(context);
         return;
@@ -79,7 +79,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
               actionName: i18nTranslate(context, state.actionKey),
               actionUrl: state.actionUrl ?? '',
               barrierDismissible: false);
-          _bloc.add(GetStartupInfoEvent());
+          _startupBloc.add(GetStartupInfoEvent());
         })();
         return;
       }
@@ -111,7 +111,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     return Scaffold(
       backgroundColor: Color(0xFFFF8C00),
       body: BlocProvider.value(
-        value: _bloc,
+        value: _startupBloc,
         child: Center(
           child: SvgPicture.asset(
             'assets/images/login/title.svg',
@@ -215,7 +215,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
 
   @override
   void dispose() {
-    _bloc.close();
+    _startupBloc.close();
     super.dispose();
   }
 

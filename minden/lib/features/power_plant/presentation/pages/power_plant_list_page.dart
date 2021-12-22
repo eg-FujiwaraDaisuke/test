@@ -26,13 +26,13 @@ class PowerPlantList extends StatefulWidget {
 }
 
 class PowerPlantListState extends State<PowerPlantList> {
-  late GetPowerPlantsBloc _bloc;
+  late GetPowerPlantsBloc _getPowerPlantsBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetPowerPlantsBloc(
+    _getPowerPlantsBloc = GetPowerPlantsBloc(
       const PowerPlantStateInitial(),
       GetPowerPlants(
         PowerPlantRepositoryImpl(
@@ -43,7 +43,7 @@ class PowerPlantListState extends State<PowerPlantList> {
       ),
     );
 
-    _bloc.stream.listen((event) async {
+    _getPowerPlantsBloc.stream.listen((event) async {
       if (event is PowerPlantLoadError) {
         if (event.needLogin) {
           BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
@@ -59,12 +59,12 @@ class PowerPlantListState extends State<PowerPlantList> {
         }
       }
     });
-    _bloc.add(GetPowerPlantsEvent(tagId: widget.tagId));
+    _getPowerPlantsBloc.add(GetPowerPlantsEvent(tagId: widget.tagId));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getPowerPlantsBloc.close();
     Loading.hide();
     super.dispose();
   }
@@ -72,7 +72,7 @@ class PowerPlantListState extends State<PowerPlantList> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _bloc,
+      value: _getPowerPlantsBloc,
       child: BlocListener<GetPowerPlantsBloc, PowerPlantState>(
         listener: (context, state) {
           if (state is PowerPlantLoading) {
