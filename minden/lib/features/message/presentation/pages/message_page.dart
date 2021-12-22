@@ -236,6 +236,11 @@ class _MessagesList extends HookWidget {
       },
     );
 
+    void _readMessage(int messageId) {
+      _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
+      messagesStateController.readMessage(messageId);
+    }
+
     return Container(
       height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -245,7 +250,7 @@ class _MessagesList extends HookWidget {
         itemBuilder: (context, index) {
           return _MessagesListItem(
             messageDetail: messagesStateData.messages[index],
-            readMessageBloc: _readMessageBloc,
+            readMessage: _readMessage,
           );
         },
       ),
@@ -256,11 +261,11 @@ class _MessagesList extends HookWidget {
 class _MessagesListItem extends HookWidget {
   _MessagesListItem({
     required this.messageDetail,
-    required this.readMessageBloc,
+    required this.readMessage,
   });
 
   final MessageDetail messageDetail;
-  final ReadMessageBloc readMessageBloc;
+  final Function readMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -274,9 +279,10 @@ class _MessagesListItem extends HookWidget {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
         if (!messageDetail.read) {
-          readMessageBloc
-              .add(ReadMessageEvent(messageId: messageDetail.messageId));
-          messagesStateController.readMessage(messageDetail.messageId);
+          readMessage(messageDetail.messageId);
+          // readMessageBloc
+          //     .add(ReadMessageEvent(messageId: messageDetail.messageId));
+          // messagesStateController.readMessage(messageDetail.messageId);
         }
 
         // messageTypeに応じて表示するダイアログを変える
