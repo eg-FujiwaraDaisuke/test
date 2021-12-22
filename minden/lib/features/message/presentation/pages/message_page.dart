@@ -31,64 +31,67 @@ class MessagePage extends HookWidget {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
 
-    useEffect(() {
-      final _getMessageDetailBloc = GetMessageDetailBloc(
-        const MessageInitial(),
-        GetMessageDetail(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
+    useEffect(
+      () {
+        final _getMessageDetailBloc = GetMessageDetailBloc(
+          const MessageInitial(),
+          GetMessageDetail(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final _readMessageBloc = ReadMessageBloc(
-        const MessageInitial(),
-        ReadMessage(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
+        final _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      // プッシュ通知をバックグラウンドorターミネイトからタップした場合
-      if (showMessageId != null) {
-        _getMessageDetailBloc.stream.listen((event) async {
-          if (event is MessageDetailLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-
-          if (event is MessageDetailLoaded) {
-            messagesStateController.readMessage(event.messageDetail.messageId);
-
-            _readMessageBloc.add(
-                ReadMessageEvent(messageId: event.messageDetail.messageId));
-
-            if (event.messageDetail.messageType == '1') {
-              MindenMessageDialog(
-                      context: context, messageDetail: event.messageDetail)
-                  .showDialog();
-            } else {
-              PowerPlantMessageDialog(
-                context: context,
-                messageDetail: event.messageDetail,
-              ).showDialog();
+        // プッシュ通知をバックグラウンドorターミネイトからタップした場合
+        if (showMessageId != null) {
+          _getMessageDetailBloc.stream.listen((event) async {
+            if (event is MessageDetailLoading) {
+              Loading.show(context);
+              return;
             }
-          }
-        });
-        _getMessageDetailBloc
-            .add(GetMessageDetailEvent(messageId: showMessageId!));
-      }
-      return () {
-        _getMessageDetailBloc.close();
-        _readMessageBloc.close();
-      };
-    }, []);
+            Loading.hide();
+
+            if (event is MessageDetailLoaded) {
+              messagesStateController
+                  .readMessage(event.messageDetail.messageId);
+
+              _readMessageBloc.add(
+                  ReadMessageEvent(messageId: event.messageDetail.messageId));
+
+              if (event.messageDetail.messageType == '1') {
+                MindenMessageDialog(
+                        context: context, messageDetail: event.messageDetail)
+                    .showDialog();
+              } else {
+                PowerPlantMessageDialog(
+                  context: context,
+                  messageDetail: event.messageDetail,
+                ).showDialog();
+              }
+            }
+          });
+          _getMessageDetailBloc
+              .add(GetMessageDetailEvent(messageId: showMessageId!));
+        }
+        return () {
+          _getMessageDetailBloc.close();
+          _readMessageBloc.close();
+        };
+      },
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,7 +139,7 @@ class MessagePage extends HookWidget {
 }
 
 class _MessagesList extends HookWidget {
-  const _MessagesList({
+  _MessagesList({
     required this.messagesStateData,
     required this.messagesStateController,
   });
@@ -144,35 +147,61 @@ class _MessagesList extends HookWidget {
   final MessagesState messagesStateData;
   final MessagesStateController messagesStateController;
 
+  late ScrollController _scrollController;
+  late GetMessagesBloc _getMessagesBloc;
+  late GetShowBadgeBloc _getShowBadgeBloc;
+  late ReadMessageBloc _readMessageBloc;
+
   @override
   Widget build(BuildContext context) {
-    late ScrollController _scrollController;
-    late GetMessagesBloc _getMessagesBloc;
-    late GetShowBadgeBloc _getShowBadgeBloc;
-
     final _isLoading = useState<bool>(false);
 
-    useEffect(() {
-      _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-      _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
-      _scrollController = ScrollController();
+    useEffect(
+      () {
+        logW('useEffect');
+        _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
+        _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
+        _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
+        _getShowBadgeBloc.stream.listen((event) {
+          if (event is ShowBadgeLoaded) {
+            // TODO 一回目のタップでイベントが複数回呼ばれてる,タップするごとに増殖する
+            logW('${event.messages.toJson()}');
+            messagesStateController.updateShowBadge(event.messages);
+          }
+        });
 
-      _scrollController.addListener(() {
-        final maxScrollExtent = _scrollController.position.maxScrollExtent;
-        final currentPosition = _scrollController.position.pixels;
+        _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
+            ),
+          ),
+        );
 
-        if (maxScrollExtent > 0 && maxScrollExtent <= currentPosition) {
-          if (_isLoading.value) return;
-          if (messagesStateData.page == messagesStateData.total) return;
-          _isLoading.value = true;
-          _getMessagesBloc
-              .add(GetMessagesEvent((messagesStateData.page + 1).toString()));
-        }
-      });
-      return () {
-        _scrollController.dispose();
-      };
-    });
+        _scrollController = ScrollController();
+
+        _scrollController.addListener(() {
+          final maxScrollExtent = _scrollController.position.maxScrollExtent;
+          final currentPosition = _scrollController.position.pixels;
+
+          if (maxScrollExtent > 0 && maxScrollExtent <= currentPosition) {
+            if (_isLoading.value) return;
+            if (messagesStateData.page == messagesStateData.total) return;
+            _isLoading.value = true;
+            _getMessagesBloc
+                .add(GetMessagesEvent((messagesStateData.page + 1).toString()));
+          }
+        });
+        return () {
+          logW('return');
+          _scrollController.dispose();
+          _readMessageBloc.close();
+        };
+      },
+    );
 
     return MultiBlocProvider(
       providers: [
@@ -212,6 +241,8 @@ class _MessagesList extends HookWidget {
             itemBuilder: (context, index) {
               return _MessagesListItem(
                 messageDetail: messagesStateData.messages[index],
+                readMessageBloc: _readMessageBloc,
+                getShowBadgeBloc: _getShowBadgeBloc,
               );
             },
           ),
@@ -222,13 +253,14 @@ class _MessagesList extends HookWidget {
 }
 
 class _MessagesListItem extends HookWidget {
-  _MessagesListItem({
-    required this.messageDetail,
-  });
+  _MessagesListItem(
+      {required this.messageDetail,
+      required this.readMessageBloc,
+      required this.getShowBadgeBloc});
 
   final MessageDetail messageDetail;
-  late ReadMessageBloc _readMessageBloc;
-  late GetShowBadgeBloc _getShowBadgeBloc;
+  final ReadMessageBloc readMessageBloc;
+  final GetShowBadgeBloc getShowBadgeBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -237,45 +269,18 @@ class _MessagesListItem extends HookWidget {
 
     final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
 
-    useEffect(() {
-      _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
-      _getShowBadgeBloc.stream.listen((event) {
-        if (event is ShowBadgeLoaded) {
-          // TODO 一回目のタップでイベントが複数回呼ばれてる、二回目以降イベントが流れてこない
-          logW('ShowBadgeLoaded');
-          messagesStateController.updateShowBadge(event.messages);
-        }
-      });
-
-      _readMessageBloc = ReadMessageBloc(
-        const MessageInitial(),
-        ReadMessage(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
-      );
-
-      return () {
-        _readMessageBloc.close();
-        _getShowBadgeBloc.close();
-      };
-    });
-
     return GestureDetector(
       onTap: () {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
         if (!messageDetail.read) {
-          _readMessageBloc
+          readMessageBloc
               .add(ReadMessageEvent(messageId: messageDetail.messageId));
           messagesStateController.readMessage(messageDetail.messageId);
         }
 
         // 未読バッチの有無を確認する
-        _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
+        getShowBadgeBloc.add(GetShowBadgeEvent('1'));
 
         if (messageDetail.messageType == '1') {
           MindenMessageDialog(context: context, messageDetail: messageDetail)
