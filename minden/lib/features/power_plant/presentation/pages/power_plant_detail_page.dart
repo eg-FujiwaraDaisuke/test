@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
@@ -34,9 +34,9 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
-import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../injection_container.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
@@ -64,6 +64,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
   late GetSupportActionBloc _getSupportActionBloc;
+  late GetPowerPlantsHistoryBloc _historyBloc;
 
   @override
   void initState() {
@@ -130,10 +131,30 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       ),
     );
 
+    _historyBloc = GetPowerPlantsHistoryBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlantsHistory(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+
+    _getSupportActionBloc.stream.listen((event) {
+      if (event is SupportActionLoading) {
+        Loading.show(context);
+        return;
+      }
+      Loading.hide();
+    });
+
     _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
     _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
     _plantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
     _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
+    _historyBloc.add(const GetSupportHistoryEvent(historyType: 'reservation'));
   }
 
   @override
@@ -142,6 +163,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     _participantBloc.close();
     _plantTagsBloc.close();
     _getSupportActionBloc.close();
+    _historyBloc.close();
     super.dispose();
   }
 
@@ -150,13 +172,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     return BlocProvider.value(
       value: _plantBloc,
       child: BlocListener<GetPowerPlantBloc, PowerPlantState>(
-        listener: (context, state) {
-          if (state is PowerPlantLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
+        listener: (context, state) {},
         child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantLoaded) {
@@ -191,13 +207,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           value: _getSupportActionBloc,
                           child: BlocListener<GetSupportActionBloc,
                               PowerPlantState>(
-                            listener: (context, state) {
-                              if (state is PowerPlantLoading) {
-                                Loading.show(context);
-                                return;
-                              }
-                              Loading.hide();
-                            },
+                            listener: (context, state) {},
                             child: BlocBuilder<GetSupportActionBloc,
                                 PowerPlantState>(
                               builder: (context, state) {
@@ -272,54 +282,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                             ],
                           ),
                           _generateDetail(detail),
-                          BlocProvider.value(
-                            value: _getSupportActionBloc,
-                            child: BlocListener<GetSupportActionBloc,
-                                PowerPlantState>(
-                              listener: (context, state) {
-                                if (state is SupportActionLoading) {
-                                  Loading.show(context);
-                                  return;
-                                }
-                                Loading.hide();
-                              },
-                              child: BlocBuilder<GetSupportActionBloc,
-                                  PowerPlantState>(
-                                builder: (context, state) {
-                                  if (state is SupportActionLoaded) {
-                                    if (state.supportAction.support_action !=
-                                            'available' &&
-                                        state.supportAction.support_action !=
-                                            'limited') {
-                                      return Container();
-                                    }
-
-                                    return FutureBuilder(
-                                      future: _getUserjson(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot snapshot) {
-                                        if (snapshot.hasData) {
-                                          final isArtistPlan =
-                                              snapshot.data.limitedPlantId !=
-                                                  null;
-                                          return SupportButton(
-                                              detail: detail,
-                                              isArtistPlan: isArtistPlan,
-                                              user: snapshot.data,
-                                              supportAction: state
-                                                  .supportAction.support_action,
-                                              getSupportAction:
-                                                  _getSupportAction);
-                                        }
-                                        return Container();
-                                      },
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                          )
+                          _actionButton(detail)
                         ],
                       ),
                     ),
@@ -336,15 +299,53 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     );
   }
 
-  void _getSupportAction() {
-    _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
+  Widget _actionButton(PowerPlantDetail detail) {
+    return BlocProvider.value(
+      value: _getSupportActionBloc,
+      child: BlocListener<GetSupportActionBloc, PowerPlantState>(
+        listener: (context, state) {},
+        child: BlocBuilder<GetSupportActionBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is SupportActionLoaded) {
+              if (state.supportAction.support_action != 'available' &&
+                  state.supportAction.support_action != 'limited') {
+                return Container();
+              }
+
+              final me = si<Account>().me;
+              if (me == null) return Container();
+
+              return BlocProvider.value(
+                value: _historyBloc,
+                child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
+                  listener: (context, state) {},
+                  child:
+                      BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
+                    builder: (context, historyState) {
+                      if (historyState is HistoryLoaded) {
+                        return SupportButton(
+                          detail: detail,
+                          user: me,
+                          supportAction: state.supportAction.support_action,
+                          getSupportAction: _getSupportAction,
+                          historyPowerPlants: historyState.history.powerPlants,
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                ),
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
-  dynamic _getUserjson() async {
-    final userJsonData =
-        await si<EncryptionTokenDataSourceImpl>().restoreUser();
-    final userJson = json.decode(userJsonData);
-    return User.fromJson(userJson);
+  void _getSupportAction() {
+    _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
   }
 
   Widget _generateDetail(
@@ -672,85 +673,43 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 }
 
 /// 応援ボタンの表示
-class SupportButton extends StatefulWidget {
-  const SupportButton({
+class SupportButton extends StatelessWidget {
+  SupportButton({
     required this.detail,
-    required this.isArtistPlan,
     required this.user,
     required this.supportAction,
     required this.getSupportAction,
-  }) : super();
+    required this.historyPowerPlants,
+  });
 
   final PowerPlantDetail detail;
-  final bool isArtistPlan;
   final User user;
   final String supportAction;
   final Function getSupportAction;
+  final List<SupportHistoryPowerPlant> historyPowerPlants;
 
-  @override
-  _SupportButtonState createState() => _SupportButtonState();
-}
-
-class _SupportButtonState extends State<SupportButton> {
-  late GetPowerPlantsHistoryBloc _historyBloc;
-  List<RegistPowerPlant> _registPowerPlants = [];
-  List<SupportHistoryPowerPlant> _historyPowerPlants = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _historyBloc = GetPowerPlantsHistoryBloc(
-      const PowerPlantStateInitial(),
-      GetPowerPlantsHistory(
-        PowerPlantRepositoryImpl(
-          powerPlantDataSource: PowerPlantDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
-    _historyBloc.stream.listen((event) {
-      if (event is HistoryLoading) {
-        Loading.show(context);
-        return;
-      }
-      Loading.hide();
-      if (event is HistoryLoaded) {
-        _historyPowerPlants = event.history.powerPlants;
-      }
-    });
-
-    _historyBloc.add(const GetSupportHistoryEvent(historyType: 'reservation'));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _historyBloc.close();
-  }
+  List<RegistPowerPlant> _registerPowerPlants = [];
 
   @override
   Widget build(BuildContext context) {
-    final isArtistPowerPlant = widget.detail.limitedIntroducerId == 'ARTIST';
-    final supportableNumber = widget.user.supportableNumber;
+    final isArtistPowerPlant = detail.limitedIntroducerId == 'ARTIST';
+    final supportableNumber = user.supportableNumber;
 
     final selectPowerPlant = PowerPlant(
-      plantId: widget.detail.plantId,
-      areaCode: widget.detail.areaCode,
-      name: widget.detail.name ?? '',
-      viewAddress: widget.detail.viewAddress ?? '',
-      voltageType: widget.detail.voltageType,
-      powerGenerationMethod: widget.detail.powerGenerationMethod ?? '',
-      renewableType: widget.detail.renewableType,
-      generationCapacity: widget.detail.generationCapacity,
-      displayOrder: widget.detail.displayOrder,
-      isRecommend: widget.detail.isRecommend,
-      ownerName: widget.detail.ownerMessage ?? '',
-      startDate: widget.detail.startDate,
-      endDate: widget.detail.endDate,
-      plantImage1: widget.detail.plantImage1,
+      plantId: detail.plantId,
+      areaCode: detail.areaCode,
+      name: detail.name ?? '',
+      viewAddress: detail.viewAddress ?? '',
+      voltageType: detail.voltageType,
+      powerGenerationMethod: detail.powerGenerationMethod ?? '',
+      renewableType: detail.renewableType,
+      generationCapacity: detail.generationCapacity,
+      displayOrder: detail.displayOrder,
+      isRecommend: detail.isRecommend,
+      ownerName: detail.ownerMessage ?? '',
+      startDate: detail.startDate,
+      endDate: detail.endDate,
+      plantImage1: detail.plantImage1,
     );
 
     return Container(
@@ -780,9 +739,9 @@ class _SupportButtonState extends State<SupportButton> {
             InkWell(
               child: OutlinedButton(
                 onPressed: () async {
-                  if (widget.supportAction != 'available') return;
+                  if (supportAction != 'available') return;
 
-                  _registPowerPlants = _historyPowerPlants
+                  _registerPowerPlants = historyPowerPlants
                       .map((powerPlant) => RegistPowerPlant(
                             isRegist: true,
                             powerPlant:
@@ -792,25 +751,25 @@ class _SupportButtonState extends State<SupportButton> {
 
                   // 通常の発電所
                   // 契約件数が現在の応援件数より少ない場合
-                  if (supportableNumber > _historyPowerPlants.length) {
+                  if (supportableNumber > historyPowerPlants.length) {
                     await SupportPowerPlantDecisionDialog(
                       context: context,
                       selectPowerPlant: selectPowerPlant,
-                      registPowerPlants: _registPowerPlants,
-                      user: widget.user,
+                      registPowerPlants: _registerPowerPlants,
+                      user: user,
                     ).showDialog();
-                    widget.getSupportAction();
+                    getSupportAction();
                     return;
                   }
 
                   // 契約件数を超えてるため、応援プラントを選択する
-                  if (supportableNumber <= _historyPowerPlants.length) {
+                  if (supportableNumber <= historyPowerPlants.length) {
                     // ignore: use_build_context_synchronously
                     final isSelected = await SupportPowerPlantSelectDialog(
                       context: context,
                       selectPowerPlant: selectPowerPlant,
-                      registPowerPlants: _registPowerPlants,
-                      user: widget.user,
+                      registPowerPlants: _registerPowerPlants,
+                      user: user,
                     ).showDialog();
 
                     // 応援プラントを選択した場合、確定ダイアログに飛ばす
@@ -819,13 +778,13 @@ class _SupportButtonState extends State<SupportButton> {
                       await SupportPowerPlantDecisionDialog(
                         context: context,
                         selectPowerPlant: selectPowerPlant,
-                        registPowerPlants: _registPowerPlants,
-                        user: widget.user,
+                        registPowerPlants: _registerPowerPlants,
+                        user: user,
                       ).showDialog();
-                      widget.getSupportAction();
+                      getSupportAction();
                     } else {
                       // 応援プラントを選択しなかった場合、stateの中身をリセット
-                      _registPowerPlants = _historyPowerPlants
+                      _registerPowerPlants = historyPowerPlants
                           .map(
                             (selectedPowerPlant) => RegistPowerPlant(
                               isRegist: true,
@@ -848,8 +807,8 @@ class _SupportButtonState extends State<SupportButton> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
                   child: Text(
-                    _getSupportButtonText(
-                        isArtistPowerPlant, widget.isArtistPlan),
+                    _getSupportButtonText(context, isArtistPowerPlant,
+                        user.limitedPlantId != null),
                     style: const TextStyle(
                       fontSize: 16,
                       fontFamily: 'NotoSansJP',
@@ -861,7 +820,7 @@ class _SupportButtonState extends State<SupportButton> {
                 ),
               ),
             ),
-            if (widget.supportAction == 'limited')
+            if (supportAction == 'limited')
               Container(
                 padding: const EdgeInsets.only(top: 9),
                 width: 310,
@@ -884,8 +843,8 @@ class _SupportButtonState extends State<SupportButton> {
     );
   }
 
-  String _getSupportButtonText(
-      bool isArtistPowerPlant, bool canSupportArtistPowerPlant) {
+  String _getSupportButtonText(BuildContext context, bool isArtistPowerPlant,
+      bool canSupportArtistPowerPlant) {
     if (!isArtistPowerPlant) {
       return i18nTranslate(context, 'power_plant_detail_support');
     }
@@ -897,7 +856,6 @@ class _SupportButtonState extends State<SupportButton> {
     if (isArtistPowerPlant && canSupportArtistPowerPlant) {
       return i18nTranslate(context, 'power_plant_detail_support');
     }
-
     return i18nTranslate(context, 'power_plant_detail_support');
   }
 }
