@@ -174,7 +174,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         } else {
           await _showAlert(
               message: i18nTranslate(context, 'unsupported_error'),
-              actionName: "OK");
+              actionName: 'OK');
         }
       }
     });
@@ -935,10 +935,11 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   Widget _generateParticipant(PowerPlantParticipant participant) {
     final icons = _generateParticipantIcons(participant);
-    if (icons.isEmpty) return Container();
+    final length = (icons.length > maxIconCount) ? maxIconCount : icons.length;
+    if (length <= 0) return Container();
     return Stack(
       children: List.generate(
-        icons.length,
+        length,
         (index) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
