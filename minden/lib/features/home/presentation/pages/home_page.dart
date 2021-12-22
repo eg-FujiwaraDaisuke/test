@@ -216,7 +216,7 @@ class HomePage extends HookWidget {
             _shoWMessageId.value = messageId ?? '';
             if (messageId?.isNotEmpty ?? false) {
               logW('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
-              _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
+              _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
             }
           }
         });

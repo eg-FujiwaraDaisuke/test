@@ -175,7 +175,6 @@ class Application extends StatelessWidget {
           return DebugPage();
         }
       },
-      // '/': (_) => InitialPage(),
       '/tutorial': (_) => TutorialPage(),
       '/home': (_) => HomePage(),
       '/login': (_) => LoginPage(),

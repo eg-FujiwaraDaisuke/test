@@ -19,14 +19,14 @@ class ProfileSettingNamePage extends StatefulWidget {
 
 class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   String _inputName = '';
-  late UpdateProfileBloc _bloc;
+  late UpdateProfileBloc _updateProfileBloc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = UpdateProfileBloc(
+    _updateProfileBloc = UpdateProfileBloc(
       const ProfileStateInitial(),
       UpdateProfile(
         ProfileRepositoryImpl(
@@ -37,7 +37,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
       ),
     );
 
-    _bloc.stream.listen((event) {
+    _updateProfileBloc.stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -55,7 +55,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
 
   @override
   void dispose() {
-    _bloc.close();
+    _updateProfileBloc.close();
     super.dispose();
   }
 
@@ -107,7 +107,7 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   void _next() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _bloc.add(
+      _updateProfileBloc.add(
         UpdateProfileEvent(
           name: _inputName,
           icon: '',

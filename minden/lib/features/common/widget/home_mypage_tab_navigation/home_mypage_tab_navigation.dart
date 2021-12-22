@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
-import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
@@ -16,20 +15,12 @@ class HomeMypageTabNavigation extends HookWidget {
     required this.currentTab,
   }) : super();
   final TabItem currentTab;
-  late GetMessagesBloc _bloc;
 
   @override
   Widget build(BuildContext context) {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
     final messagesStateData = useProvider(messagesStateControllerProvider);
-
-    useEffect(() {
-      if (!messagesStateData.hasEverGetMessage) {
-        _bloc = BlocProvider.of<GetMessagesBloc>(context);
-        _bloc.add(GetMessagesEvent('1'));
-      }
-    }, []);
 
     return BottomNavigationBar(
       backgroundColor: Colors.white,
@@ -125,20 +116,10 @@ class HomeMypageTabNavigation extends HookWidget {
             ),
           ),
           if (!messagesStateData.hasEverGetMessage)
-            BlocProvider.value(
-              value: _bloc,
-              child: BlocListener<GetMessagesBloc, MessageState>(
-                listener: (context, state) {
-                  if (state is MessagesLoaded) {
-                    messagesStateController.updateMessages(state.messages);
-                  }
-                },
-                child: Positioned(
-                  right: -6,
-                  top: -7,
-                  child: Container(),
-                ),
-              ),
+            Positioned(
+              right: -6,
+              top: -7,
+              child: Container(),
             )
           else
             Positioned(

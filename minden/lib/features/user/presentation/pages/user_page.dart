@@ -392,7 +392,7 @@ class _MenuMessageItem extends HookWidget {
   final String title;
   final String icon;
   final String routeName;
-  late GetMessagesBloc _getMessagesBloc;
+  late GetMessagesBloc _bloc;
   late GetPowerPlantBloc _getPowerPlantsBloc;
 
   @override
@@ -402,9 +402,9 @@ class _MenuMessageItem extends HookWidget {
     final messagesStateData = useProvider(messagesStateControllerProvider);
 
     useEffect(() {
+      _bloc = BlocProvider.of<GetMessagesBloc>(context);
       if (!messagesStateData.hasEverGetMessage) {
-        _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-        _getMessagesBloc.add(GetMessagesEvent('1'));
+        _bloc.add(GetMessagesEvent('1'));
       }
 
       _getPowerPlantsBloc = GetPowerPlantBloc(
@@ -437,7 +437,7 @@ class _MenuMessageItem extends HookWidget {
           width: MediaQuery.of(context).size.width,
           child: !messagesStateData.hasEverGetMessage
               ? BlocProvider.value(
-                  value: _getMessagesBloc,
+                  value: _bloc,
                   child: BlocListener<GetMessagesBloc, MessageState>(
                     listener: (context, state) {
                       if (state is MessagesLoaded) {

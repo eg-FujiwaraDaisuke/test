@@ -29,13 +29,20 @@ class MessagePage extends HookWidget {
   late GetMessageDetailBloc _getMessageDetailBloc;
   late ReadMessageBloc _readMessageBloc;
 
+  late GetShowBadgeBloc _getShowBadgeBloc;
+
+  late StreamSubscription _getShowBadgeSubscription;
+  late StreamSubscription _readMessageSubscription;
+
   @override
   Widget build(BuildContext context) {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
-
+    final showMessageIdState = useState(showMessageId);
     useEffect(
       () {
+        _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
+
         _getMessageDetailBloc = GetMessageDetailBloc(
           const MessageInitial(),
           GetMessageDetail(
@@ -58,6 +65,31 @@ class MessagePage extends HookWidget {
           ),
         );
 
+        _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
+            ),
+          ),
+        );
+
+        //最新のShowBadgeを取得し,ShowBadgeのviewmodelを更新する
+        _getShowBadgeSubscription = _getShowBadgeBloc.stream.listen((event) {
+          if (event is ShowBadgeLoaded) {
+            messagesStateController.updateShowBadge(event.messages);
+          }
+        });
+
+        // メッセージをタップした際に既読APIを叩く、既読APIが終わったら最新のShowBadgeを取得しviewmodelを更新する
+        _readMessageSubscription = _readMessageBloc.stream.listen((event) {
+          if (event is MessageReaded) {
+            _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
+          }
+        });
+
         _getMessageDetailSubscription =
             _getMessageDetailBloc.stream.listen((event) async {
           if (event is MessageDetailLoading) {
@@ -67,8 +99,6 @@ class MessagePage extends HookWidget {
           Loading.hide();
 
           if (event is MessageDetailLoaded) {
-            await _getMessageDetailSubscription.cancel();
-
             // viewmodelのreadをtrueに変える
             messagesStateController.readMessage(event.messageDetail.messageId);
             // apiを叩いて既読する
@@ -89,18 +119,27 @@ class MessagePage extends HookWidget {
         });
 
         // プッシュ通知をバックグラウンドorターミネイトからタップした場合,メッセージ詳細を取得してダイアログを表示させる
-        if (showMessageId != null) {
+        if (showMessageIdState.value != null) {
+          logW('showMessageIdState.value != null');
+          showMessageIdState.value = null;
           _getMessageDetailBloc
               .add(GetMessageDetailEvent(messageId: showMessageId!));
         }
 
         return () {
           _getMessageDetailSubscription.cancel();
+          _readMessageSubscription.cancel();
+          _getShowBadgeSubscription.cancel();
           _getMessageDetailBloc.close();
           _readMessageBloc.close();
         };
       },
     );
+
+    void _readMessage(int messageId) {
+      _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
+      messagesStateController.readMessage(messageId);
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,7 +162,7 @@ class MessagePage extends HookWidget {
         child: Center(
           child: Container(
             color: Colors.white,
-            child: _MessagesList(),
+            child: _MessagesList(readMessage: _readMessage),
           ),
         ),
       ),
@@ -146,14 +185,12 @@ class MessagePage extends HookWidget {
 }
 
 class _MessagesList extends HookWidget {
-  _MessagesList();
-
+  _MessagesList({
+    required this.readMessage,
+  });
+  final Function readMessage;
   late ScrollController _scrollController;
   late GetMessagesBloc _getMessagesBloc;
-  late GetShowBadgeBloc _getShowBadgeBloc;
-  late ReadMessageBloc _readMessageBloc;
-  late StreamSubscription _getShowBadgeSubscription;
-  late StreamSubscription _readMessageSubscription;
   late StreamSubscription _getMessagesSubscription;
 
   @override
@@ -166,29 +203,6 @@ class _MessagesList extends HookWidget {
     useEffect(
       () {
         _getMessagesBloc = BlocProvider.of<GetMessagesBloc>(context);
-        _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
-
-        _readMessageBloc = ReadMessageBloc(
-          const MessageInitial(),
-          ReadMessage(
-            MessageRepositoryImpl(
-              dataSource: MessageDataSourceImpl(
-                client: http.Client(),
-              ),
-            ),
-          ),
-        );
-
-        //最新のShowBadgeを取得し,ShowBadgeのviewmodelを更新する
-        _getShowBadgeSubscription = _getShowBadgeBloc.stream.listen((event) {
-          if (event is ShowBadgeLoaded) {
-            logW('_getShowBadgeSubscription');
-            _getShowBadgeSubscription.cancel();
-            _readMessageSubscription.cancel();
-            messagesStateController.updateShowBadge(event.messages);
-          }
-        });
-
         _getMessagesSubscription = _getMessagesBloc.stream.listen((event) {
           if (event is MessagesLoading) {
             Loading.show(context);
@@ -197,17 +211,8 @@ class _MessagesList extends HookWidget {
           }
           Loading.hide();
           if (event is MessagesLoaded) {
-            logW('_getMessagesSubscription');
             _isLoading.value = false;
             messagesStateController.addMessages(event.messages);
-          }
-        });
-
-        // メッセージをタップした際に既読APIを叩く、既読APIが終わったら最新のShowBadgeを取得しviewmodelを更新する
-        _readMessageSubscription = _readMessageBloc.stream.listen((event) {
-          if (event is MessageReaded) {
-            logW('_readMessageSubscription');
-            _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
           }
         });
 
@@ -228,18 +233,10 @@ class _MessagesList extends HookWidget {
         });
         return () {
           _getMessagesSubscription.cancel();
-          _readMessageSubscription.cancel();
-          _getShowBadgeSubscription.cancel();
           _scrollController.dispose();
-          _readMessageBloc.close();
         };
       },
     );
-
-    void _readMessage(int messageId) {
-      _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
-      messagesStateController.readMessage(messageId);
-    }
 
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -250,7 +247,7 @@ class _MessagesList extends HookWidget {
         itemBuilder: (context, index) {
           return _MessagesListItem(
             messageDetail: messagesStateData.messages[index],
-            readMessage: _readMessage,
+            readMessage: readMessage,
           );
         },
       ),
@@ -269,9 +266,6 @@ class _MessagesListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
-
     final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
 
     return GestureDetector(
@@ -279,10 +273,8 @@ class _MessagesListItem extends HookWidget {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
         if (!messageDetail.read) {
+          // ignore: avoid_dynamic_calls
           readMessage(messageDetail.messageId);
-          // readMessageBloc
-          //     .add(ReadMessageEvent(messageId: messageDetail.messageId));
-          // messagesStateController.readMessage(messageDetail.messageId);
         }
 
         // messageTypeに応じて表示するダイアログを変える

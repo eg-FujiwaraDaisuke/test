@@ -26,13 +26,13 @@ class ProfileSettingTagsDecisionPage extends StatefulWidget {
 
 class _ProfileSettingTagsDecisionPageState
     extends State<ProfileSettingTagsDecisionPage> {
-  late GetTagsBloc _bloc;
+  late GetTagsBloc _getTagsBloc;
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = GetTagsBloc(
+    _getTagsBloc = GetTagsBloc(
       const TagStateInitial(),
       GetTags(
         TagRepositoryImpl(
@@ -43,12 +43,12 @@ class _ProfileSettingTagsDecisionPageState
       ),
     );
 
-    _bloc.add(GetTagEvent(userId: si<Account>().userId));
+    _getTagsBloc.add(GetTagEvent(userId: si<Account>().userId));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getTagsBloc.close();
     super.dispose();
   }
 
@@ -100,7 +100,7 @@ class _ProfileSettingTagsDecisionPageState
               ),
               const SizedBox(height: 20),
               BlocProvider.value(
-                value: _bloc,
+                value: _getTagsBloc,
                 child: BlocListener<GetTagsBloc, TagState>(
                   listener: (context, state) {
                     if (state is TagLoading) {

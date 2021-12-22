@@ -27,14 +27,14 @@ class PowerPlantSearchListPage extends StatefulWidget {
 }
 
 class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
-  late GetPowerPlantsBloc _bloc;
+  late GetPowerPlantsBloc _getPowerPlantsBloc;
 
   @override
   void initState() {
     super.initState();
     Loading.hide();
 
-    _bloc = GetPowerPlantsBloc(
+    _getPowerPlantsBloc = GetPowerPlantsBloc(
       const PowerPlantStateInitial(),
       GetPowerPlants(
         PowerPlantRepositoryImpl(
@@ -44,12 +44,13 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
         ),
       ),
     );
-    _bloc.add(GetPowerPlantsEvent(tagId: widget.selectTag.tagId.toString()));
+    _getPowerPlantsBloc
+        .add(GetPowerPlantsEvent(tagId: widget.selectTag.tagId.toString()));
   }
 
   @override
   void dispose() {
-    _bloc.close();
+    _getPowerPlantsBloc.close();
     Loading.hide();
     super.dispose();
   }
@@ -87,7 +88,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
       body: SafeArea(
         child: SingleChildScrollView(
             child: BlocProvider.value(
-          value: _bloc,
+          value: _getPowerPlantsBloc,
           child: BlocListener<GetPowerPlantsBloc, PowerPlantState>(
             listener: (context, state) {
               if (state is PowerPlantLoading) {

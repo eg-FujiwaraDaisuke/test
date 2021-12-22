@@ -20,14 +20,14 @@ class ProfileSettingBioPage extends StatefulWidget {
 
 class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   String _inputBio = '';
-  late UpdateProfileBloc _bloc;
+  late UpdateProfileBloc _updateProfileBloc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
 
-    _bloc = UpdateProfileBloc(
+    _updateProfileBloc = UpdateProfileBloc(
       const ProfileStateInitial(),
       UpdateProfile(
         ProfileRepositoryImpl(
@@ -38,7 +38,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
       ),
     );
 
-    _bloc.stream.listen((event) {
+    _updateProfileBloc.stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -58,7 +58,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
 
   @override
   void dispose() {
-    _bloc.close();
+    _updateProfileBloc.close();
     super.dispose();
   }
 
@@ -120,7 +120,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   void _next() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _bloc.add(
+      _updateProfileBloc.add(
         UpdateProfileEvent(
           name: '',
           icon: '',

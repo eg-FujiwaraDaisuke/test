@@ -11,7 +11,9 @@ class MessagesStateController extends StateNotifier<MessagesState> {
       showBadge: messages.showBadge,
       page: messages.page,
       total: messages.total,
-      messages: messages.messages,
+      messages: [
+        ...{...messages.messages, ...state.messages}
+      ],
     );
   }
 
