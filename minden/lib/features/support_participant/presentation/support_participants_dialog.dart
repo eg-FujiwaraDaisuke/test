@@ -16,6 +16,8 @@ class SupportParticipantsDialog {
   final PowerPlantParticipant participants;
 
   void showDialog() {
+    final fromWebSupporters =
+        participants.participantSize - participants.userList.length;
     Navigator.push(
       context,
       CustomDialogOverlay(
@@ -86,64 +88,65 @@ class SupportParticipantsDialog {
                     const SizedBox(
                       height: 33,
                     ),
-                    Container(
-                      color: const Color(0xFFDADADA),
-                      width: 287,
-                      height: 1,
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          i18nTranslate(
-                            context,
-                            'support_participants_support_from_web',
+                    if (fromWebSupporters > 0) ...[
+                      Container(
+                        color: const Color(0xFFDADADA),
+                        width: 287,
+                        height: 1,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            i18nTranslate(
+                              context,
+                              'support_participants_support_from_web',
+                            ),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Color(0xFFFF8C00),
+                              fontSize: 14,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Color(0xFFFF8C00),
-                            fontSize: 14,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
+                          const SizedBox(
+                            width: 29,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 29,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                // TODO ここにWEBから応援している人数が入る
-                                text: '0',
-                                style: const TextStyle(
-                                  color: Color(0xFFFF8C00),
-                                  fontSize: 14,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${fromWebSupporters}',
+                                  style: const TextStyle(
+                                    color: Color(0xFFFF8C00),
+                                    fontSize: 14,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: i18nTranslate(
-                                  context,
-                                  'support_participants_people',
+                                TextSpan(
+                                  text: i18nTranslate(
+                                    context,
+                                    'support_participants_people',
+                                  ),
+                                  style: const TextStyle(
+                                    color: Color(0xFFFF8C00),
+                                    fontSize: 14,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                                style: const TextStyle(
-                                  color: Color(0xFFFF8C00),
-                                  fontSize: 14,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )
+                        ],
+                      )
+                    ],
                   ],
                 ),
               ),
