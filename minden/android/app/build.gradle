@@ -117,7 +117,7 @@ android {
         }
         prod {
             dimension "default"
-            applicationIdSuffix ".prod"
+            applicationIdSuffix ".MinApp"
         }
     }
 
