@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>みんな電力</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -11,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>みんな電力</string>
+	<string>minden</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -23,11 +25,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>カメラにアクセスしますか?</string>
+	<string>みんな電力アプリでは、カメラで撮影された画像をお客様のアイコン画像・背景として設定するためにカメラアクセスを必要とします。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>マイクにアクセスしますか?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ライブラリにアクセスしますか?</string>
+	<string>みんな電力アプリでは、フォトライブラリで選択された画像をお客様のアイコン画像・背景として設定するためにフォトライブラリアクセスを必要とします。</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

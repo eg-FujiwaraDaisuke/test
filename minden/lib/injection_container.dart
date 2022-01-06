@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -24,10 +25,9 @@ Future<void> init() async {
 
   final remoteConfig = RemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
-    fetchTimeout: const Duration(seconds: 0),
-    minimumFetchInterval: const Duration(hours: 1),
+    fetchTimeout: const Duration(seconds: 10),
+    minimumFetchInterval: Duration.zero,
   ));
-
   final analytics = FirebaseAnalytics();
   final firebaseAnalyticsObserver =
       FirebaseAnalyticsObserver(analytics: analytics);
