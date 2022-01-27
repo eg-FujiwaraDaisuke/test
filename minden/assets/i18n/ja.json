@@ -68,6 +68,7 @@
 "profile_setting_icon" : "プロフィール写真を設定",
 "profile_setting_important_tag_find_user" : "大切にしていることのタグを設定すると\nあなたと似たユーザーを見つけやすくなります",
 "profile_setting_input_name" : "ユーザーネームを入力",
+"profile_setting_input_name-change-anytime" : "ユーザーネームはいつでも変更できます",
 "profile_setting_select_tag" : "タグを選択",
 "profile_setting_select_tags" : "大切にしていることを\n選択してください",
 "profile_setting_select_tags_any_num" : "（4個まで選択可能）",
