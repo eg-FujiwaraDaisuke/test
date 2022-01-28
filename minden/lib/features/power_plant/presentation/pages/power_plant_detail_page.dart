@@ -36,20 +36,23 @@ import 'package:minden/features/support_power_plant/presentation/support_power_p
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../injection_container.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
     Key? key,
+    this.isShowGiftAtTheTop = false,
     required this.plantId,
   }) : super(key: key);
 
+  // 特典一覧ページから遷移してきた場合、得点を上に表示させる
+  final bool isShowGiftAtTheTop;
   final String plantId;
 
   @override
   State<StatefulWidget> createState() {
-    return PowerPlantDetailPageState(plantId: plantId);
+    return PowerPlantDetailPageState(
+        plantId: plantId, isShowGiftAtTheTop: isShowGiftAtTheTop);
   }
 }
 
@@ -57,9 +60,11 @@ class PowerPlantDetailPage extends StatefulWidget {
 class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   PowerPlantDetailPageState({
     required this.plantId,
+    required this.isShowGiftAtTheTop,
   });
 
   final String plantId;
+  final bool isShowGiftAtTheTop;
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
