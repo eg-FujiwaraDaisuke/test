@@ -641,26 +641,19 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   Widget _generateGift(PowerPlantDetail detail) {
-    final images = <String>[
-      'http://placeimg.com/350/250/people',
-      'http://placeimg.com/350/250/people',
-      'http://placeimg.com/350/250/people',
-      'http://placeimg.com/350/250/people'
-    ];
-
-    // final images = <String>[];
-    // if (detail.image1?.isNotEmpty ?? false) {
-    //   images.add(detail.plantImage1);
-    // }
-    // if (detail.image2?.isNotEmpty ?? false) {
-    //   images.add(detail.plantImage2!);
-    // }
-    // if (detail.image3?.isNotEmpty ?? false) {
-    //   images.add(detail.plantImage3!);
-    // }
-    // if (detail.image4?.isNotEmpty ?? false) {
-    //   images.add(detail.plantImage4!);
-    // }
+    final images = <String>[];
+    if (detail.image1?.isNotEmpty ?? false) {
+      images.add(detail.plantImage1);
+    }
+    if (detail.image2?.isNotEmpty ?? false) {
+      images.add(detail.plantImage2!);
+    }
+    if (detail.image3?.isNotEmpty ?? false) {
+      images.add(detail.plantImage3!);
+    }
+    if (detail.image4?.isNotEmpty ?? false) {
+      images.add(detail.plantImage4!);
+    }
 
     return Column(
       children: [
@@ -726,22 +719,6 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     : PowerPlantGiftPickup(
                         images: images,
                       ),
-                // : CachedNetworkImage(
-                //     imageUrl: images[0],
-                //     placeholder: (context, url) {
-                //       return Image.asset(
-                //         'assets/images/power_plant/power_plant_header_bg.png',
-                //         fit: BoxFit.cover,
-                //       );
-                //     },
-                //     errorWidget: (context, url, error) => Image.asset(
-                //       'assets/images/power_plant/power_plant_header_bg.png',
-                //       fit: BoxFit.cover,
-                //     ),
-                //     width: 303,
-                //     height: 203,
-                //     fit: BoxFit.cover,
-                //   ),
               ),
               const SizedBox(
                 height: 24,
