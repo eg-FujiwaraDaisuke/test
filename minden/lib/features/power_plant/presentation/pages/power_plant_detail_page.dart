@@ -38,6 +38,7 @@ import 'package:minden/features/support_power_plant/presentation/support_power_p
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../injection_container.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
@@ -413,9 +414,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     PowerPlantDetail detail,
     bool isShowGiftAtTheTop,
   ) {
-    // 特典がない,または特典の説明がない場合
-    final hasGitf =
-        detail.supportGiftName!.isNotEmpty || detail.explanation!.isNotEmpty;
+    // 特典がない場合表示しない
+    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
@@ -604,8 +604,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     PowerPlantDetail detail,
     bool isShowGiftAtTheTop,
   ) {
-    final hasGitf =
-        detail.supportGiftName!.isNotEmpty || detail.explanation!.isNotEmpty;
+    // 特典がない場合表示しない
+    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
