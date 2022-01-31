@@ -89,7 +89,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      // logD(responseBody);
+      logD(responseBody);
       return PowerPlantDetailModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();

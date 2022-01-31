@@ -24,6 +24,7 @@ import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_gitf_pickup.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
@@ -36,20 +37,26 @@ import 'package:minden/features/support_power_plant/presentation/support_power_p
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../injection_container.dart';
+import 'package:minden/core/ext/logger_ext.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
     Key? key,
+    this.isShowGiftAtTheTop = false,
     required this.plantId,
   }) : super(key: key);
 
+  // 特典一覧ページから遷移してきた場合、得点を上に表示させる
+  final bool isShowGiftAtTheTop;
   final String plantId;
 
   @override
   State<StatefulWidget> createState() {
-    return PowerPlantDetailPageState(plantId: plantId);
+    return PowerPlantDetailPageState(
+      plantId: plantId,
+      isShowGiftAtTheTop: isShowGiftAtTheTop,
+    );
   }
 }
 
@@ -57,9 +64,11 @@ class PowerPlantDetailPage extends StatefulWidget {
 class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   PowerPlantDetailPageState({
     required this.plantId,
+    required this.isShowGiftAtTheTop,
   });
 
   final String plantId;
+  final bool isShowGiftAtTheTop;
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
@@ -330,7 +339,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                               ),
                             ],
                           ),
-                          _generateDetail(detail),
+                          const Divider(
+                            height: 1,
+                            color: Color(0xFFE2E2E2),
+                          ),
+                          _generateDetail(detail, isShowGiftAtTheTop),
                           _actionButton(detail)
                         ],
                       ),
@@ -399,9 +412,16 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   Widget _generateDetail(
     PowerPlantDetail detail,
+    bool isShowGiftAtTheTop,
   ) {
+    // 特典がない場合表示しない
+    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
+
     return Column(
       children: [
+        const SizedBox(
+          height: 16,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -480,9 +500,16 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 45),
+              const SizedBox(height: 26),
+              if (isShowGiftAtTheTop && hasGitf)
+                Column(
+                  children: [
+                    _generateGift(detail),
+                    const SizedBox(height: 26),
+                  ],
+                ),
               _generateDetailParticipant(),
-              _generateDetailMessages(detail),
+              _generateDetailMessages(detail, isShowGiftAtTheTop),
               const SizedBox(height: 47),
             ],
           ),
@@ -573,7 +600,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     );
   }
 
-  Widget _generateDetailMessages(PowerPlantDetail detail) {
+  Widget _generateDetailMessages(
+    PowerPlantDetail detail,
+    bool isShowGiftAtTheTop,
+  ) {
+    // 特典がない場合表示しない
+    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
+
     return Column(
       children: [
         const Divider(
@@ -599,6 +632,176 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         const SizedBox(height: 17),
         _generateExpandableText(detail.prospect ?? '',
             i18nTranslate(context, 'power_plant_detail_prospect')),
+        const SizedBox(height: 31),
+
+        // 特典情報があって、特典ページから来てない場合表示
+        if (hasGitf && !isShowGiftAtTheTop) _generateGift(detail)
+      ],
+    );
+  }
+
+  Widget _generateGift(PowerPlantDetail detail) {
+    final images = <String>[];
+    if (detail.image1?.isNotEmpty ?? false) {
+      images.add(detail.plantImage1);
+    }
+    if (detail.image2?.isNotEmpty ?? false) {
+      images.add(detail.plantImage2!);
+    }
+    if (detail.image3?.isNotEmpty ?? false) {
+      images.add(detail.plantImage3!);
+    }
+    if (detail.image4?.isNotEmpty ?? false) {
+      images.add(detail.plantImage4!);
+    }
+
+    return Column(
+      children: [
+        const Divider(
+          height: 1,
+          color: Color(0xFFE2E2E2),
+        ),
+        const SizedBox(height: 18),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFE0E0E0)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              Container(
+                color: const Color(0xFFFF8C00),
+                width: MediaQuery.of(context).size.width,
+                height: 30,
+                child: Text(
+                  i18nTranslate(context, 'power_plant_detail_gift'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 21,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  detail.supportGiftName!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    height: calcFontHeight(fontSize: 17.0, lineHeight: 18.7),
+                    letterSpacing: calcLetterSpacing(letter: -2),
+                    color: const Color(0xFFFF8C00),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 26,
+              ),
+              SizedBox(
+                width: 303,
+                height: 203,
+                child: images.isEmpty
+                    ? Image.asset(
+                        'assets/images/power_plant/power_plant_header_bg.png',
+                        fit: BoxFit.cover,
+                      )
+                    : PowerPlantGiftPickup(
+                        images: images,
+                      ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 11),
+                child: ExpandableNotifier(
+                  child: Column(
+                    children: [
+                      Expandable(
+                        collapsed: ExpandableButton(
+                          child: Column(
+                            children: [
+                              Text(
+                                detail.explanation!,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFF7D7E7F),
+                                  height: 1.6,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      i18nTranslate(context,
+                                          'power_plant_detail_see_more'),
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontFamily: 'NotoSansJP',
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF7D7E7F),
+                                        height: 1.6,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  SvgPicture.asset(
+                                    'assets/images/common/ic_arrow_collapse.svg',
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                        expanded: Column(
+                          children: [
+                            Linkify(
+                              onOpen: (link) async {
+                                if (await canLaunch(link.url)) {
+                                  await launch(link.url);
+                                }
+                              },
+                              text: detail.explanation!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF7D7E7F),
+                                height: 1.6,
+                              ),
+                              linkStyle:
+                                  const TextStyle(color: Colors.blueAccent),
+                            ),
+                            const SizedBox(height: 31),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
