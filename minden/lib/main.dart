@@ -10,7 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
+import 'package:minden/core/provider/package_info_provider.dart';
 import 'package:minden/injection_container.dart' as di;
+import 'package:package_info/package_info.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +26,15 @@ Future<void> main() async {
   // DynamicLinksをRiverpod経由で使うため
   final dynamicLinks = FirebaseDynamicLinks.instance;
 
+  final packageInfo = await PackageInfo.fromPlatform();
+
   await runZonedGuarded(
     () async {
       runApp(
         ProviderScope(
           overrides: [
             dynamicLinksProvider.overrideWithValue(dynamicLinks),
+            packageInfoProvider.overrideWithValue(packageInfo),
           ],
           child: const Application(),
         ),
