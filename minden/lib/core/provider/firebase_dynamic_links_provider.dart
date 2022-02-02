@@ -9,8 +9,13 @@ final dynamicLinksProvider =
 
 /// アプリを起動するときのDynamicLinks情報を返す
 /// DynamicLinks経由の起動でない場合、nullを返す
-final pendingDynamicLinkData = FutureProvider<PendingDynamicLinkData?>(
+final pendingDynamicLink = FutureProvider<PendingDynamicLinkData?>(
     (ref) => ref.watch(dynamicLinksProvider).getInitialLink());
+
+/// アプリを起動するときのDynamicLinks情報をStream型で返す
+/// DynamicLinks経由の起動でない場合、nullを返す
+final pendingDynamicLinkStream = StreamProvider<PendingDynamicLinkData?>(
+    (ref) => ref.watch(dynamicLinksProvider).onLink);
 
 /// 任意のpathを開くための、DynamicLinkを生成して返す
 final createDynamicLink = FutureProvider.family<Uri, String>((

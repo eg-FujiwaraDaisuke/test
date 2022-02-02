@@ -1,3 +1,4 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -111,23 +112,46 @@ class DebugPageState extends State<DebugPage> {
 class DynamicLinksDataPreview extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final data = useProvider(pendingDynamicLinkData);
+    final currentDynamicLink = useProvider(pendingDynamicLink);
+    final streamDynamicLink = useProvider(pendingDynamicLinkStream);
+    final createdDynamicLink = useProvider(createDynamicLink('path'));
 
-    return Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // label
-        const Text('PendingDynamicLinkDate: '),
-        // date(url)
-        data.maybeWhen(data: (data) {
-          if (data != null) {
-            return Text(data.link.toString());
-          } else {
-            return const Text('Not found.');
-          }
-        }, orElse: () {
-          return const Text('Not found.');
-        }),
+        const Text('DynamicLinksプレビュー',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            )),
+        Text('未起動状態から取得: ${awaitLink(currentDynamicLink)}'),
+        Text('起動中に取得（stream）: ${awaitLink(streamDynamicLink)}'),
+        Text('生成サンプル: ${awaitUri(createdDynamicLink)}'),
       ],
     );
+  }
+
+  String awaitLink(AsyncValue<PendingDynamicLinkData?> asyncData) {
+    return asyncData.maybeWhen(data: (data) {
+      if (data != null) {
+        return data.link.toString();
+      } else {
+        return 'Not found.';
+      }
+    }, orElse: () {
+      return 'Not found.';
+    });
+  }
+
+  String awaitUri(AsyncValue<Uri?> asyncData) {
+    return asyncData.maybeWhen(data: (data) {
+      if (data != null) {
+        return data.toString();
+      } else {
+        return 'Not found.';
+      }
+    }, orElse: () {
+      return 'Not found.';
+    });
   }
 }
