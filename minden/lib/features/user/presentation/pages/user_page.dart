@@ -129,7 +129,7 @@ class _UserPageState extends State<UserPage> {
                   elevation: 0,
                   centerTitle: true,
                   title: Text(
-                    i18nTranslate(context, 'user_mypage'),
+                    i18nTranslate(context, 'user_menu'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
