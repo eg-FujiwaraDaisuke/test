@@ -332,12 +332,12 @@ class _MessagesListItem extends HookWidget {
                       imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
                         return Image.asset(
-                          'assets/images/power_plant/power_plant_header_bg.png',
+                          'assets/images/common/placeholder.png',
                           fit: BoxFit.cover,
                         );
                       },
                       errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/power_plant/power_plant_header_bg.png',
+                        'assets/images/common/noimage.png',
                         fit: BoxFit.cover,
                       ),
                       width: 64,

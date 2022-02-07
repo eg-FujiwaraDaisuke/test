@@ -713,7 +713,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 height: 203,
                 child: images.isEmpty
                     ? Image.asset(
-                        'assets/images/power_plant/power_plant_header_bg.png',
+                        'assets/images/common/noimage.png',
                         fit: BoxFit.cover,
                       )
                     : PowerPlantGiftPickup(
