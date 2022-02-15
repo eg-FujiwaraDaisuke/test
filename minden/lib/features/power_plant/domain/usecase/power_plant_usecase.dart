@@ -31,7 +31,8 @@ class GetPowerPlantsHistory
   @override
   Future<Either<Failure, SupportHistory>> call(
       GetPowerPlantParams params) async {
-    return await repository.getPowerPlantHistory(params.historyType!);
+    return await repository.getPowerPlantHistory(
+        params.historyType!, params.userId);
   }
 }
 
@@ -88,9 +89,11 @@ class GetPowerPlantParams extends Equatable {
     this.plantId,
     this.tagId,
     this.historyType,
+    this.userId,
   });
 
   String? plantId;
+  String? userId;
   String? tagId;
   String? historyType;
 

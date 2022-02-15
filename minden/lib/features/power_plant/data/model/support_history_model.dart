@@ -1,16 +1,16 @@
-import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 
 class SupportHistoryModel extends SupportHistory {
   const SupportHistoryModel({
     required int page,
     required int total,
+    required String userId,
     required String historyType,
     required List<SupportHistoryPowerPlant> powerPlants,
   }) : super(
           page: page,
           total: total,
+          userId: userId,
           historyType: historyType,
           powerPlants: powerPlants,
         );
@@ -25,6 +25,7 @@ class SupportHistoryModel extends SupportHistory {
     return SupportHistoryModel(
       page: json['page'],
       total: json['total'],
+      userId: json['userId'],
       historyType: json['historyType'],
       powerPlants: powerPlants,
     );
