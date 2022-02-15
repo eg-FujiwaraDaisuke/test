@@ -5,12 +5,7 @@ final logger = Logger(
 );
 
 /// すべてのクラスでログ出力を簡単にする拡張関数
-///
-/// NOTE: 現在、dartの問題なのか拡張関数がクイックフィックスの候補に出てこないため、
-/// 手動でimportする必要がある
-/// https://github.com/dart-lang/sdk/issues/38894
-///
-/// NOTE: 未importなファイル内で使用する場合、 `LoggerExt` とタイプしてimportするとお手軽
+/// 拡張関数のimportがしばらく対応されなさそうなため、flutter_hooksで同様の実装を行った
 extension LoggerExt on dynamic {
   void logV(String message) {
     logger.v(message);
