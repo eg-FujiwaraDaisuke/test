@@ -16,7 +16,7 @@ class PowerPlantHomeTabData {
 
 /// ホーム - トップ
 class PowerPlantHomePage extends StatefulWidget {
-  PowerPlantHomePage({Key? key}) : super(key: key);
+  static const String routeName = '/home/top';
 
   @override
   _PowerPlantHomePageState createState() => _PowerPlantHomePageState();

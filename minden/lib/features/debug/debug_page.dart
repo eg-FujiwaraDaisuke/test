@@ -50,7 +50,7 @@ class DebugPageState extends State<DebugPage> {
                 _generateNavigatorPush(
                     context, 'ログイン', (context) => LoginPage(), '/login'),
                 _generateNavigatorPush(context, 'チュートリアル',
-                    (context) => TutorialPage(), '/tutorial'),
+                    (context) => TutorialPage(), TutorialPage.routeName),
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',

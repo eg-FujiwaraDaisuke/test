@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
@@ -39,6 +40,7 @@ import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
+
 import 'features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class Application extends StatelessWidget {
@@ -167,7 +169,7 @@ class Application extends StatelessWidget {
   }
 
   Map<String, WidgetBuilder> _buildRoutes() {
-    return <String, WidgetBuilder>{
+    final routes = <String, WidgetBuilder>{
       '/': (_) {
         if (kReleaseMode) {
           return InitialPage();
@@ -175,14 +177,19 @@ class Application extends StatelessWidget {
           return DebugPage();
         }
       },
-      '/tutorial': (_) => TutorialPage(),
-      '/home': (_) => HomePage(),
-      '/login': (_) => LoginPage(),
-      '/home/top': (_) => PowerPlantHomePage(),
-      '/my_page/matching': (_) => MatchingPage(),
-      '/user': (_) => UserPage(),
-      '/user/profile/edit': (_) => ProfileEditPage(),
-      '/user/message': (_) => MessagePage(),
+      TutorialPage.routeName: (_) => TutorialPage(),
+      HomePage.routeName: (_) => HomePage(),
+      LoginPage.routeName: (_) => LoginPage(),
+      PowerPlantHomePage.routeName: (_) => PowerPlantHomePage(),
+      MatchingPage.routeName: (_) => MatchingPage(),
+      UserPage.routeName: (_) => UserPage(),
+      ProfileEditPage.routeName: (_) => ProfileEditPage(),
+      MessagePage.routeName: (_) => MessagePage(),
     };
+
+    // routeName定数化により一覧性が無くなってしまったため、ログに出力する
+    logD('routes on MaterialApp.\n${routes.entries.join('\n')}');
+
+    return routes;
   }
 }

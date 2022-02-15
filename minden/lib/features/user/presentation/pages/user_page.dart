@@ -54,10 +54,10 @@ class _Menu {
 }
 
 class UserPage extends StatefulWidget {
+  static const String routeName = '/user';
+
   @override
-  State<StatefulWidget> createState() {
-    return _UserPageState();
-  }
+  State<StatefulWidget> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
@@ -92,11 +92,7 @@ class _UserPageState extends State<UserPage> {
 
       if (event is TransitionMessagePageStart) {
         // メッセージページにいるとき、メッセージページの上にメッセージページがpushされてしまうが一旦仕様として正にする
-        final route = MaterialPageRoute(
-          builder: (context) => MessagePage(showMessageId: event.messageId),
-          settings: RouteSettings(name: '/user/message'),
-        );
-        Navigator.push(context, route);
+        Navigator.push(context, MessagePage.route(event.messageId));
       }
     });
   }
@@ -425,11 +421,7 @@ class _MenuMessageItem extends HookWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        final route = MaterialPageRoute(
-          builder: (context) => MessagePage(),
-          settings: const RouteSettings(name: '/user/message'),
-        );
-        Navigator.push(context, route);
+        Navigator.push(context, MessagePage.route());
       },
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 22),

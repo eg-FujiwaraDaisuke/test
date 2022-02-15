@@ -132,10 +132,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               return const FadeUpwardsPageTransitionsBuilder()
                                   .buildTransitions(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileEditPage(),
-                                          settings: const RouteSettings(
-                                              name: '/user/profile/edit')),
+                                        builder: (context) => ProfileEditPage(),
+                                        settings: const RouteSettings(
+                                            name: ProfileEditPage.routeName),
+                                      ),
                                       context,
                                       animation,
                                       secondaryAnimation,

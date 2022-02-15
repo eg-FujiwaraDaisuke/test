@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:minden/core/ext/logger_ext.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
@@ -21,6 +22,21 @@ import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
   MessagePage({this.showMessageId});
+
+  static const String routeName = '/user/message';
+
+  static Route<dynamic> route([String? messageId]) {
+    return MaterialPageRoute(
+      builder: (context) {
+        if (messageId != null) {
+          return MessagePage(showMessageId: messageId);
+        } else {
+          return MessagePage();
+        }
+      },
+      settings: const RouteSettings(name: routeName),
+    );
+  }
 
   // 値が入ってる場合、このページに来た時メッセージのダイアログを表示する
   String? showMessageId;
@@ -188,6 +204,7 @@ class _MessagesList extends HookWidget {
   _MessagesList({
     required this.readMessage,
   });
+
   final Function readMessage;
   late ScrollController _scrollController;
   late GetMessagesBloc _getMessagesBloc;

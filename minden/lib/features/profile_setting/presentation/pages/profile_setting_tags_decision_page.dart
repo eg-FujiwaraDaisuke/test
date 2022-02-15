@@ -176,10 +176,6 @@ class _ProfileSettingTagsDecisionPageState
   }
 
   void _decide(BuildContext context) {
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => HomePage(),
-      settings: RouteSettings(name: '/home'),
-    );
-    Navigator.pushReplacement(context, route);
+    Navigator.pushReplacement(context, HomePage.route());
   }
 }

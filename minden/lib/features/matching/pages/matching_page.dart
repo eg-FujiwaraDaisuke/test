@@ -22,6 +22,8 @@ class MatchingTabData {
 /// マイページ - マッチング
 /// マッチング関連のタブを表示する
 class MatchingPage extends StatelessWidget {
+  static const String routeName = '/my_page/matching';
+
   final List<MatchingTabData> tabs = [
     MatchingTabData(tabName: '電気使用量・料金', tabPage: (_) => Text('電気使用量・料金タブ')),
     MatchingTabData(tabName: '利用明細', tabPage: (_) => Text('利用明細タブ')),
