@@ -28,7 +28,7 @@ Future<void> init() async {
     fetchTimeout: const Duration(seconds: 10),
     minimumFetchInterval: Duration.zero,
   ));
-  final analytics = FirebaseAnalytics();
+  final analytics = FirebaseAnalytics.instance;
   final firebaseAnalyticsObserver =
       FirebaseAnalyticsObserver(analytics: analytics);
 
