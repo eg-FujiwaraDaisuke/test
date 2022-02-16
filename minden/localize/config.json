@@ -1,0 +1,10 @@
+{
+  "files": [
+      {
+        "column_key": "jp",
+        "path": "../assets/i18n/ja.json"
+      },{
+        "column_key": "en",
+        "path": "../assets/i18n/en.json"
+      }]
+}

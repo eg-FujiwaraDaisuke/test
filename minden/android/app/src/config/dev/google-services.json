@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "587283047081",
+    "project_id": "cl-minden",
+    "storage_bucket": "cl-minden.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587283047081:android:9b1bf222b73887ce033fb8",
+        "android_client_info": {
+          "package_name": "jp.co.minden.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBKmU2ci-vsFx2mprZbmJJjKqpDVWgIcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.co.minden.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
