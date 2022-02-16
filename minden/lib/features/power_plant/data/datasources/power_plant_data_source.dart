@@ -161,7 +161,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     final url = Uri.parse(endpoint + _powerPlantHistory);
 
-    final query = userId!.isEmpty
+    final queryParameters = userId?.isEmpty ?? true
         ? {
             'historyType': historyType,
           }
@@ -171,7 +171,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
           };
 
     final response = await client.get(
-      url.replace(queryParameters: query),
+      url.replace(queryParameters: queryParameters),
       headers: headers,
     );
 
