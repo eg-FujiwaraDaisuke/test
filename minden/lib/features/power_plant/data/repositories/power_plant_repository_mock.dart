@@ -206,13 +206,13 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
   /// [historyType] 応援予約 or 応援履歴
   @override
   Future<Either<PowerPlantFailure, SupportHistory>> getPowerPlantHistory(
-    String historyType,
-  ) async {
+      String historyType, String? userId) async {
     try {
       final data = SupportHistory(
         page: 1,
         total: 1,
         historyType: 'historyType',
+        userId: 'userId',
         powerPlants: [
           SupportHistoryPowerPlantModel(
             yearMonth: '202102',

@@ -12,9 +12,13 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 
 class SupportHistoryPowerPlantList extends StatefulWidget {
-  const SupportHistoryPowerPlantList(this.historyType);
+  const SupportHistoryPowerPlantList({
+    required this.historyType,
+    this.userId,
+  });
 
   final String historyType;
+  final String? userId;
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +44,8 @@ class _SupportHistoryPowerPlantListState
       ),
     );
 
-    _historyBloc.add(GetSupportHistoryEvent(historyType: widget.historyType));
+    _historyBloc.add(GetSupportHistoryEvent(
+        historyType: widget.historyType, userId: widget.userId));
   }
 
   @override

@@ -48,8 +48,8 @@ class GetPowerPlantsHistoryBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
       try {
         yield const HistoryLoading();
 
-        final failureOrUser =
-            await usecase(GetPowerPlantParams(historyType: event.historyType));
+        final failureOrUser = await usecase(GetPowerPlantParams(
+            historyType: event.historyType, userId: event.userId));
 
         yield failureOrUser.fold<PowerPlantState>(
           (failure) => throw failure,

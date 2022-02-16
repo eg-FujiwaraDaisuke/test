@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
@@ -24,7 +23,8 @@ abstract class PowerPlantDataSource {
 
   Future<TagResponseModel> getPowerPlantTags(String plantId);
 
-  Future<SupportHistoryModel> getPowerPlantHistory(String historyType);
+  Future<SupportHistoryModel> getPowerPlantHistory(
+      String historyType, String? userId);
 
   Future<SupportActionModel> getSupportAction(String plantId);
 }
@@ -151,16 +151,27 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   }
 
   @override
-  Future<SupportHistoryModel> getPowerPlantHistory(String historyType) async {
+  Future<SupportHistoryModel> getPowerPlantHistory(
+    String historyType,
+    String? userId,
+  ) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
 
     final url = Uri.parse(endpoint + _powerPlantHistory);
+
+    final queryParameters = userId?.isEmpty ?? true
+        ? {
+            'historyType': historyType,
+          }
+        : {
+            'historyType': historyType,
+            'userId': userId,
+          };
+
     final response = await client.get(
-      url.replace(queryParameters: {
-        'historyType': historyType,
-      }),
+      url.replace(queryParameters: queryParameters),
       headers: headers,
     );
 
@@ -177,7 +188,9 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   }
 
   @override
-  Future<SupportActionModel> getSupportAction(String plantId) async {
+  Future<SupportActionModel> getSupportAction(
+    String plantId,
+  ) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
@@ -191,6 +204,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     );
 
     final responseBody = utf8.decode(response.bodyBytes);
+
     if (response.statusCode == 200) {
       logD('${responseBody}');
       return SupportActionModel.fromJson(json.decode(responseBody));
