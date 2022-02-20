@@ -203,7 +203,7 @@ class SupportParticipantsDialog {
                         );
                       },
                       errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/user/icon_no_photo.png',
+                        'assets/images/common/noimage.png',
                         fit: BoxFit.cover,
                       ),
                     ),

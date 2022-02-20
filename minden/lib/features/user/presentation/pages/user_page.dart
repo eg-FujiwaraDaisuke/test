@@ -125,7 +125,7 @@ class _UserPageState extends State<UserPage> {
                   elevation: 0,
                   centerTitle: true,
                   title: Text(
-                    i18nTranslate(context, 'user_mypage'),
+                    i18nTranslate(context, 'user_menu'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -276,6 +276,11 @@ class _MenuListView extends StatelessWidget {
           routeName: MessagePage.routeName,
           type: MenuType.message),
       _Menu(
+          title: i18nTranslate(context, 'user_menu_web_mymenu'),
+          icon: 'web_my_menu',
+          routeName: '/webMyMenu',
+          type: MenuType.common),
+      _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
         icon: 'contact',
         routeName: '/contact',
@@ -334,6 +339,9 @@ class _MenuItem extends StatelessWidget {
             break;
           case '/contact':
             await launch('https://portal.minden.co.jp/contact/guest');
+            break;
+          case '/webMyMenu':
+            await launch('https://portal.minden.co.jp');
             break;
           case '/logout':
             handler?.call();

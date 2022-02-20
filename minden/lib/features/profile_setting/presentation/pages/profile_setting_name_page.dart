@@ -100,7 +100,18 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
                     onSaved: (value) {
                       _inputName = value;
                     }),
-                const SizedBox(height: 182),
+                const SizedBox(height: 26),
+                Text(
+                  i18nTranslate(
+                      context, 'profile_setting_input_name-change-anytime'),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFA7A7A7),
+                  ),
+                ),
+                const SizedBox(height: 138),
                 Button(
                   onTap: _next,
                   text: i18nTranslate(context, 'to_next'),

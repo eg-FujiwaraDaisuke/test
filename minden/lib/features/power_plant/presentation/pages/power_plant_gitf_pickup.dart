@@ -5,18 +5,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// 電力会社ピックアップ一覧
-class PowerPlantPickup extends StatefulWidget {
-  const PowerPlantPickup({required this.images});
+class PowerPlantGiftPickup extends StatefulWidget {
+  const PowerPlantGiftPickup({required this.images});
 
   final List<String> images;
 
   @override
   State<StatefulWidget> createState() {
-    return PowerPlantPickupState();
+    return PowerPlantGiftPickupState();
   }
 }
 
-class PowerPlantPickupState extends State<PowerPlantPickup> {
+class PowerPlantGiftPickupState extends State<PowerPlantGiftPickup> {
   final CarouselController _carouselController = CarouselController();
 
   @override
@@ -48,8 +48,8 @@ class PowerPlantPickupState extends State<PowerPlantPickup> {
 
   CarouselOptions _generateCarouselOpts(Function(int index) onPageChanged) {
     return CarouselOptions(
-      height: 270,
-      aspectRatio: 16 / 9,
+      height: 203,
+      aspectRatio: 303 / 203,
       viewportFraction: 1.0,
       initialPage: 0,
       enableInfiniteScroll: true,
