@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587283047081:android:9b1bf222b73887ce033fb8",
+        "mobilesdk_app_id": "1:587283047081:android:dc9c37f2c4cf0648033fb8",
         "android_client_info": {
           "package_name": "jp.co.minden.dev"
         }
@@ -31,10 +31,85 @@
               "client_type": 3
             },
             {
-              "client_id": "587283047081-k3h2gp3seckipijt4mb3ojlb9neafbjg.apps.googleusercontent.com",
+              "client_id": "587283047081-33ugt5do89tvmqjl4hmk67sj317bsv7f.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "jp.co.minden.dev"
+                "bundle_id": "jp.co.minden.prod",
+                "app_store_id": "1601755543"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587283047081:android:9b1bf222b73887ce033fb8",
+        "android_client_info": {
+          "package_name": "jp.co.minden.kyc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBKmU2ci-vsFx2mprZbmJJjKqpDVWgIcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "587283047081-33ugt5do89tvmqjl4hmk67sj317bsv7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.co.minden.prod",
+                "app_store_id": "1601755543"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587283047081:android:c63a3a654c766946033fb8",
+        "android_client_info": {
+          "package_name": "jp.co.minden.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBKmU2ci-vsFx2mprZbmJJjKqpDVWgIcs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587283047081-4kdobblfmdjcucvc3j6niddrif5ltaf9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "587283047081-33ugt5do89tvmqjl4hmk67sj317bsv7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.co.minden.prod",
+                "app_store_id": "1601755543"
               }
             }
           ]
