@@ -263,17 +263,17 @@ class _MenuListView extends StatelessWidget {
       _Menu(
           title: i18nTranslate(context, 'user_menu_profile'),
           icon: 'select_plant',
-          routeName: '/user/profile',
+          routeName: ProfilePage.routeName,
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_support_power_plant'),
           icon: 'person',
-          routeName: '/user/supporPowerPlant',
+          routeName: SupportHistoryPowerPlantPage.routeName,
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_message'),
           icon: 'message',
-          routeName: '/user/message',
+          routeName: MessagePage.routeName,
           type: MenuType.message),
       _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
@@ -319,17 +319,13 @@ class _MenuItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () async {
         switch (routeName) {
-          case '/user/profile':
+          case ProfilePage.routeName:
             final userId = si<Account>().userId;
-            final route = MaterialPageRoute(
-              builder: (context) => ProfilePage(userId: userId),
-              settings: RouteSettings(name: routeName),
-            );
-            await Navigator.push(context, route);
+            await Navigator.push(context, ProfilePage.route(userId));
             BlocProvider.of<GetProfileBloc>(context)
                 .add(GetProfileEvent(userId: si<Account>().userId));
             break;
-          case '/user/supporPowerPlant':
+          case SupportHistoryPowerPlantPage.routeName:
             final route = MaterialPageRoute(
               builder: (context) => SupportHistoryPowerPlantPage(),
               settings: RouteSettings(name: routeName),

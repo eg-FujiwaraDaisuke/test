@@ -16,6 +16,8 @@ class SupportPowerPlantTabData {
 class SupportHistoryPowerPlantPage extends StatelessWidget {
   SupportHistoryPowerPlantPage({Key? key}) : super(key: key);
 
+  static const String routeName = '/user/supportPowerPlant';
+
   final tabs = [
     SupportPowerPlantTabData(
       tabName: '次に応援する発電所',

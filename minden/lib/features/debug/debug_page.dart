@@ -57,7 +57,11 @@ class DebugPageState extends State<DebugPage> {
                     (context) => ProfileSettingNamePage(),
                     '/profileSetting/name'),
                 _generateNavigatorPush(
-                    context, 'ホーム', (context) => HomePage(), '/home/top'),
+                  context,
+                  'ホーム',
+                  (context) => HomePage(),
+                  HomePage.routeName,
+                ),
 
                 // TODO 納品後もとに戻す
                 _generateNavigatorPush(context, 'ログイン パスワードリセット',

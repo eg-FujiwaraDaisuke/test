@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,9 +20,10 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
-import 'package:collection/collection.dart';
 
 class ProfileSettingTagsPage extends StatefulWidget {
+  static const String routeName = '/profileSetting/tag';
+
   ProfileSettingTagsPage({
     required this.isRouteToPop,
     this.profileSelectedTag,
@@ -60,7 +62,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       if (event is TagUpdated) {
         final route = MaterialPageRoute(
           builder: (context) => ProfileSettingTagsDecisionPage(),
-          settings: const RouteSettings(name: '/profileSetting/tagsDecision'),
+          settings: const RouteSettings(
+              name: ProfileSettingTagsDecisionPage.routeName),
         );
         Navigator.push(context, route);
       }

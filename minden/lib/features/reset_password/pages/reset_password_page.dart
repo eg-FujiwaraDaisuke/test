@@ -14,6 +14,16 @@ import 'package:minden/utile.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({required this.loginId});
+
+  static const String routeName = '/login/resetPassword';
+
+  static Route<dynamic> route(String loginId) {
+    return NoAnimationMaterialPageRoute(
+      builder: (context) => ResetPasswordPage(loginId: loginId),
+      settings: const RouteSettings(name: routeName),
+    );
+  }
+
   final String loginId;
   @override
   _ResetPasswordPageState createState() => _ResetPasswordPageState();

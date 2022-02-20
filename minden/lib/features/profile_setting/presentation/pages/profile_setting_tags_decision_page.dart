@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
@@ -20,6 +19,8 @@ import 'package:minden/injection_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileSettingTagsDecisionPage extends StatefulWidget {
+  static const String routeName = '/profileSetting/tagsDecision';
+
   @override
   State<StatefulWidget> createState() => _ProfileSettingTagsDecisionPageState();
 }

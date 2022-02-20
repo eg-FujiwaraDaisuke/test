@@ -31,6 +31,15 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({required this.userId});
 
+  static const String routeName = '/user/profile';
+
+  static Route<dynamic> route(String userId) {
+    return MaterialPageRoute(
+      builder: (context) => ProfilePage(userId: userId),
+      settings: const RouteSettings(name: routeName),
+    );
+  }
+
   final String userId;
 
   @override

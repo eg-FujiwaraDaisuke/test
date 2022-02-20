@@ -22,6 +22,8 @@ import 'package:minden/utile.dart';
 class PowerPlantSearchByTag extends StatefulWidget {
   const PowerPlantSearchByTag({Key? key}) : super(key: key);
 
+  static const String routeName = '/home/top';
+
   @override
   _PowerPlantSearchByTagState createState() => _PowerPlantSearchByTagState();
 }
@@ -206,7 +208,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
     // 検索結画面に飛ばす
     final route = MaterialPageRoute(
       builder: (context) => PowerPlantSearchListPage(selectTag: tag),
-      settings: const RouteSettings(name: '/home/top/seach/powerPlant'),
+      settings: const RouteSettings(name: PowerPlantSearchListPage.routeName),
     );
     await Navigator.push(context, route);
     setState(() {

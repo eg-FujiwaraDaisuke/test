@@ -14,7 +14,7 @@ class PowerPlantHomeTabData {
   late final WidgetBuilder tabPage;
 }
 
-/// ホーム - トップ
+/// ホームタブ
 class PowerPlantHomePage extends StatefulWidget {
   static const String routeName = '/home/top';
 
@@ -26,9 +26,14 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage> {
   late TransitionScreenBloc _transitionScreenBloc;
 
   final tabs = [
-    PowerPlantHomeTabData(tabName: '発電所一覧', tabPage: (_) => PowerPlantList()),
     PowerPlantHomeTabData(
-        tabName: '発電所を探す', tabPage: (_) => const PowerPlantSearchByTag()),
+      tabName: '発電所一覧',
+      tabPage: (_) => PowerPlantList(),
+    ),
+    PowerPlantHomeTabData(
+      tabName: '発電所を探す',
+      tabPage: (_) => const PowerPlantSearchByTag(),
+    ),
   ];
 
   @override

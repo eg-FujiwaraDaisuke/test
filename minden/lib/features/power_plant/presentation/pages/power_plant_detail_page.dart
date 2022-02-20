@@ -40,6 +40,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../injection_container.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
+  static const String routeName = '/home/top/detail';
+
   const PowerPlantDetailPage({
     Key? key,
     required this.plantId,

@@ -1,18 +1,18 @@
 import 'dart:ui';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_i18n/loaders/file_translation_loader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:minden/core/firebase/analytics_factory.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,9 +28,6 @@ Future<void> init() async {
     fetchTimeout: const Duration(seconds: 10),
     minimumFetchInterval: Duration.zero,
   ));
-  final analytics = FirebaseAnalytics.instance;
-  final firebaseAnalyticsObserver =
-      FirebaseAnalyticsObserver(analytics: analytics);
 
   final botToastNavigatorObserver = BotToastNavigatorObserver();
 
@@ -86,7 +83,7 @@ Future<void> init() async {
     ..registerLazySingleton(() => firebaseApp)
     ..registerLazySingleton(() => flutterLocalNotificationsPlugin)
     ..registerLazySingleton(() => remoteConfig)
-    ..registerLazySingleton(() => firebaseAnalyticsObserver)
+    ..registerLazySingleton(createAnalyticsObserver)
     ..registerLazySingleton(() => botToastNavigatorObserver)
     ..registerLazySingleton(() => flutterI18nDelegate)
     ..registerLazySingleton(() => firebaseMessaging)

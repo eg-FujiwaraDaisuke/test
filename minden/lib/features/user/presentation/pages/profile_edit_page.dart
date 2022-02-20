@@ -787,7 +787,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
                               profileSelectedTag: widget.tagsList,
                             ),
                             settings: const RouteSettings(
-                              name: '/profileSetting/tag',
+                              name: ProfileSettingTagsPage.routeName,
                             ),
                           ),
                           context,
