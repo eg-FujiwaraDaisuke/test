@@ -170,7 +170,7 @@ class Application extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     final routes = <String, WidgetBuilder>{
-      '/': (_) {
+      InitialPage.routeName: (_) {
         if (kReleaseMode) {
           return InitialPage();
         } else {

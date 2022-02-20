@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InitialPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   State<StatefulWidget> createState() => _InitialPageState();
 }
