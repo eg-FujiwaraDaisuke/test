@@ -30,8 +30,8 @@ class HomeMypageTabNavigation extends HookWidget {
           context,
           TabItem.home,
         ),
-        bottomMypage(
-            context, TabItem.mypage, messagesStateController, messagesStateData)
+        bottomMenu(
+            context, TabItem.menu, messagesStateController, messagesStateData)
       ],
       type: BottomNavigationBarType.fixed,
       selectedLabelStyle: const TextStyle(
@@ -58,9 +58,9 @@ class HomeMypageTabNavigation extends HookWidget {
               .add(TransitionScreenEvent('PowerPlantHomePage', false));
         }
 
-        if (TabItem.values[index] == TabItem.mypage) {
-          // 前にいたtabがmypageで次いきたいのもmypageならisFirstさせる
-          if (TabItem.values[currentTab.index] == TabItem.mypage) {
+        if (TabItem.values[index] == TabItem.menu) {
+          // 前にいたtabがnemuで次いきたいのもnemuならisFirstさせる
+          if (TabItem.values[currentTab.index] == TabItem.menu) {
             BlocProvider.of<TransitionScreenBloc>(context)
                 .add(TransitionScreenEvent('UserPage', true));
             return;
@@ -94,7 +94,7 @@ class HomeMypageTabNavigation extends HookWidget {
     );
   }
 
-  BottomNavigationBarItem bottomMypage(
+  BottomNavigationBarItem bottomMenu(
       BuildContext context,
       TabItem tabItem,
       MessagesStateController messagesStateController,
@@ -102,7 +102,7 @@ class HomeMypageTabNavigation extends HookWidget {
     final color = currentTab == tabItem
         ? const Color(0xFFFF8C00)
         : const Color(0xFFA7A7A7);
-    final tabTitle = i18nTranslate(context, 'tab_navigation_mypage');
+    final tabTitle = i18nTranslate(context, 'tab_navigation_menu');
     const tabIcon = 'mypage';
     return BottomNavigationBarItem(
       tooltip: '',
@@ -110,8 +110,8 @@ class HomeMypageTabNavigation extends HookWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            child: SvgPicture.asset(
-              'assets/images/common/$tabIcon.svg',
+            child: Icon(
+              Icons.dehaze_rounded,
               color: color,
             ),
           ),
