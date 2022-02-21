@@ -96,7 +96,7 @@ class MindenMessageDialog {
           ],
         ),
         isAndroidBackEnable: false,
-        settings: RouteSettings(name: routeName),
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }
