@@ -9,6 +9,8 @@ class IssueReportCompleteDialog {
     required this.context,
   }) : super();
 
+  static const String routeName = '/user/profile/issueReport/complete';
+
   final BuildContext context;
 
   void showDialog() {
@@ -81,6 +83,7 @@ class IssueReportCompleteDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

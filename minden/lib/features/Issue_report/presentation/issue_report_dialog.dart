@@ -8,6 +8,8 @@ class IssueReportDialog {
     required this.userName,
   }) : super();
 
+  static const String routeName = '/user/profile/issueReport';
+
   final BuildContext context;
   final String userName;
 
@@ -95,6 +97,7 @@ class IssueReportDialog {
           ),
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

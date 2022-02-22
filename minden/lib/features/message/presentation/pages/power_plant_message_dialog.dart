@@ -121,6 +121,7 @@ class PowerPlantMessageDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }
