@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -10,10 +11,19 @@ import 'package:minden/features/reset_password/data/repositories/reset_password_
 import 'package:minden/features/reset_password/domain/usecases/reset_password_repository_usecase.dart';
 import 'package:minden/features/reset_password/pages/bloc/reset_password_bloc.dart';
 import 'package:minden/utile.dart';
-import 'package:http/http.dart' as http;
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({required this.loginId});
+
+  static const String routeName = '/login/resetPassword';
+
+  static Route<dynamic> route(String loginId) {
+    return NoAnimationMaterialPageRoute(
+      builder: (context) => ResetPasswordPage(loginId: loginId),
+      settings: const RouteSettings(name: routeName),
+    );
+  }
+
   final String loginId;
   @override
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
@@ -54,7 +64,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         // 変更用のメールアドレスを置くたらログイン画面に飛ばす
         final route = NoAnimationMaterialPageRoute(
           builder: (context) => LoginPage(),
-          settings: const RouteSettings(name: '/login'),
+          settings: const RouteSettings(name: LoginPage.routeName),
         );
         Navigator.pushReplacement(context, route);
       }

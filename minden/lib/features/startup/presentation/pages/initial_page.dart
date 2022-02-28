@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InitialPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   State<StatefulWidget> createState() => _InitialPageState();
 }
@@ -176,7 +177,7 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     if (!hasTutorial) {
       final route = NoAnimationMaterialPageRoute(
         builder: (context) => TutorialPage(),
-        settings: const RouteSettings(name: '/tutorial'),
+        settings: const RouteSettings(name: TutorialPage.routeName),
       );
       Navigator.pushReplacement(context, route);
       return;
@@ -185,31 +186,19 @@ class _InitialPageState extends State<InitialPage> with AfterLayoutMixin {
     si<Account>().prepare().then((value) async {
       if (si<Account>().appToken?.isEmpty ?? true) {
         // チュートリアルはみたが、ログインしないユーザー
-        final route = NoAnimationMaterialPageRoute(
-          builder: (context) => LoginPage(),
-          settings: const RouteSettings(name: '/login'),
-        );
-        Navigator.pushReplacement(context, route);
+        Navigator.pushReplacement(context, LoginPage.route());
         return;
       }
 
       final sharedPreferences = await SharedPreferences.getInstance();
       final hasProfile = sharedPreferences.getBool('has_profile') ?? false;
       if (!hasProfile) {
-        final route = NoAnimationMaterialPageRoute(
-          builder: (context) => ProfileSettingNamePage(),
-          settings: const RouteSettings(name: '/profileSetting/name'),
-        );
-        Navigator.pushReplacement(context, route);
+        Navigator.pushReplacement(context, ProfileSettingNamePage.route());
         return;
       }
 
       // ログインしてて、チュートリアルもみたユーザー
-      final route = NoAnimationMaterialPageRoute(
-        builder: (context) => HomePage(),
-        settings: const RouteSettings(name: '/home'),
-      );
-      Navigator.pushReplacement(context, route);
+      Navigator.pushReplacement(context, HomePage.route());
     });
   }
 

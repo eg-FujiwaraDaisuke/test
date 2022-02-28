@@ -35,10 +35,9 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../injection_container.dart';
-import 'package:minden/core/ext/logger_ext.dart';
 
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
@@ -47,28 +46,20 @@ class PowerPlantDetailPage extends StatefulWidget {
     required this.plantId,
   }) : super(key: key);
 
+  static const String routeName = '/home/top/detail';
+
   // 特典一覧ページから遷移してきた場合、得点を上に表示させる
   final bool isShowGiftAtTheTop;
   final String plantId;
 
   @override
   State<StatefulWidget> createState() {
-    return PowerPlantDetailPageState(
-      plantId: plantId,
-      isShowGiftAtTheTop: isShowGiftAtTheTop,
-    );
+    return PowerPlantDetailPageState();
   }
 }
 
 /// 発電所詳細
 class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
-  PowerPlantDetailPageState({
-    required this.plantId,
-    required this.isShowGiftAtTheTop,
-  });
-
-  final String plantId;
-  final bool isShowGiftAtTheTop;
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
@@ -343,7 +334,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                             height: 1,
                             color: Color(0xFFE2E2E2),
                           ),
-                          _generateDetail(detail, isShowGiftAtTheTop),
+                          _generateDetail(detail, widget.isShowGiftAtTheTop),
                           _actionButton(detail)
                         ],
                       ),

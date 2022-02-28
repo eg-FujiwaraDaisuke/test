@@ -31,6 +31,15 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({required this.userId});
 
+  static const String routeName = '/user/profile';
+
+  static Route<dynamic> route(String userId) {
+    return MaterialPageRoute(
+      builder: (context) => ProfilePage(userId: userId),
+      settings: const RouteSettings(name: routeName),
+    );
+  }
+
   final String userId;
 
   @override
@@ -132,10 +141,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               return const FadeUpwardsPageTransitionsBuilder()
                                   .buildTransitions(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileEditPage(),
-                                          settings: const RouteSettings(
-                                              name: '/user/profile/edit')),
+                                        builder: (context) => ProfileEditPage(),
+                                        settings: const RouteSettings(
+                                            name: ProfileEditPage.routeName),
+                                      ),
                                       context,
                                       animation,
                                       secondaryAnimation,

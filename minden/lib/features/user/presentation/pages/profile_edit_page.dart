@@ -38,10 +38,10 @@ import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfileEditPage extends StatefulWidget {
+  static const String routeName = '/user/profile/edit';
+
   @override
-  State<StatefulWidget> createState() {
-    return _ProfileEditPageState();
-  }
+  State<StatefulWidget> createState() => _ProfileEditPageState();
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
@@ -787,7 +787,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
                               profileSelectedTag: widget.tagsList,
                             ),
                             settings: const RouteSettings(
-                              name: '/profileSetting/tag',
+                              name: ProfileSettingTagsPage.routeName,
                             ),
                           ),
                           context,

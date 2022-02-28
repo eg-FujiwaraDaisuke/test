@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab_navigation.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/tab_navigator.dart';
@@ -26,6 +27,15 @@ import 'package:minden/injection_container.dart';
 // bottomNavigationBarの出し分けを行います
 
 class HomePage extends HookWidget {
+  static const String routeName = '/home';
+
+  static Route<dynamic> route() {
+    return NoAnimationMaterialPageRoute(
+      builder: (context) => HomePage(),
+      settings: const RouteSettings(name: HomePage.routeName),
+    );
+  }
+
   final _navigatorKeys = {
     TabItem.home: GlobalKey<NavigatorState>(),
     TabItem.mypage: GlobalKey<NavigatorState>(),

@@ -1,14 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
-import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:minden/injection_container.dart';
 
 class Tutorial {
   Tutorial({
@@ -27,6 +24,8 @@ class Tutorial {
 }
 
 class TutorialPage extends StatefulWidget {
+  static const String routeName = '/tutorial';
+
   @override
   _TutorialPageState createState() => _TutorialPageState();
 }
@@ -194,11 +193,7 @@ class _TutorialPageState extends State<TutorialPage> {
   Future<void> _toLogin() async {
     await _requestPermissions();
     await _doneTutorial();
-    final route = NoAnimationMaterialPageRoute(
-      builder: (context) => LoginPage(),
-      settings: const RouteSettings(name: '/login'),
-    );
-    Navigator.pushReplacement(context, route);
+    Navigator.pushReplacement(context, LoginPage.route());
   }
 
   Future<void> _doneTutorial() async {
