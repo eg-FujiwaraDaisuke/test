@@ -6,11 +6,14 @@ import 'package:minden/features/power_plant/domain/entities/power_plant_particip
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
+/// 発電所応援ダイアログ
 class SupportParticipantsDialog {
   SupportParticipantsDialog({
     required this.context,
     required this.participants,
   }) : super();
+
+  static const String routeName = '/home/top/detail/supportParticipants';
 
   final BuildContext context;
   final PowerPlantParticipant participants;
@@ -80,7 +83,7 @@ class SupportParticipantsDialog {
                         runSpacing: 16,
                         children: participants.userList
                             .map(
-                              _buildPartcipantItem,
+                              _buildParticipantItem,
                             )
                             .toList(),
                       ),
@@ -162,11 +165,12 @@ class SupportParticipantsDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }
 
-  Widget _buildPartcipantItem(PowerPlantParticipantUser participant) {
+  Widget _buildParticipantItem(PowerPlantParticipantUser participant) {
     return GestureDetector(
       onTap: () {
         Navigator.pop(context);

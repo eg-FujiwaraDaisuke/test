@@ -39,6 +39,7 @@ import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// 発電所詳細画面
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
     Key? key,
@@ -53,12 +54,9 @@ class PowerPlantDetailPage extends StatefulWidget {
   final String plantId;
 
   @override
-  State<StatefulWidget> createState() {
-    return PowerPlantDetailPageState();
-  }
+  State<StatefulWidget> createState() => PowerPlantDetailPageState();
 }
 
-/// 発電所詳細
 class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
@@ -406,13 +404,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     bool isShowGiftAtTheTop,
   ) {
     // 特典がない場合表示しない
-    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
+    final hasGift = detail.supportGiftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -492,7 +488,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ],
               ),
               const SizedBox(height: 26),
-              if (isShowGiftAtTheTop && hasGitf)
+              if (isShowGiftAtTheTop && hasGift)
                 Column(
                   children: [
                     _generateGift(detail),
@@ -536,6 +532,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
               if (state is ParticipantLoaded) {
                 return GestureDetector(
                   onTap: () {
+                    // 発電所応援ユーザー
                     SupportParticipantsDialog(
                       context: context,
                       participants: state.participant,

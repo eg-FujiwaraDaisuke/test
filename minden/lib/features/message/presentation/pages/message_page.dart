@@ -123,8 +123,9 @@ class MessagePage extends HookWidget {
 
             if (event.messageDetail.messageType == '1') {
               MindenMessageDialog(
-                      context: context, messageDetail: event.messageDetail)
-                  .showDialog();
+                context: context,
+                messageDetail: event.messageDetail,
+              ).showDialog();
             } else {
               PowerPlantMessageDialog(
                 context: context,

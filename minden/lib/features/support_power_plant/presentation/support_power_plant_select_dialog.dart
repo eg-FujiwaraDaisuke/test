@@ -17,6 +17,8 @@ class SupportPowerPlantSelectDialog {
     required this.user,
   }) : super();
 
+  static const String routeName = '/home/top/detail/select';
+
   final BuildContext context;
   final PowerPlant selectPowerPlant;
   List<RegistPowerPlant> registPowerPlants;
@@ -273,6 +275,7 @@ class SupportPowerPlantSelectDialog {
           );
         }),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

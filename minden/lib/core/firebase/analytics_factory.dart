@@ -13,6 +13,9 @@ import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
+import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
@@ -23,6 +26,7 @@ FirebaseAnalyticsObserver createAnalyticsObserver() {
   return FirebaseAnalyticsObserver(
     analytics: FirebaseAnalytics.instance,
     nameExtractor: nameExtractor,
+    routeFilter: routeFilter,
   );
 }
 
@@ -44,6 +48,9 @@ String? nameExtractor(RouteSettings settings) {
     // NOTE: TabView, ポップアップのトラッキングは別な仕組みで行う
     case PowerPlantHomePage.routeName:
     case PowerPlantDetailPage.routeName:
+    case SupportParticipantsDialog.routeName:
+    case SupportPowerPlantDecisionDialog.routeName:
+    case SupportPowerPlantSelectDialog.routeName:
     // マイページタブ
     case UserPage.routeName:
     case ProfilePage.routeName:
@@ -59,3 +66,7 @@ String? nameExtractor(RouteSettings settings) {
       return routeName;
   }
 }
+
+/// デフォルトはPageRouteのみ対象となっているため、ModalRouteも対象とする
+bool routeFilter(Route<dynamic>? route) =>
+    route is PageRoute || route is ModalRoute;
