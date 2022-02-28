@@ -34,6 +34,7 @@ abstract class PowerPlantRepository {
   /// [historyType] 応援予約 or 応援履歴
   Future<Either<PowerPlantFailure, SupportHistory>> getPowerPlantHistory(
     String historyType,
+    String? userId,
   );
 
   /// 応援ボタン表示制御API

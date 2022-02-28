@@ -31,9 +31,11 @@ class GetPowerPlantEvent extends PowerPlantEvent {
 class GetSupportHistoryEvent extends PowerPlantEvent {
   const GetSupportHistoryEvent({
     required this.historyType,
+    this.userId,
   });
 
   final String historyType;
+  final String? userId;
 
   @override
   List<Object> get props => [];
