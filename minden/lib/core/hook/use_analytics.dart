@@ -1,13 +1,16 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:minden/core/hook/use_logger.dart';
 
-const String _tabButtonEventName = 'tap_button';
+const String _tapButtonEventName = 'tap_button';
 
 const String _tapButtonEventParamsName = 'name';
 
 void useButtonAnalytics(ButtonAnalyticsType type) {
+  logD('Analytics: $_tapButtonEventName: ${type.name}');
+
   // NOTE: FirebaseAnalyticsのインスタンスはシングルトンなため都度呼び出しは問題になりづらい
   FirebaseAnalytics.instance.logEvent(
-    name: _tabButtonEventName,
+    name: _tapButtonEventName,
     parameters: {
       _tapButtonEventParamsName: type.name,
     },

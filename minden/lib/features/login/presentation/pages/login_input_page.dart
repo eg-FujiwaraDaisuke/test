@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
@@ -49,9 +50,16 @@ class _LoginInputPageState extends State<LoginInputPage> {
     });
   }
 
-  void _login() {
-    final bloc = BlocProvider.of<LoginBloc>(context);
-    bloc.add(GetLoginUserEvent(_userLoginId, _userLoginPassword));
+  /// ログインボタン押下時の処理
+  void _onLogin() {
+    useButtonAnalytics(ButtonAnalyticsType.requestLogin);
+
+    BlocProvider.of<LoginBloc>(context).add(
+      GetLoginUserEvent(
+        _userLoginId,
+        _userLoginPassword,
+      ),
+    );
   }
 
   @override
@@ -120,6 +128,10 @@ class _LoginInputPageState extends State<LoginInputPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  // パスワードリセットリンク押下
+                                  useButtonAnalytics(ButtonAnalyticsType
+                                      .navigateResetPassword);
+
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => ForgotPasswordPage(),
                                     settings:
@@ -156,7 +168,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                           height: 32,
                         ),
                         Button(
-                          onTap: _login,
+                          onTap: _onLogin,
                           text: i18nTranslate(context, 'login_login'),
                           size: ButtonSize.L,
                         ),
