@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -14,6 +15,7 @@ import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
@@ -189,7 +191,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   else
                     GestureDetector(
                       onTap: () async {
-                        // // ユーザーの通報
+                        // ユーザーの通報
+                        useButtonAnalytics(
+                            ButtonAnalyticsType.requestIssueReport);
+
                         final isShowReport = await IssueReportDialog(
                                 context: context,
                                 userName: state.profile.name ?? '')
@@ -545,6 +550,7 @@ class _ProfileBio extends StatelessWidget {
   }
 }
 
+// 大切にしていること（タグ）
 class _TagsList extends StatelessWidget {
   const _TagsList({required this.tagsList}) : super();
   final List<Tag> tagsList;
@@ -576,7 +582,19 @@ class _TagsList extends StatelessWidget {
                 .map(
                   (tag) => TagListItem(
                     tag: tag,
-                    onSelect: (tag) {},
+                    onSelect: (tag) {
+                      useButtonAnalytics(ButtonAnalyticsType
+                          .navigateSearchByTagPowerPlantFromProfile);
+
+                      // 検索結画面に飛ばす
+                      final route = MaterialPageRoute(
+                        builder: (context) =>
+                            PowerPlantSearchListPage(selectTag: tag),
+                        settings: const RouteSettings(
+                            name: PowerPlantSearchListPage.routeName),
+                      );
+                      Navigator.push(context, route);
+                    },
                     isSelected: true,
                   ),
                 )

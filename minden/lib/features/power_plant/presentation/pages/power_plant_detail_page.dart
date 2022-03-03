@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -980,6 +981,10 @@ class SupportButton extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () async {
                   if (supportAction != 'available') return;
+
+                  // 応援するボタンの動作如何によらず、計測は同一
+                  useButtonAnalytics(
+                      ButtonAnalyticsType.navigateSupportPowerPlant);
 
                   _registerPowerPlants = historyPowerPlants
                       .map((powerPlant) => RegistPowerPlant(

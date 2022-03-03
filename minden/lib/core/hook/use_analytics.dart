@@ -25,17 +25,17 @@ enum ButtonAnalyticsType {
   // パスワードリセット画面 - パスワードリセットボタン押下
   requestResetPassword,
   // タグ設定画面 - 次へ押下
-  confirmTagSettings,
+  navigateConfirmTagSettings,
   // タグ設定確認画面 - 決定押下
-  requestTagSettings,
+  completeTagSettings,
   // 発電所をタグで探すタブ - タグ押下
   navigateSearchByTagPowerPlant,
   // 発電所詳細画面 - この発電所を応援するボタン押下
   navigateSupportPowerPlant,
   // ユーザー一覧ポップアップ - ユーザーアイコン押下
-  navigateUser,
+  navigateParticipantUser,
   // 発電所応援ポップアップ - 決定する押下
-  requestSupportPowerPlant,
+  decideSupportPowerPlant,
   // プロフィール画面 - タグ押下
   navigateSearchByTagPowerPlantFromProfile,
   // プロフィール画面 - このユーザーを報告押下
@@ -57,17 +57,17 @@ extension ButtonAnalyticsTypeExt on ButtonAnalyticsType {
         return 'navigateResetPassword';
       case ButtonAnalyticsType.requestResetPassword:
         return 'requestResetPassword';
-      case ButtonAnalyticsType.confirmTagSettings:
+      case ButtonAnalyticsType.navigateConfirmTagSettings:
         return 'confirmTagSettings';
-      case ButtonAnalyticsType.requestTagSettings:
+      case ButtonAnalyticsType.completeTagSettings:
         return 'requestTagSettings';
       case ButtonAnalyticsType.navigateSearchByTagPowerPlant:
         return 'navigateSearchByTagPowerPlant';
       case ButtonAnalyticsType.navigateSupportPowerPlant:
         return 'navigateSupportPowerPlant';
-      case ButtonAnalyticsType.navigateUser:
+      case ButtonAnalyticsType.navigateParticipantUser:
         return 'navigateUser';
-      case ButtonAnalyticsType.requestSupportPowerPlant:
+      case ButtonAnalyticsType.decideSupportPowerPlant:
         return 'requestSupportPowerPlant';
       case ButtonAnalyticsType.navigateSearchByTagPowerPlantFromProfile:
         return 'navigateSearchByTagPowerPlantFromProfile';
