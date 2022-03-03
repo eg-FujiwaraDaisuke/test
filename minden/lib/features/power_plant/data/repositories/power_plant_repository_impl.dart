@@ -86,11 +86,10 @@ class PowerPlantRepositoryImpl
   /// [historyType] 応援予約 or 応援履歴
   @override
   Future<Either<PowerPlantFailure, SupportHistory>> getPowerPlantHistory(
-    String historyType,
-  ) async {
+      String historyType, String? userId) async {
     try {
       final history = await retryRequest(
-          () => powerPlantDataSource.getPowerPlantHistory(historyType));
+          () => powerPlantDataSource.getPowerPlantHistory(historyType, userId));
       return Right(history);
     } on ServerException {
       return left(PowerPlantFailure());

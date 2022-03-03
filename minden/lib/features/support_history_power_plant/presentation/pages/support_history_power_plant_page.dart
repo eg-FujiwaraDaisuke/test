@@ -22,12 +22,12 @@ class SupportHistoryPowerPlantPage extends StatelessWidget {
     SupportPowerPlantTabData(
       tabName: '次に応援する発電所',
       tabPage: (_) => const SingleChildScrollView(
-          child: SupportHistoryPowerPlantList('reservation')),
+          child: SupportHistoryPowerPlantList(historyType: 'reservation')),
     ),
     SupportPowerPlantTabData(
       tabName: '応援した発電所',
       tabPage: (_) => const SingleChildScrollView(
-          child: SupportHistoryPowerPlantList('history')),
+          child: SupportHistoryPowerPlantList(historyType: 'history')),
     ),
   ];
 

@@ -81,7 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
 
-    _getProfileBloc.add(GetProfileEvent(userId: widget.userId));
+    _getProfileBloc.add(GetProfileEvent(
+      userId: widget.userId,
+    ));
   }
 
   @override
@@ -286,7 +288,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 37,
                         ),
-                        const _SupportPowerPlant(),
+                        _SupportPowerPlant(
+                          userId: widget.userId,
+                        ),
                       ],
                     ),
                   ),
@@ -331,127 +335,6 @@ class PlaceHolderProfile extends StatelessWidget {
         ),
       ),
     );
-
-    // return Scaffold(
-    //   backgroundColor: Colors.white,
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.transparent,
-    //     elevation: 0,
-    //     centerTitle: true,
-    //     leading: GestureDetector(
-    //       onTap: () {
-    //         Navigator.pop(context);
-    //       },
-    //       child: Center(
-    //         child: SvgPicture.asset(
-    //           'assets/images/common/leading_back.svg',
-    //           fit: BoxFit.fill,
-    //           width: 44,
-    //           height: 44,
-    //         ),
-    //       ),
-    //     ),
-    //     actions: [
-    //       if (isMe)
-    //         GestureDetector(
-    //           onTap: () {},
-    //           child: Container(
-    //             width: 90,
-    //             height: 44,
-    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(22),
-    //               color: Colors.white,
-    //             ),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 SvgPicture.asset('assets/images/user/edit.svg'),
-    //                 const SizedBox(
-    //                   width: 9,
-    //                 ),
-    //                 Text(
-    //                   i18nTranslate(context, 'user_edit'),
-    //                   style: const TextStyle(
-    //                     color: Color(0xFF575292),
-    //                     fontSize: 12,
-    //                     fontFamily: 'NotoSansJP',
-    //                     fontWeight: FontWeight.w500,
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         )
-    //       else
-    //         GestureDetector(
-    //           onTap: () {},
-    //           child: Container(
-    //             width: 44,
-    //             height: 44,
-    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(22),
-    //               color: Colors.black.withOpacity(0.2),
-    //             ),
-    //             child: const Center(
-    //               child: Icon(Icons.more_horiz),
-    //             ),
-    //           ),
-    //         )
-    //     ],
-    //   ),
-    //   extendBodyBehindAppBar: true,
-    //   body: SafeArea(
-    //     top: false,
-    //     child: SingleChildScrollView(
-    //       child: Center(
-    //         child: Column(
-    //           children: [
-    //             Stack(
-    //               alignment: Alignment.center,
-    //               clipBehavior: Clip.none,
-    //               children: [
-    //                 Container(
-    //                     width: MediaQuery.of(context).size.width,
-    //                     height: 173,
-    //                     color: const Color(0xFFFFFB92)),
-    //                 CustomPaint(
-    //                   size: Size(MediaQuery.of(context).size.width, 173),
-    //                   painter: WallPaperArcPainter(color: Colors.white),
-    //                 ),
-    //                 const Positioned(
-    //                   bottom: -44,
-    //                   child: ProfileIcon(icon: null),
-    //                 )
-    //               ],
-    //             ),
-    //             const SizedBox(
-    //               height: 60,
-    //             ),
-    //             const ProfileName(
-    //               name: '',
-    //             ),
-    //             const SizedBox(
-    //               height: 35,
-    //             ),
-    //             const _ProfileBio(bio: ''),
-    //             const SizedBox(
-    //               height: 43,
-    //             ),
-    //             const _TagsList(
-    //               tagsList: [],
-    //             ),
-    //             const SizedBox(
-    //               height: 37,
-    //             ),
-    //             const _SupportPowerPlant(),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
 
@@ -588,14 +471,10 @@ class _TagsList extends StatelessWidget {
   }
 }
 
-class _SupportPowerPlant extends StatefulWidget {
-  const _SupportPowerPlant();
+class _SupportPowerPlant extends StatelessWidget {
+  const _SupportPowerPlant({required this.userId});
+  final String userId;
 
-  @override
-  _SupportPowerPlantState createState() => _SupportPowerPlantState();
-}
-
-class _SupportPowerPlantState extends State<_SupportPowerPlant> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -619,7 +498,10 @@ class _SupportPowerPlantState extends State<_SupportPowerPlant> {
         const SizedBox(
           height: 7,
         ),
-        const SupportHistoryPowerPlantList('reservation'),
+        SupportHistoryPowerPlantList(
+          historyType: 'reservation',
+          userId: userId,
+        ),
       ],
     );
   }
