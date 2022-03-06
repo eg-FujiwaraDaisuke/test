@@ -1,8 +1,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:minden/core/hook/use_logger.dart';
 
+// ボタン操作時のトラッキング用イベント名
 const String _tapButtonEventName = 'tap_button';
 
+// トラッキング時の、ボタン種別
 const String _tapButtonEventParamsName = 'name';
 
 void useButtonAnalytics(ButtonAnalyticsType type) {
