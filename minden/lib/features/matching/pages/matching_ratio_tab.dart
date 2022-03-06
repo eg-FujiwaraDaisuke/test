@@ -238,7 +238,7 @@ class _MatchingRatioByDate extends ConsumerWidget {
                   ),
                   getTitles: (value) {
                     if (value == 9) {
-                      return 'kWh';
+                      return 'kW';
                     } else {
                       return value.toStringAsFixed(0);
                     }

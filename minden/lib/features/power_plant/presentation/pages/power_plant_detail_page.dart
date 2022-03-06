@@ -477,7 +477,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     ),
                   ),
                   Text(
-                    '${detail.generationCapacity}kWh',
+                    '${detail.generationCapacity}kW',
                     style: const TextStyle(
                       fontSize: 15,
                       fontFamily: 'NotoSansJP',

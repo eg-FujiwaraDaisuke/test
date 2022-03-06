@@ -5,11 +5,13 @@ class SupportHistory extends Equatable {
     required this.page,
     required this.total,
     required this.historyType,
+    required this.userId,
     required this.powerPlants,
   });
 
   final int page;
   final int total;
+  final String userId;
   final String historyType;
   final List<SupportHistoryPowerPlant> powerPlants;
 
@@ -17,6 +19,7 @@ class SupportHistory extends Equatable {
     return {
       'page': page,
       'total': total,
+      'userId': userId,
       'historyType': historyType,
       'powerPlants': powerPlants.map((e) => e.toJson()).toList()
     };
