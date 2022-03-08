@@ -24,7 +24,7 @@ class SupportPowerPlantDecisionDialog {
     required this.user,
   }) : super();
 
-  static const String routeName = '/home/top/detail/decision';
+  static const String routeName = '/home/top/detail/support/decision';
 
   final BuildContext context;
   final PowerPlant selectPowerPlant;
