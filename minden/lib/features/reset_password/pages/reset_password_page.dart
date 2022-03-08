@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -25,6 +26,7 @@ class ResetPasswordPage extends StatefulWidget {
   }
 
   final String loginId;
+
   @override
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
@@ -182,6 +184,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 Button(
                     onTap: () {
+                      useButtonAnalytics(
+                          ButtonAnalyticsType.requestResetPassword);
+
                       _updatePasswordBloc.add(UpdatePasswordEvent(
                         loginId: widget.loginId,
                         confirmationCode: _decideCode,

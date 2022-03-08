@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/color_code_util.dart';
@@ -197,13 +198,11 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
   }
 
   Future<void> _onSelectTag(Tag tag) async {
-    final foundTag = _selectedTags.firstWhere((element) {
-      return element?.tagId == tag.tagId;
-    }, orElse: () => null);
-
     setState(() {
       _selectedTags.add(tag);
     });
+
+    useButtonAnalytics(ButtonAnalyticsType.navigateSearchByTagPowerPlant);
 
     // 検索結画面に飛ばす
     final route = MaterialPageRoute(

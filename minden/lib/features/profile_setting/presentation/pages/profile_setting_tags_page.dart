@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/color_code_util.dart';
@@ -333,6 +334,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 ),
               ),
               const SizedBox(height: 28),
+              // 次へ
               if (_selectedTags.isEmpty || _selectedTags.length > 4)
                 Button(
                   onTap: () => {},
@@ -362,7 +364,10 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
     Navigator.pop(context, _selectedTags);
   }
 
+  // タグを選択 - 次へ押下
   void _next() {
+    useButtonAnalytics(ButtonAnalyticsType.navigateConfirmTagSettings);
+
     if (widget.isRouteToPop) {
       Navigator.pop(context, _selectedTags);
       return;
