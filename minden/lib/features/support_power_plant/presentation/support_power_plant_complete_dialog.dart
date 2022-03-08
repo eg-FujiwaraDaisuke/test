@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
@@ -9,27 +8,26 @@ import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
-import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/features/support_power_plant/data/datasources/support_power_plant_datasources.dart';
 import 'package:minden/features/support_power_plant/data/repositories/support_power_plant_repository_impl.dart';
 import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
 import 'package:minden/features/support_power_plant/presentation/bloc/support_power_plant_bloc.dart';
-import 'package:minden/features/support_power_plant/presentation/support_power_plant_complete_dialog.dart';
 import 'package:minden/utile.dart';
 
-class SupportPowerPlantDecisionDialog {
-  SupportPowerPlantDecisionDialog({
+/// 発電所の応援完了ダイアログ
+class SupportPowerPlantCompleteDialog {
+  SupportPowerPlantCompleteDialog({
     required this.context,
-    required this.selectPowerPlant,
-    required this.registPowerPlants,
+    required this.registeredPowerPlants,
     required this.user,
   }) : super();
 
-  static const String routeName = '/home/top/detail/support/decision';
+  static const String routeName = '/home/top/detail/support/complete';
 
   final BuildContext context;
-  final PowerPlant selectPowerPlant;
-  final List<RegistPowerPlant> registPowerPlants;
+
+  /// 応援済み発電所
+  final List<PowerPlant> registeredPowerPlants;
   final User user;
   final _updateSupportPowerPlantBloc = UpdateSupportPowerPlantBloc(
     const SupportPowerPlantInitial(),
@@ -50,18 +48,8 @@ class SupportPowerPlantDecisionDialog {
       }
       Loading.hide();
       if (event is SupportPowerPlantUpdated) {
-        // 登録された応援している発電所
-        final supportPowerPlants = event.supportPowerPlants;
-
         _updateSupportPowerPlantBloc.close();
         Navigator.pop(context, true);
-
-        // 応援完了ダイアログを表示
-        SupportPowerPlantCompleteDialog(
-          context: context,
-          registeredPowerPlants: supportPowerPlants,
-          user: user,
-        ).showDialog();
         return;
       }
     });
@@ -70,19 +58,6 @@ class SupportPowerPlantDecisionDialog {
       context,
       CustomDialogOverlay(
         StatefulBuilder(builder: (context, setState) {
-          // 登録可能な発電所のみ保持
-          final canRegistPowerPlants = registPowerPlants
-              .where((registPowerPlant) => registPowerPlant.isRegist)
-              .toList();
-
-          // 新しく登録する予定の発電所
-          final newRegistPowerPlants = [
-            ...canRegistPowerPlants
-                .map((registPowerPlants) => registPowerPlants.powerPlant)
-                .toList(),
-            selectPowerPlant
-          ];
-
           return Stack(
             children: [
               Positioned(
@@ -95,86 +70,31 @@ class SupportPowerPlantDecisionDialog {
                   ),
                   child: Column(
                     children: [
-                      if (newRegistPowerPlants.length == 1)
-                        Column(
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: i18nTranslate(
-                                        context, 'bracket_before'),
-                                    style: const TextStyle(
-                                      color: Color(0xFFFF8C00),
-                                      fontSize: 18,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: selectPowerPlant.name,
-                                    style: const TextStyle(
-                                      color: Color(0xFFFF8C00),
-                                      fontSize: 18,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        i18nTranslate(context, 'bracket_after'),
-                                    style: const TextStyle(
-                                      color: Color(0xFFFF8C00),
-                                      fontSize: 18,
-                                      fontFamily: 'NotoSansJP',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              i18nTranslate(
-                                  context, 'support_plant_decide_alright'),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Color(0xFF575292),
-                                fontSize: 16,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        Text(
-                          i18nTranslate(context,
-                              'support_plant_decide_next_month_alright'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color(0xFF575292),
-                            fontSize: 16,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
-                            height:
-                                calcFontHeight(fontSize: 16, lineHeight: 27.2),
-                          ),
+                      // タイトル
+                      Text(
+                        i18nTranslate(
+                            context, 'support_plant_complete_announce'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF575292),
+                          fontSize: 16,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          height:
+                              calcFontHeight(fontSize: 16, lineHeight: 27.2),
                         ),
-                      const SizedBox(
-                        height: 12,
                       ),
+                      const SizedBox(height: 12),
+                      // 来月から応援することになった発電所一覧
                       Column(
-                        children: newRegistPowerPlants
+                        children: registeredPowerPlants
                             .map(_buildSelectedPlantListItem)
                             .toList(),
                       ),
                       const SizedBox(
                         height: 25,
                       ),
+                      // 応援する発電所の変更可能期限について表記
                       Text(
                         i18nTranslate(context, 'support_plant_can_be_changed'),
                         textAlign: TextAlign.center,
@@ -185,31 +105,25 @@ class SupportPowerPlantDecisionDialog {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      const SizedBox(
-                        height: 32,
-                      ),
+                      const SizedBox(height: 32),
+                      // 応援した発電所をシェアしようボタン
                       Button(
                           onTap: () {
-                            useButtonAnalytics(
-                                ButtonAnalyticsType.decideSupportPowerPlant);
+                            // シェア呼び出し
 
-                            _updateSupportPowerPlantBloc.add(
-                                UpdateSupportPowerPlantEvent(
-                                    newRegistPowerPlants));
+                            // ダイアログを閉じる
                           },
-                          text: i18nTranslate(context, 'decide'),
-                          size: ButtonSize.S),
-                      const SizedBox(
-                        height: 12,
-                      ),
+                          text: i18nTranslate(
+                              context, 'support_plant_complete_suggest_share'),
+                          size: ButtonSize.M),
+                      const SizedBox(height: 12),
+                      // 閉じるボタン
                       GestureDetector(
                         onTap: () {
-                          registPowerPlants.forEach((registPowerPlant) =>
-                              registPowerPlant.isRegist = true);
                           Navigator.pop(context, false);
                         },
                         child: Text(
-                          i18nTranslate(context, 'cancel_katakana'),
+                          i18nTranslate(context, 'close'),
                           style: const TextStyle(
                             color: Color(0xFF787877),
                             fontSize: 14,
@@ -241,6 +155,7 @@ class SupportPowerPlantDecisionDialog {
     );
   }
 
+  /// 応援することにした発電所のWidget
   Widget _buildSelectedPlantListItem(PowerPlant powerPlant) {
     return Column(
       children: [
