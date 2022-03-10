@@ -18,9 +18,6 @@ class UpdateSupportPowerPlantBloc
     SupportPowerPlantEvent event,
   ) async* {
     if (event is UpdateSupportPowerPlantEvent) {
-      // 新たに応援する発電所一覧
-      final powerPlants = event.newRegistPowerPlants;
-
       try {
         yield const SupportPowerPlantUpdating();
 
@@ -30,7 +27,8 @@ class UpdateSupportPowerPlantBloc
         yield failureOrSuccess.fold<SupportPowerPlantState>(
           (failure) => throw failure,
           (success) => SupportPowerPlantUpdated(
-            supportPowerPlants: powerPlants,
+            newSupportPowerPlant: event.newSupportPowerPlant,
+            supportPowerPlants: event.supportPowerPlants,
           ),
         );
       } on RefreshTokenExpiredException catch (e) {

@@ -1,6 +1,8 @@
 // Package imports:
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:minden/core/env/config.dart';
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/package_info_provider.dart';
 
 /// FirebaseDynamicLinksインスタンスを返す（ProviderScopeでoverride利用）
@@ -24,13 +26,11 @@ final createDynamicLink = FutureProvider.family<Uri, String>((
 ) {
   final dynamicLinks = ref.watch(dynamicLinksProvider);
   final packageInfo = ref.watch(packageInfoProvider);
-
-  const uriPrefix = 'https://stgminden.page.link';
+  // 環境によって利用するFirebaseプロジェクトが異なるため、uriPrefixも異なる
+  final uriPrefix = Config.getDynamicLinksDomainByEnvironment();
 
   final params = DynamicLinkParameters(
-    // TODO: 環境別に設定する（Firebaseプロジェクトが単一の場合は不要）
     uriPrefix: uriPrefix,
-    // TODO: 開きたいページのurlを設定する。Webページのドメイン + pathとするのがよさそう
     link: Uri.parse('$uriPrefix/$path'),
     androidParameters: AndroidParameters(
       packageName: packageInfo.packageName,
@@ -43,6 +43,7 @@ final createDynamicLink = FutureProvider.family<Uri, String>((
   );
 
   return dynamicLinks.buildShortLink(params).then((linkData) {
+    logD('Create DynamicLinks. Preview: ${linkData.previewLink}');
     return linkData.shortUrl;
   });
 });

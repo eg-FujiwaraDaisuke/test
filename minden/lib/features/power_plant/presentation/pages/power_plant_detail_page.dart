@@ -50,6 +50,13 @@ class PowerPlantDetailPage extends StatefulWidget {
 
   static const String routeName = '/home/top/detail';
 
+  static Route<dynamic> route(String plantId) {
+    return MaterialPageRoute(
+      builder: (context) => PowerPlantDetailPage(plantId: plantId),
+      settings: const RouteSettings(name: PowerPlantDetailPage.routeName),
+    );
+  }
+
   // 特典一覧ページから遷移してきた場合、得点を上に表示させる
   final bool isShowGiftAtTheTop;
   final String plantId;

@@ -50,7 +50,7 @@ class SupportPowerPlantDecisionDialog {
       }
       Loading.hide();
       if (event is SupportPowerPlantUpdated) {
-        // 登録された応援している発電所
+        final newSupportPowerPlant = event.newSupportPowerPlant;
         final supportPowerPlants = event.supportPowerPlants;
 
         _updateSupportPowerPlantBloc.close();
@@ -59,8 +59,8 @@ class SupportPowerPlantDecisionDialog {
         // 応援完了ダイアログを表示
         SupportPowerPlantCompleteDialog(
           context: context,
+          selectPowerPlant: newSupportPowerPlant,
           registeredPowerPlants: supportPowerPlants,
-          user: user,
         ).showDialog();
         return;
       }
@@ -194,8 +194,11 @@ class SupportPowerPlantDecisionDialog {
                                 ButtonAnalyticsType.decideSupportPowerPlant);
 
                             _updateSupportPowerPlantBloc.add(
-                                UpdateSupportPowerPlantEvent(
-                                    newRegistPowerPlants));
+                              UpdateSupportPowerPlantEvent(
+                                selectPowerPlant,
+                                newRegistPowerPlants,
+                              ),
+                            );
                           },
                           text: i18nTranslate(context, 'decide'),
                           size: ButtonSize.S),

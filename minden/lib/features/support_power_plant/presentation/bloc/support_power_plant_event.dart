@@ -5,17 +5,26 @@ abstract class SupportPowerPlantEvent extends Equatable {
 }
 
 class UpdateSupportPowerPlantEvent extends SupportPowerPlantEvent {
-  const UpdateSupportPowerPlantEvent(this.newRegistPowerPlants);
+  const UpdateSupportPowerPlantEvent(
+    this.newSupportPowerPlant,
+    this.supportPowerPlants,
+  );
 
   /// 新たに応援することになった発電所一覧
-  final List<PowerPlant> newRegistPowerPlants;
+  final PowerPlant newSupportPowerPlant;
+
+  /// 応援する発電所一覧
+  final List<PowerPlant> supportPowerPlants;
 
   Map<String, List<Map<String, String>>> get plantIdList => {
-        'plantIdList': newRegistPowerPlants
+        'plantIdList': supportPowerPlants
             .map((powerPlant) => {'plantId': powerPlant.plantId})
             .toList()
       };
 
   @override
-  List<Object> get props => [newRegistPowerPlants];
+  List<Object> get props => [
+        newSupportPowerPlant,
+        supportPowerPlants,
+      ];
 }
