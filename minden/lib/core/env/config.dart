@@ -58,4 +58,18 @@ class Config {
   static String _environmentString(Flavor flavor) {
     return flavor.toString().split('.').last;
   }
+
+  /// DynamicLinksで利用するURL接頭辞（カスタムドメイン）を返す
+  static String getDynamicLinksDomainByEnvironment() {
+    switch (_environment) {
+      case Flavor.dev:
+        return 'https://stgminden.page.link';
+      case Flavor.staging:
+        return 'https://stgminden.page.link';
+      case Flavor.prod:
+        return 'https://minden.page.link';
+      case Flavor.undefined:
+        return 'https://stgminden.page.link';
+    }
+  }
 }
