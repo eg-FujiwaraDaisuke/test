@@ -30,7 +30,7 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   final http.Client client;
 
-  String get _updatePath => '/api/v1/profile/edit';
+  String get _updatePath => '/api/v1.1/profile/edit';
 
   String get _getPath => '/api/v1.1/profile';
 
