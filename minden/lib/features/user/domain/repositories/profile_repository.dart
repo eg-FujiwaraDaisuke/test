@@ -8,6 +8,10 @@ abstract class ProfileRepository {
     required String icon,
     required String bio,
     required String wallPaper,
+    required String freeLink,
+    required String twitterLink,
+    required String facebookLink,
+    required String instagramLink,
   });
 
   Future<Either<Failure, Profile>> get({

@@ -43,6 +43,10 @@ class UpdateProfile extends UseCase<Profile, UpdateProfileParams> {
       icon: params.icon,
       bio: params.bio,
       wallPaper: params.wallPaper,
+      freeLink: params.freeLink,
+      twitterLink: params.twitterLink,
+      facebookLink: params.facebookLink,
+      instagramLink: params.instagramLink,
     );
   }
 }
@@ -53,12 +57,20 @@ class UpdateProfileParams extends Equatable {
     this.icon,
     this.bio,
     this.wallPaper,
+    this.freeLink,
+    this.twitterLink,
+    this.facebookLink,
+    this.instagramLink,
   );
 
   final String name;
   final String icon;
   final String bio;
   final String wallPaper;
+  final String freeLink;
+  final String twitterLink;
+  final String facebookLink;
+  final String instagramLink;
 
   @override
   List<Object> get props => [name];

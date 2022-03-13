@@ -922,47 +922,49 @@ class _SnsLinkEditForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (hasSectionTitle)
-          _generateSectionTitle(context, 'profile_setting_sns'),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          height: 40,
-          width: 339,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: TextFormField(
-            keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.done,
-            initialValue: link,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: i18nTranslate(context, placeholderKey),
-                hintStyle: TextStyle(
-                  color: const Color(0xFF7C7C7C),
-                  fontSize: 12,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: calcLetterSpacing(letter: 0.5),
-                  height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
-                )),
-            style: TextStyle(
-              color: const Color(0xFF7C7C7C),
-              fontSize: 16,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w400,
-              letterSpacing: calcLetterSpacing(letter: 0.5),
-              height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (hasSectionTitle)
+            _generateSectionTitle(context, 'profile_setting_sns'),
+          const SizedBox(height: 8),
+          Container(
+            height: 40,
+            width: 339,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
             ),
-            onChanged: textHandler,
+            child: TextFormField(
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.done,
+              initialValue: link,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: i18nTranslate(context, placeholderKey),
+                  hintStyle: TextStyle(
+                    color: const Color(0xFF7C7C7C),
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: calcLetterSpacing(letter: 0.5),
+                    height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+                  )),
+              style: TextStyle(
+                color: const Color(0xFF7C7C7C),
+                fontSize: 16,
+                fontFamily: 'NotoSansJP',
+                fontWeight: FontWeight.w400,
+                letterSpacing: calcLetterSpacing(letter: 0.5),
+                height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
+              ),
+              onChanged: textHandler,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
