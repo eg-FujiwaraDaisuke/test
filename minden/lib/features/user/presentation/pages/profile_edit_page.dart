@@ -261,6 +261,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(
                               height: 33,
                             ),
+                            // 自己紹介
                             _ProfileBioEditForm(
                               bio: _bio,
                               textHandler: (value) {
@@ -272,12 +273,44 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(
                               height: 30,
                             ),
+                            // 大切にしていること
                             _ImportantTagsList(
                               tagsList: _tags,
                               tagHandler: (tags) {
                                 setState(() {
                                   _tags = tags;
                                 });
+                              },
+                            ),
+                            const SizedBox(height: 38),
+                            // SNS
+                            _SnsLinkEditForm(
+                              placeholderKey: 'profile_setting_sns_instagram',
+                              link: _instagramLink,
+                              textHandler: (value) {
+                                _instagramLink = value;
+                              },
+                              hasSectionTitle: true,
+                            ),
+                            _SnsLinkEditForm(
+                              placeholderKey: 'profile_setting_sns_facebook',
+                              link: _facebookLink,
+                              textHandler: (value) {
+                                _facebookLink = value;
+                              },
+                            ),
+                            _SnsLinkEditForm(
+                              placeholderKey: 'profile_setting_sns_twitter',
+                              link: _twitterLink,
+                              textHandler: (value) {
+                                _twitterLink = value;
+                              },
+                            ),
+                            _SnsLinkEditForm(
+                              placeholderKey: 'profile_setting_sns_free',
+                              link: _freeLink,
+                              textHandler: (value) {
+                                _freeLink = value;
                               },
                             ),
                           ],
@@ -716,9 +749,7 @@ class _ProfileBioEditForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _generateSectionTitle(context, 'profile_edit_self_intro'),
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           height: 110,
@@ -875,8 +906,72 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
   }
 }
 
+/// SNSリンクを編集するForm
+class _SnsLinkEditForm extends StatelessWidget {
+  const _SnsLinkEditForm({
+    required this.placeholderKey,
+    required this.link,
+    required this.textHandler,
+    this.hasSectionTitle = false,
+  }) : super();
+
+  final String placeholderKey;
+  final String? link;
+  final Function(String text) textHandler;
+  final bool hasSectionTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (hasSectionTitle)
+          _generateSectionTitle(context, 'profile_setting_sns'),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          height: 40,
+          width: 339,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: TextFormField(
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.done,
+            initialValue: link,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: i18nTranslate(context, placeholderKey),
+                hintStyle: TextStyle(
+                  color: const Color(0xFF7C7C7C),
+                  fontSize: 12,
+                  fontFamily: 'NotoSansJP',
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: calcLetterSpacing(letter: 0.5),
+                  height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+                )),
+            style: TextStyle(
+              color: const Color(0xFF7C7C7C),
+              fontSize: 16,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w400,
+              letterSpacing: calcLetterSpacing(letter: 0.5),
+              height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
+            ),
+            onChanged: textHandler,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// 設定項目のタイトルを生成して返す
-Text _generateSectionTitle(BuildContext context, String titleKey) {
+Widget _generateSectionTitle(
+  BuildContext context,
+  String titleKey,
+) {
   return Text(
     i18nTranslate(context, titleKey),
     style: TextStyle(
