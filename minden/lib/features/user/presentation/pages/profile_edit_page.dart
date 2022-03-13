@@ -321,6 +321,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 _freeLink = value;
                               },
                             ),
+                            const SizedBox(height: 24),
                           ],
                         ),
                       ),
@@ -951,28 +952,43 @@ class _SnsLinkEditForm extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             alignment: Alignment.centerLeft,
-            height: 40,
             width: 339,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
             child: TextFormField(
-              keyboardType: TextInputType.multiline,
+              keyboardType: TextInputType.url,
               textInputAction: TextInputAction.done,
               initialValue: link,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 2),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 prefixIcon: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
-                  child: SvgPicture.asset(prefixIconKey, width: 18, height: 18),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                  child: SvgPicture.asset(
+                    prefixIconKey,
+                    width: 18,
+                    height: 18,
+                    fit: BoxFit.scaleDown,
+                  ),
                 ),
                 hintText: i18nTranslate(context, placeholderKey),
                 hintStyle: formTextStyle,
+                fillColor: Colors.white,
+                filled: true,
+                isDense: true,
               ),
               style: formTextStyle,
               onChanged: textHandler,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return null;
+                }
+                if (Uri.tryParse(value!)?.hasAbsolutePath ?? false) {
+                  return null;
+                }
+
+                return i18nTranslate(context, 'user_sns_link_invalid_error');
+              },
             ),
           ),
         ],

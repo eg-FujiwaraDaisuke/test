@@ -356,7 +356,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _launchSnsLink(String link) async {
     if (await canLaunch(link)) {
-      logD('Launch  link. link: $link');
+      logD('This link is valid. link: $link');
       await launch(link);
     } else {
       logW('This link is invalid. link: $link');
