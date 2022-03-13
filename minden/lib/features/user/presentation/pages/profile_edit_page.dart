@@ -59,6 +59,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   late List<Tag> _tags;
   late Profile _profile;
 
+  // SNS
+  late String? _instagramLink;
+  late String? _facebookLink;
+  late String? _twitterLink;
+  late String? _freeLink;
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +86,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           _name = event.profile.name;
           _bio = event.profile.bio;
           _wallPaperUrl = event.profile.wallPaper;
+          _instagramLink = event.profile.instagramLink;
+          _facebookLink = event.profile.facebookLink;
+          _twitterLink = event.profile.twitterLink;
+          _freeLink = event.profile.freeLink;
           _iconUrl = event.profile.icon;
           _tags = event.profile.tags;
         });
@@ -285,20 +295,37 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
+  /// 編集画面を開いたときから、設定が変更されているか
   bool _isDirty() {
-    return _iconUrl != _profile.icon ||
-        _wallPaperUrl != _profile.wallPaper ||
-        _name != _profile.name ||
-        _bio != _profile.bio ||
-        _tags != _profile.tags;
+    final isChangedIcon = _iconUrl != _profile.icon;
+    final isChangedWallpaper = _wallPaperUrl != _profile.wallPaper;
+    final isChangedName = _name != _profile.name;
+    final isChangedBio = _bio != _profile.bio;
+    final isChangedTags = _tags != _profile.tags;
+    final isChangedInstagram = _instagramLink != _profile.instagramLink;
+    final isChangedFacebook = _facebookLink != _profile.facebookLink;
+    final isChangedTwitter = _twitterLink != _profile.twitterLink;
+    final isChangedFreeUrl = _freeLink != _profile.freeLink;
+
+    return isChangedIcon ||
+        isChangedWallpaper ||
+        isChangedName ||
+        isChangedBio ||
+        isChangedTags ||
+        isChangedInstagram ||
+        isChangedFacebook ||
+        isChangedTwitter ||
+        isChangedFreeUrl;
   }
 
   Future<void> _prev(BuildContext context) async {
     if (!_isDirty()) {
+      // 変更がない場合、無条件でpop
       Navigator.pop(context, false);
       return;
     }
 
+    // 変更されている場合、変更を破棄して戻るか確認
     final isDiscard = await showDialog(
       context: context,
       builder: (context) {
@@ -371,6 +398,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         icon: _iconUrl ?? '',
         bio: _bio!,
         wallPaper: _wallPaperUrl ?? '',
+        freeLink: _freeLink ?? '',
+        twitterLink: _twitterLink ?? '',
+        facebookLink: _facebookLink ?? '',
+        instagramLink: _instagramLink ?? '',
       ));
     }
   }
@@ -684,16 +715,7 @@ class _ProfileBioEditForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          i18nTranslate(context, 'profile_edit_self_intro'),
-          style: TextStyle(
-            color: const Color(0xFF575292),
-            fontSize: 14,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-            letterSpacing: calcLetterSpacing(letter: 4),
-          ),
-        ),
+        _generateSectionTitle(context, 'profile_edit_self_intro'),
         const SizedBox(
           height: 8,
         ),
@@ -760,16 +782,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                i18nTranslate(context, 'user_important'),
-                style: TextStyle(
-                  color: const Color(0xFF575292),
-                  fontSize: 14,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: calcLetterSpacing(letter: 4),
-                ),
-              ),
+              _generateSectionTitle(context, 'user_important'),
               GestureDetector(
                 onTap: () async {
                   // 大切にしていること編集
@@ -860,4 +873,18 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
       ),
     );
   }
+}
+
+/// 設定項目のタイトルを生成して返す
+Text _generateSectionTitle(BuildContext context, String titleKey) {
+  return Text(
+    i18nTranslate(context, titleKey),
+    style: TextStyle(
+      color: const Color(0xFF575292),
+      fontSize: 14,
+      fontFamily: 'NotoSansJP',
+      fontWeight: FontWeight.w700,
+      letterSpacing: calcLetterSpacing(letter: 4),
+    ),
+  );
 }

@@ -126,6 +126,10 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
           icon: '',
           bio: _inputBio,
           wallPaper: '',
+          freeLink: '',
+          twitterLink: '',
+          facebookLink: '',
+          instagramLink: '',
         ),
       );
     }

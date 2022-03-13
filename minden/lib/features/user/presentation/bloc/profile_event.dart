@@ -19,12 +19,20 @@ class UpdateProfileEvent extends ProfileEvent {
     required this.icon,
     required this.bio,
     required this.wallPaper,
+    required this.freeLink,
+    required this.twitterLink,
+    required this.facebookLink,
+    required this.instagramLink,
   });
 
   final String name;
   final String icon;
   final String bio;
   final String wallPaper;
+  final String freeLink;
+  final String twitterLink;
+  final String facebookLink;
+  final String instagramLink;
 
   @override
   List<Object> get props => [name];

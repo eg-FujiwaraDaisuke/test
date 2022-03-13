@@ -9,6 +9,10 @@ class ProfileModel extends Profile {
       required icon,
       required bio,
       required wallPaper,
+      required freeLink,
+      required twitterLink,
+      required facebookLink,
+      required instagramLink,
       required tags,
       required selectedPowerPlants})
       : super(
@@ -17,6 +21,10 @@ class ProfileModel extends Profile {
             icon: icon,
             bio: bio,
             wallPaper: wallPaper,
+            freeLink: freeLink,
+            twitterLink: twitterLink,
+            facebookLink: facebookLink,
+            instagramLink: instagramLink,
             tags: tags,
             selectedPowerPlants: selectedPowerPlants);
 
@@ -36,6 +44,10 @@ class ProfileModel extends Profile {
         icon: elem['icon'],
         bio: elem['bio'],
         wallPaper: elem['wallPaper'],
+        freeLink: elem['freeLink'],
+        twitterLink: elem['twitterLink'],
+        facebookLink: elem['facebookLink'],
+        instagramLink: elem['instagramLink'],
         tags: tags,
         selectedPowerPlants: selectedPowerPlants);
   }
