@@ -285,6 +285,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(height: 38),
                             // SNS
                             _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_instagram.svg',
                               placeholderKey: 'profile_setting_sns_instagram',
                               link: _instagramLink,
                               textHandler: (value) {
@@ -293,6 +295,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               hasSectionTitle: true,
                             ),
                             _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_facebook.svg',
                               placeholderKey: 'profile_setting_sns_facebook',
                               link: _facebookLink,
                               textHandler: (value) {
@@ -300,6 +304,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               },
                             ),
                             _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_twitter.svg',
                               placeholderKey: 'profile_setting_sns_twitter',
                               link: _twitterLink,
                               textHandler: (value) {
@@ -307,6 +313,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               },
                             ),
                             _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_free.svg',
                               placeholderKey: 'profile_setting_sns_free',
                               link: _freeLink,
                               textHandler: (value) {
@@ -909,12 +917,23 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
 /// SNSリンクを編集するForm
 class _SnsLinkEditForm extends StatelessWidget {
   const _SnsLinkEditForm({
+    required this.prefixIconKey,
     required this.placeholderKey,
     required this.link,
     required this.textHandler,
     this.hasSectionTitle = false,
   }) : super();
 
+  static TextStyle formTextStyle = TextStyle(
+    color: const Color(0xFF7C7C7C),
+    fontSize: 12,
+    fontFamily: 'NotoSansJP',
+    fontWeight: FontWeight.w400,
+    letterSpacing: calcLetterSpacing(letter: 0.5),
+    height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+  );
+
+  final String prefixIconKey;
   final String placeholderKey;
   final String? link;
   final Function(String text) textHandler;
@@ -931,6 +950,7 @@ class _SnsLinkEditForm extends StatelessWidget {
             _generateSectionTitle(context, 'profile_setting_sns'),
           const SizedBox(height: 8),
           Container(
+            alignment: Alignment.centerLeft,
             height: 40,
             width: 339,
             decoration: BoxDecoration(
@@ -942,24 +962,16 @@ class _SnsLinkEditForm extends StatelessWidget {
               textInputAction: TextInputAction.done,
               initialValue: link,
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: i18nTranslate(context, placeholderKey),
-                  hintStyle: TextStyle(
-                    color: const Color(0xFF7C7C7C),
-                    fontSize: 12,
-                    fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: calcLetterSpacing(letter: 0.5),
-                    height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
-                  )),
-              style: TextStyle(
-                color: const Color(0xFF7C7C7C),
-                fontSize: 16,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w400,
-                letterSpacing: calcLetterSpacing(letter: 0.5),
-                height: calcFontHeight(lineHeight: 22.08, fontSize: 16),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(vertical: 2),
+                prefixIcon: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+                  child: SvgPicture.asset(prefixIconKey, width: 18, height: 18),
+                ),
+                hintText: i18nTranslate(context, placeholderKey),
+                hintStyle: formTextStyle,
               ),
+              style: formTextStyle,
               onChanged: textHandler,
             ),
           ),
