@@ -148,6 +148,10 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
               bio: '1',
               wallpaper:
                   'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              freeLink: '',
+              twitterLink: '',
+              facebookLink: '',
+              instagramLink: '',
             ),
             PowerPlantParticipantUser(
               userId: '2',
@@ -158,6 +162,10 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
               bio: '1',
               wallpaper:
                   'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              freeLink: '',
+              twitterLink: '',
+              facebookLink: '',
+              instagramLink: '',
             ),
             PowerPlantParticipantUser(
               userId: '1',
@@ -168,6 +176,10 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
               bio: '1',
               wallpaper:
                   'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              freeLink: '',
+              twitterLink: '',
+              facebookLink: '',
+              instagramLink: '',
             ),
             PowerPlantParticipantUser(
               userId: '2',
@@ -178,6 +190,10 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
               bio: '1',
               wallpaper:
                   'https://ca.slack-edge.com/T02HZH8HZ-U017YCHMU05-043558546a4e-512',
+              freeLink: '',
+              twitterLink: '',
+              facebookLink: '',
+              instagramLink: '',
             ),
           ]);
       return Right(data);

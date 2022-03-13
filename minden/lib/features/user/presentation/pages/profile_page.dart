@@ -281,8 +281,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           name: state.profile.name,
                         ),
                         const SizedBox(
-                          height: 35,
+                          height: 22,
                         ),
+                        // SNS
+                        _buildSnsLinks(state),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        // 自己紹介
                         _ProfileBio(bio: state.profile.bio),
                         const SizedBox(
                           height: 43,
@@ -305,6 +311,40 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           return PlaceHolderProfile();
         }),
+      ),
+    );
+  }
+
+  Widget _buildSnsLinks(ProfileLoaded state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildSnsLink(
+          state.profile.instagramLink,
+          'assets/images/user/sns_instagram.svg',
+        ),
+        _buildSnsLink(
+          'state.profile.facebookLink',
+          'assets/images/user/sns_facebook.svg',
+        ),
+        _buildSnsLink(
+          state.profile.twitterLink,
+          'assets/images/user/sns_twitter.svg',
+        ),
+        _buildSnsLink(
+          state.profile.freeLink,
+          'assets/images/user/sns_free.svg',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSnsLink(String? link, String assetName) {
+    return Visibility(
+      visible: link?.isNotEmpty ?? false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: SvgPicture.asset(assetName),
       ),
     );
   }

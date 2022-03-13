@@ -9,6 +9,10 @@ class PowerPlantParticipantUser extends Equatable {
     required this.icon,
     required this.bio,
     required this.wallpaper,
+    required this.freeLink,
+    required this.twitterLink,
+    required this.facebookLink,
+    required this.instagramLink,
   });
 
   /// ユーザーid
@@ -28,6 +32,18 @@ class PowerPlantParticipantUser extends Equatable {
 
   /// 壁紙
   final String wallpaper;
+
+  /// 自由リンク
+  final String freeLink;
+
+  /// Twitterリンク
+  final String twitterLink;
+
+  /// Facebookリンク
+  final String facebookLink;
+
+  /// Instagramリンク
+  final String instagramLink;
 
   @override
   List<Object> get props => [
