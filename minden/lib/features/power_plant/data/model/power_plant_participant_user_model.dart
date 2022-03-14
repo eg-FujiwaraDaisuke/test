@@ -27,4 +27,15 @@ class PowerPlantParticipantUserModel extends PowerPlantParticipantUser {
       wallpaper: json['wallpaper'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'name': name,
+      'contractor': contractor,
+      'icon': icon,
+      'bio': bio,
+      'wallpaper': wallpaper,
+    };
+  }
 }

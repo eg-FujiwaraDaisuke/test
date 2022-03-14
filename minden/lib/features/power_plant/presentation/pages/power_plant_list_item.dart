@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
+import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
 enum Direction {
@@ -58,7 +59,6 @@ class PowerPlantListItem extends StatelessWidget {
               // ヘッダー画像・キャッチフレーズ
               _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
               // 発電署名・所在地
-
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -111,9 +111,24 @@ class PowerPlantListItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                    // 応援しているユーザー
+                    GestureDetector(
+                      onTap: () {
+                        // 発電所応援ユーザー
+                        SupportParticipantsDialog(
+                          context: context,
+                          participants: powerPlant.userList,
+                        ).showDialog();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ParticipantUserIconGroup(
+                              participant: powerPlant.userList),
+                        ],
+                      ),
                     ),
+                    const SizedBox(height: 10),
                     if (reservedDate != null || supportedData != null)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
