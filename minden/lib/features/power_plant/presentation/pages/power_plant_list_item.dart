@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
 enum Direction {
