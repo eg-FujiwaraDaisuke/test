@@ -29,7 +29,7 @@ class PowerPlant extends Equatable {
   });
 
   factory PowerPlant.fromJson(Map<String, dynamic> json) {
-    final Iterable iterable = json['userList'];
+    final Iterable iterable = json['userList'] ?? [];
 
     return PowerPlant(
       plantId: json['plantId'],
@@ -130,10 +130,13 @@ class PowerPlant extends Equatable {
   ///　応援ユーザー
   final List<PowerPlantParticipantUserModel> userList;
 
+  /// ギフト名
   final String? giftName;
 
+  /// ギフト詳細
   final String? giftDescription;
 
+  /// ギフト写真
   final String? giftImage;
 
   Map<String, dynamic> toJson() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
@@ -83,6 +84,8 @@ class PowerPlantListState extends State<PowerPlantList> {
         },
         child: BlocBuilder<GetPowerPlantsBloc, PowerPlantState>(
           builder: (context, state) {
+            logD('Get power plant. state: $state');
+
             if (state is PowerPlantsLoaded) {
               return ListView.builder(
                 itemCount: state.powerPlants.powerPlants.length,

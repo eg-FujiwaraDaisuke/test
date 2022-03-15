@@ -546,6 +546,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                       ParticipantUserIconGroup(
                         participantUserList: state.participant.userList,
                         participantSize: state.participant.participantSize,
+                        maxUserIconCount: 3,
+                        iconSize: 52.0,
                       ),
                     ],
                   ),
@@ -1115,23 +1117,22 @@ class ParticipantUserIconGroup extends StatelessWidget {
     Key? key,
     required this.participantUserList,
     required this.participantSize,
+    required this.maxUserIconCount,
+    required this.iconSize,
   }) : super(key: key);
-
-  /// 表示可能な最大ユーザーアイコン数
-  static const maxUserIconCount = 3;
-
-  /// 表示可能な最大アイコン数
-  static const maxIconCount = 4;
 
   /// アイコン同士の重なり度合い
   static const overlapLength = 36.0;
 
-  /// アイコンサイズ（直径）
-  static const iconSize = 52.0;
-
   final List<PowerPlantParticipantUser> participantUserList;
 
   final int participantSize;
+
+  /// 表示可能な最大ユーザーアイコン数
+  final int maxUserIconCount;
+
+  /// アイコンサイズ（直径）
+  final iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -1140,7 +1141,9 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   Widget _generateParticipant() {
     final icons = _generateParticipantIcons();
-    final length = (icons.length > maxIconCount) ? maxIconCount : icons.length;
+    final length = (icons.length > maxUserIconCount + 1)
+        ? maxUserIconCount + 1
+        : icons.length;
     if (length <= 0) return Container();
     return Stack(
       children: List.generate(
@@ -1148,7 +1151,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         (index) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
-                (maxIconCount - index) * overlapLength, 0, 0, 0),
+                (maxUserIconCount + 1 - index) * overlapLength, 0, 0, 0),
             child: icons[index],
           );
         },
