@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -38,10 +39,10 @@ import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfileEditPage extends StatefulWidget {
+  static const String routeName = '/user/profile/edit';
+
   @override
-  State<StatefulWidget> createState() {
-    return _ProfileEditPageState();
-  }
+  State<StatefulWidget> createState() => _ProfileEditPageState();
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
@@ -361,6 +362,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   void _complete(BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      useButtonAnalytics(ButtonAnalyticsType.completeTagSettings);
+
       _formKey.currentState!.save();
 
       _updateBloc.add(UpdateProfileEvent(
@@ -460,6 +463,10 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
+                    // 背景編集
+                    useButtonAnalytics(
+                        ButtonAnalyticsType.requestChangeProfileWallpaper);
+
                     ImagePickerBottomSheet.show(
                       context: context,
                       imageHandler: (value) {
@@ -576,6 +583,10 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                 right: 0,
                 child: GestureDetector(
                   onTap: () {
+                    // アイコン編集
+                    useButtonAnalytics(
+                        ButtonAnalyticsType.requestChangeProfileIcon);
+
                     ImagePickerBottomSheet.show(
                       context: context,
                       imageHandler: (value) {
@@ -761,6 +772,10 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
               ),
               GestureDetector(
                 onTap: () async {
+                  // 大切にしていること編集
+                  useButtonAnalytics(
+                      ButtonAnalyticsType.requestChangeProfileTags);
+
                   final ret = await Navigator.push<List<Tag>>(
                     context,
                     PageRouteBuilder(
@@ -787,7 +802,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
                               profileSelectedTag: widget.tagsList,
                             ),
                             settings: const RouteSettings(
-                              name: '/profileSetting/tag',
+                              name: ProfileSettingTagsPage.routeName,
                             ),
                           ),
                           context,

@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/Issue_report/data/datasources/issue_report_datasource.dart';
@@ -16,8 +18,8 @@ import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/token/data/datasources/encryption_token_data_source.dart';
 import 'package:minden/utile.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../injection_container.dart';
 
 class IssueReportMessageDialog {
@@ -25,6 +27,8 @@ class IssueReportMessageDialog {
     required this.context,
     required this.targetUserId,
   }) : super();
+
+  static const String routeName = '/user/profile/issueReport/message';
 
   late String reportText = '';
   late bool isInappropriate = false;
@@ -324,6 +328,7 @@ class IssueReportMessageDialog {
           );
         }),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

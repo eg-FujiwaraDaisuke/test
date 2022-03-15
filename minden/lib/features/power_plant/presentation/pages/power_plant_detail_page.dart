@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -35,11 +36,11 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../injection_container.dart';
-import 'package:minden/core/ext/logger_ext.dart';
 
+/// 発電所詳細画面
 class PowerPlantDetailPage extends StatefulWidget {
   const PowerPlantDetailPage({
     Key? key,
@@ -47,28 +48,17 @@ class PowerPlantDetailPage extends StatefulWidget {
     required this.plantId,
   }) : super(key: key);
 
+  static const String routeName = '/home/top/detail';
+
   // 特典一覧ページから遷移してきた場合、得点を上に表示させる
   final bool isShowGiftAtTheTop;
   final String plantId;
 
   @override
-  State<StatefulWidget> createState() {
-    return PowerPlantDetailPageState(
-      plantId: plantId,
-      isShowGiftAtTheTop: isShowGiftAtTheTop,
-    );
-  }
+  State<StatefulWidget> createState() => PowerPlantDetailPageState();
 }
 
-/// 発電所詳細
 class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
-  PowerPlantDetailPageState({
-    required this.plantId,
-    required this.isShowGiftAtTheTop,
-  });
-
-  final String plantId;
-  final bool isShowGiftAtTheTop;
   late GetPowerPlantBloc _plantBloc;
   late GetParticipantBloc _participantBloc;
   late GetPlantTagsBloc _plantTagsBloc;
@@ -343,7 +333,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                             height: 1,
                             color: Color(0xFFE2E2E2),
                           ),
-                          _generateDetail(detail, isShowGiftAtTheTop),
+                          _generateDetail(detail, widget.isShowGiftAtTheTop),
                           _actionButton(detail)
                         ],
                       ),
@@ -415,13 +405,11 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     bool isShowGiftAtTheTop,
   ) {
     // 特典がない場合表示しない
-    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
+    final hasGift = detail.supportGiftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -489,7 +477,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     ),
                   ),
                   Text(
-                    '${detail.generationCapacity}kWh',
+                    '${detail.generationCapacity}kW',
                     style: const TextStyle(
                       fontSize: 15,
                       fontFamily: 'NotoSansJP',
@@ -501,7 +489,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 ],
               ),
               const SizedBox(height: 26),
-              if (isShowGiftAtTheTop && hasGitf)
+              if (isShowGiftAtTheTop && hasGift)
                 Column(
                   children: [
                     _generateGift(detail),
@@ -545,6 +533,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
               if (state is ParticipantLoaded) {
                 return GestureDetector(
                   onTap: () {
+                    // 発電所応援ユーザー
                     SupportParticipantsDialog(
                       context: context,
                       participants: state.participant,
@@ -992,6 +981,10 @@ class SupportButton extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () async {
                   if (supportAction != 'available') return;
+
+                  // 応援するボタンの動作如何によらず、計測は同一
+                  useButtonAnalytics(
+                      ButtonAnalyticsType.navigateSupportPowerPlant);
 
                   _registerPowerPlants = historyPowerPlants
                       .map((powerPlant) => RegistPowerPlant(

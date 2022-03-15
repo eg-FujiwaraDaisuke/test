@@ -16,9 +16,14 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_list_
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/utile.dart';
 
+/// 発電所を探す画面
+/// 選択したタグに基づく、発電所一覧を表示する
 class PowerPlantSearchListPage extends StatefulWidget {
   const PowerPlantSearchListPage({required this.selectTag, Key? key})
       : super(key: key);
+
+  static const String routeName = '/home/top/search/powerPlant';
+
   final Tag selectTag;
 
   @override
@@ -33,7 +38,6 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
   void initState() {
     super.initState();
     Loading.hide();
-
     _getPowerPlantsBloc = GetPowerPlantsBloc(
       const PowerPlantStateInitial(),
       GetPowerPlants(
@@ -245,7 +249,9 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
 /// 発電所一覧
 class _PowerPlantSearchList extends StatelessWidget {
   _PowerPlantSearchList({required this.powerPlants});
+
   final List<PowerPlant> powerPlants;
+
   @override
   Widget build(BuildContext context) {
     var index = 0;

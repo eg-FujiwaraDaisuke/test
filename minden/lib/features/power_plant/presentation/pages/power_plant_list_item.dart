@@ -46,7 +46,7 @@ class PowerPlantListItem extends StatelessWidget {
           final route = MaterialPageRoute(
             builder: (context) =>
                 PowerPlantDetailPage(plantId: powerPlant.plantId),
-            settings: const RouteSettings(name: '/home/top/detail'),
+            settings: const RouteSettings(name: PowerPlantDetailPage.routeName),
           );
           Navigator.push(context, route);
         },

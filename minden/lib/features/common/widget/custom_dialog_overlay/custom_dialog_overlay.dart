@@ -4,7 +4,8 @@ class CustomDialogOverlay extends ModalRoute<bool> {
   CustomDialogOverlay(
     this.contents, {
     this.isAndroidBackEnable = false,
-  }) : super();
+    RouteSettings? settings,
+  }) : super(settings: settings);
 
   final Widget contents;
 
@@ -13,14 +14,19 @@ class CustomDialogOverlay extends ModalRoute<bool> {
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 0);
+
   @override
   bool get opaque => false;
+
   @override
   bool get barrierDismissible => false;
+
   @override
   Color get barrierColor => Colors.black.withOpacity(0.5);
+
   @override
   String? get barrierLabel => null;
+
   @override
   bool get maintainState => true;
 

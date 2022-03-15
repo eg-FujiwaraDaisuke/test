@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
@@ -13,7 +15,6 @@ import 'package:minden/features/support_power_plant/data/repositories/support_po
 import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
 import 'package:minden/features/support_power_plant/presentation/bloc/support_power_plant_bloc.dart';
 import 'package:minden/utile.dart';
-import 'package:http/http.dart' as http;
 
 class SupportPowerPlantDecisionDialog {
   SupportPowerPlantDecisionDialog({
@@ -22,6 +23,8 @@ class SupportPowerPlantDecisionDialog {
     required this.registPowerPlants,
     required this.user,
   }) : super();
+
+  static const String routeName = '/home/top/detail/decision';
 
   final BuildContext context;
   final PowerPlant selectPowerPlant;
@@ -176,6 +179,9 @@ class SupportPowerPlantDecisionDialog {
                       ),
                       Button(
                           onTap: () {
+                            useButtonAnalytics(
+                                ButtonAnalyticsType.decideSupportPowerPlant);
+
                             final plantIdList = {
                               'plantIdList': newRegistPowerPlants
                                   .map((powerPlant) =>
@@ -225,6 +231,7 @@ class SupportPowerPlantDecisionDialog {
           );
         }),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

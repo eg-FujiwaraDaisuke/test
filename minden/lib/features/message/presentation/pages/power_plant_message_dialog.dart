@@ -8,6 +8,9 @@ class PowerPlantMessageDialog {
     required this.context,
     required this.messageDetail,
   }) : super();
+
+  static const String routeName = '/user/message/detail';
+
   final BuildContext context;
   final MessageDetail messageDetail;
   final int bgNum = DateTime.now().month % 4;
@@ -118,6 +121,7 @@ class PowerPlantMessageDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

@@ -1,16 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
+/// 発電所応援ダイアログ
 class SupportParticipantsDialog {
   SupportParticipantsDialog({
     required this.context,
     required this.participants,
   }) : super();
+
+  static const String routeName = '/home/top/detail/supportParticipants';
 
   final BuildContext context;
   final PowerPlantParticipant participants;
@@ -80,7 +84,7 @@ class SupportParticipantsDialog {
                         runSpacing: 16,
                         children: participants.userList
                             .map(
-                              _buildPartcipantItem,
+                              _buildParticipantItem,
                             )
                             .toList(),
                       ),
@@ -162,19 +166,24 @@ class SupportParticipantsDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }
 
-  Widget _buildPartcipantItem(PowerPlantParticipantUser participant) {
+  Widget _buildParticipantItem(PowerPlantParticipantUser participant) {
     return GestureDetector(
       onTap: () {
+        // 応援ユーザーアイコンのタップ
+        useButtonAnalytics(ButtonAnalyticsType.navigateParticipantUser);
+
         Navigator.pop(context);
+
         final route = MaterialPageRoute(
           builder: (context) => ProfilePage(
             userId: participant.userId,
           ),
-          settings: const RouteSettings(name: '/user/profile'),
+          settings: const RouteSettings(name: ProfilePage.routeName),
         );
         Navigator.push(context, route);
       },

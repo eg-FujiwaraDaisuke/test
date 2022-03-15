@@ -54,10 +54,10 @@ class _Menu {
 }
 
 class UserPage extends StatefulWidget {
+  static const String routeName = '/user';
+
   @override
-  State<StatefulWidget> createState() {
-    return _UserPageState();
-  }
+  State<StatefulWidget> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
@@ -92,11 +92,7 @@ class _UserPageState extends State<UserPage> {
 
       if (event is TransitionMessagePageStart) {
         // メッセージページにいるとき、メッセージページの上にメッセージページがpushされてしまうが一旦仕様として正にする
-        final route = MaterialPageRoute(
-          builder: (context) => MessagePage(showMessageId: event.messageId),
-          settings: RouteSettings(name: '/user/message'),
-        );
-        Navigator.push(context, route);
+        Navigator.push(context, MessagePage.route(event.messageId));
       }
     });
   }
@@ -267,17 +263,17 @@ class _MenuListView extends StatelessWidget {
       _Menu(
           title: i18nTranslate(context, 'user_menu_profile'),
           icon: 'select_plant',
-          routeName: '/user/profile',
+          routeName: ProfilePage.routeName,
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_support_power_plant'),
           icon: 'person',
-          routeName: '/user/supporPowerPlant',
+          routeName: SupportHistoryPowerPlantPage.routeName,
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_message'),
           icon: 'message',
-          routeName: '/user/message',
+          routeName: MessagePage.routeName,
           type: MenuType.message),
       _Menu(
           title: i18nTranslate(context, 'user_menu_web_mymenu'),
@@ -328,17 +324,13 @@ class _MenuItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () async {
         switch (routeName) {
-          case '/user/profile':
+          case ProfilePage.routeName:
             final userId = si<Account>().userId;
-            final route = MaterialPageRoute(
-              builder: (context) => ProfilePage(userId: userId),
-              settings: RouteSettings(name: routeName),
-            );
-            await Navigator.push(context, route);
+            await Navigator.push(context, ProfilePage.route(userId));
             BlocProvider.of<GetProfileBloc>(context)
                 .add(GetProfileEvent(userId: si<Account>().userId));
             break;
-          case '/user/supporPowerPlant':
+          case SupportHistoryPowerPlantPage.routeName:
             final route = MaterialPageRoute(
               builder: (context) => SupportHistoryPowerPlantPage(),
               settings: RouteSettings(name: routeName),
@@ -433,11 +425,7 @@ class _MenuMessageItem extends HookWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        final route = MaterialPageRoute(
-          builder: (context) => MessagePage(),
-          settings: const RouteSettings(name: '/user/message'),
-        );
-        Navigator.push(context, route);
+        Navigator.push(context, MessagePage.route());
       },
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 22),

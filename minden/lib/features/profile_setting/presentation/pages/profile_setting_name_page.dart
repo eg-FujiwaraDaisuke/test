@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
@@ -13,6 +14,15 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 
 class ProfileSettingNamePage extends StatefulWidget {
+  static const String routeName = '/profileSetting/name';
+
+  static Route<dynamic> route() {
+    return NoAnimationMaterialPageRoute(
+      builder: (context) => ProfileSettingNamePage(),
+      settings: const RouteSettings(name: ProfileSettingNamePage.routeName),
+    );
+  }
+
   @override
   _ProfileSettingNamePageState createState() => _ProfileSettingNamePageState();
 }

@@ -8,6 +8,9 @@ class MindenMessageDialog {
     required this.context,
     required this.messageDetail,
   }) : super();
+
+  static const String routeName = '/user/message/detail';
+
   final BuildContext context;
   final MessageDetail messageDetail;
 
@@ -93,6 +96,7 @@ class MindenMessageDialog {
           ],
         ),
         isAndroidBackEnable: false,
+        settings: const RouteSettings(name: routeName),
       ),
     );
   }

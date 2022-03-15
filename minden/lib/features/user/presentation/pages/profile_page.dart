@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -14,6 +15,7 @@ import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
@@ -30,6 +32,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({required this.userId});
+
+  static const String routeName = '/user/profile';
+
+  static Route<dynamic> route(String userId) {
+    return MaterialPageRoute(
+      builder: (context) => ProfilePage(userId: userId),
+      settings: const RouteSettings(name: routeName),
+    );
+  }
 
   final String userId;
 
@@ -72,7 +83,9 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
 
-    _getProfileBloc.add(GetProfileEvent(userId: widget.userId));
+    _getProfileBloc.add(GetProfileEvent(
+      userId: widget.userId,
+    ));
   }
 
   @override
@@ -132,10 +145,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               return const FadeUpwardsPageTransitionsBuilder()
                                   .buildTransitions(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileEditPage(),
-                                          settings: const RouteSettings(
-                                              name: '/user/profile/edit')),
+                                        builder: (context) => ProfileEditPage(),
+                                        settings: const RouteSettings(
+                                            name: ProfileEditPage.routeName),
+                                      ),
                                       context,
                                       animation,
                                       secondaryAnimation,
@@ -180,7 +193,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   else
                     GestureDetector(
                       onTap: () async {
-                        // // ユーザーの通報
+                        // ユーザーの通報
+                        useButtonAnalytics(
+                            ButtonAnalyticsType.requestIssueReport);
+
                         final isShowReport = await IssueReportDialog(
                                 context: context,
                                 userName: state.profile.name ?? '')
@@ -277,7 +293,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 37,
                         ),
-                        const _SupportPowerPlant(),
+                        _SupportPowerPlant(
+                          userId: widget.userId,
+                        ),
                       ],
                     ),
                   ),
@@ -322,127 +340,6 @@ class PlaceHolderProfile extends StatelessWidget {
         ),
       ),
     );
-
-    // return Scaffold(
-    //   backgroundColor: Colors.white,
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.transparent,
-    //     elevation: 0,
-    //     centerTitle: true,
-    //     leading: GestureDetector(
-    //       onTap: () {
-    //         Navigator.pop(context);
-    //       },
-    //       child: Center(
-    //         child: SvgPicture.asset(
-    //           'assets/images/common/leading_back.svg',
-    //           fit: BoxFit.fill,
-    //           width: 44,
-    //           height: 44,
-    //         ),
-    //       ),
-    //     ),
-    //     actions: [
-    //       if (isMe)
-    //         GestureDetector(
-    //           onTap: () {},
-    //           child: Container(
-    //             width: 90,
-    //             height: 44,
-    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(22),
-    //               color: Colors.white,
-    //             ),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 SvgPicture.asset('assets/images/user/edit.svg'),
-    //                 const SizedBox(
-    //                   width: 9,
-    //                 ),
-    //                 Text(
-    //                   i18nTranslate(context, 'user_edit'),
-    //                   style: const TextStyle(
-    //                     color: Color(0xFF575292),
-    //                     fontSize: 12,
-    //                     fontFamily: 'NotoSansJP',
-    //                     fontWeight: FontWeight.w500,
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         )
-    //       else
-    //         GestureDetector(
-    //           onTap: () {},
-    //           child: Container(
-    //             width: 44,
-    //             height: 44,
-    //             margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(22),
-    //               color: Colors.black.withOpacity(0.2),
-    //             ),
-    //             child: const Center(
-    //               child: Icon(Icons.more_horiz),
-    //             ),
-    //           ),
-    //         )
-    //     ],
-    //   ),
-    //   extendBodyBehindAppBar: true,
-    //   body: SafeArea(
-    //     top: false,
-    //     child: SingleChildScrollView(
-    //       child: Center(
-    //         child: Column(
-    //           children: [
-    //             Stack(
-    //               alignment: Alignment.center,
-    //               clipBehavior: Clip.none,
-    //               children: [
-    //                 Container(
-    //                     width: MediaQuery.of(context).size.width,
-    //                     height: 173,
-    //                     color: const Color(0xFFFFFB92)),
-    //                 CustomPaint(
-    //                   size: Size(MediaQuery.of(context).size.width, 173),
-    //                   painter: WallPaperArcPainter(color: Colors.white),
-    //                 ),
-    //                 const Positioned(
-    //                   bottom: -44,
-    //                   child: ProfileIcon(icon: null),
-    //                 )
-    //               ],
-    //             ),
-    //             const SizedBox(
-    //               height: 60,
-    //             ),
-    //             const ProfileName(
-    //               name: '',
-    //             ),
-    //             const SizedBox(
-    //               height: 35,
-    //             ),
-    //             const _ProfileBio(bio: ''),
-    //             const SizedBox(
-    //               height: 43,
-    //             ),
-    //             const _TagsList(
-    //               tagsList: [],
-    //             ),
-    //             const SizedBox(
-    //               height: 37,
-    //             ),
-    //             const _SupportPowerPlant(),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
 
@@ -536,6 +433,7 @@ class _ProfileBio extends StatelessWidget {
   }
 }
 
+// 大切にしていること（タグ）
 class _TagsList extends StatelessWidget {
   const _TagsList({required this.tagsList}) : super();
   final List<Tag> tagsList;
@@ -567,7 +465,19 @@ class _TagsList extends StatelessWidget {
                 .map(
                   (tag) => TagListItem(
                     tag: tag,
-                    onSelect: (tag) {},
+                    onSelect: (tag) {
+                      useButtonAnalytics(ButtonAnalyticsType
+                          .navigateSearchByTagPowerPlantFromProfile);
+
+                      // 検索結画面に飛ばす
+                      final route = MaterialPageRoute(
+                        builder: (context) =>
+                            PowerPlantSearchListPage(selectTag: tag),
+                        settings: const RouteSettings(
+                            name: PowerPlantSearchListPage.routeName),
+                      );
+                      Navigator.push(context, route);
+                    },
                     isSelected: true,
                   ),
                 )
@@ -579,14 +489,10 @@ class _TagsList extends StatelessWidget {
   }
 }
 
-class _SupportPowerPlant extends StatefulWidget {
-  const _SupportPowerPlant();
+class _SupportPowerPlant extends StatelessWidget {
+  const _SupportPowerPlant({required this.userId});
+  final String userId;
 
-  @override
-  _SupportPowerPlantState createState() => _SupportPowerPlantState();
-}
-
-class _SupportPowerPlantState extends State<_SupportPowerPlant> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -610,7 +516,10 @@ class _SupportPowerPlantState extends State<_SupportPowerPlant> {
         const SizedBox(
           height: 7,
         ),
-        const SupportHistoryPowerPlantList('reservation'),
+        SupportHistoryPowerPlantList(
+          historyType: 'reservation',
+          userId: userId,
+        ),
       ],
     );
   }

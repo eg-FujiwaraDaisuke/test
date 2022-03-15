@@ -45,19 +45,19 @@ class DebugPageState extends State<DebugPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _generateNavigatorPush(
-                    context, '通常遷移', (context) => InitialPage(), '/init'),
-                _generateNavigatorPush(
-                    context, 'ログイン', (context) => LoginPage(), '/login'),
+                _generateNavigatorPush(context, '通常遷移',
+                    (context) => InitialPage(), InitialPage.routeName),
+                _generateNavigatorPush(context, 'ログイン',
+                    (context) => LoginPage(), LoginPage.routeName),
                 _generateNavigatorPush(context, 'チュートリアル',
-                    (context) => TutorialPage(), '/tutorial'),
+                    (context) => TutorialPage(), TutorialPage.routeName),
                 _generateNavigatorPush(
                     context,
                     'プロフィール設定',
                     (context) => ProfileSettingNamePage(),
                     '/profileSetting/name'),
-                _generateNavigatorPush(
-                    context, 'ホーム', (context) => HomePage(), '/home/top'),
+                _generateNavigatorPush(context, 'ホーム', (context) => HomePage(),
+                    HomePage.routeName),
 
                 // TODO 納品後もとに戻す
                 _generateNavigatorPush(context, 'ログイン パスワードリセット',
