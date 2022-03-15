@@ -117,14 +117,17 @@ class PowerPlantListItem extends StatelessWidget {
                         // 発電所応援ユーザー
                         SupportParticipantsDialog(
                           context: context,
-                          participants: powerPlant.userList,
+                          participantUserList: powerPlant.userList,
+                          participantSize: powerPlant.userList.length,
                         ).showDialog();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ParticipantUserIconGroup(
-                              participant: powerPlant.userList),
+                            participantUserList: powerPlant.userList,
+                            participantSize: powerPlant.userList.length,
+                          ),
                         ],
                       ),
                     ),

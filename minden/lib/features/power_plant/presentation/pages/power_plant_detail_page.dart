@@ -18,7 +18,7 @@ import 'package:minden/features/power_plant/data/datasources/power_plant_data_so
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -536,13 +536,17 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     // 発電所応援ユーザー
                     SupportParticipantsDialog(
                       context: context,
-                      participants: state.participant,
+                      participantUserList: state.participant.userList,
+                      participantSize: state.participant.participantSize,
                     ).showDialog();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ParticipantUserIconGroup(participant: state.participant),
+                      ParticipantUserIconGroup(
+                        participantUserList: state.participant.userList,
+                        participantSize: state.participant.participantSize,
+                      ),
                     ],
                   ),
                 );
@@ -1107,8 +1111,11 @@ class SupportButton extends StatelessWidget {
 
 /// 応援ユーザー表示
 class ParticipantUserIconGroup extends StatelessWidget {
-  const ParticipantUserIconGroup({Key? key, required this.participant})
-      : super(key: key);
+  const ParticipantUserIconGroup({
+    Key? key,
+    required this.participantUserList,
+    required this.participantSize,
+  }) : super(key: key);
 
   /// 表示可能な最大ユーザーアイコン数
   static const maxUserIconCount = 3;
@@ -1122,15 +1129,17 @@ class ParticipantUserIconGroup extends StatelessWidget {
   /// アイコンサイズ（直径）
   static const iconSize = 52.0;
 
-  final PowerPlantParticipant participant;
+  final List<PowerPlantParticipantUser> participantUserList;
+
+  final int participantSize;
 
   @override
   Widget build(BuildContext context) {
-    return _generateParticipant(participant);
+    return _generateParticipant();
   }
 
-  Widget _generateParticipant(PowerPlantParticipant participant) {
-    final icons = _generateParticipantIcons(participant);
+  Widget _generateParticipant() {
+    final icons = _generateParticipantIcons();
     final length = (icons.length > maxIconCount) ? maxIconCount : icons.length;
     if (length <= 0) return Container();
     return Stack(
@@ -1147,20 +1156,20 @@ class ParticipantUserIconGroup extends StatelessWidget {
     );
   }
 
-  List<Widget> _generateParticipantIcons(PowerPlantParticipant participant) {
-    final total = participant.total;
+  List<Widget> _generateParticipantIcons() {
+    final total = participantSize;
     if (maxUserIconCount < total) {
       // 4人以上応援ユーザーがいる場合、
       return [
         _generateCircleRemainIcon(total),
-        ...participant.userList
+        ...participantUserList
             .take(maxUserIconCount)
             .map((p) => _generateCircleUserIcon(p.icon))
             .toList()
       ];
     } else {
       // 3人以下の応援ユーザーしかいないため、「+X」表記を行わない
-      return participant.userList
+      return participantUserList
           .map((p) => _generateCircleUserIcon(p.icon))
           .toList();
     }
