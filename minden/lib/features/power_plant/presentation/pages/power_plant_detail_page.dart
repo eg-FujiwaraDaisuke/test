@@ -547,7 +547,8 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                         participantUserList: state.participant.userList,
                         participantSize: state.participant.participantSize,
                         maxUserIconCount: 3,
-                        iconSize: 52.0,
+                        iconSize: 52,
+                        overlapLength: 36,
                       ),
                     ],
                   ),
@@ -1119,10 +1120,8 @@ class ParticipantUserIconGroup extends StatelessWidget {
     required this.participantSize,
     required this.maxUserIconCount,
     required this.iconSize,
+    required this.overlapLength,
   }) : super(key: key);
-
-  /// アイコン同士の重なり度合い
-  static const overlapLength = 36.0;
 
   final List<PowerPlantParticipantUser> participantUserList;
 
@@ -1132,7 +1131,10 @@ class ParticipantUserIconGroup extends StatelessWidget {
   final int maxUserIconCount;
 
   /// アイコンサイズ（直径）
-  final iconSize;
+  final double iconSize;
+
+  /// アイコン同士の重なり度合い
+  final double overlapLength;
 
   @override
   Widget build(BuildContext context) {
@@ -1151,7 +1153,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         (index) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
-                (maxUserIconCount + 1 - index) * overlapLength, 0, 0, 0),
+                (maxUserIconCount - index) * overlapLength, 0, 0, 0),
             child: icons[index],
           );
         },
@@ -1162,7 +1164,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
   List<Widget> _generateParticipantIcons() {
     final total = participantSize;
     if (maxUserIconCount < total) {
-      // 4人以上応援ユーザーがいる場合、
+      // 規定数人以上応援ユーザーがいる場合、
       return [
         _generateCircleRemainIcon(total),
         ...participantUserList
@@ -1171,7 +1173,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
             .toList()
       ];
     } else {
-      // 3人以下の応援ユーザーしかいないため、「+X」表記を行わない
+      // 規定数人以下の応援ユーザーしかいないため、「+X」表記を行わない
       return participantUserList
           .map((p) => _generateCircleUserIcon(p.icon))
           .toList();
@@ -1226,7 +1228,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         alignment: Alignment.center,
         color: const Color(0xFFEDCB50),
         padding: const EdgeInsets.only(left: 4),
-        child: Text('+${participantCount - 3}',
+        child: Text('+${participantCount - maxUserIconCount}',
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'NotoSansJP',

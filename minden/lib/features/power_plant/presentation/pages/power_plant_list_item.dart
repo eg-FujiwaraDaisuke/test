@@ -110,7 +110,7 @@ class PowerPlantListItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     // 応援しているユーザー
                     GestureDetector(
                       child: Row(
@@ -120,7 +120,8 @@ class PowerPlantListItem extends StatelessWidget {
                             participantUserList: powerPlant.userList,
                             participantSize: powerPlant.userList.length,
                             maxUserIconCount: 6,
-                            iconSize: 38.0,
+                            iconSize: 38,
+                            overlapLength: 42.75,
                           ),
                         ],
                       ),
