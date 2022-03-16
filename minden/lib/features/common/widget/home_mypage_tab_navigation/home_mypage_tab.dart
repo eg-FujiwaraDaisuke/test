@@ -1,1 +1,1 @@
-enum TabItem { home, mypage }
+enum TabItem { home, menu }

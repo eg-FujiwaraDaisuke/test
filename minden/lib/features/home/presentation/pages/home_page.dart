@@ -38,7 +38,7 @@ class HomePage extends HookWidget {
 
   final _navigatorKeys = {
     TabItem.home: GlobalKey<NavigatorState>(),
-    TabItem.mypage: GlobalKey<NavigatorState>(),
+    TabItem.menu: GlobalKey<NavigatorState>(),
   };
 
   @override
@@ -84,14 +84,14 @@ class HomePage extends HookWidget {
           }
           if (event.screen == 'UserPage') {
             _selectTab(
-              TabItem.mypage,
+              TabItem.menu,
             );
           }
         }
 
         if (event is TransitionMessagePageStart) {
           _selectTab(
-            TabItem.mypage,
+            TabItem.menu,
           );
         }
       });
@@ -258,7 +258,7 @@ class HomePage extends HookWidget {
         body: Stack(
           children: [
             _buildOffstageNavigator(TabItem.home, _currentTab.value),
-            _buildOffstageNavigator(TabItem.mypage, _currentTab.value)
+            _buildOffstageNavigator(TabItem.menu, _currentTab.value)
           ],
         ),
         bottomNavigationBar: HomeMypageTabNavigation(

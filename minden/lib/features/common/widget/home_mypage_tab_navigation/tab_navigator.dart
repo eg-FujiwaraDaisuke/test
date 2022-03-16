@@ -15,7 +15,7 @@ class TabNavigator extends StatelessWidget {
   Map<TabItem, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
       TabItem.home: (context) => PowerPlantHomePage(),
-      TabItem.mypage: (context) => UserPage(),
+      TabItem.menu: (context) => UserPage(),
     };
   }
 
@@ -34,7 +34,7 @@ class TabNavigator extends StatelessWidget {
           settings: RouteSettings(
             name: {
               TabItem.home: PowerPlantHomePage.routeName,
-              TabItem.mypage: UserPage.routeName,
+              TabItem.menu: UserPage.routeName,
             }[tabItem],
           ),
         );
