@@ -42,7 +42,7 @@ class PowerPlantMessageDialog {
                     width: 256,
                     height: 192,
                     child: CachedNetworkImage(
-                      imageUrl: messageDetail.image!,
+                      imageUrl: messageDetail.image ?? '',
                       placeholder: (context, url) {
                         return Image.asset(
                           'assets/images/common/placeholder.png',
