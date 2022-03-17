@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
 enum Direction {
@@ -58,7 +59,6 @@ class PowerPlantListItem extends StatelessWidget {
               // ヘッダー画像・キャッチフレーズ
               _generateSHortCatchphraseOnImage(powerPlant.plantImage1),
               // 発電署名・所在地
-
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -111,35 +111,53 @@ class PowerPlantListItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                    const SizedBox(height: 6),
+                    // 応援しているユーザー
+                    GestureDetector(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ParticipantUserIconGroup(
+                            participantUserList: powerPlant.userList,
+                            participantSize: powerPlant.userList.length,
+                            maxUserIconCount: 6,
+                            iconSize: 38,
+                            overlapLength: 42.75,
+                          ),
+                        ],
+                      ),
                     ),
                     if (reservedDate != null || supportedData != null)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Column(
                         children: [
-                          Text(
-                            reservedDate == null
-                                ? ''
-                                : '🚩${reservedDate}${i18nTranslate(context, 'power_plant_support_start_date')}',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFFF8C00),
-                            ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                reservedDate == null
+                                    ? ''
+                                    : '🚩${reservedDate}${i18nTranslate(context, 'power_plant_support_start_date')}',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFFF8C00),
+                                ),
+                              ),
+                              Text(
+                                supportedData == null
+                                    ? ''
+                                    : '${supportedData}${!fromApp ? 'WEB' : ''}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'NotoSansJP',
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFA7A7A7),
+                                ),
+                              )
+                            ],
                           ),
-                          Text(
-                            supportedData == null
-                                ? ''
-                                : '${supportedData}${!fromApp ? 'WEB' : ''}${i18nTranslate(context, 'power_plant_support_start_date_short')}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFA7A7A7),
-                            ),
-                          )
                         ],
                       ),
                   ],
