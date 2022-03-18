@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
-import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_menu.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class PowerPlantHomeTabData {
@@ -22,6 +22,10 @@ class PowerPlantHomePage extends StatefulWidget {
   _PowerPlantHomePageState createState() => _PowerPlantHomePageState();
 }
 
+/// 発電所を探すタブの、探し方選択まではタブ内で画面遷移を行う
+final GlobalKey<NavigatorState> _searchPowerPlantNavKey =
+    GlobalKey<NavigatorState>();
+
 class _PowerPlantHomePageState extends State<PowerPlantHomePage> {
   late TransitionScreenBloc _transitionScreenBloc;
 
@@ -32,7 +36,7 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage> {
     ),
     PowerPlantHomeTabData(
       tabName: '発電所を探す',
-      tabPage: (_) => const PowerPlantSearchByTag(),
+      tabPage: (_) => const PowerPlantSearchMenu(),
     ),
   ];
 

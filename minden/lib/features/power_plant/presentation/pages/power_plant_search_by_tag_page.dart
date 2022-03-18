@@ -20,10 +20,11 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
+/// 大切にしていることから探す
 class PowerPlantSearchByTag extends StatefulWidget {
   const PowerPlantSearchByTag({Key? key}) : super(key: key);
 
-  static const String routeName = '/home/top';
+  static const String routeName = '/home/top/search/tag';
 
   @override
   _PowerPlantSearchByTagState createState() => _PowerPlantSearchByTagState();
@@ -209,7 +210,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
       builder: (context) => PowerPlantSearchListPage(selectTag: tag),
       settings: const RouteSettings(name: PowerPlantSearchListPage.routeName),
     );
-    await Navigator.push(context, route);
+    await Navigator.of(context, rootNavigator: true).push(route);
     setState(() {
       _selectedTags = [];
     });
