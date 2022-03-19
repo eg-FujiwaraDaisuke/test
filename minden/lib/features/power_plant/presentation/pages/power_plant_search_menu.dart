@@ -32,22 +32,12 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
             context,
             'power_plant_search_menu_by_tag_title',
             'power_plant_search_menu_by_tag_description',
-            SizedBox(
-              width: 76,
-              height: 55.55,
-              child: Stack(
-                children: [
-                  Image.asset(
-                    'assets/images/power_plant/balloon_blue.png',
-                    width: 42.44,
-                    height: 37.4,
-                  ),
-                  Image.asset(
-                    'assets/images/power_plant/balloon_pink.png',
-                    width: 39.56,
-                    height: 35.96,
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(top: 5, right: 7),
+              child: Image.asset(
+                'assets/images/power_plant/balloon.png',
+                width: 76,
+                height: 52,
               ),
             ),
             () {
@@ -65,10 +55,13 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
             context,
             'power_plant_search_menu_by_gift_title',
             'power_plant_search_menu_by_gift_description',
-            Image.asset(
-              'assets/images/power_plant/present_box_blue.png',
-              width: 40,
-              height: 40,
+            Padding(
+              padding: const EdgeInsets.only(top: 8, right: 11),
+              child: Image.asset(
+                'assets/images/power_plant/present_box.png',
+                width: 72,
+                height: 41,
+              ),
             ),
             () {},
           ),
