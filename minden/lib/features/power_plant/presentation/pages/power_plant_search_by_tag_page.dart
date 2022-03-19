@@ -84,115 +84,122 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
   Widget build(
     BuildContext context,
   ) {
-    return SingleChildScrollView(
-      child: Container(
-        color: const Color(0xFFFAF9F8),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          i18nTranslate(context, 'power_plant_serch_by_important'),
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF575292),
+            letterSpacing: calcLetterSpacing(letter: 4),
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: Navigator.of(context).pop,
+          child: Center(
+            child: SvgPicture.asset(
+              'assets/images/common/leading_back.svg',
+              fit: BoxFit.fill,
+              width: 44,
+              height: 44,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            color: const Color(0xFFFAF9F8),
+            child: Column(
               children: [
-                SvgPicture.asset(
-                  'assets/images/power_plant/search.svg',
-                  width: 16,
-                  height: 16,
-                  color: const Color(0xFF575292),
+                const SizedBox(
+                  height: 12,
+                ),
+                Image.asset(
+                  'assets/images/profile_setting/hukidasi_illust.png',
+                  fit: BoxFit.contain,
+                  width: 213,
+                  height: 65,
                 ),
                 const SizedBox(
-                  width: 2,
+                  height: 10,
                 ),
                 Text(
-                  i18nTranslate(context, 'power_plant_serch_by_important'),
-                  style: const TextStyle(
-                    color: Color(0xFF575292),
-                    fontSize: 16,
+                  i18nTranslate(
+                      context, 'power_plant_serch_select_important_tag'),
+                  style: TextStyle(
+                    color: const Color(0xFF575292),
+                    fontSize: 13,
                     fontFamily: 'NotoSansJP',
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
+                    height: calcFontHeight(fontSize: 13, lineHeight: 17),
                   ),
                 ),
+                _buildCharacter(),
+                const SizedBox(
+                  height: 8,
+                ),
+                BlocProvider.value(
+                  value: _tagBloc,
+                  child: BlocListener<GetTagsBloc, TagState>(
+                    listener: (context, state) {
+                      if (state is TagLoading) {
+                        Loading.show(context);
+                        return;
+                      }
+                      Loading.hide();
+                    },
+                    child: BlocBuilder<GetTagsBloc, TagState>(
+                      builder: (context, state) {
+                        if (state is TagGetSucceed) {
+                          return _buildSelectedTag(state.tags);
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 34,
+                ),
+                BlocProvider.value(
+                  value: _allTagBloc,
+                  child: BlocListener<GetAllTagsBloc, TagState>(
+                      listener: (context, state) {
+                    if (state is TagLoading) {
+                      Loading.show(context);
+                      return;
+                    }
+                    Loading.hide();
+                  }, child: BlocBuilder<GetAllTagsBloc, TagState>(
+                    builder: (context, state) {
+                      if (state is CategoryGetSucceed) {
+                        return Column(
+                          children: state.category
+                              .map((e) => TagsList(
+                                    tagsList: e.tags,
+                                    onSelect: _onSelectTag,
+                                    selectedTags: _selectedTags,
+                                    color: getColorFromCode(e.colorCode),
+                                    title: e.categoryName,
+                                  ))
+                              .toList(),
+                        );
+                      }
+                      return Container();
+                    },
+                  )),
+                )
               ],
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            Image.asset(
-              'assets/images/profile_setting/hukidasi_illust.png',
-              fit: BoxFit.contain,
-              width: 213,
-              height: 65,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              i18nTranslate(context, 'power_plant_serch_select_important_tag'),
-              style: TextStyle(
-                color: const Color(0xFF575292),
-                fontSize: 13,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w500,
-                height: calcFontHeight(fontSize: 13, lineHeight: 17),
-              ),
-            ),
-            _buildCharacter(),
-            const SizedBox(
-              height: 8,
-            ),
-            BlocProvider.value(
-              value: _tagBloc,
-              child: BlocListener<GetTagsBloc, TagState>(
-                listener: (context, state) {
-                  if (state is TagLoading) {
-                    Loading.show(context);
-                    return;
-                  }
-                  Loading.hide();
-                },
-                child: BlocBuilder<GetTagsBloc, TagState>(
-                  builder: (context, state) {
-                    if (state is TagGetSucceed) {
-                      return _buildSelectedTag(state.tags);
-                    }
-                    return Container();
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 34,
-            ),
-            BlocProvider.value(
-              value: _allTagBloc,
-              child: BlocListener<GetAllTagsBloc, TagState>(
-                  listener: (context, state) {
-                if (state is TagLoading) {
-                  Loading.show(context);
-                  return;
-                }
-                Loading.hide();
-              }, child: BlocBuilder<GetAllTagsBloc, TagState>(
-                builder: (context, state) {
-                  if (state is CategoryGetSucceed) {
-                    return Column(
-                      children: state.category
-                          .map((e) => TagsList(
-                                tagsList: e.tags,
-                                onSelect: _onSelectTag,
-                                selectedTags: _selectedTags,
-                                color: getColorFromCode(e.colorCode),
-                                title: e.categoryName,
-                              ))
-                          .toList(),
-                    );
-                  }
-                  return Container();
-                },
-              )),
-            )
-          ],
+          ),
         ),
       ),
     );
