@@ -84,15 +84,30 @@ class PowerPlantListState extends State<PowerPlantList> {
         child: BlocBuilder<GetPowerPlantsBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantsLoaded) {
+              final numPowerPlant = state.powerPlants.powerPlants.length;
               return ListView.builder(
-                itemCount: state.powerPlants.powerPlants.length,
+                itemCount: numPowerPlant + 1,
                 itemBuilder: (BuildContext context, int index) {
-                  final powerPlant = state.powerPlants.powerPlants[index];
-                  final direction = searchDirectionByIndex(index);
-                  return PowerPlantListItem(
-                    powerPlant: powerPlant,
-                    direction: direction,
-                  );
+                  if (index < numPowerPlant) {
+                    final powerPlant = state.powerPlants.powerPlants[index];
+                    final direction = searchDirectionByIndex(index);
+                    return PowerPlantListItem(
+                      powerPlant: powerPlant,
+                      direction: direction,
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 14, 18, 66),
+                      child: Text(
+                        '※アプリではピックアップしている$numPowerPlantヶ所の発電所を表示しております。',
+                        style: const TextStyle(
+                          color: Color(0xff7d7e7f),
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 10,
+                        ),
+                      ),
+                    );
+                  }
                 },
               );
             }
