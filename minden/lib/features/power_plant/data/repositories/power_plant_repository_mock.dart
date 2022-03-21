@@ -6,6 +6,7 @@ import 'package:minden/features/power_plant/data/model/support_action_model.dart
 import 'package:minden/features/power_plant/data/model/support_history_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
@@ -326,5 +327,15 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
   Future<Either<PowerPlantFailure, SupportAction>> getSupportAction(
       String plantId) async {
     return const Right(SupportActionModel(support_action: 'none'));
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, List<PowerPlantGift>>> getGift() async {
+    final data = [
+      const PowerPlantGift(giftTypeId: 1, giftTypeName: '1'),
+      const PowerPlantGift(giftTypeId: 2, giftTypeName: '2'),
+      const PowerPlantGift(giftTypeId: 3, giftTypeName: '3'),
+    ];
+    return Right(data);
   }
 }

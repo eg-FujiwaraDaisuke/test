@@ -6,6 +6,7 @@ import 'package:minden/core/env/api_config.dart';
 import 'package:minden/core/error/exceptions.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_detail_model.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_gift_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plant_participant_model.dart';
 import 'package:minden/features/power_plant/data/model/power_plants_response_model.dart';
 import 'package:minden/features/power_plant/data/model/support_action_model.dart';
@@ -28,6 +29,8 @@ abstract class PowerPlantDataSource {
       String historyType, String? userId);
 
   Future<SupportActionModel> getSupportAction(String plantId);
+
+  Future<List<PowerPlantGiftModel>> getPlantsGifts();
 }
 
 class PowerPlantDataSourceImpl implements PowerPlantDataSource {
@@ -46,6 +49,8 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   final _powerPlantHistory = '/api/v1/support_history';
 
   final _supportAction = '/api/v1/power_plant/support_action';
+
+  final _getPlantsGiftsPath = '/api/v1/power_plants/gift_types';
 
   @override
   Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
@@ -212,6 +217,35 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       throw TokenExpiredException();
     } else {
       logW('${response.statusCode}: ${response.body}');
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<PowerPlantGiftModel>> getPlantsGifts() async {
+    final endpoint = ApiConfig.apiEndpoint();
+    final headers = ApiConfig.tokenHeader();
+    headers.addAll(ApiConfig.contentTypeHeaderApplicationJson);
+
+    final url = Uri.parse(endpoint + _getPlantsGiftsPath);
+    final response = await client.get(
+      url,
+      headers: headers,
+    );
+
+    final responseBody = utf8.decode(response.bodyBytes);
+    logD(responseBody);
+    final map = json.decode(responseBody);
+    final list = map['gift_types'] ?? [];
+    final gifts = list.map<PowerPlantGiftModel>((e) {
+      return PowerPlantGiftModel.fromJson(e);
+    }).toList();
+
+    if (response.statusCode == 200) {
+      return gifts;
+    } else if (response.statusCode == 401) {
+      throw TokenExpiredException();
+    } else {
       throw ServerException();
     }
   }

@@ -51,3 +51,10 @@ class GetSupportActionEvent extends PowerPlantEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetGiftEvent extends PowerPlantEvent {
+  const GetGiftEvent();
+
+  @override
+  List<Object> get props => [];
+}

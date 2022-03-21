@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
@@ -81,6 +82,18 @@ class GetSupportAction extends UseCase<SupportAction, GetPowerPlantParams> {
   Future<Either<Failure, SupportAction>> call(
       GetPowerPlantParams params) async {
     return await repository.getSupportAction(params.plantId!);
+  }
+}
+
+class GetGift extends UseCase<List<PowerPlantGift>, GetPowerPlantParams> {
+  GetGift(this.repository);
+
+  final PowerPlantRepository repository;
+
+  @override
+  Future<Either<Failure, List<PowerPlantGift>>> call(
+      GetPowerPlantParams params) async {
+    return await repository.getGift();
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_gift_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
 import 'package:minden/utile.dart';
 
@@ -63,7 +64,15 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
                 height: 41,
               ),
             ),
-            () {},
+            () {
+              // 特典から探す画面を表示
+              final route = MaterialPageRoute(
+                builder: (context) => const PowerPlantSearchByGift(),
+                settings:
+                    const RouteSettings(name: PowerPlantSearchByGift.routeName),
+              );
+              Navigator.push(context, route);
+            },
           ),
         ],
       ),

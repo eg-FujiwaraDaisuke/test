@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
@@ -41,4 +42,7 @@ abstract class PowerPlantRepository {
   Future<Either<PowerPlantFailure, SupportAction>> getSupportAction(
     String plantId,
   );
+
+  /// 発電所の特典（一覧）
+  Future<Either<PowerPlantFailure, List<PowerPlantGift>>> getGift();
 }
