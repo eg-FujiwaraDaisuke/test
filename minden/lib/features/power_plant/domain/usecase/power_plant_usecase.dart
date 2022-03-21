@@ -19,7 +19,7 @@ class GetPowerPlants extends UseCase<PowerPlantsResponse, GetPowerPlantParams> {
   @override
   Future<Either<Failure, PowerPlantsResponse>> call(
       GetPowerPlantParams params) async {
-    return await repository.getPowerPlant(params.tagId);
+    return await repository.getPowerPlant(params.tagId, params.giftTypeId);
   }
 }
 
@@ -101,14 +101,16 @@ class GetPowerPlantParams extends Equatable {
   GetPowerPlantParams({
     this.plantId,
     this.tagId,
+    this.giftTypeId,
     this.historyType,
     this.userId,
   });
 
   String? plantId;
-  String? userId;
   String? tagId;
+  String? giftTypeId;
   String? historyType;
+  String? userId;
 
   @override
   List<Object> get props => [];

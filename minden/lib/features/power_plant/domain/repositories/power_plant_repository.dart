@@ -13,6 +13,7 @@ abstract class PowerPlantRepository {
   /// [tagId] フィルタタグid
   Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlant(
     String? tagId,
+    String? giftTypeId,
   );
 
   /// 顔の見える発電所情報取得（詳細）

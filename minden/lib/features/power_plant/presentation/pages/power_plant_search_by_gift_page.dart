@@ -12,6 +12,7 @@ import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/utile.dart';
@@ -172,6 +173,15 @@ class _PowerPlantSearchByGiftState extends State<PowerPlantSearchByGift> {
                     onSelect: (gift) {
                       // 選択した特典に合致する発電所一覧を表示
                       logD('Selected gift type. name: ${gift.giftTypeName}');
+
+                      // 検索結画面に飛ばす
+                      final route = MaterialPageRoute(
+                        builder: (context) =>
+                            PowerPlantSearchListPage(selectGift: gift),
+                        settings: const RouteSettings(
+                            name: PowerPlantSearchListPage.routeName),
+                      );
+                      Navigator.of(context, rootNavigator: true).push(route);
                     },
                   ),
                 )
@@ -219,7 +229,7 @@ class _GiftListItemState extends State<GiftListItem> {
           color: Colors.white,
         ),
         child: Text(
-          '#${widget.gift.giftTypeName ?? ''}',
+          '#${widget.gift.giftTypeName}',
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Color(0xFF787877),

@@ -17,7 +17,10 @@ final powerPlantDataSourceProvider = Provider<PowerPlantDataSource>(
     (ref) => PowerPlantDataSourceImpl(client: http.Client()));
 
 abstract class PowerPlantDataSource {
-  Future<PowerPlantsResponseModel> getPowerPlant(String? tagId);
+  Future<PowerPlantsResponseModel> getPowerPlant(
+    String? tagId,
+    String? giftTypeId,
+  );
 
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId);
 
@@ -53,7 +56,10 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
   final _getPlantsGiftsPath = '/api/v1/power_plants/gift_types';
 
   @override
-  Future<PowerPlantsResponseModel> getPowerPlant(String? tagId) async {
+  Future<PowerPlantsResponseModel> getPowerPlant(
+    String? tagId,
+    String? giftTypeId,
+  ) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
@@ -63,7 +69,12 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
       url = url.replace(queryParameters: {
         'tagId': tagId,
       });
+    } else if (giftTypeId?.isNotEmpty ?? false) {
+      url = url.replace(queryParameters: {
+        'giftTypeId': giftTypeId,
+      });
     }
+
     final response = await client.get(
       url,
       headers: headers,

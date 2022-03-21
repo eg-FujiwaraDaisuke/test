@@ -20,7 +20,9 @@ import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 class PowerPlantRepositoryMock implements PowerPlantRepository {
   @override
   Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlant(
-      String? tagId) async {
+    String? tagId,
+    String? giftTypeId,
+  ) async {
     try {
       final data = PowerPlantsResponse(
         tag: const TagModel(

@@ -7,10 +7,12 @@ abstract class PowerPlantEvent extends Equatable {
 class GetPowerPlantsEvent extends PowerPlantEvent {
   const GetPowerPlantsEvent({
     this.tagId,
+    this.giftTypeId,
     this.historyType,
   });
 
   final String? tagId;
+  final String? giftTypeId;
   final String? historyType;
 
   @override

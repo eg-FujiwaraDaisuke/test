@@ -37,10 +37,15 @@ class PowerPlantRepositoryImpl
 
   @override
   Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlant(
-      String? tagId) async {
+    String? tagId,
+    String? giftTypeId,
+  ) async {
     try {
       final plants =
-          await retryRequest(() => powerPlantDataSource.getPowerPlant(tagId));
+          await retryRequest(() => powerPlantDataSource.getPowerPlant(
+                tagId,
+                giftTypeId,
+              ));
 
       return Right(plants);
     } on ServerException {

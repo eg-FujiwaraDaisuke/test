@@ -19,8 +19,10 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
       try {
         yield const PowerPlantLoading();
 
-        final failureOrUser =
-            await usecase(GetPowerPlantParams(tagId: event.tagId));
+        final failureOrUser = await usecase(GetPowerPlantParams(
+          tagId: event.tagId,
+          giftTypeId: event.giftTypeId,
+        ));
 
         yield failureOrUser.fold<PowerPlantState>(
           (failure) => throw failure,
