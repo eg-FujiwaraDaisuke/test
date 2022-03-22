@@ -23,12 +23,14 @@ class PowerPlantParticipantModel extends PowerPlantParticipant {
     final Iterable iterable = json['userList'];
 
     return PowerPlantParticipantModel(
-        participantSize: json['participantSize'],
-        page: json['page'],
-        total: json['total'],
-        plantId: json['plantId'],
-        yearMonth: json['yearMonth'],
-        userList: List<PowerPlantParticipantUserModel>.from(iterable
-            .map((model) => PowerPlantParticipantUserModel.fromJson(model))));
+      participantSize: json['participantSize'],
+      page: json['page'],
+      total: json['total'],
+      plantId: json['plantId'],
+      yearMonth: json['yearMonth'],
+      userList: List<PowerPlantParticipantUserModel>.from(
+        iterable.map((model) => PowerPlantParticipantUserModel.fromJson(model)),
+      ),
+    );
   }
 }

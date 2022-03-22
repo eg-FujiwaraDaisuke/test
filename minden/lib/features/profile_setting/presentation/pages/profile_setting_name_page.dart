@@ -134,6 +134,10 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
           icon: '',
           bio: '',
           wallPaper: '',
+          freeLink: '',
+          twitterLink: '',
+          facebookLink: '',
+          instagramLink: '',
         ),
       );
     }

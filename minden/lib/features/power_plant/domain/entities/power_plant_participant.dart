@@ -27,7 +27,7 @@ class PowerPlantParticipant extends Equatable {
   /// 発電署名
   final String yearMonth;
 
-  /// 表示用設備所在地
+  /// 応援ユーザー
   final List<PowerPlantParticipantUser> userList;
 
   @override

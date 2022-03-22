@@ -5,6 +5,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/hook/use_analytics.dart';
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -281,8 +282,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           name: state.profile.name,
                         ),
                         const SizedBox(
-                          height: 35,
+                          height: 22,
                         ),
+                        // SNS
+                        _buildSnsLinks(state),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        // 自己紹介
                         _ProfileBio(bio: state.profile.bio),
                         const SizedBox(
                           height: 43,
@@ -307,6 +314,53 @@ class _ProfilePageState extends State<ProfilePage> {
         }),
       ),
     );
+  }
+
+  /// 対象ユーザーが設定しているSNSリンクを表示する
+  Widget _buildSnsLinks(ProfileLoaded state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildSnsLink(
+          state.profile.instagramLink,
+          'assets/images/user/sns_instagram.svg',
+        ),
+        _buildSnsLink(
+          state.profile.facebookLink,
+          'assets/images/user/sns_facebook.svg',
+        ),
+        _buildSnsLink(
+          state.profile.twitterLink,
+          'assets/images/user/sns_twitter.svg',
+        ),
+        _buildSnsLink(
+          state.profile.freeLink,
+          'assets/images/user/sns_free.svg',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSnsLink(String? link, String assetName) {
+    return Visibility(
+      visible: link?.isNotEmpty ?? false,
+      child: GestureDetector(
+        onTap: () => _launchSnsLink(link!),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: SvgPicture.asset(assetName),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _launchSnsLink(String link) async {
+    if (await canLaunch(link)) {
+      logD('This link is valid. link: $link');
+      await launch(link);
+    } else {
+      logW('This link is invalid. link: $link');
+    }
   }
 }
 
@@ -491,6 +545,7 @@ class _TagsList extends StatelessWidget {
 
 class _SupportPowerPlant extends StatelessWidget {
   const _SupportPowerPlant({required this.userId});
+
   final String userId;
 
   @override

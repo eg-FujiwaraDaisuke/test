@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:minden/features/power_plant/data/model/power_plant_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
-import 'package:minden/features/login/domain/entities/support.dart';
 
 class Profile extends Equatable {
   const Profile({
@@ -11,6 +9,10 @@ class Profile extends Equatable {
     required this.icon,
     required this.bio,
     required this.wallPaper,
+    required this.freeLink,
+    required this.twitterLink,
+    required this.facebookLink,
+    required this.instagramLink,
     required this.tags,
     required this.selectedPowerPlants,
   });
@@ -31,6 +33,10 @@ class Profile extends Equatable {
         icon: elem['icon'],
         bio: elem['bio'],
         wallPaper: elem['wallPaper'],
+        freeLink: elem['freeLink'],
+        twitterLink: elem['twitterLink'],
+        facebookLink: elem['facebookLink'],
+        instagramLink: elem['instagramLink'],
         tags: tags,
         selectedPowerPlants: selectedPowerPlants);
   }
@@ -40,6 +46,10 @@ class Profile extends Equatable {
   final String? icon;
   final String? bio;
   final String? wallPaper;
+  final String? freeLink;
+  final String? twitterLink;
+  final String? facebookLink;
+  final String? instagramLink;
   final List<Tag> tags;
   final List<PowerPlant> selectedPowerPlants;
 
@@ -50,6 +60,10 @@ class Profile extends Equatable {
       'icon': icon,
       'bio': bio,
       'wallPaper': wallPaper,
+      'freeLink': freeLink,
+      'twitterLink': twitterLink,
+      'facebookLink': facebookLink,
+      'instagramLink': instagramLink,
       'tags': tags.map((e) => e.toJson()).toList(),
       'selectedPowerPlants':
           selectedPowerPlants.map((e) => e.toJson()).toList(),

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:minden/features/power_plant/data/model/power_plant_participant_user_model.dart';
 
 /// 顔の見える発電所情報
 class PowerPlant extends Equatable {
@@ -21,9 +22,15 @@ class PowerPlant extends Equatable {
     this.shortCatchphrase,
     this.catchphrase,
     this.thankYouMessage,
+    this.userList = const [],
+    this.giftName,
+    this.giftDescription,
+    this.giftImage,
   });
 
   factory PowerPlant.fromJson(Map<String, dynamic> json) {
+    final Iterable iterable = json['userList'] ?? [];
+
     return PowerPlant(
       plantId: json['plantId'],
       areaCode: json['areaCode'],
@@ -43,6 +50,11 @@ class PowerPlant extends Equatable {
       shortCatchphrase: json['shortCatchphrase'],
       catchphrase: json['catchphrase'],
       thankYouMessage: json['thankYouMessage'],
+      userList: List<PowerPlantParticipantUserModel>.from(iterable
+          .map((model) => PowerPlantParticipantUserModel.fromJson(model))),
+      giftName: json['giftName'],
+      giftDescription: json['giftDescription'],
+      giftImage: json['giftImage'],
     );
   }
 
@@ -115,6 +127,18 @@ class PowerPlant extends Equatable {
   /// 応援のお礼メッセージ
   final String? thankYouMessage;
 
+  ///　応援ユーザー
+  final List<PowerPlantParticipantUserModel> userList;
+
+  /// ギフト名
+  final String? giftName;
+
+  /// ギフト詳細
+  final String? giftDescription;
+
+  /// ギフト写真
+  final String? giftImage;
+
   Map<String, dynamic> toJson() {
     return {
       'plantId': plantId,
@@ -135,6 +159,10 @@ class PowerPlant extends Equatable {
       'shortCatchphrase': shortCatchphrase,
       'catchphrase': catchphrase,
       'thankYouMessage': thankYouMessage,
+      'userList': userList.map((user) => user.toJson()).toList(),
+      'giftName': giftName,
+      'giftDescription': giftDescription,
+      'giftImage': giftImage,
     };
   }
 

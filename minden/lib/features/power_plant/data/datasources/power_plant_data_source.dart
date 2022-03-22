@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
@@ -34,7 +35,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   final http.Client client;
 
-  final _powerPlantsPath = '/api/v1/power_plants';
+  final _powerPlantsPath = '/api/v1.1/power_plants';
 
   final _powerPlantPath = '/api/v1/power_plant';
 
@@ -65,7 +66,6 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      // logW(responseBody);
       return PowerPlantsResponseModel.fromJson(json.decode(responseBody));
     } else if (response.statusCode == 401) {
       throw TokenExpiredException();

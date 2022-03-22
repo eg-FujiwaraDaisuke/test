@@ -52,6 +52,10 @@ class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             event.icon,
             event.bio,
             event.wallPaper,
+            event.freeLink,
+            event.twitterLink,
+            event.facebookLink,
+            event.instagramLink,
           ),
         );
 

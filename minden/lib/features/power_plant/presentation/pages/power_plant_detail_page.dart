@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +17,6 @@ import 'package:minden/features/power_plant/data/datasources/power_plant_data_so
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
@@ -26,6 +24,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_gitf_pickup.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
 import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
@@ -543,13 +542,20 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     // 発電所応援ユーザー
                     SupportParticipantsDialog(
                       context: context,
-                      participants: state.participant,
+                      participantUserList: state.participant.userList,
+                      participantSize: state.participant.participantSize,
                     ).showDialog();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ParticipantUserIconGroup(participant: state.participant),
+                      ParticipantUserIconGroup(
+                        participantUserList: state.participant.userList,
+                        participantSize: state.participant.participantSize,
+                        maxUserIconCount: 3,
+                        iconSize: 52,
+                        overlapLength: 36,
+                      ),
                     ],
                   ),
                 );
@@ -1109,127 +1115,5 @@ class SupportButton extends StatelessWidget {
       return i18nTranslate(context, 'power_plant_detail_support');
     }
     return i18nTranslate(context, 'power_plant_detail_support');
-  }
-}
-
-/// 応援ユーザー表示
-class ParticipantUserIconGroup extends StatelessWidget {
-  const ParticipantUserIconGroup({Key? key, required this.participant})
-      : super(key: key);
-
-  /// 表示可能な最大ユーザーアイコン数
-  static const maxUserIconCount = 3;
-
-  /// 表示可能な最大アイコン数
-  static const maxIconCount = 4;
-
-  /// アイコン同士の重なり度合い
-  static const overlapLength = 36.0;
-
-  /// アイコンサイズ（直径）
-  static const iconSize = 52.0;
-
-  final PowerPlantParticipant participant;
-
-  @override
-  Widget build(BuildContext context) {
-    return _generateParticipant(participant);
-  }
-
-  Widget _generateParticipant(PowerPlantParticipant participant) {
-    final icons = _generateParticipantIcons(participant);
-    final length = (icons.length > maxIconCount) ? maxIconCount : icons.length;
-    if (length <= 0) return Container();
-    return Stack(
-      children: List.generate(
-        length,
-        (index) {
-          return Padding(
-            padding: EdgeInsets.fromLTRB(
-                (maxIconCount - index) * overlapLength, 0, 0, 0),
-            child: icons[index],
-          );
-        },
-      ),
-    );
-  }
-
-  List<Widget> _generateParticipantIcons(PowerPlantParticipant participant) {
-    final total = participant.total;
-    if (maxUserIconCount < total) {
-      // 4人以上応援ユーザーがいる場合、
-      return [
-        _generateCircleRemainIcon(total),
-        ...participant.userList
-            .take(maxUserIconCount)
-            .map((p) => _generateCircleUserIcon(p.icon))
-            .toList()
-      ];
-    } else {
-      // 3人以下の応援ユーザーしかいないため、「+X」表記を行わない
-      return participant.userList
-          .map((p) => _generateCircleUserIcon(p.icon))
-          .toList();
-    }
-  }
-
-  Widget _generateCircleUserIcon(String? imageUrl) {
-    final valid = Uri.parse(imageUrl ?? '').isAbsolute;
-    return Container(
-      width: iconSize,
-      height: iconSize,
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(iconSize / 2),
-      ),
-      // 魔法の padding
-      padding: const EdgeInsets.all(0.5),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(iconSize / 2),
-        child: valid
-            ? CachedNetworkImage(
-                imageUrl: imageUrl!,
-                placeholder: (context, url) {
-                  return Image.asset(
-                    'assets/images/user/icon_no_photo.png',
-                    fit: BoxFit.cover,
-                  );
-                },
-                errorWidget: (context, url, error) => Image.asset(
-                  'assets/images/user/icon_no_photo.png',
-                  fit: BoxFit.cover,
-                ),
-                width: iconSize,
-                height: iconSize,
-              )
-            : Image.asset(
-                'assets/images/user/icon_no_photo.png',
-                fit: BoxFit.cover,
-                width: iconSize,
-                height: iconSize,
-              ),
-      ),
-    );
-  }
-
-  Widget _generateCircleRemainIcon(int participantCount) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(iconSize / 2),
-      child: Container(
-        width: iconSize,
-        height: iconSize,
-        alignment: Alignment.center,
-        color: const Color(0xFFEDCB50),
-        padding: const EdgeInsets.only(left: 4),
-        child: Text('+${participantCount - 3}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-              height: 1.2,
-            )),
-      ),
-    );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
-import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
@@ -11,17 +10,18 @@ import 'package:minden/features/user/presentation/pages/profile_page.dart';
 class SupportParticipantsDialog {
   SupportParticipantsDialog({
     required this.context,
-    required this.participants,
+    required this.participantUserList,
+    required this.participantSize,
   }) : super();
 
   static const String routeName = '/home/top/detail/supportParticipants';
 
   final BuildContext context;
-  final PowerPlantParticipant participants;
+  final List<PowerPlantParticipantUser> participantUserList;
+  final int participantSize;
 
   void showDialog() {
-    final fromWebSupporters =
-        participants.participantSize - participants.userList.length;
+    final fromWebSupporters = participantSize - participantUserList.length;
     Navigator.push(
       context,
       CustomDialogOverlay(
@@ -50,8 +50,8 @@ class SupportParticipantsDialog {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                '${participants.participantSize.toString()}${i18nTranslate(context, 'support_participants_people')}',
+                            text: '''
+${participantSize.toString()}${i18nTranslate(context, 'support_participants_people')}''',
                             style: const TextStyle(
                               color: Color(0xFF787877),
                               fontSize: 16,
@@ -82,7 +82,7 @@ class SupportParticipantsDialog {
                         alignment: WrapAlignment.start,
                         spacing: 7,
                         runSpacing: 16,
-                        children: participants.userList
+                        children: participantUserList
                             .map(
                               _buildParticipantItem,
                             )

@@ -1,3 +1,4 @@
+import 'package:minden/features/power_plant/data/model/power_plant_participant_user_model.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 
 class PowerPlantModel extends PowerPlant {
@@ -20,6 +21,10 @@ class PowerPlantModel extends PowerPlant {
     String? shortCatchphrase,
     String? catchphrase,
     String? thankYouMessage,
+    List<PowerPlantParticipantUserModel> userList = const [],
+    String? giftName,
+    String? giftDescription,
+    String? giftImage,
   }) : super(
           plantId: plantId,
           areaCode: areaCode,
@@ -39,6 +44,10 @@ class PowerPlantModel extends PowerPlant {
           shortCatchphrase: shortCatchphrase,
           catchphrase: catchphrase,
           thankYouMessage: thankYouMessage,
+          userList: userList,
+          giftName: giftName,
+          giftDescription: giftDescription,
+          giftImage: giftImage,
         );
 
   factory PowerPlantModel.fromProfile(PowerPlant powerPlant) {
@@ -61,9 +70,13 @@ class PowerPlantModel extends PowerPlant {
       shortCatchphrase: powerPlant.shortCatchphrase,
       catchphrase: powerPlant.catchphrase,
       thankYouMessage: powerPlant.thankYouMessage,
+      userList: powerPlant.userList,
+      giftName: powerPlant.giftName,
+      giftDescription: powerPlant.giftDescription,
+      giftImage: powerPlant.giftImage,
     );
   }
-  
+
   factory PowerPlantModel.fromJson(Map<String, dynamic> json) {
     return PowerPlantModel.fromProfile(PowerPlant.fromJson(json));
   }
