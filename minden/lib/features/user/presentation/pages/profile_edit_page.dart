@@ -289,6 +289,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   'assets/images/user/input_sns_instagram.svg',
                               placeholderKey: 'profile_setting_sns_instagram',
                               link: _instagramLink,
+                              validateDomain: 'www.instagram.com',
                               textHandler: (value) {
                                 _instagramLink = value;
                               },
@@ -299,6 +300,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   'assets/images/user/input_sns_facebook.svg',
                               placeholderKey: 'profile_setting_sns_facebook',
                               link: _facebookLink,
+                              validateDomain: 'www.facebook.com',
                               textHandler: (value) {
                                 _facebookLink = value;
                               },
@@ -308,6 +310,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   'assets/images/user/input_sns_twitter.svg',
                               placeholderKey: 'profile_setting_sns_twitter',
                               link: _twitterLink,
+                              validateDomain: 'twitter.com',
                               textHandler: (value) {
                                 _twitterLink = value;
                               },
@@ -317,6 +320,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                   'assets/images/user/input_sns_free.svg',
                               placeholderKey: 'profile_setting_sns_free',
                               link: _freeLink,
+                              validateDomain: null,
                               textHandler: (value) {
                                 _freeLink = value;
                               },
@@ -921,6 +925,7 @@ class _SnsLinkEditForm extends StatelessWidget {
     required this.prefixIconKey,
     required this.placeholderKey,
     required this.link,
+    required this.validateDomain,
     required this.textHandler,
     this.hasSectionTitle = false,
   }) : super();
@@ -937,6 +942,7 @@ class _SnsLinkEditForm extends StatelessWidget {
   final String prefixIconKey;
   final String placeholderKey;
   final String? link;
+  final String? validateDomain;
   final Function(String text) textHandler;
   final bool hasSectionTitle;
 
@@ -981,12 +987,20 @@ class _SnsLinkEditForm extends StatelessWidget {
               onChanged: textHandler,
               validator: (value) {
                 if (value?.isEmpty ?? true) {
+                  // 未入力なら何もしない
                   return null;
                 }
-                if (Uri.tryParse(value!)?.hasAbsolutePath ?? false) {
+                if (validateDomain != null &&
+                    !RegExp(validateDomain!).hasMatch(value ?? '')) {
+                  // 要求するドメインが含まれていなければエラーを返す
+                  return i18nTranslate(
+                      context, 'user_sns_link_invalid_domain_error');
+                } else if (Uri.tryParse(value!)?.hasAbsolutePath ?? false) {
+                  // 正しいurlなら何もしない
                   return null;
                 }
 
+                // urlとして正しくなければエラーを返す
                 return i18nTranslate(context, 'user_sns_link_invalid_error');
               },
             ),
