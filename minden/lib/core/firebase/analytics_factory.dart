@@ -6,6 +6,9 @@ import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_gift_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_menu.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_name_page.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_decision_page.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
@@ -48,6 +51,9 @@ String? nameExtractor(RouteSettings settings) {
     // NOTE: TabView, ポップアップのトラッキングは別な仕組みで行う
     case PowerPlantHomePage.routeName:
     case PowerPlantDetailPage.routeName:
+    case PowerPlantSearchMenu.routeName:
+    case PowerPlantSearchByTag.routeName:
+    case PowerPlantSearchByGift.routeName:
     case SupportParticipantsDialog.routeName:
     case SupportPowerPlantDecisionDialog.routeName:
     case SupportPowerPlantSelectDialog.routeName:
