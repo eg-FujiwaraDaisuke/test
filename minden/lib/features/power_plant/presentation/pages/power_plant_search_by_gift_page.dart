@@ -76,15 +76,14 @@ class _PowerPlantSearchByGiftState extends State<PowerPlantSearchByGift> {
             color: const Color(0xFFFAF9F8),
             child: Column(
               children: [
-                const SizedBox(height: 12),
-                // TODO 画像差し替え
+                const SizedBox(height: 20),
                 Image.asset(
-                  'assets/images/profile_setting/hukidasi_illust.png',
+                  'assets/images/power_plant/present_box_header.png',
                   fit: BoxFit.contain,
-                  width: 213,
-                  height: 65,
+                  width: 253,
+                  height: 48,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 24),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(

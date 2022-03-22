@@ -57,11 +57,11 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
             'power_plant_search_menu_by_gift_title',
             'power_plant_search_menu_by_gift_description',
             Padding(
-              padding: const EdgeInsets.only(top: 8, right: 11),
+              padding: const EdgeInsets.only(top: 9, right: 19),
               child: Image.asset(
                 'assets/images/power_plant/present_box.png',
-                width: 72,
-                height: 41,
+                width: 66,
+                height: 39,
               ),
             ),
             () {
