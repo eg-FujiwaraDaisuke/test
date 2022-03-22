@@ -59,6 +59,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   late List<Tag> _tags;
   late Profile _profile;
 
+  // SNS
+  late String? _instagramLink;
+  late String? _facebookLink;
+  late String? _twitterLink;
+  late String? _freeLink;
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +86,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           _name = event.profile.name;
           _bio = event.profile.bio;
           _wallPaperUrl = event.profile.wallPaper;
+          _instagramLink = event.profile.instagramLink;
+          _facebookLink = event.profile.facebookLink;
+          _twitterLink = event.profile.twitterLink;
+          _freeLink = event.profile.freeLink;
           _iconUrl = event.profile.icon;
           _tags = event.profile.tags;
         });
@@ -251,6 +261,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(
                               height: 33,
                             ),
+                            // 自己紹介
                             _ProfileBioEditForm(
                               bio: _bio,
                               textHandler: (value) {
@@ -262,6 +273,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                             const SizedBox(
                               height: 30,
                             ),
+                            // 大切にしていること
                             _ImportantTagsList(
                               tagsList: _tags,
                               tagHandler: (tags) {
@@ -270,6 +282,50 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                                 });
                               },
                             ),
+                            const SizedBox(height: 38),
+                            // SNS
+                            _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_instagram.svg',
+                              placeholderKey: 'profile_setting_sns_instagram',
+                              link: _instagramLink,
+                              validateDomain: 'www.instagram.com',
+                              textHandler: (value) {
+                                _instagramLink = value;
+                              },
+                              hasSectionTitle: true,
+                            ),
+                            _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_facebook.svg',
+                              placeholderKey: 'profile_setting_sns_facebook',
+                              link: _facebookLink,
+                              validateDomain: 'www.facebook.com',
+                              textHandler: (value) {
+                                _facebookLink = value;
+                              },
+                            ),
+                            _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_twitter.svg',
+                              placeholderKey: 'profile_setting_sns_twitter',
+                              link: _twitterLink,
+                              validateDomain: 'twitter.com',
+                              textHandler: (value) {
+                                _twitterLink = value;
+                              },
+                            ),
+                            _SnsLinkEditForm(
+                              prefixIconKey:
+                                  'assets/images/user/input_sns_free.svg',
+                              placeholderKey: 'profile_setting_sns_free',
+                              link: _freeLink,
+                              validateDomain: null,
+                              textHandler: (value) {
+                                _freeLink = value;
+                              },
+                            ),
+                            const SizedBox(height: 24),
                           ],
                         ),
                       ),
@@ -285,20 +341,37 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
+  /// 編集画面を開いたときから、設定が変更されているか
   bool _isDirty() {
-    return _iconUrl != _profile.icon ||
-        _wallPaperUrl != _profile.wallPaper ||
-        _name != _profile.name ||
-        _bio != _profile.bio ||
-        _tags != _profile.tags;
+    final isChangedIcon = _iconUrl != _profile.icon;
+    final isChangedWallpaper = _wallPaperUrl != _profile.wallPaper;
+    final isChangedName = _name != _profile.name;
+    final isChangedBio = _bio != _profile.bio;
+    final isChangedTags = _tags != _profile.tags;
+    final isChangedInstagram = _instagramLink != _profile.instagramLink;
+    final isChangedFacebook = _facebookLink != _profile.facebookLink;
+    final isChangedTwitter = _twitterLink != _profile.twitterLink;
+    final isChangedFreeUrl = _freeLink != _profile.freeLink;
+
+    return isChangedIcon ||
+        isChangedWallpaper ||
+        isChangedName ||
+        isChangedBio ||
+        isChangedTags ||
+        isChangedInstagram ||
+        isChangedFacebook ||
+        isChangedTwitter ||
+        isChangedFreeUrl;
   }
 
   Future<void> _prev(BuildContext context) async {
     if (!_isDirty()) {
+      // 変更がない場合、無条件でpop
       Navigator.pop(context, false);
       return;
     }
 
+    // 変更されている場合、変更を破棄して戻るか確認
     final isDiscard = await showDialog(
       context: context,
       builder: (context) {
@@ -371,6 +444,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         icon: _iconUrl ?? '',
         bio: _bio!,
         wallPaper: _wallPaperUrl ?? '',
+        freeLink: _freeLink ?? '',
+        twitterLink: _twitterLink ?? '',
+        facebookLink: _facebookLink ?? '',
+        instagramLink: _instagramLink ?? '',
       ));
     }
   }
@@ -684,19 +761,8 @@ class _ProfileBioEditForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          i18nTranslate(context, 'profile_edit_self_intro'),
-          style: TextStyle(
-            color: const Color(0xFF575292),
-            fontSize: 14,
-            fontFamily: 'NotoSansJP',
-            fontWeight: FontWeight.w700,
-            letterSpacing: calcLetterSpacing(letter: 4),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
+        _generateSectionTitle(context, 'profile_edit_self_intro'),
+        const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
           height: 110,
@@ -760,16 +826,7 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                i18nTranslate(context, 'user_important'),
-                style: TextStyle(
-                  color: const Color(0xFF575292),
-                  fontSize: 14,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: calcLetterSpacing(letter: 4),
-                ),
-              ),
+              _generateSectionTitle(context, 'user_important'),
               GestureDetector(
                 onTap: () async {
                   // 大切にしていること編集
@@ -860,4 +917,113 @@ class _ImportantTagsListState extends State<_ImportantTagsList> {
       ),
     );
   }
+}
+
+/// SNSリンクを編集するForm
+class _SnsLinkEditForm extends StatelessWidget {
+  const _SnsLinkEditForm({
+    required this.prefixIconKey,
+    required this.placeholderKey,
+    required this.link,
+    required this.validateDomain,
+    required this.textHandler,
+    this.hasSectionTitle = false,
+  }) : super();
+
+  static TextStyle formTextStyle = TextStyle(
+    color: const Color(0xFF7C7C7C),
+    fontSize: 12,
+    fontFamily: 'NotoSansJP',
+    fontWeight: FontWeight.w400,
+    letterSpacing: calcLetterSpacing(letter: 0.5),
+    height: calcFontHeight(lineHeight: 22.08, fontSize: 12),
+  );
+
+  final String prefixIconKey;
+  final String placeholderKey;
+  final String? link;
+  final String? validateDomain;
+  final Function(String text) textHandler;
+  final bool hasSectionTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (hasSectionTitle)
+            _generateSectionTitle(context, 'profile_setting_sns'),
+          const SizedBox(height: 8),
+          Container(
+            alignment: Alignment.centerLeft,
+            width: 339,
+            child: TextFormField(
+              keyboardType: TextInputType.url,
+              textInputAction: TextInputAction.done,
+              initialValue: link,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 12, 0),
+                  child: SvgPicture.asset(
+                    prefixIconKey,
+                    width: 18,
+                    height: 18,
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+                hintText: i18nTranslate(context, placeholderKey),
+                hintStyle: formTextStyle,
+                fillColor: Colors.white,
+                filled: true,
+                isDense: true,
+              ),
+              style: formTextStyle,
+              onChanged: textHandler,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  // 未入力なら何もしない
+                  return null;
+                }
+                if (validateDomain != null &&
+                    !RegExp(validateDomain!).hasMatch(value ?? '')) {
+                  // 要求するドメインが含まれていなければエラーを返す
+                  return i18nTranslate(
+                      context, 'user_sns_link_invalid_domain_error');
+                } else if (Uri.tryParse(value!)?.hasAbsolutePath ?? false) {
+                  // 正しいurlなら何もしない
+                  return null;
+                }
+
+                // urlとして正しくなければエラーを返す
+                return i18nTranslate(context, 'user_sns_link_invalid_error');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 設定項目のタイトルを生成して返す
+Widget _generateSectionTitle(
+  BuildContext context,
+  String titleKey,
+) {
+  return Text(
+    i18nTranslate(context, titleKey),
+    style: TextStyle(
+      color: const Color(0xFF575292),
+      fontSize: 14,
+      fontFamily: 'NotoSansJP',
+      fontWeight: FontWeight.w700,
+      letterSpacing: calcLetterSpacing(letter: 4),
+    ),
+  );
 }

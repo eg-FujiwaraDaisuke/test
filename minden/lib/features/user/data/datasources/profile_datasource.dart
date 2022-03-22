@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/env/api_config.dart';
@@ -13,6 +14,10 @@ abstract class ProfileDataSource {
     required String icon,
     required String bio,
     required String wallPaper,
+    required String freeLink,
+    required String twitterLink,
+    required String facebookLink,
+    required String instagramLink,
   });
 
   Future<ProfileModel> get({
@@ -25,9 +30,9 @@ class ProfileDataSourceImpl implements ProfileDataSource {
 
   final http.Client client;
 
-  String get _updatePath => '/api/v1/profile/edit';
+  String get _updatePath => '/api/v1.1/profile/edit';
 
-  String get _getPath => '/api/v1/profile';
+  String get _getPath => '/api/v1.1/profile';
 
   @override
   Future<ProfileModel> update({
@@ -35,6 +40,10 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     required String icon,
     required String bio,
     required String wallPaper,
+    required String freeLink,
+    required String twitterLink,
+    required String facebookLink,
+    required String instagramLink,
   }) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
@@ -51,6 +60,10 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     if (wallPaper.isNotEmpty) {
       param['wallPaper'] = wallPaper;
     }
+    param['freeLink'] = freeLink;
+    param['twitterLink'] = twitterLink;
+    param['facebookLink'] = facebookLink;
+    param['instagramLink'] = instagramLink;
 
     final body = json.encode(param);
     logD(body);
