@@ -6,6 +6,7 @@ import 'package:minden/core/repository/retry_process_mixin.dart';
 import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
 import 'package:minden/features/power_plant/data/repositories/power_plant_repository_mock.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
@@ -36,10 +37,15 @@ class PowerPlantRepositoryImpl
 
   @override
   Future<Either<PowerPlantFailure, PowerPlantsResponse>> getPowerPlant(
-      String? tagId) async {
+    String? tagId,
+    String? giftTypeId,
+  ) async {
     try {
       final plants =
-          await retryRequest(() => powerPlantDataSource.getPowerPlant(tagId));
+          await retryRequest(() => powerPlantDataSource.getPowerPlant(
+                tagId,
+                giftTypeId,
+              ));
 
       return Right(plants);
     } on ServerException {
@@ -104,6 +110,17 @@ class PowerPlantRepositoryImpl
       final supportAction = await retryRequest(
           () => powerPlantDataSource.getSupportAction(plantId));
       return Right(supportAction);
+    } on ServerException {
+      return left(PowerPlantFailure());
+    }
+  }
+
+  @override
+  Future<Either<PowerPlantFailure, List<PowerPlantGift>>> getGift() async {
+    try {
+      final powerPlantGift =
+          await retryRequest(powerPlantDataSource.getPlantsGifts);
+      return Right(powerPlantGift);
     } on ServerException {
       return left(PowerPlantFailure());
     }

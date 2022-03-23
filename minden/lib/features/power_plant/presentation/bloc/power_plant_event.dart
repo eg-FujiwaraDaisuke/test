@@ -7,10 +7,12 @@ abstract class PowerPlantEvent extends Equatable {
 class GetPowerPlantsEvent extends PowerPlantEvent {
   const GetPowerPlantsEvent({
     this.tagId,
+    this.giftTypeId,
     this.historyType,
   });
 
   final String? tagId;
+  final String? giftTypeId;
   final String? historyType;
 
   @override
@@ -47,6 +49,13 @@ class GetSupportActionEvent extends PowerPlantEvent {
   });
 
   final String plantId;
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetGiftEvent extends PowerPlantEvent {
+  const GetGiftEvent();
 
   @override
   List<Object> get props => [];

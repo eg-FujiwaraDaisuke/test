@@ -19,8 +19,10 @@ class GetPowerPlantsBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
       try {
         yield const PowerPlantLoading();
 
-        final failureOrUser =
-            await usecase(GetPowerPlantParams(tagId: event.tagId));
+        final failureOrUser = await usecase(GetPowerPlantParams(
+          tagId: event.tagId,
+          giftTypeId: event.giftTypeId,
+        ));
 
         yield failureOrUser.fold<PowerPlantState>(
           (failure) => throw failure,
@@ -141,6 +143,33 @@ class GetSupportActionBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
         yield failureOrUser.fold<PowerPlantState>(
           (failure) => throw failure,
           (supportAction) => SupportActionLoaded(supportAction),
+        );
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
+      } catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
+      }
+    }
+  }
+}
+
+class GetGiftBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
+  GetGiftBloc(PowerPlantState initialState, this.usecase) : super(initialState);
+  final GetGift usecase;
+
+  @override
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
+    if (event is GetGiftEvent) {
+      try {
+        yield const GiftLoading();
+
+        final failureOrUser = await usecase(GetPowerPlantParams());
+
+        yield failureOrUser.fold<PowerPlantState>(
+          (failure) => throw failure,
+          (gift) => GiftLoaded(gift),
         );
       } on RefreshTokenExpiredException catch (e) {
         yield PowerPlantLoadError(message: e.toString(), needLogin: true);

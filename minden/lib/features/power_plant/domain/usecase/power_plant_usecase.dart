@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/core/error/failure.dart';
 import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
@@ -18,7 +19,7 @@ class GetPowerPlants extends UseCase<PowerPlantsResponse, GetPowerPlantParams> {
   @override
   Future<Either<Failure, PowerPlantsResponse>> call(
       GetPowerPlantParams params) async {
-    return await repository.getPowerPlant(params.tagId);
+    return await repository.getPowerPlant(params.tagId, params.giftTypeId);
   }
 }
 
@@ -84,18 +85,32 @@ class GetSupportAction extends UseCase<SupportAction, GetPowerPlantParams> {
   }
 }
 
+class GetGift extends UseCase<List<PowerPlantGift>, GetPowerPlantParams> {
+  GetGift(this.repository);
+
+  final PowerPlantRepository repository;
+
+  @override
+  Future<Either<Failure, List<PowerPlantGift>>> call(
+      GetPowerPlantParams params) async {
+    return await repository.getGift();
+  }
+}
+
 class GetPowerPlantParams extends Equatable {
   GetPowerPlantParams({
     this.plantId,
     this.tagId,
+    this.giftTypeId,
     this.historyType,
     this.userId,
   });
 
   String? plantId;
-  String? userId;
   String? tagId;
+  String? giftTypeId;
   String? historyType;
+  String? userId;
 
   @override
   List<Object> get props => [];
