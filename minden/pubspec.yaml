@@ -87,6 +87,8 @@ dependencies:
 
   flutter_linkify: ^5.0.2
 
+  share_plus: ^2.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

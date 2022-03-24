@@ -8,6 +8,6 @@ class ButtonStyle {
 
 final buttonStyle = {
   ButtonSize.S: ButtonStyle(width: 180, height: 54),
-  ButtonSize.M: ButtonStyle(width: 399, height: 50),
+  ButtonSize.M: ButtonStyle(width: 284, height: 50),
   ButtonSize.L: ButtonStyle(width: 399, height: 50),
 };

@@ -14,6 +14,7 @@ import 'package:minden/features/support_power_plant/data/datasources/support_pow
 import 'package:minden/features/support_power_plant/data/repositories/support_power_plant_repository_impl.dart';
 import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
 import 'package:minden/features/support_power_plant/presentation/bloc/support_power_plant_bloc.dart';
+import 'package:minden/features/support_power_plant/presentation/support_power_plant_complete_dialog.dart';
 import 'package:minden/utile.dart';
 
 class SupportPowerPlantDecisionDialog {
@@ -24,7 +25,7 @@ class SupportPowerPlantDecisionDialog {
     required this.user,
   }) : super();
 
-  static const String routeName = '/home/top/detail/decision';
+  static const String routeName = '/home/top/detail/support/decision';
 
   final BuildContext context;
   final PowerPlant selectPowerPlant;
@@ -49,8 +50,18 @@ class SupportPowerPlantDecisionDialog {
       }
       Loading.hide();
       if (event is SupportPowerPlantUpdated) {
+        final newSupportPowerPlant = event.newSupportPowerPlant;
+        final supportPowerPlants = event.supportPowerPlants;
+
         _updateSupportPowerPlantBloc.close();
         Navigator.pop(context, true);
+
+        // 応援完了ダイアログを表示
+        SupportPowerPlantCompleteDialog(
+          context: context,
+          selectPowerPlant: newSupportPowerPlant,
+          registeredPowerPlants: supportPowerPlants,
+        ).showDialog();
         return;
       }
     });
@@ -182,15 +193,12 @@ class SupportPowerPlantDecisionDialog {
                             useButtonAnalytics(
                                 ButtonAnalyticsType.decideSupportPowerPlant);
 
-                            final plantIdList = {
-                              'plantIdList': newRegistPowerPlants
-                                  .map((powerPlant) =>
-                                      {'plantId': powerPlant.plantId})
-                                  .toList()
-                            };
-
-                            _updateSupportPowerPlantBloc
-                                .add(UpdateSupportPowerPlantEvent(plantIdList));
+                            _updateSupportPowerPlantBloc.add(
+                              UpdateSupportPowerPlantEvent(
+                                selectPowerPlant,
+                                newRegistPowerPlants,
+                              ),
+                            );
                           },
                           text: i18nTranslate(context, 'decide'),
                           size: ButtonSize.S),

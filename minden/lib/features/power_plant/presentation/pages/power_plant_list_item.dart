@@ -44,12 +44,8 @@ class PowerPlantListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: InkWell(
         onTap: () {
-          final route = MaterialPageRoute(
-            builder: (context) =>
-                PowerPlantDetailPage(plantId: powerPlant.plantId),
-            settings: const RouteSettings(name: PowerPlantDetailPage.routeName),
-          );
-          Navigator.push(context, route);
+          Navigator.push(
+              context, PowerPlantDetailPage.route(powerPlant.plantId));
         },
         child: Container(
           width: MediaQuery.of(context).size.width,

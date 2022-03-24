@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:minden/core/error/exceptions.dart';
-import 'package:minden/core/success/success.dart';
-import 'package:minden/features/reset_password/domain/usecases/reset_password_repository_usecase.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
 
 part 'support_power_plant_event.dart';
@@ -28,7 +26,10 @@ class UpdateSupportPowerPlantBloc
 
         yield failureOrSuccess.fold<SupportPowerPlantState>(
           (failure) => throw failure,
-          (success) => const SupportPowerPlantUpdated(),
+          (success) => SupportPowerPlantUpdated(
+            newSupportPowerPlant: event.newSupportPowerPlant,
+            supportPowerPlants: event.supportPowerPlants,
+          ),
         );
       } on RefreshTokenExpiredException catch (e) {
         yield SupportPowerPlantError(message: e.toString(), needLogin: true);
