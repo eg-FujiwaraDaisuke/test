@@ -49,9 +49,15 @@ class PowerPlantDetailPage extends StatefulWidget {
 
   static const String routeName = '/home/top/detail';
 
-  static Route<dynamic> route(String plantId) {
+  static Route<dynamic> route(
+    String plantId, {
+    bool isShowGiftAtThaTop = false,
+  }) {
     return MaterialPageRoute(
-      builder: (context) => PowerPlantDetailPage(plantId: plantId),
+      builder: (context) => PowerPlantDetailPage(
+        plantId: plantId,
+        isShowGiftAtTheTop: isShowGiftAtThaTop,
+      ),
       settings: const RouteSettings(name: PowerPlantDetailPage.routeName),
     );
   }

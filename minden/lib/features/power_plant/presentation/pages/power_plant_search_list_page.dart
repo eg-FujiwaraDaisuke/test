@@ -271,7 +271,9 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
                           ),
                           const SizedBox(height: 31),
                           _PowerPlantSearchList(
-                              powerPlants: state.powerPlants.powerPlants),
+                            powerPlants: state.powerPlants.powerPlants,
+                            searchType: widget.searchType,
+                          ),
                         ],
                       ),
                     ),
@@ -311,9 +313,14 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
 
 /// 発電所一覧
 class _PowerPlantSearchList extends StatelessWidget {
-  _PowerPlantSearchList({required this.powerPlants});
+  const _PowerPlantSearchList({
+    required this.powerPlants,
+    required this.searchType,
+  });
 
   final List<PowerPlant> powerPlants;
+
+  final PowerPlantSearchType searchType;
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +332,7 @@ class _PowerPlantSearchList extends StatelessWidget {
       plants.add(PowerPlantListItem(
         powerPlant: element,
         direction: direction,
+        searchType: searchType,
       ));
     });
     return Column(
