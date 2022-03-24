@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/color_code_util.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -17,6 +18,11 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_list_
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/utile.dart';
 
+enum PowerPlantSearchType {
+  tag,
+  gift,
+}
+
 /// 発電所を探す画面
 /// 選択したタグに基づく、発電所一覧を表示する
 class PowerPlantSearchListPage extends StatefulWidget {
@@ -27,6 +33,17 @@ class PowerPlantSearchListPage extends StatefulWidget {
   }) : super(key: key);
 
   static const String routeName = '/home/top/search/powerPlant';
+
+  PowerPlantSearchType get searchType {
+    if (selectTag != null) {
+      return PowerPlantSearchType.tag;
+    } else if (selectGift != null) {
+      return PowerPlantSearchType.gift;
+    } else {
+      logW('selectTag and selectGift is null.');
+      return PowerPlantSearchType.tag;
+    }
+  }
 
   final Tag? selectTag;
 
@@ -55,17 +72,20 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
       ),
     );
 
-    if (widget.selectTag != null) {
-      // タグから探す
-      _getPowerPlantsBloc.add(
-        GetPowerPlantsEvent(tagId: widget.selectTag!.tagId.toString()),
-      );
-    } else if (widget.selectGift != null) {
-      // 特典から探す
-      _getPowerPlantsBloc.add(
-        GetPowerPlantsEvent(
-            giftTypeId: widget.selectGift!.giftTypeId.toString()),
-      );
+    switch (widget.searchType) {
+      case PowerPlantSearchType.tag:
+        // タグから探す
+        _getPowerPlantsBloc.add(
+          GetPowerPlantsEvent(tagId: widget.selectTag!.tagId.toString()),
+        );
+        break;
+      case PowerPlantSearchType.gift:
+        // 特典から探す
+        _getPowerPlantsBloc.add(
+          GetPowerPlantsEvent(
+              giftTypeId: widget.selectGift!.giftTypeId.toString()),
+        );
+        break;
     }
   }
 
@@ -74,6 +94,15 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
     _getPowerPlantsBloc.close();
     Loading.hide();
     super.dispose();
+  }
+
+  String descriptionTextKey() {
+    switch (widget.searchType) {
+      case PowerPlantSearchType.tag:
+        return 'power_plant_serch_selected_tag_support';
+      case PowerPlantSearchType.gift:
+        return 'power_plant_search_selected_gift';
+    }
   }
 
   @override
@@ -232,8 +261,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
                           ),
                           const SizedBox(height: 43),
                           Text(
-                            i18nTranslate(context,
-                                'power_plant_serch_selected_tag_support'),
+                            i18nTranslate(context, descriptionTextKey()),
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'NotoSansJP',
