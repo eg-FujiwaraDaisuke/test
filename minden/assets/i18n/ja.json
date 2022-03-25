@@ -62,6 +62,7 @@
 "power_plant_search_select_gift" : "発電所を応援するともらえる特典の内容で、発電所を選ぶことができます。",
 "power_plant_serch_selected_tag" : "あなたの選んだタグ",
 "power_plant_serch_selected_tag_support" : "このタグを選んだ人が応援している発電所",
+"power_plant_search_selected_gift" : "応援するとことの特典がもらえる発電所",
 "power_plant_serch_support_owner" : "一人ひとりの応援が積み重なると生産者さんの大きな力になるよ！",
 "power_plant_serch_who_make" : "みんながどの発電所を応援しているか見てみよう！",
 "power_plant_support_start_date" : "からこの発電所を応援",

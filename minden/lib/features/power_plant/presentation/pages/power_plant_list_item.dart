@@ -5,6 +5,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
 enum Direction {
@@ -16,13 +17,15 @@ enum Direction {
 
 /// 発電所一覧要素
 class PowerPlantListItem extends StatelessWidget {
-  PowerPlantListItem(
-      {required this.powerPlant,
-      required this.direction,
-      this.isShowCatchphras = true,
-      this.fromApp = false,
-      this.supportedData,
-      this.reservedDate});
+  PowerPlantListItem({
+    required this.powerPlant,
+    required this.direction,
+    this.isShowCatchphras = true,
+    this.fromApp = false,
+    this.supportedData,
+    this.reservedDate,
+    this.searchType = PowerPlantSearchType.tag,
+  });
 
   static const cornerRadius = Radius.circular(11);
 
@@ -32,6 +35,8 @@ class PowerPlantListItem extends StatelessWidget {
   final String? supportedData;
   final String? reservedDate;
   final bool fromApp;
+
+  final PowerPlantSearchType searchType;
 
   double _thumbnailImageHeight = 0;
   double _thumbnailImageWidth = 0;
@@ -45,7 +50,11 @@ class PowerPlantListItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, PowerPlantDetailPage.route(powerPlant.plantId));
+              context,
+              PowerPlantDetailPage.route(
+                powerPlant.plantId,
+                isShowGiftAtThaTop: searchType == PowerPlantSearchType.gift,
+              ));
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
