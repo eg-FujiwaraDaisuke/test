@@ -651,7 +651,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   Widget _generateGift(PowerPlantDetail detail) {
     final images = <String>[];
     if (detail.image1?.isNotEmpty ?? false) {
-      images.add(detail.image1);
+      images.add(detail.image1!);
     }
     if (detail.image2?.isNotEmpty ?? false) {
       images.add(detail.image2!);
