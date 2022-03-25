@@ -262,12 +262,12 @@ class _MenuListView extends StatelessWidget {
     final _menuList = [
       _Menu(
           title: i18nTranslate(context, 'user_menu_profile'),
-          icon: 'select_plant',
+          icon: 'person',
           routeName: ProfilePage.routeName,
           type: MenuType.common),
       _Menu(
           title: i18nTranslate(context, 'user_menu_support_power_plant'),
-          icon: 'person',
+          icon: 'select_plant',
           routeName: SupportHistoryPowerPlantPage.routeName,
           type: MenuType.common),
       _Menu(
