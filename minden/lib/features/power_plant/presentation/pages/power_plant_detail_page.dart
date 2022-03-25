@@ -651,16 +651,19 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   Widget _generateGift(PowerPlantDetail detail) {
     final images = <String>[];
     if (detail.image1?.isNotEmpty ?? false) {
-      images.add(detail.plantImage1);
+      images.add(detail.image1!);
     }
     if (detail.image2?.isNotEmpty ?? false) {
-      images.add(detail.plantImage2!);
+      images.add(detail.image2!);
     }
     if (detail.image3?.isNotEmpty ?? false) {
-      images.add(detail.plantImage3!);
+      images.add(detail.image3!);
     }
     if (detail.image4?.isNotEmpty ?? false) {
-      images.add(detail.plantImage4!);
+      images.add(detail.image4!);
+    }
+    if (detail.image5?.isNotEmpty ?? false) {
+      images.add(detail.image5!);
     }
 
     return Column(
