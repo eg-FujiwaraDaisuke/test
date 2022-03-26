@@ -5,6 +5,7 @@ import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_gift_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
@@ -51,6 +52,7 @@ String? mindenNameExtractor(RouteSettings settings) {
     // ホームタブ
     // NOTE: TabView, ポップアップのトラッキングは別な仕組みで行う
     case PowerPlantHomePage.routeName:
+    case PowerPlantList.routeName:
     case PowerPlantDetailPage.routeName:
     case PowerPlantSearchMenu.routeName:
     case PowerPlantSearchByTag.routeName:

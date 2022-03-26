@@ -18,6 +18,8 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_list_
 class PowerPlantList extends StatefulWidget {
   PowerPlantList({this.tagId});
 
+  static const String routeName = '/home/top/list';
+
   String? tagId;
 
   @override
