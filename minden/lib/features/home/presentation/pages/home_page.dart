@@ -269,11 +269,14 @@ class HomePage extends HookWidget {
   }
 
   Widget _buildOffstageNavigator(TabItem tabItem, TabItem currentTab) {
+    final isCurrentTab = currentTab == tabItem;
+
     return Offstage(
-      offstage: currentTab != tabItem,
+      offstage: !isCurrentTab,
       child: TabNavigator(
         navigatorKey: _navigatorKeys[tabItem],
         tabItem: tabItem,
+        isCurrentTab: isCurrentTab,
       ),
     );
   }

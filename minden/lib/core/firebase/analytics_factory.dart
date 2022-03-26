@@ -29,7 +29,7 @@ import 'package:minden/features/user/presentation/pages/user_page.dart';
 FirebaseAnalyticsObserver createAnalyticsObserver() {
   return FirebaseAnalyticsObserver(
     analytics: FirebaseAnalytics.instance,
-    nameExtractor: nameExtractor,
+    nameExtractor: mindenNameExtractor,
     routeFilter: routeFilter,
   );
 }
@@ -37,7 +37,7 @@ FirebaseAnalyticsObserver createAnalyticsObserver() {
 /// RouteSettingsに設定したrouteNameに基づき、
 /// Firebase Analyticsのscreen_viewに送る値を抽出する
 /// NOTE: Navigatorを用いない繊維（TabView）については、別な仕組みでscreen_viewを送る
-String? nameExtractor(RouteSettings settings) {
+String? mindenNameExtractor(RouteSettings settings) {
   final routeName = settings.name;
 
   logD('Extract target route. routeName: $routeName');
