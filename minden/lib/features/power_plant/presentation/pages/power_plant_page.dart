@@ -7,6 +7,8 @@ import 'package:minden/core/firebase/analytics_factory.dart';
 import 'package:minden/core/firebase/dynamic_links_route_mapper.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
+import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
+import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_menu.dart';
@@ -25,7 +27,7 @@ class PowerPlantHomeTabData {
 }
 
 /// ホームタブ
-class PowerPlantHomePage extends StatefulWidget {
+class PowerPlantHomePage extends StatefulHookWidget {
   static const String routeName = '/home/top';
 
   @override
@@ -78,9 +80,11 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final homePageTab = useProvider(homePageTabProvider);
+
     // 画面表示時の、初回表示タブについて、ScreenViewEventを送信する
     // NOTE: BottomNavigation切り替えの場合、0とは限らない
-    sendScreenTabViewEvent(_tabController.index);
+    sendScreenTabViewEvent(_tabController.index, tabItem: homePageTab.state);
 
     return DefaultTabController(
       length: tabs.length,
@@ -134,7 +138,17 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
     );
   }
 
-  void sendScreenTabViewEvent(int index) {
+  void sendScreenTabViewEvent(
+    int index, {
+    TabItem tabItem = TabItem.home,
+  }) {
+    if (tabItem != TabItem.home) {
+      // NOTE: BottomNavigationの切り替えによっても、
+      // 表示中に依らずTabControllerのリスナーが反応するため、
+      // BottomNavigationで選択中のタブを参照して、必要なときだけScreenViewEventを送信する
+      return;
+    }
+
     final currentPath = tabs[index].tabPageRoute;
     logD('Tab in TabChanged. route: $currentPath');
 
