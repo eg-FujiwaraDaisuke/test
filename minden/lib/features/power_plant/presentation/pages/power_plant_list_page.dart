@@ -172,7 +172,7 @@ class PowerPlantListState extends State<PowerPlantList> {
                           ),
                         ),
                         TextSpan(
-                          text: 'では全ての発電所\n'
+                          text: 'では全ての発電所を\n'
                               '掲載しています。',
                           style: textStyle.copyWith(
                             color: const Color(0xff828282),
