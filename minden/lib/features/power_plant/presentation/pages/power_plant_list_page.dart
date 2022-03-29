@@ -13,6 +13,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 発電所一覧
 class PowerPlantList extends StatefulWidget {
@@ -101,16 +102,9 @@ class PowerPlantListState extends State<PowerPlantList> {
                       direction: direction,
                     );
                   } else {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 14, 18, 66),
-                      child: Text(
-                        '※アプリではピックアップしている$numPowerPlantヶ所の発電所を表示しております。',
-                        style: const TextStyle(
-                          color: Color(0xff7d7e7f),
-                          fontFamily: 'NotoSansJP',
-                          fontSize: 10,
-                        ),
-                      ),
+                    return buildLastItem(
+                      context: context,
+                      numPowerPlant: numPowerPlant,
                     );
                   }
                 },
@@ -136,5 +130,69 @@ class PowerPlantListState extends State<PowerPlantList> {
       default:
         return Direction.topLeft;
     }
+  }
+
+  Widget buildLastItem({
+    required BuildContext context,
+    required int numPowerPlant,
+  }) {
+    const textStyle = TextStyle(
+      fontFamily: 'NotoSansJP',
+      fontSize: 10,
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 14, 36),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            launch('https://portal.minden.co.jp');
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/power_plant/character_smile.png',
+                  width: 92,
+                ),
+                SizedBox(
+                  width: 190,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'アプリではピックアップしている$numPowerPlantヶ所\n'
+                              'の発電所から応援先を選択できます。\n',
+                          style: textStyle.copyWith(
+                            color: const Color(0xff828282),
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'マイページ（WEB）',
+                          style: textStyle.copyWith(
+                            color: const Color(0xff75c975),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'では全ての発電所を\n'
+                              '掲載しています。',
+                          style: textStyle.copyWith(
+                            color: const Color(0xff828282),
+                          ),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
