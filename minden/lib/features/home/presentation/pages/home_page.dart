@@ -23,9 +23,12 @@ import 'package:minden/features/message/presentation/viewmodel/messages_controll
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/injection_container.dart';
 
+// HomePageにおけるBottomNavigationの選択中タブデータ
+// NOTE: 子画面から、BottomNavigationの状態を取得したいため、グローバルに定義
+final homePageTabProvider = StateProvider((ref) => TabItem.home);
+
 // FCMプッシュ通知の遷移周りの初期化を行っています。
 // bottomNavigationBarの出し分けを行います
-
 class HomePage extends HookWidget {
   static const String routeName = '/home';
 
@@ -43,7 +46,7 @@ class HomePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentTab = useState<TabItem>(TabItem.home);
+    final homePageTab = useProvider(homePageTabProvider);
 
     // バックグラウンドorターミネイト状態からプッシュ通知をタップした際のMessageIdを一時保持
     final _shoWMessageId = useState('');
@@ -53,7 +56,7 @@ class HomePage extends HookWidget {
     late GetMessageBackGroundPushNotifyBloc _getMessageBackGroundPushNotifyBloc;
     late TransitionScreenBloc _transitionScreenBloc;
 
-    void _selectTab(TabItem tabItem) => _currentTab.value = tabItem;
+    void _selectTab(TabItem tabItem) => homePageTab.state = tabItem;
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
 
@@ -253,27 +256,30 @@ class HomePage extends HookWidget {
 
     return WillPopScope(
       onWillPop: () async =>
-          !await _navigatorKeys[_currentTab.value]!.currentState!.maybePop(),
+          !await _navigatorKeys[homePageTab.state]!.currentState!.maybePop(),
       child: Scaffold(
         body: Stack(
           children: [
-            _buildOffstageNavigator(TabItem.home, _currentTab.value),
-            _buildOffstageNavigator(TabItem.menu, _currentTab.value)
+            _buildOffstageNavigator(TabItem.home, homePageTab.state),
+            _buildOffstageNavigator(TabItem.menu, homePageTab.state)
           ],
         ),
         bottomNavigationBar: HomeMypageTabNavigation(
-          currentTab: _currentTab.value,
+          currentTab: homePageTab.state,
         ),
       ),
     );
   }
 
   Widget _buildOffstageNavigator(TabItem tabItem, TabItem currentTab) {
+    final isCurrentTab = currentTab == tabItem;
+
     return Offstage(
-      offstage: currentTab != tabItem,
+      offstage: !isCurrentTab,
       child: TabNavigator(
         navigatorKey: _navigatorKeys[tabItem],
         tabItem: tabItem,
+        isCurrentTab: isCurrentTab,
       ),
     );
   }

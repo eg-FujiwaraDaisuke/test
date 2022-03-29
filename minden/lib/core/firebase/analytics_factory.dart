@@ -5,6 +5,7 @@ import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_gift_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
@@ -29,7 +30,7 @@ import 'package:minden/features/user/presentation/pages/user_page.dart';
 FirebaseAnalyticsObserver createAnalyticsObserver() {
   return FirebaseAnalyticsObserver(
     analytics: FirebaseAnalytics.instance,
-    nameExtractor: nameExtractor,
+    nameExtractor: mindenNameExtractor,
     routeFilter: routeFilter,
   );
 }
@@ -37,7 +38,7 @@ FirebaseAnalyticsObserver createAnalyticsObserver() {
 /// RouteSettingsに設定したrouteNameに基づき、
 /// Firebase Analyticsのscreen_viewに送る値を抽出する
 /// NOTE: Navigatorを用いない繊維（TabView）については、別な仕組みでscreen_viewを送る
-String? nameExtractor(RouteSettings settings) {
+String? mindenNameExtractor(RouteSettings settings) {
   final routeName = settings.name;
 
   logD('Extract target route. routeName: $routeName');
@@ -51,6 +52,7 @@ String? nameExtractor(RouteSettings settings) {
     // ホームタブ
     // NOTE: TabView, ポップアップのトラッキングは別な仕組みで行う
     case PowerPlantHomePage.routeName:
+    case PowerPlantList.routeName:
     case PowerPlantDetailPage.routeName:
     case PowerPlantSearchMenu.routeName:
     case PowerPlantSearchByTag.routeName:
