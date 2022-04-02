@@ -5,7 +5,7 @@ import 'package:minden/core/hook/use_logger.dart';
 const String _tapButtonEventName = 'tap_button';
 
 // トラッキング時の、ボタン種別
-const String _tapButtonEventParamsName = 'name';
+const String _tapButtonEventParamsName = 'tap_button_name';
 
 void useButtonAnalytics(ButtonAnalyticsType type) {
   logD('Analytics: $_tapButtonEventName: ${type.name}');
