@@ -124,6 +124,7 @@ flutter:
     - assets/images/message/
     - assets/images/violate/
     - assets/images/sample/
+    - assets/images/support_history/
     - assets/fonts/
   fonts:
     - family: NotoSansJP
