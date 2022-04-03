@@ -18,6 +18,7 @@ import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/support_history/presentation/support_history_page.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -609,7 +610,15 @@ class _OpenSupportHistoryButton extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(11),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              final route = MaterialPageRoute(
+                builder: (context) => const SupportHistoryPage(),
+                settings: const RouteSettings(
+                  name: SupportHistoryPage.routeName,
+                ),
+              );
+              Navigator.push(context, route);
+            },
             borderRadius: BorderRadius.circular(11),
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -667,7 +676,7 @@ class _OpenSupportHistoryButton extends StatelessWidget {
                             fontSize: 10,
                           ),
                         ),
-                        SizedBox(width: 2),
+                        const SizedBox(width: 2),
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
                           child: Image.asset(
