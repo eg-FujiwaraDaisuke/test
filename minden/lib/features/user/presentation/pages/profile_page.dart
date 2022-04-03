@@ -659,6 +659,7 @@ class _OpenSupportHistoryButton extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.bold,
                           height: 1.6,
                         ),
                       ),
