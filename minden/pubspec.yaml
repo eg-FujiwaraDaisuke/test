@@ -117,6 +117,7 @@ flutter:
     - assets/images/common/
     - assets/images/login/
     - assets/images/user/
+    - assets/images/profile/
     - assets/images/power_plant/
     - assets/images/tutorial/
     - assets/images/profile_setting/
