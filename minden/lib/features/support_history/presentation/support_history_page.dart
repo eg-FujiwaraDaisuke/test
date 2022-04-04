@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// 応援の軌跡ページ
 class SupportHistoryPage extends StatelessWidget {
   const SupportHistoryPage();
 

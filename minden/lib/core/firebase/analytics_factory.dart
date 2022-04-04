@@ -4,7 +4,6 @@ import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/message/presentation/pages/message_page.dart';
-import 'package:minden/features/power_plant/domain/entities/support_history.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
