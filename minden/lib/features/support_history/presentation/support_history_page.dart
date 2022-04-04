@@ -205,7 +205,6 @@ class _CaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           decoration: BoxDecoration(
@@ -228,6 +227,18 @@ class _CaseWidget extends StatelessWidget {
                   height: 1.4,
                 ),
               ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 36,
+            ),
+            child: Image.asset(
+              'assets/images/support_history/support_history_balloon_triangle.png',
+              width: 20,
             ),
           ),
         ),
