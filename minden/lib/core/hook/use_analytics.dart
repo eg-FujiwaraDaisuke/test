@@ -5,7 +5,7 @@ import 'package:minden/core/hook/use_logger.dart';
 const String _tapButtonEventName = 'tap_button';
 
 // トラッキング時の、ボタン種別
-const String _tapButtonEventParamsName = 'name';
+const String _tapButtonEventParamsName = 'tap_button_name';
 
 void useButtonAnalytics(ButtonAnalyticsType type) {
   logD('Analytics: $_tapButtonEventName: ${type.name}');
@@ -60,17 +60,17 @@ extension ButtonAnalyticsTypeExt on ButtonAnalyticsType {
       case ButtonAnalyticsType.requestResetPassword:
         return 'requestResetPassword';
       case ButtonAnalyticsType.navigateConfirmTagSettings:
-        return 'confirmTagSettings';
+        return 'navigateConfirmTagSettings';
       case ButtonAnalyticsType.completeTagSettings:
-        return 'requestTagSettings';
+        return 'completeTagSettings';
       case ButtonAnalyticsType.navigateSearchByTagPowerPlant:
         return 'navigateSearchByTagPowerPlant';
       case ButtonAnalyticsType.navigateSupportPowerPlant:
         return 'navigateSupportPowerPlant';
       case ButtonAnalyticsType.navigateParticipantUser:
-        return 'navigateUser';
+        return 'navigateParticipantUser';
       case ButtonAnalyticsType.decideSupportPowerPlant:
-        return 'requestSupportPowerPlant';
+        return 'decideSupportPowerPlant';
       case ButtonAnalyticsType.navigateSearchByTagPowerPlantFromProfile:
         return 'navigateSearchByTagPowerPlantFromProfile';
       case ButtonAnalyticsType.requestIssueReport:
