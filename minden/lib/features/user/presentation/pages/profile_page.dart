@@ -18,6 +18,7 @@ import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/support_history/presentation/support_history_page.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/data/datasources/profile_datasource.dart';
 import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
@@ -303,6 +304,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         _SupportPowerPlant(
                           userId: widget.userId,
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const _OpenSupportHistoryButton(),
+                        const SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
                   ),
@@ -576,6 +584,116 @@ class _SupportPowerPlant extends StatelessWidget {
           userId: userId,
         ),
       ],
+    );
+  }
+}
+
+class _OpenSupportHistoryButton extends StatelessWidget {
+  const _OpenSupportHistoryButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x32DADADA),
+              spreadRadius: 5,
+              blurRadius: 8,
+              offset: Offset(0, 6),
+            )
+          ],
+        ),
+        child: Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(11),
+          child: InkWell(
+            onTap: () {
+              final route = MaterialPageRoute(
+                builder: (context) => const SupportHistoryPage(),
+                settings: const RouteSettings(
+                  name: SupportHistoryPage.routeName,
+                ),
+              );
+              Navigator.push(context, route);
+            },
+            borderRadius: BorderRadius.circular(11),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: 20,
+              ),
+              child: Stack(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              width: 73,
+                              height: 73,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFF75C975),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 3),
+                              child: Image.asset(
+                                'assets/images/profile/open_support_history_button_character.png',
+                                width: 51,
+                                height: 84,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      const Text(
+                        'みんなが今までに発電所を\n応援した金額は......',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.bold,
+                          height: 1.6,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        const Text(
+                          'もっと見る',
+                          style: TextStyle(
+                            color: Color(0xFF7D7E7F),
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: Image.asset(
+                            'assets/images/profile/open_support_history_button_arrow.png',
+                            height: 7,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

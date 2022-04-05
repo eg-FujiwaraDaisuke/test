@@ -16,6 +16,7 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/features/reset_password/pages/reset_password_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
+import 'package:minden/features/support_history/presentation/support_history_page.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_complete_dialog.dart';
@@ -70,6 +71,7 @@ String? mindenNameExtractor(RouteSettings settings) {
     case ProfileSettingTagsDecisionPage.routeName:
     case SupportHistoryPowerPlantPage.routeName:
     case MessagePage.routeName:
+    case SupportHistoryPage.routeName:
       return routeName;
     default:
       logD('Undefined route name for analytics. routeName: $routeName}');
