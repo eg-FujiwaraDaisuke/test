@@ -164,7 +164,7 @@ class SupportHistoryPage extends StatelessWidget {
             const SizedBox(height: 8),
             const Center(
               child: Text(
-                'みんでんのサイトにリンクします',
+                '発電所一覧（WEB）へ',
                 style: TextStyle(
                   color: Color(0xFF787877),
                   fontSize: 11,
