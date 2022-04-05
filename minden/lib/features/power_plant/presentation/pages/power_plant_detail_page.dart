@@ -648,7 +648,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   Widget _generateGift(PowerPlantDetail detail) {
-
+    final description = detail.giftDescription != null
+        ? '${detail.giftDescription}\n〇特典は発電者さまのご厚意で用意いただいているものです。やむを得ない事情により、代替品のご提供、上記内容変更となる場合もございます。ご理解のほど宜しくお願いいたします。'
+        : '';
     return Column(
       children: [
         const Divider(
@@ -728,7 +730,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           child: Column(
                             children: [
                               Text(
-                                detail.explanation!,
+                                description,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -775,7 +777,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                   await launch(link.url);
                                 }
                               },
-                              text: detail.explanation!,
+                              text: description,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: 'NotoSansJP',
