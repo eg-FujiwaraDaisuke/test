@@ -28,13 +28,9 @@ class PowerPlantDetail extends Equatable {
     this.plantImage3,
     this.plantImage4,
     this.limitedIntroducerId,
-    this.supportGiftName,
-    this.explanation,
-    this.image1,
-    this.image2,
-    this.image3,
-    this.image4,
-    this.image5,
+    this.giftName,
+    this.giftDescription,
+    this.giftImage,
     this.shortCatchphrase,
     this.catchphrase,
     this.thankYouMessage,
@@ -136,30 +132,14 @@ class PowerPlantDetail extends Equatable {
   final String? limitedIntroducerId;
 
   /// 特典名
-  final String? supportGiftName;
+  final String? giftName;
 
   /// 特典説明
-  final String? explanation;
+  final String? giftDescription;
 
-  /// 特典写真1
+  /// 特典写真
   /// S3のURL
-  final String? image1;
-
-  /// 特典写真2
-  /// S3のURL
-  final String? image2;
-
-  /// 特典写真3
-  /// S3のURL
-  final String? image3;
-
-  /// 特典写真4
-  /// S3のURL
-  final String? image4;
-
-  /// 特典写真5
-  /// S3のURL
-  final String? image5;
+  final String? giftImage;
 
   /// 短いキャッチフレーズ
   final String? shortCatchphrase;
@@ -200,13 +180,9 @@ class PowerPlantDetail extends Equatable {
       'plantImage3': plantImage3,
       'plantImage4': plantImage4,
       'limitedIntroducerId': limitedIntroducerId,
-      'supportGiftName': supportGiftName,
-      'explanation': explanation,
-      'image1': image1,
-      'image2': image2,
-      'image3': image3,
-      'image4': image4,
-      'image5': image5,
+      'giftName': giftName,
+      'giftDescription': giftDescription,
+      'giftImage': giftImage,
       'shortCatchphrase': shortCatchphrase,
       'catchphrase': catchphrase,
       'thankYouMessage': thankYouMessage,

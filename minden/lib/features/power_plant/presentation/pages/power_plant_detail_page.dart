@@ -23,7 +23,6 @@ import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
-import 'package:minden/features/power_plant/presentation/pages/power_plant_gitf_pickup.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_pickup_page.dart';
 import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
@@ -417,7 +416,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     bool isShowGiftAtTheTop,
   ) {
     // 特典がない場合表示しない
-    final hasGift = detail.supportGiftName?.isNotEmpty ?? false;
+    final hasGift = detail.giftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
@@ -613,7 +612,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     bool isShowGiftAtTheTop,
   ) {
     // 特典がない場合表示しない
-    final hasGitf = detail.supportGiftName?.isNotEmpty ?? false;
+    final hasGitf = detail.giftName?.isNotEmpty ?? false;
 
     return Column(
       children: [
@@ -649,23 +648,9 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
   }
 
   Widget _generateGift(PowerPlantDetail detail) {
-    final images = <String>[];
-    if (detail.image1?.isNotEmpty ?? false) {
-      images.add(detail.image1!);
-    }
-    if (detail.image2?.isNotEmpty ?? false) {
-      images.add(detail.image2!);
-    }
-    if (detail.image3?.isNotEmpty ?? false) {
-      images.add(detail.image3!);
-    }
-    if (detail.image4?.isNotEmpty ?? false) {
-      images.add(detail.image4!);
-    }
-    if (detail.image5?.isNotEmpty ?? false) {
-      images.add(detail.image5!);
-    }
-
+    final description = detail.giftDescription != null
+        ? '${detail.giftDescription}\n〇特典は発電者さまのご厚意で用意いただいているものです。やむを得ない事情により、代替品のご提供、上記内容変更となる場合もございます。ご理解のほど宜しくお願いいたします。'
+        : '';
     return Column(
       children: [
         const Divider(
@@ -704,7 +689,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  detail.supportGiftName!,
+                  detail.giftName!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 17,
@@ -722,13 +707,14 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
               SizedBox(
                 width: 303,
                 height: 203,
-                child: images.isEmpty
+                child: detail.giftImage == null
                     ? Image.asset(
                         'assets/images/common/noimage.png',
                         fit: BoxFit.cover,
                       )
-                    : PowerPlantGiftPickup(
-                        images: images,
+                    : Image.network(
+                        detail.giftImage!,
+                        fit: BoxFit.cover,
                       ),
               ),
               const SizedBox(
@@ -744,7 +730,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                           child: Column(
                             children: [
                               Text(
-                                detail.explanation!,
+                                description,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -791,7 +777,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                   await launch(link.url);
                                 }
                               },
-                              text: detail.explanation!,
+                              text: description,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: 'NotoSansJP',
