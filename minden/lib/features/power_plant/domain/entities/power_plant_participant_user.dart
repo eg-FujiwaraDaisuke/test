@@ -25,7 +25,7 @@ class PowerPlantParticipantUser extends Equatable {
   final String contractor;
 
   /// ユーザーアイコン
-  final String icon;
+  final String? icon;
 
   /// bio
   final String bio;
