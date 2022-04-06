@@ -547,7 +547,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     // 発電所応援ユーザー
                     SupportParticipantsDialog(
                       context: context,
-                      participantUserList: state.participant.userList,
+                      participantUserList: state.participant.orderedUserList,
                       participantSize: state.participant.participantSize,
                     ).showDialog();
                   },
@@ -555,7 +555,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ParticipantUserIconGroup(
-                        participantUserList: state.participant.userList,
+                        participantUserList: state.participant.orderedUserList,
                         participantSize: state.participant.participantSize,
                         maxUserIconCount: 3,
                         iconSize: 52,
