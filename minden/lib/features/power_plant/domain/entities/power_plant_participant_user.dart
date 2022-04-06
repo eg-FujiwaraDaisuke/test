@@ -49,4 +49,6 @@ class PowerPlantParticipantUser extends Equatable {
   List<Object> get props => [
         userId,
       ];
+
+  bool get hasIcon => icon?.isNotEmpty ?? false;
 }

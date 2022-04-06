@@ -170,4 +170,19 @@ class PowerPlant extends Equatable {
   List<Object> get props => [
         plantId,
       ];
+
+  /// 条件に従ってを並び替えた応援ユーザーのリスト
+  List<PowerPlantParticipantUserModel> get orderedUserList {
+    // アイコンが設定されているユーザーは後ろにする
+    return List.of(userList)
+      ..sort((a, b) {
+        if (a.hasIcon && !b.hasIcon) {
+          return -1;
+        }
+        if (!a.hasIcon && b.hasIcon) {
+          return 1;
+        }
+        return userList.indexOf(a).compareTo(userList.indexOf(b));
+      });
+  }
 }
