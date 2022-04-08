@@ -123,7 +123,7 @@ class PowerPlantListItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ParticipantUserIconGroup(
-                            participantUserList: powerPlant.userList,
+                            participantUserList: powerPlant.orderedUserList,
                             participantSize: powerPlant.userList.length,
                             maxUserIconCount: 6,
                             iconSize: 38,

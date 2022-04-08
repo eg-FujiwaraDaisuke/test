@@ -203,7 +203,7 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
                       fit: BoxFit.cover,
                     )
                   : CachedNetworkImage(
-                      imageUrl: participant.icon,
+                      imageUrl: participant.icon!,
                       fit: BoxFit.cover,
                       placeholder: (context, url) {
                         return Image.asset(

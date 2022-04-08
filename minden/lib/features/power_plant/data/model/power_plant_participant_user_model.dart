@@ -5,7 +5,7 @@ class PowerPlantParticipantUserModel extends PowerPlantParticipantUser {
     required String userId,
     required String name,
     required String contractor,
-    required String icon,
+    required String? icon,
     required String bio,
     required String wallpaper,
     required freeLink,

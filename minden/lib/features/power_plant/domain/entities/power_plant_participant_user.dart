@@ -25,7 +25,7 @@ class PowerPlantParticipantUser extends Equatable {
   final String contractor;
 
   /// ユーザーアイコン
-  final String icon;
+  final String? icon;
 
   /// bio
   final String bio;
@@ -49,4 +49,6 @@ class PowerPlantParticipantUser extends Equatable {
   List<Object> get props => [
         userId,
       ];
+
+  bool get hasIcon => icon?.isNotEmpty ?? false;
 }
