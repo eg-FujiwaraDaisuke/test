@@ -33,14 +33,12 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   Widget _generateParticipant() {
-    final icons = _generateParticipantIcons();
-    final length = (icons.length > maxUserIconCount + 1)
-        ? maxUserIconCount + 1
-        : icons.length;
-    if (length <= 0) return Container();
+    // 後ろのアイコンから先に表示するので、リストをリバースさせている
+    final icons = _generateParticipantIcons().reversed.toList();
+    if (icons.isEmpty) return Container();
     return Stack(
       children: List.generate(
-        length,
+        icons.length,
         (index) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
@@ -57,11 +55,11 @@ class ParticipantUserIconGroup extends StatelessWidget {
     if (maxUserIconCount < total) {
       // 規定数人以上応援ユーザーがいる場合、
       return [
-        _generateCircleRemainIcon(total),
         ...participantUserList
             .take(maxUserIconCount)
             .map((p) => _generateCircleUserIcon(p.icon))
-            .toList()
+            .toList(),
+        _generateCircleRemainIcon(total),
       ];
     } else {
       // 規定数人以下の応援ユーザーしかいないため、「+X」表記を行わない
