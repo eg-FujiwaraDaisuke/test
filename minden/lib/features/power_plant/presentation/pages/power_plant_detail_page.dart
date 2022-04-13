@@ -649,7 +649,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   Widget _generateGift(PowerPlantDetail detail) {
     final description = detail.giftDescription != null
-        ? '${detail.giftDescription}\n〇特典は発電者さまのご厚意で用意いただいているものです。やむを得ない事情により、代替品のご提供、上記内容変更となる場合もございます。ご理解のほど宜しくお願いいたします。'
+        ? '${detail.giftDescription}\n\n〇特典は発電者さまのご厚意で用意いただいているものです。やむを得ない事情により、代替品のご提供、上記内容変更となる場合もございます。ご理解のほど宜しくお願いいたします。'
         : '';
     return Column(
       children: [
