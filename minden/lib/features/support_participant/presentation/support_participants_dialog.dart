@@ -172,71 +172,78 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
   }
 
   Widget _buildParticipantItem(PowerPlantParticipantUser participant) {
-    return GestureDetector(
-      onTap: () {
-        // 応援ユーザーアイコンのタップ
-        useButtonAnalytics(ButtonAnalyticsType.navigateParticipantUser);
-
-        Navigator.pop(context);
-
-        final route = MaterialPageRoute(
-          builder: (context) => ProfilePage(
-            userId: participant.userId,
+    final child = Column(
+      children: [
+        Container(
+          width: 47,
+          height: 47,
+          clipBehavior: Clip.hardEdge,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
           ),
-          settings: const RouteSettings(name: ProfilePage.routeName),
-        );
-        Navigator.push(context, route);
-      },
-      child: Column(
-        children: [
-          Container(
-            width: 47,
-            height: 47,
-            clipBehavior: Clip.hardEdge,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: participant.icon == null
-                  ? Image.asset(
-                      'assets/images/user/icon_no_photo.png',
-                      fit: BoxFit.cover,
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: participant.icon!,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/user/icon_no_photo.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/common/noimage.png',
+          child: Center(
+            child: participant.icon == null
+                ? Image.asset(
+                    'assets/images/user/icon_no_photo.png',
+                    fit: BoxFit.cover,
+                  )
+                : CachedNetworkImage(
+                    imageUrl: participant.icon!,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) {
+                      return Image.asset(
+                        'assets/images/user/icon_no_photo.png',
                         fit: BoxFit.cover,
-                      ),
+                      );
+                    },
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/common/noimage.png',
+                      fit: BoxFit.cover,
                     ),
+                  ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          width: 66,
+          child: Text(
+            participant.name ?? '',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFFFF8C00),
+              fontSize: 11,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            width: 66,
-            child: Text(
-              participant.name ?? '',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFFFF8C00),
-                fontSize: 11,
-                fontFamily: 'NotoSansJP',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
+
+    // 名前が設定されているユーザーのみ、プロフィール画面が見られるようにする
+    if (participant.name?.isNotEmpty ?? false) {
+      return GestureDetector(
+        onTap: () {
+          // 応援ユーザーアイコンのタップ
+          useButtonAnalytics(ButtonAnalyticsType.navigateParticipantUser);
+
+          Navigator.pop(context);
+
+          final route = MaterialPageRoute(
+            builder: (context) => ProfilePage(
+              userId: participant.userId,
+            ),
+            settings: const RouteSettings(name: ProfilePage.routeName),
+          );
+          Navigator.push(context, route);
+        },
+        child: child,
+      );
+    } else {
+      return child;
+    }
   }
 
   /*
