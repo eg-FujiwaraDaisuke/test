@@ -14,14 +14,6 @@ class SupportHistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const caseWidgets = [
       _CaseWidget(
-        balloonText: '手話サークル費用に充てています！',
-        imagePath:
-            'assets/images/support_history/support_history_case_id_18.jpg',
-        imageLabelText: 'しゅわハウス祖師谷公園',
-        mainText:
-            '当シェアハウスは日本の森林を守る為、国産材を使用した総杉造りの建物です。また聴覚障害者と健常者が共に暮らせるシェアハウスでもあります。応援金は手話サークル費用に充てさせて頂く予定です。',
-      ),
-      _CaseWidget(
         balloonText: 'さらなる再エネ発電普及に活用しています！',
         imagePath:
             'assets/images/support_history/support_history_case_id_10.jpg',
@@ -52,6 +44,14 @@ class SupportHistoryPage extends StatelessWidget {
         imageLabelText: 'GBバイオマス',
         mainText:
             '私たちは、課題山積の日本の林業・エネルギー問題解決への貢献を目指し、木質バイオマス発電事業を始めました。\n日本の林業を守っていくため、日本に小規模木質バイオマス発電事業を推進するため、ぜひ私たちの挑戦を応援してください。',
+      ),
+      _CaseWidget(
+        balloonText: '豊かで住みよい益田市を実現し、人口減少に歯止めをかけたいと考えています！',
+        imagePath:
+            'assets/images/support_history/support_history_case_id_26.jpg',
+        imageLabelText: '高津川風力発電所',
+        mainText:
+            '地元出資の地域電力会社を設立し、地域でエネルギーと資金を還流させ、余剰は全国の皆様にこの日本海の電力をお送りし、豊かで住みよい益田市を実現し、人口減少に歯止めをかけたいと考えております。',
       ),
     ];
     return Scaffold(
