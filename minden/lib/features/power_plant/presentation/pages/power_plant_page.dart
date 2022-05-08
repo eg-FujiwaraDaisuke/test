@@ -12,6 +12,7 @@ import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_menu.dart';
+import 'package:minden/features/support_history/presentation/support_history_page.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class PowerPlantHomeTabData {
@@ -48,6 +49,11 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
       tabName: '発電所を探す',
       tabPage: (_) => const PowerPlantSearchMenu(),
       tabPageRoute: PowerPlantSearchMenu.routeName,
+    ),
+    PowerPlantHomeTabData(
+      tabName: '応援の軌跡',
+      tabPage: (_) => const SupportHistoryPage(),
+      tabPageRoute: SupportHistoryPage.routeName,
     ),
   ];
 

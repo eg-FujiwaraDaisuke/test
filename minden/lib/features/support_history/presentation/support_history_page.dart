@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SupportHistoryPage extends StatelessWidget {
   const SupportHistoryPage();
 
-  static const String routeName = '/user/profile/support_history';
+  static const String routeName = '/home/top/search/menu/support_history';
 
   @override
   Widget build(BuildContext context) {
