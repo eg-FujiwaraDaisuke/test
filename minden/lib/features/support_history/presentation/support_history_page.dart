@@ -1,18 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:minden/utile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:minden/core/util/bot_toast_helper.dart';
+import 'package:minden/features/common/widget/ellipse_progress_widget/ellipse_progress_widget.dart';
+import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
+import 'package:minden/features/login/presentation/bloc/logout_event.dart';
+import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/support_amount/data/datasources/support_amount_data_source.dart';
+import 'package:minden/features/support_amount/data/repositories/support_amount_repository_impl.dart';
+import 'package:minden/features/support_amount/domain/usecase/support_amount_usecase.dart';
+import 'package:minden/features/support_amount/presentation/bloc/support_amount_bloc.dart';
+import 'package:minden/features/support_amount/presentation/bloc/support_amount_event.dart';
+import 'package:minden/features/support_amount/presentation/bloc/support_amount_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 応援の軌跡ページ
-class SupportHistoryPage extends StatelessWidget {
+class SupportHistoryPage extends StatefulWidget {
   const SupportHistoryPage();
 
   static const String routeName = '/home/top/search/menu/support_history';
 
   @override
+  _SupportHistoryPageState createState() => _SupportHistoryPageState();
+}
+
+class _SupportHistoryPageState extends State<SupportHistoryPage> {
+  late GetSupportAmountBloc _getSupportAmountBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _getSupportAmountBloc = GetSupportAmountBloc(
+      GetSupportAmount(
+        SupportAmountRepositoryImpl(
+          supportAmountDataSource: SupportAmountDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    );
+    _getSupportAmountBloc.add(const GetSupportAmountEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
+    return BlocProvider.value(
+      value: _getSupportAmountBloc,
+      child: BlocListener<GetSupportAmountBloc, SupportAmountState>(
+        listener: (context, state) async {
+          if (state is SupportAmountStateLoadError) {
+            if (state.needLogin) {
+              BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
+              Loading.show(context);
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) return;
+              await Navigator.of(
+                context,
+                rootNavigator: true,
+              ).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (_) {
+                  Loading.hide();
+                  return false;
+                },
+              );
+            }
+          }
+
+          if (state is SupportAmountStateLoading) {
+            if (!mounted) return;
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+        },
+        child: BlocBuilder<GetSupportAmountBloc, SupportAmountState>(
+          builder: (context, state) {
+            if (state is SupportAmountStateLoaded) {
+              return ListView(
+                children: [
+                  _buildCases(),
+                ],
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
+  }
+
       children: [
         _buildCases(),
       ],
@@ -169,6 +248,12 @@ class SupportHistoryPage extends StatelessWidget {
         color: const Color(0xFFE2E2E2),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _getSupportAmountBloc.close();
+    super.dispose();
   }
 }
 
