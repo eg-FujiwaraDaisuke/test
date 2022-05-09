@@ -17,11 +17,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// 発電所一覧
 class PowerPlantList extends StatefulWidget {
-  PowerPlantList({this.tagId});
+  PowerPlantList({
+    this.tagId,
+    required this.onTapOpenSupportHistory,
+  });
 
   static const String routeName = '/home/top/list';
 
   String? tagId;
+  VoidCallback onTapOpenSupportHistory;
 
   @override
   State<StatefulWidget> createState() {
@@ -91,28 +95,133 @@ class PowerPlantListState extends State<PowerPlantList> {
 
             if (state is PowerPlantsLoaded) {
               final numPowerPlant = state.powerPlants.powerPlants.length;
-              return ListView.builder(
-                itemCount: numPowerPlant + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index < numPowerPlant) {
-                    final powerPlant = state.powerPlants.powerPlants[index];
-                    final direction = searchDirectionByIndex(index);
-                    return PowerPlantListItem(
-                      powerPlant: powerPlant,
-                      direction: direction,
-                    );
-                  } else {
-                    return buildLastItem(
-                      context: context,
-                      numPowerPlant: numPowerPlant,
-                    );
-                  }
-                },
+              return ListView(
+                children: [
+                  _buildSupportHistoryButton(),
+                  for (var i = 0; i < state.powerPlants.powerPlants.length; i++)
+                    PowerPlantListItem(
+                      powerPlant: state.powerPlants.powerPlants[i],
+                      direction: searchDirectionByIndex(i),
+                    ),
+                  buildLastItem(
+                    context: context,
+                    numPowerPlant: numPowerPlant,
+                  ),
+                ],
               );
             }
             return Container();
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildSupportHistoryButton() {
+    return Container(
+      color: const Color(0xFF82D2A3),
+      height: 188,
+      child: Stack(
+        children: [
+          Image.asset(
+            'assets/images/power_plant/support_history_button_confetti.png',
+            height: 188,
+          ),
+          Align(
+            alignment: const Alignment(0.97, 1),
+            child: Image.asset(
+              'assets/images/power_plant/support_history_button_character_2.png',
+              height: 100,
+            ),
+          ),
+          Align(
+            alignment: const Alignment(0.92, -1),
+            child: Image.asset(
+              'assets/images/power_plant/support_history_button_character_3.png',
+              height: 120,
+            ),
+          ),
+          Align(
+            alignment: const Alignment(-0.8, -1),
+            child: Image.asset(
+              'assets/images/power_plant/support_history_button_character_4.png',
+              height: 120,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Image.asset(
+              'assets/images/power_plant/support_history_button_character_5.png',
+              height: 120,
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              width: 260,
+              height: 150,
+              child: Material(
+                elevation: 10,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(75),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(75),
+                  onTap: widget.onTapOpenSupportHistory,
+                  child: Stack(
+                    children: [
+                      const Align(
+                        alignment: Alignment(0, -0.6),
+                        child: Text(
+                          'これまで\nみんなで届けた応援金は...',
+                          style: TextStyle(
+                            fontFamily: 'NotoSansJP',
+                            color: Color(0xFF828282),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/power_plant/support_history_button_character_1.png',
+                              height: 90,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'もっと見る',
+                                  style: TextStyle(
+                                    fontFamily: 'NotoSansJP',
+                                    color: Color(0xFF7D7E7F),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3),
+                                  child: Image.asset(
+                                    'assets/images/power_plant/support_history_button_arrow.png',
+                                    height: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

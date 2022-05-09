@@ -39,29 +39,37 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
     with SingleTickerProviderStateMixin {
   late TransitionScreenBloc _transitionScreenBloc;
 
-  final tabs = [
-    PowerPlantHomeTabData(
-      tabName: '発電所一覧',
-      tabPage: (_) => PowerPlantList(),
-      tabPageRoute: PowerPlantList.routeName,
-    ),
-    PowerPlantHomeTabData(
-      tabName: '発電所を探す',
-      tabPage: (_) => const PowerPlantSearchMenu(),
-      tabPageRoute: PowerPlantSearchMenu.routeName,
-    ),
-    PowerPlantHomeTabData(
-      tabName: '応援の軌跡',
-      tabPage: (_) => const SupportHistoryPage(),
-      tabPageRoute: SupportHistoryPage.routeName,
-    ),
-  ];
+  late PowerPlantHomeTabData supportHistoryTab;
+
+  late List<PowerPlantHomeTabData> tabs;
 
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+
+    supportHistoryTab = PowerPlantHomeTabData(
+      tabName: '応援の軌跡',
+      tabPage: (_) => const SupportHistoryPage(),
+      tabPageRoute: SupportHistoryPage.routeName,
+    );
+
+    tabs = [
+      PowerPlantHomeTabData(
+        tabName: '発電所一覧',
+        tabPage: (_) => PowerPlantList(
+          onTapOpenSupportHistory: openSupportHistoryTab,
+        ),
+        tabPageRoute: PowerPlantList.routeName,
+      ),
+      PowerPlantHomeTabData(
+        tabName: '発電所を探す',
+        tabPage: (_) => const PowerPlantSearchMenu(),
+        tabPageRoute: PowerPlantSearchMenu.routeName,
+      ),
+      supportHistoryTab,
+    ];
 
     _tabController = TabController(length: tabs.length, vsync: this);
     _tabController.addListener(() {
@@ -177,5 +185,9 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
       default:
       // 何もしない
     }
+  }
+
+  void openSupportHistoryTab() {
+    _tabController.animateTo(tabs.indexOf(supportHistoryTab));
   }
 }
