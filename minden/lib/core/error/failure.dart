@@ -67,3 +67,5 @@ class UnderMaintenanceFailure extends Failure {
         actionUrl,
       ];
 }
+
+class SupportAmountFailure extends Failure {}
