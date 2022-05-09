@@ -46,6 +46,9 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final day = DateTime.now().day;
+    // 祝福バージョンの表示か
+    final isBlessing = day < 7;
     return BlocProvider.value(
       value: _getSupportAmountBloc,
       child: BlocListener<GetSupportAmountBloc, SupportAmountState>(
@@ -78,23 +81,411 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
         },
         child: BlocBuilder<GetSupportAmountBloc, SupportAmountState>(
           builder: (context, state) {
-            if (state is SupportAmountStateLoaded) {
-              return ListView(
-                children: [
-                  _buildCases(),
-                ],
-              );
-            }
-            return Container();
+            return ListView(
+              children: [
+                _buildSupportAmount(
+                  supportAmount: state is SupportAmountStateLoaded
+                      ? state.supportAmount.supportAmount
+                      : null,
+                  isBlessing: isBlessing,
+                ),
+                _buildCases(),
+              ],
+            );
           },
         ),
       ),
     );
   }
 
+  Widget _buildSupportAmount({
+    int? supportAmount,
+    required bool isBlessing,
+  }) {
+    return Container(
+      color: const Color(0xFF82D2A3),
+      child: Column(
+        children: [
+          const SizedBox(height: 32),
+          const Divider(
+            thickness: 1,
+            color: Colors.white,
+            indent: 20,
+            endIndent: 20,
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'お気に入りの発電所を見つけよう！',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Divider(
+            thickness: 1,
+            color: Colors.white,
+            indent: 20,
+            endIndent: 20,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            '電気代のうち100円が\nあなたからの応援の気持ちとして\n毎月選んだ発電所に届きます。',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'NotoSansJP',
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                children: [
+                  const SizedBox(height: 40),
+                  Opacity(
+                    opacity: 0.7,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              isBlessing ? 'いつもありがとう！' : 'ふんふふーん。',
+                              style: const TextStyle(
+                                color: Color(0xFF828282),
+                                fontSize: 10,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/images/support_history/support_history_white_balloon_triangle.png',
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  SizedBox(
+                    width: 320,
+                    height: 225,
+                    child: Stack(
+                      children: [
+                        _buildCharacter1(isBlessing: isBlessing),
+                        Align(
+                          alignment: const Alignment(-0.75, -0.85),
+                          child: _buildCharacter2Small(isBlessing: isBlessing),
+                        ),
+                        Align(
+                          alignment: const Alignment(-1.18, 0.05),
+                          child: _buildCharacter3Small(isBlessing: isBlessing),
+                        ),
+                        Align(
+                          alignment: const Alignment(0.85, -0.9),
+                          child: _buildCharacter4Small(isBlessing: isBlessing),
+                        ),
+                        Align(
+                          alignment: const Alignment(1.25, 0),
+                          child: _buildCharacter5Small(isBlessing: isBlessing),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 36),
+                ],
+              ),
+              if (isBlessing)
+                Image.asset(
+                  'assets/images/support_history/support_history_confetti.gif',
+                ),
+            ],
+          ),
+          SizedBox(
+            width: 340,
+            height: 90,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 72,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: supportAmount != null
+                        ? Center(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: NumberFormat('#,###')
+                                        .format(supportAmount),
+                                    style: const TextStyle(
+                                      color: Color(0xFF32B432),
+                                      fontSize: 24,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '円',
+                                    style: TextStyle(
+                                      color: Color(0xFF828282),
+                                      fontSize: 11,
+                                      fontFamily: 'NotoSansJP',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                                style: const TextStyle(letterSpacing: 10),
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: 240,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'これまでみんなで届けた応援金',
+                        style: TextStyle(
+                          color: Color(0xFF828282),
+                          fontSize: 11,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                if (isBlessing && supportAmount != null)
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Image.asset(
+                      'assets/images/support_history/support_history_popper_left.png',
+                      width: 60,
+                    ),
+                  ),
+                if (isBlessing)
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image.asset(
+                      'assets/images/support_history/support_history_popper_right.png',
+                      width: 60,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 50),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCharacter1({
+    required bool isBlessing,
+  }) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
-        _buildCases(),
+        const SizedBox(
+          width: 126,
+          height: 33,
+          child: EllipseProgressWidget(
+            progress: 0,
+            strokeColor: Color(0xFF32B432),
+            strokeWidth: 3,
+            duration: Duration.zero,
+          ),
+        ),
+        if (isBlessing)
+          Align(
+            alignment: const Alignment(0.06, 0),
+            child: Image.asset(
+              'assets/images/support_history/support_history_character_1_1.gif',
+              height: 215,
+            ),
+          )
+        else
+          Align(
+            alignment: const Alignment(0.13, 0),
+            child: Image.asset(
+              'assets/images/support_history/support_history_character_1_2.gif',
+              height: 215,
+            ),
+          ),
       ],
+    );
+  }
+
+  Widget _buildCharacter2Small({
+    required bool isBlessing,
+  }) {
+    return SizedBox(
+      width: 100,
+      height: 130,
+      child: Stack(
+        children: [
+          Align(
+            alignment: const Alignment(0, 0.96),
+            child: _buildEllipse(width: 40, height: 10),
+          ),
+          if (isBlessing)
+            Align(
+              alignment: const Alignment(-0.1, 1),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_2_1.gif',
+                height: 117,
+              ),
+            )
+          else
+            Align(
+              alignment: const Alignment(0.1, 1),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_2_2.gif',
+                height: 117,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCharacter3Small({
+    required bool isBlessing,
+  }) {
+    return SizedBox(
+      width: 100,
+      height: 140,
+      child: Stack(
+        children: [
+          Align(
+            alignment: const Alignment(0, 1),
+            child: _buildEllipse(width: 40, height: 10),
+          ),
+          if (isBlessing)
+            Align(
+              alignment: const Alignment(0.45, 0.95),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_3_1.gif',
+                height: 110,
+              ),
+            )
+          else
+            Align(
+              alignment: const Alignment(0.3, 0.95),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_3_2.gif',
+                height: 110,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCharacter4Small({
+    required bool isBlessing,
+  }) {
+    return SizedBox(
+      width: 100,
+      height: 130,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _buildEllipse(width: 40, height: 10),
+          ),
+          if (!isBlessing)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_4_1.gif',
+                height: 110,
+              ),
+            )
+          else
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_4_2.gif',
+                height: 110,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCharacter5Small({
+    required bool isBlessing,
+  }) {
+    return SizedBox(
+      width: 100,
+      height: 150,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _buildEllipse(width: 40, height: 10),
+          ),
+          if (!isBlessing)
+            Align(
+              alignment: const Alignment(-0.5, 0.75),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_5_1.gif',
+                height: 130,
+              ),
+            )
+          else
+            Align(
+              alignment: const Alignment(-0.3, 0.9),
+              child: Image.asset(
+                'assets/images/support_history/support_history_character_5_2.gif',
+                height: 120,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEllipse({
+    required double width,
+    required double height,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.elliptical(width, height),
+        ),
+      ),
     );
   }
 
