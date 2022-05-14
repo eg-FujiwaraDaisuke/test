@@ -46,9 +46,16 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final day = DateTime.now().day;
+    final now = DateTime.now();
+    final day = now.day;
     // 祝福バージョンの表示か
     final isBlessing = day < 7;
+
+    final currentMonthLastDay =
+        DateTime(now.year, now.month).add(const Duration(days: -1)).day;
+    // 今日が今月の何%か
+    final progressMonth = day / currentMonthLastDay;
+
     return BlocProvider.value(
       value: _getSupportAmountBloc,
       child: BlocListener<GetSupportAmountBloc, SupportAmountState>(
@@ -84,6 +91,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
             return ListView(
               children: [
                 _buildSupportAmount(
+                  progress: progressMonth,
                   supportAmount: state is SupportAmountStateLoaded
                       ? state.supportAmount.supportAmount
                       : null,
@@ -101,6 +109,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
   Widget _buildSupportAmount({
     int? supportAmount,
     required bool isBlessing,
+    required double progress,
   }) {
     return Container(
       color: const Color(0xFF82D2A3),
@@ -183,7 +192,10 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
                     height: 225,
                     child: Stack(
                       children: [
-                        _buildCharacter1(isBlessing: isBlessing),
+                        _buildCharacter1(
+                          isBlessing: isBlessing,
+                          progress: progress,
+                        ),
                         Align(
                           alignment: const Alignment(-0.75, -0.85),
                           child: _buildCharacter2Small(isBlessing: isBlessing),
@@ -307,18 +319,19 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
 
   Widget _buildCharacter1({
     required bool isBlessing,
+    required double progress,
   }) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        const SizedBox(
+        SizedBox(
           width: 126,
           height: 33,
           child: EllipseProgressWidget(
-            progress: 0,
-            strokeColor: Color(0xFF32B432),
+            progress: progress,
+            strokeColor: const Color(0xFF32B432),
             strokeWidth: 3,
-            duration: Duration.zero,
+            duration: const Duration(milliseconds: 500),
           ),
         ),
         if (isBlessing)
