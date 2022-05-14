@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -396,7 +395,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
       child: Stack(
         children: [
           Align(
-            alignment: const Alignment(0, 1),
+            alignment: Alignment.bottomCenter,
             child: _buildEllipse(width: 40, height: 10),
           ),
           if (isBlessing)
