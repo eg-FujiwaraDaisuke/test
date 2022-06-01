@@ -141,7 +141,7 @@
 "user_menu_message" : "メッセージ",
 "user_menu_profile" : "プロフィール",
 "user_menu_support_power_plant" : "応援した発電所",
-"user_menu_web_mymenu" : "マイページ（WEB）へ",
+"user_menu_web_mymenu" : "マイページ/利用明細(WEBへ)",
 "user_name_length_error" : "ユーザー名は2文字以上で入力してください",
 "user_sns_link_invalid_domain_error" : "該当するサービスのリンクを入力してください",
 "user_sns_link_invalid_error" : "httpsではじまるリンクを入力してください",
