@@ -224,7 +224,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
               ),
               child: const Center(
                 child: Text(
-                  '活用事例をもっと見る',
+                  '活用事例をもっと見る(WEBへ)',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -236,19 +236,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        const Center(
-          child: Text(
-            '発電所一覧（WEB）へ',
-            style: TextStyle(
-              color: Color(0xFF787877),
-              fontSize: 11,
-              fontFamily: 'NotoSansJP',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 8)
       ],
     );
   }
