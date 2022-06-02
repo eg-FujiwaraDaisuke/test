@@ -3,3 +3,9 @@ credentials.json
 minden/.vscode/settings.json
 .DS_Store
 
+fvm_config.json
+HBLab.pem
+MinApp_Prod.mobileprovision
+minapp_android.jks
+mindenStgKey.jks
+flutter_sdk
