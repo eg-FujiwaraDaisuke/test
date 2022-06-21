@@ -114,7 +114,8 @@ class DynamicLinksDataPreview extends HookWidget {
   Widget build(BuildContext context) {
     final currentDynamicLink = useProvider(pendingDynamicLink);
     final streamDynamicLink = useProvider(pendingDynamicLinkStream);
-    final createdDynamicLink = useProvider(createDynamicLink('path'));
+    final createdDynamicLink =
+        useProvider(createDynamicLink('powerplant-info/MP000606'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
