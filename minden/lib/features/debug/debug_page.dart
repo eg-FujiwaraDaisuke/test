@@ -80,7 +80,8 @@ class DebugPageState extends State<DebugPage> {
                     (context) => IssueReportDialogDebugPage(),
                     '/violate_dialog_debug'),
                 // DynamicLinks経由起動の場合の、リンク情報を表示する
-                DynamicLinksDataPreview(),
+                // NOTE: DynamicLinksの利用有無が決まったら、削除などを行う
+                // DynamicLinksDataPreview(),
               ],
             ),
           ),

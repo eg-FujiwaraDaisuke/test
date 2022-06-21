@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/firebase/dynamic_links_route_mapper.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
@@ -38,11 +37,16 @@ class SupportPowerPlantCompleteDialog {
         HookBuilder(
           builder: (context) {
             // シェア呼び出し
-            final createdDynamicLink = useProvider(
-              createDynamicLink(
-                '${DynamicLinksType.powerPlantDetail.pathByType}/${selectPowerPlant.plantId}',
-              ),
-            );
+            // NOTE: DynamicLinksの処遇について決まったら、削除 or 復活させる
+            // final createdDynamicLink = useProvider(
+            //   createDynamicLink(
+            //     '${DynamicLinksType.powerPlantDetail.pathByType}/${selectPowerPlant.plantId}',
+            //   ),
+            // );
+
+            // シェアurl生成
+            final shareUrl = createSimplyLink(
+                '${DynamicLinksType.powerPlantDetail.pathByType}/${selectPowerPlant.plantId}');
 
             return StatefulBuilder(builder: (context, setState) {
               return Stack(
@@ -97,15 +101,12 @@ class SupportPowerPlantCompleteDialog {
                           // 応援した発電所をシェアしようボタン
                           Button(
                               onTap: () {
-                                final shareUrl = createdDynamicLink.data?.value;
                                 logD('Share. url: $shareUrl');
 
-                                if (shareUrl != null) {
-                                  Share.share(
-                                    shareUrl.toString(),
-                                    subject: '${selectPowerPlant.name}を応援しました',
-                                  );
-                                }
+                                Share.share(
+                                  shareUrl.toString(),
+                                  subject: '${selectPowerPlant.name}を応援しました',
+                                );
 
                                 // ダイアログを閉じる
                                 Navigator.pop(context, false);

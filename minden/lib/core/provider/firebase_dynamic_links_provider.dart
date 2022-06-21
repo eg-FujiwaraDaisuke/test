@@ -50,3 +50,9 @@ final createDynamicLink = FutureProvider.family<Uri, String>((
     return linkData.shortUrl;
   });
 });
+
+/// 指定したpathを開くための、みんな電力Webページurlを生成して返す
+/// NOTE: DynamicLinksの扱いについてはっきりした時点で、本処理は別ファイルに移動などを検討されたし
+String createSimplyLink(String path) {
+  return '$mindenDomain/$path';
+}
