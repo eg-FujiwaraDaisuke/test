@@ -173,7 +173,7 @@ class PowerPlant extends Equatable {
 
   /// 条件に従ってを並び替えた応援ユーザーのリスト
   List<PowerPlantParticipantUserModel> get orderedUserList {
-    // アイコンが設定されているユーザーは後ろにする
+    // アイコンが設定されているユーザーは前にする
     return List.of(userList)
       ..sort((a, b) {
         if (a.hasIcon && !b.hasIcon) {
