@@ -21,7 +21,8 @@ class SupportParticipantsDialog {
   final int participantSize;
 
   void showDialog() {
-    final fromWebSupporters = participantSize - participantUserList.length;
+    final fromWebSupporters = participantSize -
+        participantUserList.where((user) => user.isAppUser).length;
     Navigator.push(
       context,
       CustomDialogOverlay(
@@ -124,7 +125,7 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${fromWebSupporters}',
+                                  text: '$fromWebSupporters',
                                   style: const TextStyle(
                                     color: Color(0xFFFF8C00),
                                     fontSize: 14,

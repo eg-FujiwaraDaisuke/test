@@ -51,4 +51,6 @@ class PowerPlantParticipantUser extends Equatable {
       ];
 
   bool get hasIcon => icon?.isNotEmpty ?? false;
+
+  bool get isAppUser => name?.isNotEmpty ?? false;
 }
