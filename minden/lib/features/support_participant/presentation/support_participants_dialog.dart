@@ -183,12 +183,8 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: participant.icon == null
-                ? Image.asset(
-                    'assets/images/user/icon_no_photo.png',
-                    fit: BoxFit.cover,
-                  )
-                : CachedNetworkImage(
+            child: participant.hasIcon
+                ? CachedNetworkImage(
                     imageUrl: participant.icon!,
                     fit: BoxFit.cover,
                     placeholder: (context, url) {
@@ -201,6 +197,10 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
                       'assets/images/common/noimage.png',
                       fit: BoxFit.cover,
                     ),
+                  )
+                : Image.asset(
+                    'assets/images/user/icon_no_photo.png',
+                    fit: BoxFit.cover,
                   ),
           ),
         ),
