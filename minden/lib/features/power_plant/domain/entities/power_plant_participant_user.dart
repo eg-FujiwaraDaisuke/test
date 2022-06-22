@@ -50,7 +50,11 @@ class PowerPlantParticipantUser extends Equatable {
         userId,
       ];
 
+  bool get hasName => name?.isNotEmpty ?? false;
+
   bool get hasIcon => icon?.isNotEmpty ?? false;
+
+  bool get hasIconAndName => hasName && hasIcon;
 
   bool get isAppUser => name?.isNotEmpty ?? false;
 }

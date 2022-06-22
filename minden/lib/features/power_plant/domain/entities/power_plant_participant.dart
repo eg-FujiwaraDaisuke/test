@@ -41,12 +41,22 @@ class PowerPlantParticipant extends Equatable {
     // アイコンが設定されているユーザーを前にする
     return List.of(userList)
       ..sort((a, b) {
-        if (a.hasIcon && !b.hasIcon) {
+        // 名前、アイコンありユーザーを優先する
+        if (a.hasIconAndName && !b.hasIconAndName) {
           return -1;
         }
-        if (!a.hasIcon && b.hasIcon) {
+        if (!a.hasIconAndName && b.hasIconAndName) {
           return 1;
         }
+
+        // 次に名前ありユーザーを優先する
+        if (a.hasName && !b.hasName) {
+          return -1;
+        }
+        if (!a.hasName && b.hasName) {
+          return 1;
+        }
+
         return userList.indexOf(a).compareTo(userList.indexOf(b));
       });
   }
