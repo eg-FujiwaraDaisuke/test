@@ -24,7 +24,10 @@ abstract class PowerPlantDataSource {
 
   Future<PowerPlantDetailModel> getPowerPlantDetail(String plantId);
 
-  Future<PowerPlantParticipantModel> getPowerPlantParticipants(String plantId);
+  Future<PowerPlantParticipantModel> getPowerPlantParticipants(
+    String plantId, [
+    int page = 1,
+  ]);
 
   Future<TagResponseModel> getPowerPlantTags(String plantId);
 
@@ -117,7 +120,9 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
 
   @override
   Future<PowerPlantParticipantModel> getPowerPlantParticipants(
-      String plantId) async {
+    String plantId, [
+    int page = 1,
+  ]) async {
     final endpoint = ApiConfig.apiEndpoint();
     final headers = ApiConfig.tokenHeader();
     headers.addAll(ApiConfig.contentTypeHeaderApplicationXFormUrlEncoded);
@@ -126,7 +131,7 @@ class PowerPlantDataSourceImpl implements PowerPlantDataSource {
     final response = await client.get(
       url.replace(queryParameters: {
         'plantId': plantId,
-        'page': '1', // TODO optionalだけど400を返されるので一旦追加
+        'page': page.toString(),
       }),
       headers: headers,
     );

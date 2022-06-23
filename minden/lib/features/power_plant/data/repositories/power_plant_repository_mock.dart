@@ -133,7 +133,10 @@ class PowerPlantRepositoryMock implements PowerPlantRepository {
 
   @override
   Future<Either<PowerPlantFailure, PowerPlantParticipant>>
-      getPowerPlantParticipants(String plantId) async {
+      getPowerPlantParticipants(
+    String plantId, [
+    int page = 1,
+  ]) async {
     try {
       const data = PowerPlantParticipant(
           participantSize: 1,

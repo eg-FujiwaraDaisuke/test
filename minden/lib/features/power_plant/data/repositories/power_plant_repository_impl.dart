@@ -67,10 +67,13 @@ class PowerPlantRepositoryImpl
 
   @override
   Future<Either<PowerPlantFailure, PowerPlantParticipant>>
-      getPowerPlantParticipants(String plantId) async {
+      getPowerPlantParticipants(
+    String plantId, [
+    int page = 1,
+  ]) async {
     try {
       final plant = await retryRequest(
-          () => powerPlantDataSource.getPowerPlantParticipants(plantId));
+          () => powerPlantDataSource.getPowerPlantParticipants(plantId, page));
       return Right(plant);
     } on ServerException {
       return left(PowerPlantFailure());

@@ -25,8 +25,9 @@ abstract class PowerPlantRepository {
   /// 発電所応援ユーザー取得（一覧）
   Future<Either<PowerPlantFailure, PowerPlantParticipant>>
       getPowerPlantParticipants(
-    String plantId,
-  );
+    String plantId, [
+    int page,
+  ]);
 
   /// 発電所大切にしているタグ（一覧）
   Future<Either<PowerPlantFailure, TagResponse>> getPowerPlantTags(

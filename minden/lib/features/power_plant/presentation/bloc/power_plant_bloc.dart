@@ -124,6 +124,35 @@ class GetParticipantBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   }
 }
 
+class GetParticipantAllUserBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
+  GetParticipantAllUserBloc(PowerPlantState initialState, this.usecase)
+      : super(initialState);
+  final GetPowerPlantParticipantAllUser usecase;
+
+  @override
+  Stream<PowerPlantState> mapEventToState(
+    PowerPlantEvent event,
+  ) async* {
+    if (event is GetPowerPlantEvent) {
+      try {
+        yield const PowerPlantLoading();
+
+        final failureOrUser =
+            await usecase(GetPowerPlantParams(plantId: event.plantId));
+
+        yield failureOrUser.fold<PowerPlantState>((failure) => throw failure,
+            (participant) {
+          return AllParticipantLoaded(participant);
+        });
+      } on RefreshTokenExpiredException catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: true);
+      } catch (e) {
+        yield PowerPlantLoadError(message: e.toString(), needLogin: false);
+      }
+    }
+  }
+}
+
 class GetSupportActionBloc extends Bloc<PowerPlantEvent, PowerPlantState> {
   GetSupportActionBloc(PowerPlantState initialState, this.usecase)
       : super(initialState);

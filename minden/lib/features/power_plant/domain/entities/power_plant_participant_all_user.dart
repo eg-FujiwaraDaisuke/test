@@ -2,24 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
 
 /// 応援ユーザー情報
-class PowerPlantParticipant extends Equatable {
-  const PowerPlantParticipant({
-    required this.participantSize,
-    required this.page,
-    required this.total,
+class PowerPlantParticipantAllUser extends Equatable {
+  const PowerPlantParticipantAllUser({
     required this.plantId,
     required this.yearMonth,
     required this.userList,
   });
-
-  /// 応援ユーザー総数
-  final int participantSize;
-
-  /// ページ
-  final String page;
-
-  /// 応援ユーザー総数?
-  final int total;
 
   /// MP番号
   final String plantId;
@@ -32,7 +20,6 @@ class PowerPlantParticipant extends Equatable {
 
   @override
   List<Object> get props => [
-        page,
         plantId,
       ];
 
