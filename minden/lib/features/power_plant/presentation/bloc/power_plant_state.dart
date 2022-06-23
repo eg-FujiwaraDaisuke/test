@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant_all_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
@@ -73,6 +74,15 @@ class ParticipantLoaded extends PowerPlantState {
   const ParticipantLoaded(this.participant);
 
   final PowerPlantParticipant participant;
+
+  @override
+  List<Object> get props => [participant];
+}
+
+class AllParticipantLoaded extends PowerPlantState {
+  const AllParticipantLoaded(this.participant);
+
+  final PowerPlantParticipantAllUser participant;
 
   @override
   List<Object> get props => [participant];

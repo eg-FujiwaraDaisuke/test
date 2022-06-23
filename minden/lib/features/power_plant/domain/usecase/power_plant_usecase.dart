@@ -5,6 +5,7 @@ import 'package:minden/core/usecase/usecase.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_detail.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_gift.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant.dart';
+import 'package:minden/features/power_plant/domain/entities/power_plant_participant_all_user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plants_response.dart';
 import 'package:minden/features/power_plant/domain/entities/support_action.dart';
 import 'package:minden/features/power_plant/domain/entities/support_history.dart';
@@ -59,6 +60,53 @@ class GetPowerPlantParticipant
   Future<Either<Failure, PowerPlantParticipant>> call(
       GetPowerPlantParams params) async {
     return await repository.getPowerPlantParticipants(params.plantId!);
+  }
+}
+
+/// 発電所応援ユーザーを一気に全員分、取得する
+class GetPowerPlantParticipantAllUser
+    extends UseCase<PowerPlantParticipantAllUser, GetPowerPlantParams> {
+  GetPowerPlantParticipantAllUser(this.repository);
+
+  final PowerPlantRepository repository;
+
+  @override
+  Future<Either<Failure, PowerPlantParticipantAllUser>> call(
+    GetPowerPlantParams params,
+  ) async {
+    final plantOrFailure =
+        await repository.getPowerPlantParticipants(params.plantId!);
+    if (plantOrFailure.isLeft()) {
+      return Left(PowerPlantFailure());
+    }
+
+    final plant = plantOrFailure.fold<PowerPlantParticipant>(
+      (failure) => throw Error(),
+      (plant) => plant,
+    );
+    final userList = plant.userList;
+    for (var page = 2; page <= plant.total; page++) {
+      final plantOrFailure = await repository.getPowerPlantParticipants(
+        params.plantId!,
+        page,
+      );
+      if (plantOrFailure.isLeft()) {
+        break;
+      }
+      plantOrFailure.fold(
+        (failure) => throw Error(),
+        (plant) {
+          userList.addAll(plant.userList);
+        },
+      );
+    }
+    return Right(
+      PowerPlantParticipantAllUser(
+        plantId: plant.plantId,
+        yearMonth: plant.yearMonth,
+        userList: userList,
+      ),
+    );
   }
 }
 
