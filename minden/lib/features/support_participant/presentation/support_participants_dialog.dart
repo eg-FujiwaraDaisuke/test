@@ -1,173 +1,239 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
+import 'package:minden/features/power_plant/data/datasources/power_plant_data_source.dart';
+import 'package:minden/features/power_plant/data/repositories/power_plant_repository_impl.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
+import 'package:minden/features/power_plant/domain/usecase/power_plant_usecase.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
+import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 
 /// 発電所応援ダイアログ
 class SupportParticipantsDialog {
-  SupportParticipantsDialog({
-    required this.context,
-    required this.participantUserList,
-    required this.participantSize,
-  }) : super();
+  SupportParticipantsDialog({required this.context, required this.plantId})
+      : super();
 
   static const String routeName = '/home/top/detail/supportParticipants';
 
   final BuildContext context;
-  final List<PowerPlantParticipantUser> participantUserList;
-  final int participantSize;
+  final String plantId;
 
   void showDialog() {
-    final fromWebSupporters = participantSize -
-        participantUserList.where((user) => user.isAppUser).length;
     Navigator.push(
       context,
       CustomDialogOverlay(
-        Stack(
-          children: [
-            Positioned(
-              child: Container(
-                width: 338,
-                padding: const EdgeInsets.only(top: 50, bottom: 31),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50),
+          child: Stack(
+            children: [
+              Positioned(
+                child: _DialogContent(plantId),
+              ),
+              Positioned(
+                top: 25,
+                right: 27,
+                child: GestureDetector(
+                  onTap: _hideDialog,
+                  child: const Icon(Icons.close),
                 ),
-                child: Column(
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: i18nTranslate(context, 'now'),
-                            style: const TextStyle(
-                              color: Color(0xFF787877),
-                              fontSize: 16,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '''
-${participantSize.toString()}${i18nTranslate(context, 'support_participants_people')}''',
-                            style: const TextStyle(
-                              color: Color(0xFF787877),
-                              fontSize: 16,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          TextSpan(
-                            text: i18nTranslate(
-                                context, 'support_participants_supporting'),
-                            style: const TextStyle(
-                              color: Color(0xFF787877),
-                              fontSize: 16,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
+              ),
+            ],
+          ),
+        ),
+        settings: const RouteSettings(name: routeName),
+      ),
+    );
+  }
+
+  /*
+   * 非表示
+   */
+  void _hideDialog() {
+    Navigator.of(context).pop();
+  }
+}
+
+class _DialogContent extends StatefulWidget {
+  const _DialogContent(
+    this.plantId,
+  );
+
+  final String plantId;
+
+  @override
+  State<_DialogContent> createState() => _DialogContentState();
+}
+
+class _DialogContentState extends State<_DialogContent> {
+  late GetParticipantAllUserBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = GetParticipantAllUserBloc(
+      const PowerPlantStateInitial(),
+      GetPowerPlantParticipantAllUser(
+        PowerPlantRepositoryImpl(
+          powerPlantDataSource: PowerPlantDataSourceImpl(
+            client: http.Client(),
+          ),
+        ),
+      ),
+    )..add(GetPowerPlantEvent(plantId: widget.plantId));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 338,
+      padding: const EdgeInsets.only(top: 50, bottom: 31),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: BlocProvider.value(
+        value: _bloc,
+        child: BlocBuilder<GetParticipantAllUserBloc, PowerPlantState>(
+          builder: (context, state) {
+            if (state is! AllParticipantLoaded) {
+              return const SizedBox(
+                height: 100,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            final users = state.participant.orderedUserList;
+            final fromWebUsers =
+                users.length - users.where((user) => user.isAppUser).length;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: i18nTranslate(context, 'now'),
+                        style: const TextStyle(
+                          color: Color(0xFF787877),
+                          fontSize: 16,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 27,
-                    ),
-                    SizedBox(
-                      width: 286,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        spacing: 7,
-                        runSpacing: 16,
-                        children: participantUserList
-                            .map(
-                              _buildParticipantItem,
-                            )
-                            .toList(),
+                      TextSpan(
+                        text: '''
+${users.length.toString()}${i18nTranslate(context, 'support_participants_people')}''',
+                        style: const TextStyle(
+                          color: Color(0xFF787877),
+                          fontSize: 16,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 33,
-                    ),
-                    if (fromWebSupporters > 0) ...[
-                      Container(
-                        color: const Color(0xFFDADADA),
-                        width: 287,
-                        height: 1,
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'support_participants_supporting'),
+                        style: const TextStyle(
+                          color: Color(0xFF787877),
+                          fontSize: 16,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 27,
+                ),
+                SizedBox(
+                  width: 286,
+                  child: Wrap(
+                    spacing: 7,
+                    runSpacing: 16,
+                    children: users
+                        .map(
+                          _buildParticipantItem,
+                        )
+                        .toList(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 33,
+                ),
+                if (fromWebUsers > 0) ...[
+                  Container(
+                    color: const Color(0xFFDADADA),
+                    width: 287,
+                    height: 1,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        i18nTranslate(
+                          context,
+                          'support_participants_support_from_web',
+                        ),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Color(0xFFFF8C00),
+                          fontSize: 14,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       const SizedBox(
-                        height: 12,
+                        width: 29,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            i18nTranslate(
-                              context,
-                              'support_participants_support_from_web',
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '$fromWebUsers',
+                              style: const TextStyle(
+                                color: Color(0xFFFF8C00),
+                                fontSize: 14,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFFFF8C00),
-                              fontSize: 14,
-                              fontFamily: 'NotoSansJP',
-                              fontWeight: FontWeight.w500,
+                            TextSpan(
+                              text: i18nTranslate(
+                                context,
+                                'support_participants_people',
+                              ),
+                              style: const TextStyle(
+                                color: Color(0xFFFF8C00),
+                                fontSize: 14,
+                                fontFamily: 'NotoSansJP',
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 29,
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '$fromWebSupporters',
-                                  style: const TextStyle(
-                                    color: Color(0xFFFF8C00),
-                                    fontSize: 14,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: i18nTranslate(
-                                    context,
-                                    'support_participants_people',
-                                  ),
-                                  style: const TextStyle(
-                                    color: Color(0xFFFF8C00),
-                                    fontSize: 14,
-                                    fontFamily: 'NotoSansJP',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      )
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 25,
-              right: 27,
-              child: GestureDetector(
-                onTap: _hideDialog,
-                child: Icon(Icons.close),
-              ),
-            ),
-          ],
+                  )
+                ],
+              ],
+            );
+          },
         ),
-        isAndroidBackEnable: false,
-        settings: const RouteSettings(name: routeName),
       ),
     );
   }
@@ -247,10 +313,9 @@ ${participantSize.toString()}${i18nTranslate(context, 'support_participants_peop
     }
   }
 
-  /*
-   * 非表示
-   */
-  void _hideDialog() {
-    Navigator.of(context).pop();
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
   }
 }
