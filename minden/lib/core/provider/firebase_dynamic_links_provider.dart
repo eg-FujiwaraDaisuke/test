@@ -5,6 +5,9 @@ import 'package:minden/core/env/config.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/package_info_provider.dart';
 
+/// みんな電力Webページのドメイン
+const String mindenDomain = 'https://portal.minden.co.jp';
+
 /// FirebaseDynamicLinksインスタンスを返す（ProviderScopeでoverride利用）
 final dynamicLinksProvider =
     Provider<FirebaseDynamicLinks>((ref) => throw UnimplementedError());
@@ -31,7 +34,7 @@ final createDynamicLink = FutureProvider.family<Uri, String>((
 
   final params = DynamicLinkParameters(
     uriPrefix: uriPrefix,
-    link: Uri.parse('$uriPrefix/$path'),
+    link: Uri.parse('$mindenDomain/$path'),
     androidParameters: AndroidParameters(
       packageName: packageInfo.packageName,
       minimumVersion: 3,
@@ -47,3 +50,9 @@ final createDynamicLink = FutureProvider.family<Uri, String>((
     return linkData.shortUrl;
   });
 });
+
+/// 指定したpathを開くための、みんな電力Webページurlを生成して返す
+/// NOTE: DynamicLinksの扱いについてはっきりした時点で、本処理は別ファイルに移動などを検討されたし
+String createSimplyLink(String path) {
+  return '$mindenDomain/$path';
+}

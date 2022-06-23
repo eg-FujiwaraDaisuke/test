@@ -1,7 +1,7 @@
 import 'package:minden/core/hook/use_logger.dart';
 
 /// 発電所詳細を開くurl
-const String _powerPlantDetailPath = 'power_plant/detail/';
+const String _powerPlantDetailPath = 'powerplant-info';
 
 /// DynamicLinksで扱う種別
 enum DynamicLinksType {
@@ -24,7 +24,7 @@ extension DynamicLinksTypeExt on DynamicLinksType {
 }
 
 /// uriから、合致するDynamicLinksTypeを検索する
-/// ex: https://minden.page.link/power_plant/detail/xxx
+/// ex: https://portal.minden.co.jp/powerplant-info/xxx
 DynamicLinksType? typeByUri(Uri? uri) {
   if (uri == null) {
     return null;

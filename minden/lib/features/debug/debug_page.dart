@@ -80,7 +80,8 @@ class DebugPageState extends State<DebugPage> {
                     (context) => IssueReportDialogDebugPage(),
                     '/violate_dialog_debug'),
                 // DynamicLinks経由起動の場合の、リンク情報を表示する
-                DynamicLinksDataPreview(),
+                // NOTE: DynamicLinksの利用有無が決まったら、削除などを行う
+                // DynamicLinksDataPreview(),
               ],
             ),
           ),
@@ -114,7 +115,8 @@ class DynamicLinksDataPreview extends HookWidget {
   Widget build(BuildContext context) {
     final currentDynamicLink = useProvider(pendingDynamicLink);
     final streamDynamicLink = useProvider(pendingDynamicLinkStream);
-    final createdDynamicLink = useProvider(createDynamicLink('path'));
+    final createdDynamicLink =
+        useProvider(createDynamicLink('powerplant-info/MP000606'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
