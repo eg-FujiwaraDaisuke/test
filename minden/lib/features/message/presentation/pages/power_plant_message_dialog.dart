@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PowerPlantMessageDialog {
   PowerPlantMessageDialog({
@@ -68,8 +70,13 @@ class PowerPlantMessageDialog {
                       isAlwaysShown: false,
                       controller: ScrollController(),
                       child: SingleChildScrollView(
-                        child: Text(
-                          messageDetail.body,
+                        child: Linkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            }
+                          },
+                          text: messageDetail.body,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                             color: Color(0xFF967D5E),
@@ -77,6 +84,7 @@ class PowerPlantMessageDialog {
                             fontFamily: 'NotoSansJP',
                             fontWeight: FontWeight.w500,
                           ),
+                          linkStyle: const TextStyle(color: Colors.blueAccent),
                         ),
                       ),
                     ),

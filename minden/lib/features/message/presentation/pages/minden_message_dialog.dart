@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/utile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MindenMessageDialog {
   MindenMessageDialog({
@@ -69,8 +71,13 @@ class MindenMessageDialog {
                     ),
                     SizedBox(
                       width: 298,
-                      child: Text(
-                        messageDetail.body,
+                      child: Linkify(
+                        onOpen: (link) async {
+                          if (await canLaunch(link.url)) {
+                            await launch(link.url);
+                          }
+                        },
+                        text: messageDetail.body,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xFF27AE60),
@@ -79,6 +86,7 @@ class MindenMessageDialog {
                           fontWeight: FontWeight.w500,
                           height: calcFontHeight(fontSize: 14, lineHeight: 18),
                         ),
+                        linkStyle: const TextStyle(color: Colors.blueAccent),
                       ),
                     ),
                   ],
