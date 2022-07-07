@@ -183,14 +183,6 @@ class PowerPlant extends Equatable {
           return 1;
         }
 
-        // 次に名前ありユーザーを優先する
-        if (a.hasName && !b.hasName) {
-          return -1;
-        }
-        if (!a.hasName && b.hasName) {
-          return 1;
-        }
-
         return userList.indexOf(a).compareTo(userList.indexOf(b));
       });
   }

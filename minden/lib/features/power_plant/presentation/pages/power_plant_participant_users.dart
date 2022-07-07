@@ -52,7 +52,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   List<Widget> _generateParticipantIcons() {
     final total = participantSize;
-    if (maxUserIconCount < total) {
+    if (maxUserIconCount < total && participantUserList.isNotEmpty) {
       // 規定数人以上応援ユーザーがいる場合、
       return [
         ...participantUserList
@@ -117,7 +117,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         alignment: Alignment.center,
         color: const Color(0xFFEDCB50),
         padding: const EdgeInsets.only(left: 4),
-        child: Text('+${participantCount - maxUserIconCount}',
+        child: Text('+${participantCount - participantUserList.length}',
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'NotoSansJP',
