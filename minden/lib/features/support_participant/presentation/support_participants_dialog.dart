@@ -110,9 +110,10 @@ class _DialogContentState extends State<_DialogContent> {
               );
             }
 
+            final total_users = state.participant.participantSize;
             final users = state.participant.orderedUserList;
             final fromWebUsers =
-                users.length - users.where((user) => user.isAppUser).length;
+                total_users - users.length;
 
             return Column(
               mainAxisSize: MainAxisSize.min,
