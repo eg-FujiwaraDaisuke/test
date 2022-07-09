@@ -156,20 +156,26 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
                 const SizedBox(
                   height: 27,
                 ),
-                SizedBox(
-                  width: 286,
-                  child: Wrap(
-                    spacing: 7,
-                    runSpacing: 16,
-                    children: users
-                        .map(
-                          _buildParticipantItem,
-                        )
-                        .toList(),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 240,
+                    maxWidth: 286,
+                    minWidth: 286,
+                  ),
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                    ),
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      return _buildParticipantItem(users[0]);
+                    },
+                    shrinkWrap: true,
                   ),
                 ),
                 const SizedBox(
-                  height: 33,
+                  height: 24,
                 ),
                 if (fromWebUsers > 0) ...[
                   Container(
