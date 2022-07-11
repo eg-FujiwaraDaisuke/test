@@ -128,6 +128,7 @@ class PowerPlantListItem extends StatelessWidget {
                             maxUserIconCount: 6,
                             iconSize: 38,
                             overlapLength: 42.75,
+                            type: "list"
                           ),
                         ],
                       ),
