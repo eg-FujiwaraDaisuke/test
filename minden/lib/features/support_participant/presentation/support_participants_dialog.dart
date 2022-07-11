@@ -118,7 +118,7 @@ class _DialogContentState extends State<_DialogContent> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                RichText(
+                if (users.isNotEmpty) RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
@@ -170,7 +170,7 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
                     ),
                     itemCount: users.length,
                     itemBuilder: (context, index) {
-                      return _buildParticipantItem(users[0]);
+                      return _buildParticipantItem(users[index]);
                     },
                     shrinkWrap: true,
                   ),

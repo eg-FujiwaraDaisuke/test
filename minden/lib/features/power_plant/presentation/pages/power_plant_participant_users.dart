@@ -52,7 +52,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   List<Widget> _generateParticipantIcons() {
     final total = participantSize;
-    if (maxUserIconCount < total && participantUserList.isNotEmpty) {
+    if (maxUserIconCount < total) {
       // 規定数人以上応援ユーザーがいる場合、
       return [
         ...participantUserList
@@ -109,6 +109,12 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   Widget _generateCircleRemainIcon(int participantCount) {
+    var finalParticipantCount = 0;
+    if (participantUserList.length <= 3) {
+      finalParticipantCount = participantCount - participantUserList.length;
+    } else {
+      finalParticipantCount = participantCount - maxUserIconCount;
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(iconSize / 2),
       child: Container(
@@ -117,7 +123,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         alignment: Alignment.center,
         color: const Color(0xFFEDCB50),
         padding: const EdgeInsets.only(left: 4),
-        child: Text('+${participantCount - participantUserList.length}',
+        child: Text('+${finalParticipantCount}',
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'NotoSansJP',
