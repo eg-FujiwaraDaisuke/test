@@ -7,6 +7,7 @@ class PowerPlantParticipantAllUser extends Equatable {
     required this.plantId,
     required this.yearMonth,
     required this.userList,
+    required this.participantSize,
   });
 
   /// MP番号
@@ -17,6 +18,9 @@ class PowerPlantParticipantAllUser extends Equatable {
 
   /// 応援ユーザー
   final List<PowerPlantParticipantUser> userList;
+
+  /// 応援ユーザー総数
+  final int participantSize;
 
   @override
   List<Object> get props => [
@@ -33,14 +37,6 @@ class PowerPlantParticipantAllUser extends Equatable {
           return -1;
         }
         if (!a.hasIconAndName && b.hasIconAndName) {
-          return 1;
-        }
-
-        // 次に名前ありユーザーを優先する
-        if (a.hasName && !b.hasName) {
-          return -1;
-        }
-        if (!a.hasName && b.hasName) {
           return 1;
         }
 

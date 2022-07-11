@@ -105,6 +105,7 @@ class GetPowerPlantParticipantAllUser
         plantId: plant.plantId,
         yearMonth: plant.yearMonth,
         userList: userList,
+        participantSize: plant.participantSize
       ),
     );
   }
