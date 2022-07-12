@@ -559,6 +559,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                         maxUserIconCount: 3,
                         iconSize: 52,
                         overlapLength: 36,
+                        type: "detail"
                       ),
                     ],
                   ),
