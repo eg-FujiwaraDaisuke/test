@@ -12,6 +12,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
     required this.maxUserIconCount,
     required this.iconSize,
     required this.overlapLength,
+    required this.type,
   }) : super(key: key);
 
   final List<PowerPlantParticipantUser> participantUserList;
@@ -26,6 +27,9 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   /// アイコン同士の重なり度合い
   final double overlapLength;
+
+  /// 参照元
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +56,20 @@ class ParticipantUserIconGroup extends StatelessWidget {
 
   List<Widget> _generateParticipantIcons() {
     final total = participantSize;
-    if (maxUserIconCount < total) {
+    var participantCount = 0;
+    if (participantUserList.length <= 3) {
+      participantCount = total - participantUserList.length;
+    } else {
+      participantCount = total - maxUserIconCount;
+    }
+    if ((maxUserIconCount < total && type == 'list') || (participantCount > 0 && type == 'detail')) {
       // 規定数人以上応援ユーザーがいる場合、
       return [
         ...participantUserList
             .take(maxUserIconCount)
             .map((p) => _generateCircleUserIcon(p.icon))
             .toList(),
-        _generateCircleRemainIcon(total),
+        _generateCircleRemainIcon(participantCount),
       ];
     } else {
       // 規定数人以下の応援ユーザーしかいないため、「+X」表記を行わない
@@ -109,12 +119,6 @@ class ParticipantUserIconGroup extends StatelessWidget {
   }
 
   Widget _generateCircleRemainIcon(int participantCount) {
-    var finalParticipantCount = 0;
-    if (participantUserList.length <= 3) {
-      finalParticipantCount = participantCount - participantUserList.length;
-    } else {
-      finalParticipantCount = participantCount - maxUserIconCount;
-    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(iconSize / 2),
       child: Container(
@@ -123,7 +127,7 @@ class ParticipantUserIconGroup extends StatelessWidget {
         alignment: Alignment.center,
         color: const Color(0xFFEDCB50),
         padding: const EdgeInsets.only(left: 4),
-        child: Text('+${finalParticipantCount}',
+        child: Text('+${participantCount}',
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'NotoSansJP',
