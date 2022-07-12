@@ -246,6 +246,10 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
   }
 
   Widget _buildParticipantItem(PowerPlantParticipantUser participant) {
+    var name = participant.name ?? '';
+    if (name.length > 6) {
+      name = '${name.substring(0, 5)}...';
+    }
     final child = Column(
       children: [
         Container(
@@ -283,7 +287,7 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
         SizedBox(
           width: 66,
           child: Text(
-            participant.name ?? '',
+            name,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFFFF8C00),
