@@ -307,8 +307,6 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
           // 応援ユーザーアイコンのタップ
           useButtonAnalytics(ButtonAnalyticsType.navigateParticipantUser);
 
-          Navigator.pop(context);
-
           final route = MaterialPageRoute(
             builder: (context) => ProfilePage(
               userId: participant.userId,
