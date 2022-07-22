@@ -5,6 +5,7 @@ import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
 import 'package:minden/features/login/presentation/bloc/logout_event.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/support_amount/data/datasources/support_amount_data_source.dart';
 import 'package:minden/features/support_amount/data/repositories/support_amount_repository_impl.dart';
 import 'package:minden/features/support_amount/domain/usecase/support_amount_usecase.dart';
@@ -118,7 +119,9 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
             'assets/images/support_history/support_history_case_id_10.jpg',
         imageLabelText: 'あつぎ市民発電所 第1号機',
         mainText: '''
-脱原発と気候危機回避への一歩として、未来の子どもたちに自立したクリーンなエネルギー環境を、と市民が自分たちの手で発電事業を始めました。太陽の恵みできれいな電気とおいしい野菜を！応援金はさらなる再エネ発電普及に活用します。''',
+脱原発と気候危機回避への一歩として、未来の子どもたちに自立したクリーンなエネルギー環境を、と市民が自分たちの手で発電事業を始めました。
+太陽の恵みできれいな電気とおいしい野菜を！応援金はさらなる再エネ発電普及に活用します。''',
+        plantId: 'MP000163',
       ),
       _CaseWidget(
         balloonText: '自給自足の野菜づくりを充実させています！',
@@ -129,6 +132,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
 私たちの発電所は、東日本大震災の被災者支援から始まり、主婦6人で開所した高齢者施設です。
 「自分の親を預けたいと思えるデイサービスを」がコンセプト。
 応援金で自給自足の野菜づくりを充実させます！''',
+        plantId: 'MP000200',
       ),
       _CaseWidget(
         balloonText: '子供たちが幸せに生きていけるように、ソーラーシェアリングの普及を目指します！',
@@ -138,6 +142,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
         mainText: '''
 伊勢の地で未来を担う子供たちが幸せに生きていけるように、農地を守るソーラーシェアリングの普及を目指しております。
 太陽光との組み合わせで稼ぎやすい農業のモデルを作り見本となれるよう頑張ります。''',
+        plantId: 'MP000399',
       ),
       _CaseWidget(
         balloonText: '日本の林業を守っていくため、小規模木質バイオマス発電事業の推進に活用しています！',
@@ -147,6 +152,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
         mainText: '''
 私たちは、課題山積の日本の林業・エネルギー問題解決への貢献を目指し、木質バイオマス発電事業を始めました。
 日本の林業を守っていくため、日本に小規模木質バイオマス発電事業を推進するため、ぜひ私たちの挑戦を応援してください。''',
+        plantId: 'MP000383',
       ),
       _CaseWidget(
         balloonText: '豊かで住みよい益田市を実現し、人口減少に歯止めをかけたいと考えています！',
@@ -155,6 +161,7 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
         imageLabelText: '高津川風力発電所',
         mainText: '''
 地元出資の地域電力会社を設立し、地域でエネルギーと資金を還流させ、余剰は全国の皆様にこの日本海の電力をお送りし、豊かで住みよい益田市を実現し、人口減少に歯止めをかけたいと考えております。''',
+        plantId: 'MP000434',
       ),
     ];
     return Column(
@@ -266,12 +273,14 @@ class _CaseWidget extends StatelessWidget {
     required this.imagePath,
     required this.imageLabelText,
     required this.mainText,
+    required this.plantId,
   });
 
   final String balloonText;
   final String imagePath;
   final String imageLabelText;
   final String mainText;
+  final String plantId;
 
   @override
   Widget build(BuildContext context) {
@@ -314,45 +323,51 @@ class _CaseWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: AspectRatio(
-            aspectRatio: 1.5,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 20,
-                  child: Container(
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      color: Color(0xCCFFFFFF),
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(15),
+        InkWell(
+          onTap: () {
+            // 発電所詳細画面を開く
+            Navigator.push(context, PowerPlantDetailPage.route(plantId));
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AspectRatio(
+              aspectRatio: 1.5,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 20,
+                    child: Container(
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xCCFFFFFF),
+                        borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(15),
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 16),
-                        child: Text(
-                          imageLabelText,
-                          style: const TextStyle(
-                            color: Color(0xFF32B432),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'NotoSansJP',
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 16),
+                          child: Text(
+                            imageLabelText,
+                            style: const TextStyle(
+                              color: Color(0xFF32B432),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'NotoSansJP',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
