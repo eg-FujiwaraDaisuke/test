@@ -306,6 +306,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
     );
   }
 
+  // あなたの選んだタグ
   Widget _buildSelectedTag(List<Tag> tags) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +331,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                 .map(
                   (tag) => TagListItem(
                     tag: tag,
-                    onSelect: (tag) {},
+                    onSelect: _onSelectTag,
                     isSelected: true,
                   ),
                 )
