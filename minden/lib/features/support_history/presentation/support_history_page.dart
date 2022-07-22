@@ -252,6 +252,9 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
 
   @override
   void dispose() {
+    // NOTE: ローディングUI表示中に、別画面に遷移した場合、hide処理が呼ばれないことがある
+    // そのため、dispose時にhide処理を行う
+    Loading.hide();
     _getSupportAmountBloc.close();
     super.dispose();
   }

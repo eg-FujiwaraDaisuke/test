@@ -112,48 +112,48 @@ class _DialogContentState extends State<_DialogContent> {
 
             final total_users = state.participant.participantSize;
             final users = state.participant.orderedUserList;
-            final fromWebUsers =
-                total_users - users.length;
+            final fromWebUsers = total_users - users.length;
 
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (users.isNotEmpty) RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: i18nTranslate(context, 'now'),
-                        style: const TextStyle(
-                          color: Color(0xFF787877),
-                          fontSize: 16,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w400,
+                if (users.isNotEmpty)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: i18nTranslate(context, 'now'),
+                          style: const TextStyle(
+                            color: Color(0xFF787877),
+                            fontSize: 16,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      TextSpan(
-                        text: '''
+                        TextSpan(
+                          text: '''
 ${users.length.toString()}${i18nTranslate(context, 'support_participants_people')}''',
-                        style: const TextStyle(
-                          color: Color(0xFF787877),
-                          fontSize: 16,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w400,
+                          style: const TextStyle(
+                            color: Color(0xFF787877),
+                            fontSize: 16,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      TextSpan(
-                        text: i18nTranslate(
-                            context, 'support_participants_supporting'),
-                        style: const TextStyle(
-                          color: Color(0xFF787877),
-                          fontSize: 16,
-                          fontFamily: 'NotoSansJP',
-                          fontWeight: FontWeight.w400,
+                        TextSpan(
+                          text: i18nTranslate(
+                              context, 'support_participants_supporting'),
+                          style: const TextStyle(
+                            color: Color(0xFF787877),
+                            fontSize: 16,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
                 const SizedBox(
                   height: 27,
                 ),
@@ -306,8 +306,6 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
         onTap: () {
           // 応援ユーザーアイコンのタップ
           useButtonAnalytics(ButtonAnalyticsType.navigateParticipantUser);
-
-          Navigator.pop(context);
 
           final route = MaterialPageRoute(
             builder: (context) => ProfilePage(
