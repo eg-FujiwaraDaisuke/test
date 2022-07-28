@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -256,6 +258,25 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 body: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(
+                      leading: Container(
+                        decoration:
+                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 24,
+                          ),
+                        ]),
+                        child: IconButton(
+                          icon: Icon(
+                            Platform.isAndroid
+                                ? Icons.arrow_back
+                                : Icons.arrow_back_ios,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ),
                       flexibleSpace: Stack(children: [
                         FlexibleSpaceBar(
                           background: PowerPlantPickup(
