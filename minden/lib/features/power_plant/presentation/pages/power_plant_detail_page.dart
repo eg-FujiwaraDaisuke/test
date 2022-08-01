@@ -635,33 +635,48 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
     // 特典がない場合表示しない
     final hasGitf = detail.giftName?.isNotEmpty ?? false;
 
+    final isShowOwnerMessage = detail.ownerMessage != null &&
+        detail.ownerMessage.toString().isNotEmpty;
+
+    final isShowAboutPlant =
+        detail.aboutPlant != null && detail.aboutPlant.toString().isNotEmpty;
+
+    final isShowProspect =
+        detail.prospect != null && detail.prospect.toString().isNotEmpty;
+
     return Column(
       children: [
-        const Divider(
-          height: 1,
-          color: Color(0xFFE2E2E2),
-        ),
-        const SizedBox(height: 10),
-        _generateExpandableText(detail.ownerMessage ?? '',
-            i18nTranslate(context, 'power_plant_detail_from_owner')),
-        const SizedBox(height: 10),
-        const Divider(
-          height: 1,
-          color: Color(0xFFE2E2E2),
-        ),
-        const SizedBox(height: 17),
-        _generateExpandableText(detail.aboutPlant ?? '',
-            i18nTranslate(context, 'power_plant_detail_about')),
-        const SizedBox(height: 10),
-        const Divider(
-          height: 1,
-          color: Color(0xFFE2E2E2),
-        ),
-        const SizedBox(height: 17),
-        _generateExpandableText(detail.prospect ?? '',
-            i18nTranslate(context, 'power_plant_detail_prospect')),
-        const SizedBox(height: 31),
-
+        if (isShowOwnerMessage) ...[
+          const Divider(
+            height: 1,
+            color: Color(0xFFE2E2E2),
+          ),
+          const SizedBox(height: 10),
+          _generateExpandableText(detail.ownerMessage ?? '',
+              i18nTranslate(context, 'power_plant_detail_from_owner')),
+          const SizedBox(height: 10)
+        ],
+        if (isShowAboutPlant) ...[
+          const Divider(
+            height: 1,
+            color: Color(0xFFE2E2E2),
+          ),
+          const SizedBox(height: 17),
+          _generateExpandableText(detail.aboutPlant ?? '',
+              i18nTranslate(context, 'power_plant_detail_about')),
+          const SizedBox(height: 10),
+        ],
+        if (isShowProspect) ...[
+          const Divider(
+            height: 1,
+            color: Color(0xFFE2E2E2),
+          ),
+          const SizedBox(height: 17),
+          _generateExpandableText(detail.prospect ?? '',
+              i18nTranslate(context, 'power_plant_detail_prospect')),
+          const SizedBox(height: 10),
+        ],
+        const SizedBox(height: 21),
         // 特典情報があって、特典ページから来てない場合表示
         if (hasGitf && !isShowGiftAtTheTop) _generateGift(detail)
       ],
