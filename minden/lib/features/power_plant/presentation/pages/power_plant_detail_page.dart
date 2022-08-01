@@ -1041,13 +1041,18 @@ class SupportButton extends StatelessWidget {
                   // 通常の発電所
                   // 契約件数が現在の応援件数より少ない場合
                   if (supportableNumber > historyPowerPlants.length) {
-                    await SupportPowerPlantDecisionDialog(
+                    final result = await SupportPowerPlantDecisionDialog(
                       context: context,
                       selectPowerPlant: selectPowerPlant,
                       registPowerPlants: _registerPowerPlants,
                       user: user,
                     ).showDialog();
-                    getSupportAction();
+                    final isConfirm = result != null && result == true;
+
+                    if (isConfirm) {
+                      getSupportAction();
+                      
+                    }
                     return;
                   }
 
