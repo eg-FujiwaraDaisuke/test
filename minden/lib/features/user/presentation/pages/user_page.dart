@@ -408,7 +408,6 @@ class _MenuMessageItem extends HookWidget {
       if (!messagesStateData.hasEverGetMessage) {
         _bloc.stream.listen((state) {
           if (state is MessagesLoaded) {
-            logD('MessagesLoaded');
             messagesStateController.updateMessages(state.messages);
           }
         });
