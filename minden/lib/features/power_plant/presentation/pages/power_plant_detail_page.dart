@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -258,24 +259,46 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 body: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(
-                      leading: Container(
-                        decoration:
-                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 24,
+                      leading: Stack(
+                        children: [
+                          Positioned(
+                            left: 1,
+                            top: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(5,5),
+                                    spreadRadius: 0.5,
+                                    blurRadius: 2,
+                                  )
+                                ]
+                              ),
+                              child: IconButton(
+                                  onPressed: null,
+                                  icon: Icon(
+                                    Platform.isAndroid
+                                        ? Icons.arrow_back
+                                        : Icons.arrow_back_ios,
+                                    color: Colors.black.withOpacity(0.1),
+                                    size: 24,
+
+                                  ),
+                                ),
+                            ),
                           ),
-                        ]),
-                        child: IconButton(
-                          icon: Icon(
-                            Platform.isAndroid
-                                ? Icons.arrow_back
-                                : Icons.arrow_back_ios,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
+                           IconButton(
+                              icon: Icon(
+                                Platform.isAndroid
+                                    ? Icons.arrow_back
+                                    : Icons.arrow_back_ios,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              onPressed: Navigator.of(context).pop,
+                            ),
+                        ],
                       ),
                       flexibleSpace: Stack(children: [
                         FlexibleSpaceBar(
@@ -575,13 +598,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ParticipantUserIconGroup(
-                        participantUserList: state.participant.orderedUserList,
-                        participantSize: state.participant.participantSize,
-                        maxUserIconCount: 3,
-                        iconSize: 52,
-                        overlapLength: 36,
-                        type: "detail"
-                      ),
+                          participantUserList:
+                              state.participant.orderedUserList,
+                          participantSize: state.participant.participantSize,
+                          maxUserIconCount: 3,
+                          iconSize: 52,
+                          overlapLength: 36,
+                          type: "detail"),
                     ],
                   ),
                 );
