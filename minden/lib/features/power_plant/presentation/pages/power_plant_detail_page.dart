@@ -271,7 +271,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                     color: Colors.black12,
                                     offset: Offset(5,5),
                                     spreadRadius: 0.5,
-                                    blurRadius: 2,
+                                    blurRadius: 20,
                                   )
                                 ]
                               ),
