@@ -270,11 +270,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                 : Icons.arrow_back_ios,
                             color: Colors.white,
                             size: 24,
-                            shadows: const [
-                              BoxShadow(
-                                blurRadius: 50
-                              )
-                            ],
+                            shadows: const [BoxShadow(blurRadius: 50)],
                           ),
                         ),
                       ),
