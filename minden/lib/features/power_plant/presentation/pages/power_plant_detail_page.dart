@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:decorated_icon/decorated_icon.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -258,23 +260,18 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 body: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(
-                      leading: Container(
-                        decoration:
-                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 24,
-                          ),
-                        ]),
-                        child: IconButton(
-                          icon: Icon(
+                      leading: Padding(
+                        padding: const EdgeInsets.fromLTRB(7, 10, 0, 0),
+                        child: GestureDetector(
+                          onTap: Navigator.of(context).pop,
+                          child: DecoratedIcon(
                             Platform.isAndroid
                                 ? Icons.arrow_back
                                 : Icons.arrow_back_ios,
                             color: Colors.white,
                             size: 24,
+                            shadows: const [BoxShadow(blurRadius: 10)],
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
                         ),
                       ),
                       flexibleSpace: Stack(children: [
@@ -575,13 +572,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ParticipantUserIconGroup(
-                        participantUserList: state.participant.orderedUserList,
-                        participantSize: state.participant.participantSize,
-                        maxUserIconCount: 3,
-                        iconSize: 52,
-                        overlapLength: 36,
-                        type: "detail"
-                      ),
+                          participantUserList:
+                              state.participant.orderedUserList,
+                          participantSize: state.participant.participantSize,
+                          maxUserIconCount: 3,
+                          iconSize: 52,
+                          overlapLength: 36,
+                          type: "detail"),
                     ],
                   ),
                 );
