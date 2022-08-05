@@ -9,6 +9,7 @@ class Loading {
         valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
       ),
       backgroundColor: Colors.transparent,
+      allowClick: true
     );
   }
 
