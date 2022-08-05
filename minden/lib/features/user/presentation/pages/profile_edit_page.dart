@@ -10,7 +10,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/hook/use_analytics.dart';
-import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
@@ -26,16 +25,12 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
-import 'package:minden/features/user/data/datasources/profile_datasource.dart';
-import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
 import 'package:minden/features/user/domain/entities/profile.dart';
-import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
-import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -47,9 +42,6 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late UpdateProfileBloc _updateBloc;
-  late GetProfileBloc _getProfileBloc;
   late UpdateTagBloc _updateTagBloc;
 
   late String? _wallPaperUrl;
@@ -68,61 +60,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   void initState() {
     super.initState();
-
-    _getProfileBloc = GetProfileBloc(
-      const ProfileStateInitial(),
-      GetProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-    _getProfileBloc.stream.listen((event) {
-      if (event is ProfileLoaded) {
-        setState(() {
-          _profile = event.profile;
-          _name = event.profile.name;
-          _bio = event.profile.bio;
-          _wallPaperUrl = event.profile.wallPaper;
-          _instagramLink = event.profile.instagramLink;
-          _facebookLink = event.profile.facebookLink;
-          _twitterLink = event.profile.twitterLink;
-          _freeLink = event.profile.freeLink;
-          _iconUrl = event.profile.icon;
-          _tags = event.profile.tags;
-        });
-      }
-    });
-
-    _updateBloc = UpdateProfileBloc(
-      const ProfileStateInitial(),
-      UpdateProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-    _updateBloc.stream.listen((event) {
-      if (event is ProfileLoading) {
-        Loading.show(context);
-        return;
-      }
-      Loading.hide();
-      if (event is ProfileLoaded) {
-        if (_tags.isNotEmpty) {
-          _tags.removeWhere((element) => element == null);
-          _updateTagBloc
-              .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
-          return;
-        }
-        Navigator.pop(context, true);
-      }
-    });
-
     _updateTagBloc = UpdateTagBloc(
       const TagStateInitial(),
       UpdateTags(
@@ -133,213 +70,204 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
       ),
     );
-    _updateTagBloc.stream.listen((event) {
-      if (event is TagUpdated) {
-        Navigator.pop(context, true);
+    context.read<ProfileBloc>().stream.listen((event) {
+      if (event is ProfileLoaded) {
+        if (_tags.isNotEmpty) {
+          _updateTagBloc
+              .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
+          return;
+        }
       }
     });
-
-    _getProfileBloc.add(GetProfileEvent(userId: si<Account>().userId));
   }
 
   @override
   void dispose() {
-    _updateBloc.close();
-    _getProfileBloc.close();
-    _updateTagBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _getProfileBloc,
-      child: BlocListener<GetProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetProfileBloc, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileLoaded) {
-              return Scaffold(
-                backgroundColor: const Color(0xFFF6F5EF),
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  centerTitle: true,
-                  leading: GestureDetector(
-                    onTap: () {
-                      _prev(context);
-                    },
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'assets/images/common/leading_back.svg',
-                        fit: BoxFit.fill,
-                        width: 44,
-                        height: 44,
-                      ),
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          _profile = state.profile;
+          _name = state.profile.name;
+          _bio = state.profile.bio;
+          _wallPaperUrl = state.profile.wallPaper;
+          _instagramLink = state.profile.instagramLink;
+          _facebookLink = state.profile.facebookLink;
+          _twitterLink = state.profile.twitterLink;
+          _freeLink = state.profile.freeLink;
+          _iconUrl = state.profile.icon;
+          _tags = state.profile.tags;
+          return Scaffold(
+            backgroundColor: const Color(0xFFF6F5EF),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              leading: GestureDetector(
+                onTap: () {
+                  _prev(context);
+                },
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/images/common/leading_back.svg',
+                    fit: BoxFit.fill,
+                    width: 44,
+                    height: 44,
+                  ),
+                ),
+              ),
+              actions: [
+                GestureDetector(
+                  onTap: () => _complete(context),
+                  child: Container(
+                    width: 90,
+                    height: 44,
+                    margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      color: Colors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/images/user/check.svg'),
+                        const SizedBox(
+                          width: 10.5,
+                        ),
+                        Text(
+                          i18nTranslate(context, 'user_edit_complete'),
+                          style: const TextStyle(
+                            color: Color(0xFF575292),
+                            fontSize: 12,
+                            fontFamily: 'NotoSansJP',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  actions: [
-                    GestureDetector(
-                      onTap: () => _complete(context),
-                      child: Container(
-                        width: 90,
-                        height: 44,
-                        margin:
-                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ],
+            ),
+            extendBodyBehindAppBar: true,
+            body: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          clipBehavior: Clip.antiAlias,
                           children: [
-                            SvgPicture.asset('assets/images/user/check.svg'),
-                            const SizedBox(
-                              width: 10.5,
+                            _ProfileWallPaperEdit(
+                              imageUrl: state.profile.wallPaper,
+                              imageHandler: (value) {
+                                _wallPaperUrl = value;
+                              },
                             ),
-                            Text(
-                              i18nTranslate(context, 'user_edit_complete'),
-                              style: const TextStyle(
-                                color: Color(0xFF575292),
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w500,
+                            Positioned(
+                              child: _ProfileIconEdit(
+                                imageUrl: state.profile.icon,
+                                imageHandler: (value) {
+                                  _iconUrl = value;
+                                },
                               ),
-                            )
+                            ),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                extendBodyBehindAppBar: true,
-                body: SafeArea(
-                  top: false,
-                  child: SingleChildScrollView(
-                    child: Center(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomCenter,
-                              clipBehavior: Clip.antiAlias,
-                              children: [
-                                _ProfileWallPaperEdit(
-                                  imageUrl: _wallPaperUrl,
-                                  imageHandler: (value) {
-                                    _wallPaperUrl = value;
-                                  },
-                                ),
-                                Positioned(
-                                  child: _ProfileIconEdit(
-                                    imageUrl: _iconUrl,
-                                    imageHandler: (value) {
-                                      _iconUrl = value;
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 17,
-                            ),
-                            _ProfileNameEditForm(
-                              name: _name,
-                              textHandler: (value) {
-                                setState(() {
-                                  _name = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 33,
-                            ),
-                            // 自己紹介
-                            _ProfileBioEditForm(
-                              bio: _bio,
-                              textHandler: (value) {
-                                setState(() {
-                                  _bio = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            // 大切にしていること
-                            _ImportantTagsList(
-                              tagsList: _tags,
-                              tagHandler: (tags) {
-                                setState(() {
-                                  _tags = tags;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 38),
-                            // SNS
-                            _SnsLinkEditForm(
-                              prefixIconKey:
-                                  'assets/images/user/input_sns_instagram.svg',
-                              placeholderKey: 'profile_setting_sns_instagram',
-                              link: _instagramLink,
-                              validateDomains: const [
-                                'www.instagram.com',
-                                'instagram.com'
-                              ],
-                              textHandler: (value) {
-                                _instagramLink = value;
-                              },
-                              hasSectionTitle: true,
-                            ),
-                            _SnsLinkEditForm(
-                              prefixIconKey:
-                                  'assets/images/user/input_sns_facebook.svg',
-                              placeholderKey: 'profile_setting_sns_facebook',
-                              link: _facebookLink,
-                              validateDomains: const ['www.facebook.com'],
-                              textHandler: (value) {
-                                _facebookLink = value;
-                              },
-                            ),
-                            _SnsLinkEditForm(
-                              prefixIconKey:
-                                  'assets/images/user/input_sns_twitter.svg',
-                              placeholderKey: 'profile_setting_sns_twitter',
-                              link: _twitterLink,
-                              validateDomains: const ['twitter.com'],
-                              textHandler: (value) {
-                                _twitterLink = value;
-                              },
-                            ),
-                            _SnsLinkEditForm(
-                              prefixIconKey:
-                                  'assets/images/user/input_sns_free.svg',
-                              placeholderKey: 'profile_setting_sns_free',
-                              link: _freeLink,
-                              textHandler: (value) {
-                                _freeLink = value;
-                              },
-                            ),
-                            const SizedBox(height: 24),
-                          ],
+                        const SizedBox(
+                          height: 17,
                         ),
-                      ),
+                        _ProfileNameEditForm(
+                          name: state.profile.name,
+                          textHandler: (value) {
+                            _name = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 33,
+                        ),
+                        // 自己紹介
+                        _ProfileBioEditForm(
+                          bio: state.profile.bio,
+                          textHandler: (value) {
+                            _bio = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        // 大切にしていること
+                        _ImportantTagsList(
+                          tagsList: state.profile.tags,
+                          tagHandler: (tags) {
+                            _tags = tags;
+                          },
+                        ),
+                        const SizedBox(height: 38),
+                        // SNS
+                        _SnsLinkEditForm(
+                          prefixIconKey:
+                              'assets/images/user/input_sns_instagram.svg',
+                          placeholderKey: 'profile_setting_sns_instagram',
+                          link: state.profile.instagramLink,
+                          validateDomains: const [
+                            'www.instagram.com',
+                            'instagram.com'
+                          ],
+                          textHandler: (value) {
+                            _instagramLink = value;
+                          },
+                          hasSectionTitle: true,
+                        ),
+                        _SnsLinkEditForm(
+                          prefixIconKey:
+                              'assets/images/user/input_sns_facebook.svg',
+                          placeholderKey: 'profile_setting_sns_facebook',
+                          link: state.profile.facebookLink,
+                          validateDomains: const ['www.facebook.com'],
+                          textHandler: (value) {
+                            _facebookLink = value;
+                          },
+                        ),
+                        _SnsLinkEditForm(
+                          prefixIconKey:
+                              'assets/images/user/input_sns_twitter.svg',
+                          placeholderKey: 'profile_setting_sns_twitter',
+                          link: state.profile.twitterLink,
+                          validateDomains: const ['twitter.com'],
+                          textHandler: (value) {
+                            _twitterLink = value;
+                          },
+                        ),
+                        _SnsLinkEditForm(
+                          prefixIconKey:
+                              'assets/images/user/input_sns_free.svg',
+                          placeholderKey: 'profile_setting_sns_free',
+                          link: state.profile.freeLink,
+                          textHandler: (value) {
+                            _freeLink = value;
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                      ],
                     ),
                   ),
                 ),
-              );
-            }
-            return PlaceHolderProfile();
-          },
-        ),
-      ),
+              ),
+            ),
+          );
+        }
+        return PlaceHolderProfile();
+      },
     );
   }
 
@@ -438,19 +366,18 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   void _complete(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       useButtonAnalytics(ButtonAnalyticsType.completeTagSettings);
-
       _formKey.currentState!.save();
-
-      _updateBloc.add(UpdateProfileEvent(
-        name: _name!,
-        icon: _iconUrl ?? '',
-        bio: _bio!,
-        wallPaper: _wallPaperUrl ?? '',
-        freeLink: _freeLink ?? '',
-        twitterLink: _twitterLink ?? '',
-        facebookLink: _facebookLink ?? '',
-        instagramLink: _instagramLink ?? '',
-      ));
+      context.read<ProfileBloc>().add(UpdateProfileEvent(
+            name: _name!,
+            icon: _iconUrl ?? '',
+            bio: _bio!,
+            wallPaper: _wallPaperUrl ?? '',
+            freeLink: _freeLink ?? '',
+            twitterLink: _twitterLink ?? '',
+            facebookLink: _facebookLink ?? '',
+            instagramLink: _instagramLink ?? '',
+          ));
+      Navigator.pop(context);
     }
   }
 }

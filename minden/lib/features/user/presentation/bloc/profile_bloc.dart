@@ -6,9 +6,12 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 
-class GetProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  GetProfileBloc(ProfileState initialState, this.usecase) : super(initialState);
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  ProfileBloc(
+      ProfileState initialState, this.usecase, this.updateProfileUseCase)
+      : super(initialState);
   final GetProfile usecase;
+  final UpdateProfile updateProfileUseCase;
 
   @override
   Stream<ProfileState> mapEventToState(
@@ -29,24 +32,11 @@ class GetProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       } catch (e) {
         yield ProfileLoadError(message: e.toString(), needLogin: false);
       }
-    }
-  }
-}
-
-class UpdateProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  UpdateProfileBloc(ProfileState initialState, this.usecase)
-      : super(initialState);
-  final UpdateProfile usecase;
-
-  @override
-  Stream<ProfileState> mapEventToState(
-    ProfileEvent event,
-  ) async* {
-    if (event is UpdateProfileEvent) {
+    } else if (event is UpdateProfileEvent) {
       try {
         yield const ProfileLoading();
 
-        final failureOrUser = await usecase(
+        final failureOrUser = await updateProfileUseCase(
           UpdateProfileParams(
             event.name,
             event.icon,

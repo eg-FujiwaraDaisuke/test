@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -15,9 +14,6 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_event.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
-import 'package:minden/features/user/data/datasources/profile_datasource.dart';
-import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -28,8 +24,6 @@ class ProfileSettingIconPage extends StatefulWidget {
 }
 
 class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
-  late UpdateProfileBloc _updateProfileBloc;
-
   void _setImage(File croppedImage) {
     BlocProvider.of<UploadBloc>(context).add(UploadMediaEvent(croppedImage));
   }
@@ -37,17 +31,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
   @override
   void initState() {
     super.initState();
-    _updateProfileBloc = UpdateProfileBloc(
-      const ProfileStateInitial(),
-      UpdateProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-    _updateProfileBloc.stream.listen((event) {
+    context.read<ProfileBloc>().stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -58,7 +42,6 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
 
   @override
   void dispose() {
-    _updateProfileBloc.close();
     super.dispose();
   }
 
@@ -108,18 +91,18 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
           }
           Loading.hide();
           if (state is Uploaded) {
-            _updateProfileBloc.add(
-              UpdateProfileEvent(
-                name: '',
-                icon: state.media.url,
-                bio: '',
-                wallPaper: '',
-                freeLink: '',
-                twitterLink: '',
-                facebookLink: '',
-                instagramLink: '',
-              ),
-            );
+            context.read<ProfileBloc>().add(
+                  UpdateProfileEvent(
+                    name: '',
+                    icon: state.media.url,
+                    bio: '',
+                    wallPaper: '',
+                    freeLink: '',
+                    twitterLink: '',
+                    facebookLink: '',
+                    instagramLink: '',
+                  ),
+                );
           }
         },
         child: BlocBuilder<UploadBloc, UploadState>(
