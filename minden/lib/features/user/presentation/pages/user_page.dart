@@ -6,7 +6,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/success/account.dart';
+import 'package:minden/core/util/app_lifecycle.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
@@ -404,6 +406,11 @@ class _MenuMessageItem extends HookWidget {
     useEffect(() {
       _bloc = BlocProvider.of<GetMessagesBloc>(context);
       if (!messagesStateData.hasEverGetMessage) {
+        _bloc.stream.listen((state) {
+          if (state is MessagesLoaded) {
+            messagesStateController.updateMessages(state.messages);
+          }
+        });
         _bloc.add(GetMessagesEvent('1'));
       }
 
@@ -421,6 +428,21 @@ class _MenuMessageItem extends HookWidget {
         _getPowerPlantsBloc.close();
       };
     });
+
+    useEffect(
+      () {
+        final observer = AppLifeCycleObserver(
+          onResume: () {
+            // メッセージ一覧の更新
+            // NOTE: 過去取得状態に依らず、再取得を行う
+            _bloc.add(GetMessagesEvent('1'));
+          },
+        );
+        WidgetsBinding.instance?.addObserver(observer);
+        return () => WidgetsBinding.instance?.removeObserver(observer);
+      },
+      const [],
+    );
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,

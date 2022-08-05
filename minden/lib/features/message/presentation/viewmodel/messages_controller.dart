@@ -1,11 +1,13 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
 import 'package:minden/features/message/domain/entities/messages.dart';
+
 import 'messages_state.dart';
 
 class MessagesStateController extends StateNotifier<MessagesState> {
   MessagesStateController() : super(const MessagesState());
-  updateMessages(Messages messages) {
+
+  void updateMessages(Messages messages) {
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,
@@ -17,7 +19,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
-  updateMessagesPushNotify(Messages messages) {
+  void updateMessagesPushNotify(Messages messages) {
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,
@@ -28,7 +30,7 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
-  addMessages(Messages messages) {
+  void addMessages(Messages messages) {
     state = state.copyWith(
       hasEverGetMessage: true,
       showBadge: messages.showBadge,
@@ -41,14 +43,15 @@ class MessagesStateController extends StateNotifier<MessagesState> {
     );
   }
 
-  updateShowBadge(Messages messages) {
+  void updateShowBadge(Messages messages) {
     state = state.copyWith(
       showBadge: messages.showBadge,
       total: messages.total,
     );
   }
 
-  readMessage(int messageId) {
+  /// [messageId] で指定したメッセージを既読にする
+  void readMessage(int messageId) {
     state = state.copyWith(
       messages: state.messages.map((messageDetail) {
         return messageDetail.messageId == messageId
