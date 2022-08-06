@@ -19,6 +19,7 @@ import 'package:minden/features/message/data/datasources/message_datasource.dart
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
+import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/injection_container.dart';
@@ -236,12 +237,19 @@ class HomePage extends HookWidget {
 
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+          logD('onMessageOpenedApp ${message.data}');
+
           if (message.data.isNotEmpty) {
             final String? messageId = message.data['messageId'];
             _shoWMessageId.value = messageId ?? '';
             if (messageId?.isNotEmpty ?? false) {
               logW('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
+
+              logD('onMessageOpenedApp $messageId');
+              // メッセージ詳細画面に遷移する
+              // NOTE: 一覧画面を間に挟む必要はなく、直に詳細画面をスタックする
+              Navigator.push(context, MessagePage.route(messageId));
             }
           }
         });
