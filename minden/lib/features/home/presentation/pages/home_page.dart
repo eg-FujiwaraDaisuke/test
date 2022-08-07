@@ -232,25 +232,30 @@ class HomePage extends HookWidget {
               logW('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
             }
+
+            // メッセージ詳細画面に遷移する
+            Navigator.push(context, MessagePage.route(messageId));
+          } else if (message != null) {
+            // メッセージ一覧画面に遷移する
+            Navigator.push(context, MessagePage.route());
           }
         });
 
         // バックグラウンド状態でプッシュ通知メッセージからアプリを起動した場合の遷移
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          logD('onMessageOpenedApp ${message.data}');
-
           if (message.data.isNotEmpty) {
             final String? messageId = message.data['messageId'];
             _shoWMessageId.value = messageId ?? '';
             if (messageId?.isNotEmpty ?? false) {
               logW('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
-
-              logD('onMessageOpenedApp $messageId');
-              // メッセージ詳細画面に遷移する
-              // NOTE: 一覧画面を間に挟む必要はなく、直に詳細画面をスタックする
-              Navigator.push(context, MessagePage.route(messageId));
             }
+
+            // メッセージ詳細画面に遷移する
+            Navigator.push(context, MessagePage.route(messageId));
+          } else {
+            // メッセージ一覧画面に遷移する
+            Navigator.push(context, MessagePage.route());
           }
         });
       });
