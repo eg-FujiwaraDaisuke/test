@@ -6,7 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/app_lifecycle.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
@@ -68,6 +67,8 @@ class _UserPageState extends State<UserPage> {
     BlocProvider.of<ProfileBloc>(context)
         .add(GetProfileEvent(userId: si<Account>().userId));
 
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileEvent(userId: si<Account>().userId));
     _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
@@ -148,7 +149,7 @@ class _UserPageState extends State<UserPage> {
                         );
                       }
                     }
-                    return PlaceHolderProfile();
+                    return Container();
                   }),
                   CustomPaint(
                     size: Size(MediaQuery.of(context).size.width, 173),
@@ -186,8 +187,8 @@ class _UserPageState extends State<UserPage> {
                 routeName: '/logout',
                 handler: () async {
                   await _showAlert(
-                      message: i18nTranslate(context, 'confirm_logout'),
-                      actionName: i18nTranslate(context, 'YES'));
+                      message: i18nTranslate(context, "confirm_logout"),
+                      actionName: i18nTranslate(context, "YES"));
                 },
               ),
             ],
