@@ -90,6 +90,7 @@ dependencies:
   share_plus: ^2.2.0
 
   decorated_icon: ^1.2.1
+  flutter_app_badger: ^1.4.0
 
 dev_dependencies:
   flutter_test:

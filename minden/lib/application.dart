@@ -106,6 +106,17 @@ class Application extends StatelessWidget {
             ),
           ),
         ),
+        BlocProvider<GetMessagePushNotifyBloc>(
+            create: (context) => GetMessagePushNotifyBloc(
+                  const MessageInitial(),
+                  GetMessages(
+                    MessageRepositoryImpl(
+                      dataSource: MessageDataSourceImpl(
+                        client: http.Client(),
+                      ),
+                    ),
+                  ),
+                )),
         BlocProvider<GetShowBadgeBloc>(
           create: (BuildContext context) => GetShowBadgeBloc(
             const MessageInitial(),
