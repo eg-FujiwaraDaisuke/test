@@ -156,15 +156,15 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       ),
     );
 
-    var firstLoad = true;
     _getSupportActionBloc.stream.listen((event) async {
       if (event is SupportActionLoading) {
         Loading.show(context);
         return;
       }
-      Loading.hide();
 
+      var firstLoad = true;
       if (event is SupportActionLoaded) {
+        Loading.hide();
         if (!firstLoad) {
           _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
           _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
@@ -239,6 +239,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantLoaded) {
+              Loading.hide();
               final images = <String>[];
               final detail = state.powerPlant;
 
@@ -289,6 +290,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                 PowerPlantState>(
                               builder: (context, state) {
                                 if (state is SupportActionLoaded) {
+                                  Loading.hide();
                                   if (state.supportAction.support_action !=
                                           'configured' &&
                                       state.supportAction.support_action !=

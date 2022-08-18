@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/no_animation_router.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_icon_page.dart';
-import 'package:minden/features/user/data/datasources/profile_datasource.dart';
-import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -29,25 +26,14 @@ class ProfileSettingNamePage extends StatefulWidget {
 
 class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   String _inputName = '';
-  late UpdateProfileBloc _updateProfileBloc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
 
-    _updateProfileBloc = UpdateProfileBloc(
-      const ProfileStateInitial(),
-      UpdateProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
 
-    _updateProfileBloc.stream.listen((event) {
+    BlocProvider.of<ProfileBloc>(context).stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -65,7 +51,6 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
 
   @override
   void dispose() {
-    _updateProfileBloc.close();
     super.dispose();
   }
 
@@ -128,10 +113,10 @@ class _ProfileSettingNamePageState extends State<ProfileSettingNamePage> {
   void _next() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _updateProfileBloc.add(
+      context.read<ProfileBloc>().add(
         UpdateProfileEvent(
           name: _inputName,
-          icon: '',
+              icon: '',
           bio: '',
           wallPaper: '',
           freeLink: '',
