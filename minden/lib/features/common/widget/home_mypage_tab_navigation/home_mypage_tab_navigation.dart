@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -10,17 +9,17 @@ import 'package:minden/features/message/presentation/viewmodel/messages_controll
 import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
-class HomeMypageTabNavigation extends HookWidget {
+class HomeMypageTabNavigation extends HookConsumerWidget {
   HomeMypageTabNavigation({
     required this.currentTab,
   }) : super();
   final TabItem currentTab;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+        ref.watch(messagesStateControllerProvider.notifier);
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
 
     return BottomNavigationBar(
       backgroundColor: Colors.white,

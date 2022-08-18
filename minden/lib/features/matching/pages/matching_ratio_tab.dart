@@ -1,17 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/features/matching/pages/matching_page.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
 
 /// マイページ - マッチング - マッチング率
 /// マッチング関連のタブを表示する
-class MatchingRatioTab extends StatelessWidget {
+class MatchingRatioTab extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO 初期データ取得
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(matchingPageViewModelProvider.notifier).fetch();
+      ref.read(matchingPageViewModelProvider.notifier).fetch();
     });
 
     return SingleChildScrollView(
@@ -24,10 +25,10 @@ class MatchingRatioTab extends StatelessWidget {
             _MatchingRatioByCompany(),
             // 凡例
             _ChartLegends(),
-            SizedBox(height: 44),
+            const SizedBox(height: 44),
             // マッチング量（日別）
             // TODO デザイン確定後、設定している条件に応じて棒グラフの表示内容も変わる見込み
-            Text(
+            const Text(
               'マッチング量（日別）',
               style: TextStyle(
                 fontFamily: 'NotoSansJP',
@@ -37,7 +38,7 @@ class MatchingRatioTab extends StatelessWidget {
                 letterSpacing: 0.4,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _MatchingRatioByDate(),
           ],
         ),
@@ -46,11 +47,11 @@ class MatchingRatioTab extends StatelessWidget {
   }
 }
 
-class _MatchingRatioByCompany extends ConsumerWidget {
+class _MatchingRatioByCompany extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final viewModel = watch(matchingPageViewModelProvider.notifier);
-    final data = watch(matchingPageViewModelProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(matchingPageViewModelProvider.notifier);
+    final data = ref.watch(matchingPageViewModelProvider);
 
     return AspectRatio(
       aspectRatio: 1,
@@ -87,8 +88,8 @@ class _MatchingRatioByCompany extends ConsumerWidget {
             children: [
               SizedBox(height: 18),
               Text(
-                '${data.selectedCompanyPercentage()}',
-                style: TextStyle(
+                data.selectedCompanyPercentage(),
+                style: const TextStyle(
                   fontFamily: 'Barlow',
                   fontWeight: FontWeight.w700,
                   fontSize: 36,
@@ -96,7 +97,7 @@ class _MatchingRatioByCompany extends ConsumerWidget {
                   letterSpacing: 0.04,
                 ),
               ),
-              Text(
+              const Text(
                 '%',
                 style: TextStyle(
                   fontFamily: 'Barlow',
@@ -131,10 +132,10 @@ class _MatchingRatioByCompany extends ConsumerWidget {
   }
 }
 
-class _ChartLegends extends ConsumerWidget {
+class _ChartLegends extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final data = watch(matchingPageViewModelProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(matchingPageViewModelProvider);
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -168,7 +169,7 @@ class _ChartLegends extends ConsumerWidget {
           ),
           Text(
             v.energyCompanyName,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xFF6A6F7D),
               fontFamily: 'NotoSansJP',
               fontWeight: FontWeight.w500,
@@ -183,9 +184,9 @@ class _ChartLegends extends ConsumerWidget {
   }
 }
 
-class _MatchingRatioByDate extends ConsumerWidget {
+class _MatchingRatioByDate extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
@@ -256,9 +257,9 @@ class _MatchingRatioByDate extends ConsumerWidget {
               ),
               borderData: FlBorderData(
                 show: true,
-                border: Border(
+                border: const Border(
                   bottom: BorderSide(
-                    color: const Color(0xFFE5E7EB),
+                    color: Color(0xFFE5E7EB),
                     width: 1,
                   ),
                 ),

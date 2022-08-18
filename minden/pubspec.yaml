@@ -78,8 +78,8 @@ dependencies:
 
   flutter_native_splash: ^1.1.5+1
 
-  flutter_hooks: ^0.18.0
-  hooks_riverpod: ^0.14.0
+  flutter_hooks: ^0.18.3
+  hooks_riverpod: ^1.0.3
   freezed_annotation: ^0.14.0
 
   collection: ^1.15.0

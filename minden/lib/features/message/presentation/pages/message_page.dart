@@ -20,7 +20,7 @@ import 'package:minden/features/message/presentation/pages/power_plant_message_d
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/utile.dart';
 
-class MessagePage extends HookWidget {
+class MessagePage extends HookConsumerWidget {
   MessagePage({this.showMessageId});
 
   static const String routeName = '/user/message';
@@ -51,9 +51,9 @@ class MessagePage extends HookWidget {
   late StreamSubscription _readMessageSubscription;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
+        ref.watch(messagesStateControllerProvider.notifier);
     final showMessageIdState = useState(showMessageId);
     useEffect(
       () {
@@ -201,7 +201,7 @@ class MessagePage extends HookWidget {
   }
 }
 
-class _MessagesList extends HookWidget {
+class _MessagesList extends HookConsumerWidget {
   _MessagesList({
     required this.readMessage,
   });
@@ -212,10 +212,10 @@ class _MessagesList extends HookWidget {
   late StreamSubscription _getMessagesSubscription;
 
   @override
-  Widget build(BuildContext context) {
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
+        ref.watch(messagesStateControllerProvider.notifier);
     final _isLoading = useState<bool>(false);
 
     useEffect(
@@ -273,7 +273,7 @@ class _MessagesList extends HookWidget {
   }
 }
 
-class _MessagesListItem extends HookWidget {
+class _MessagesListItem extends HookConsumerWidget {
   _MessagesListItem({
     required this.messageDetail,
     required this.readMessage,
@@ -283,7 +283,7 @@ class _MessagesListItem extends HookWidget {
   final Function readMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
 
     return GestureDetector(
