@@ -7,6 +7,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:minden/core/event_bus/event.dart';
+import 'package:minden/core/event_bus/event_bus.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
@@ -18,6 +20,7 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/main.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookWidget {
@@ -54,6 +57,7 @@ class MessagePage extends HookWidget {
   Widget build(BuildContext context) {
     final messagesStateController =
         useProvider(messagesStateControllerProvider.notifier);
+    final messagesStateData = useProvider(messagesStateControllerProvider);
     final showMessageIdState = useState(showMessageId);
     useEffect(
       () {
@@ -156,6 +160,13 @@ class MessagePage extends HookWidget {
     void _readMessage(int messageId) {
       _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
       messagesStateController.readMessage(messageId);
+      var numMessUnread = 0;
+      for (final messageDetail in messagesStateData.messages) {
+        if (!messageDetail.read) {
+          numMessUnread++;
+        }
+      }
+      eventBus.fire(NotificationCounterEvent(count: numMessUnread - 1));
     }
 
     return Scaffold(
@@ -290,6 +301,7 @@ class _MessagesListItem extends HookWidget {
       onTap: () {
         // 未読ならviewmodelのreadをtrueに変える
         // apiを叩いて既読する
+        numMessageUnread--;
         if (!messageDetail.read) {
           // ignore: avoid_dynamic_calls
           readMessage(messageDetail.messageId);
