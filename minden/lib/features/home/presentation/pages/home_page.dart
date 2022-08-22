@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -31,6 +32,7 @@ final homePageTabProvider = StateProvider((ref) => TabItem.home);
 // bottomNavigationBarの出し分けを行います
 class HomePage extends HookWidget {
   static const String routeName = '/home';
+  static const platform = MethodChannel('samples.flutter.dev/battery');
 
   static Route<dynamic> route() {
     return NoAnimationMaterialPageRoute(
@@ -52,7 +54,6 @@ class HomePage extends HookWidget {
     final _shoWMessageId = useState('');
 
     late UpdateFcmTokenBloc _updateFcmTokenBloc;
-    late GetMessagePushNotifyBloc _getMessagePushNotifyBloc;
     late GetMessageBackGroundPushNotifyBloc _getMessageBackGroundPushNotifyBloc;
     late TransitionScreenBloc _transitionScreenBloc;
 
@@ -99,18 +100,9 @@ class HomePage extends HookWidget {
         }
       });
 
-      _getMessagePushNotifyBloc = GetMessagePushNotifyBloc(
-        const MessageInitial(),
-        GetMessages(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
-            ),
-          ),
-        ),
-      );
-
-      _getMessagePushNotifyBloc.stream.listen((event) async {
+      BlocProvider.of<GetMessagePushNotifyBloc>(context)
+          .stream
+          .listen((event) async {
         if (event is MessagesLoading) {
           Loading.show(context);
           return;
@@ -145,7 +137,7 @@ class HomePage extends HookWidget {
         ),
       );
 
-      _getMessageBackGroundPushNotifyBloc.stream.listen((event) {
+      _getMessageBackGroundPushNotifyBloc.stream.listen((event) async {
         if (event is MessagesLoading) {
           Loading.show(context);
           return;
@@ -164,7 +156,9 @@ class HomePage extends HookWidget {
       Future(() async {
         const initializationSettingsAndroid =
             AndroidInitializationSettings('@mipmap/ic_launcher');
-        const initializationSettingsIOS = IOSInitializationSettings();
+        const initializationSettingsIOS = IOSInitializationSettings(
+          requestBadgePermission: false,
+        );
 
         const initializationSettings = InitializationSettings(
             android: initializationSettingsAndroid,
@@ -178,9 +172,9 @@ class HomePage extends HookWidget {
         // Android ではアプリがフォアグラウンド状態で
         // 画面上部にプッシュ通知メッセージを表示することができない為、
         // ローカル通知で擬似的に通知メッセージを表示
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          _getMessagePushNotifyBloc.add(GetMessagesEvent('1'));
-
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+          BlocProvider.of<GetMessagePushNotifyBloc>(context)
+              .add(GetMessagesEvent('1'));
           final notification = message.notification;
           final android = message.notification?.android;
           const channel = AndroidNotificationChannel(
@@ -200,7 +194,7 @@ class HomePage extends HookWidget {
               }
             }
 
-            si<FlutterLocalNotificationsPlugin>().show(
+            await si<FlutterLocalNotificationsPlugin>().show(
               notification.hashCode,
               notification.title,
               notification.body,
@@ -210,6 +204,7 @@ class HomePage extends HookWidget {
                   channel.name,
                   channel.description,
                   icon: 'launch_background',
+                  channelShowBadge: false,
                 ),
               ),
               payload: payload,
@@ -249,7 +244,6 @@ class HomePage extends HookWidget {
 
       return () {
         _updateFcmTokenBloc.close();
-        _getMessagePushNotifyBloc.close();
         _getMessageBackGroundPushNotifyBloc.close();
       };
     }, []);

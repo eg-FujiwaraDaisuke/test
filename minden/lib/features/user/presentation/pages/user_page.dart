@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,6 +30,7 @@ import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
 import 'package:minden/injection_container.dart';
+import 'package:minden/main.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -454,6 +456,15 @@ class _MenuMessageItem extends HookWidget {
     // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
     final latestUnreadMessageDetail = messagesStateData.messages
         .firstWhereOrNull((messageDetail) => messageDetail.read == false);
+
+    for (final element in messagesStateData.messages) {
+      if (!element.read) {
+        numMessageUnread += 1;
+      }
+    }
+    if (numMessageUnread == 0) {
+      FlutterAppBadger.removeBadge();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
