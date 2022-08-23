@@ -1047,10 +1047,8 @@ class SupportButton extends StatelessWidget {
                       user: user,
                     ).showDialog();
                     final isConfirm = result != null && result == true;
-
                     if (isConfirm) {
                       getSupportAction();
-                      
                     }
                     return;
                   }
@@ -1068,13 +1066,16 @@ class SupportButton extends StatelessWidget {
                     // 応援プラントを選択した場合、確定ダイアログに飛ばす
                     if (isSelected ?? false) {
                       // ignore: use_build_context_synchronously
-                      await SupportPowerPlantDecisionDialog(
+                      final result = await SupportPowerPlantDecisionDialog(
                         context: context,
                         selectPowerPlant: selectPowerPlant,
                         registPowerPlants: _registerPowerPlants,
                         user: user,
                       ).showDialog();
-                      getSupportAction();
+                      final isDecision = result != null && result == true;
+                      if (isDecision) {
+                        getSupportAction();
+                      }
                     } else {
                       // 応援プラントを選択しなかった場合、stateの中身をリセット
                       _registerPowerPlants = historyPowerPlants
