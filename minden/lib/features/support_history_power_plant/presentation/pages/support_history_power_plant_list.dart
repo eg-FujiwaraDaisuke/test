@@ -62,9 +62,7 @@ class _SupportHistoryPowerPlantListState
       child: BlocListener<GetPowerPlantsHistoryBloc, PowerPlantState>(
         listener: (context, state) {
           if (state is HistoryLoading) {
-/*
             Loading.show(context);
-*/
             return;
           }
         },

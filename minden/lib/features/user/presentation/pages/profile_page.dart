@@ -15,6 +15,7 @@ import 'package:minden/features/power_plant/presentation/pages/power_plant_searc
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
@@ -43,6 +44,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileEvent(userId: widget.userId));
     super.initState();
   }
 
