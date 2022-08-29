@@ -2,50 +2,24 @@
 
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
-import 'package:minden/core/event_bus/event.dart';
-import 'package:minden/core/event_bus/event_bus.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
 import 'package:minden/core/provider/package_info_provider.dart';
 import 'package:minden/injection_container.dart' as di;
-import 'package:minden/injection_container.dart';
 import 'package:package_info/package_info.dart';
-
-int numMessageUnread = 0;
-
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (await FlutterAppBadger.isAppBadgeSupported()) {
-    FlutterAppBadger.updateBadgeCount(1);
-  }
-}
-
-void initNotificationCounter() {
-  eventBus.on<NotificationCounterEvent>().listen((event) async {
-    if (await FlutterAppBadger.isAppBadgeSupported()) {
-      FlutterAppBadger.updateBadgeCount(event.count);
-    }
-    if (event.count == 0) {
-      await si<FlutterLocalNotificationsPlugin>().cancelAll();
-      FlutterAppBadger.removeBadge();
-    }
-  });
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   const env = String.fromEnvironment('DEFINE_BUILD_ENV');
   Config.setEnvironment(env);
   await di.init();
-  await Firebase.initializeApp();
+
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
@@ -53,6 +27,7 @@ Future<void> main() async {
   final dynamicLinks = FirebaseDynamicLinks.instance;
 
   final packageInfo = await PackageInfo.fromPlatform();
+
   await runZonedGuarded(
     () async {
       runApp(
