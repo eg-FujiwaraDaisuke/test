@@ -19,7 +19,6 @@ import 'package:minden/features/message/data/datasources/message_datasource.dart
 import 'package:minden/features/message/data/repositories/message_repository_impl.dart';
 import 'package:minden/features/message/domain/usecases/message_usecase.dart';
 import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
-import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/injection_container.dart';
