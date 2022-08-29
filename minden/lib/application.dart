@@ -1,8 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
@@ -46,12 +48,18 @@ import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
+import 'package:minden/main.dart';
 
-class Application extends StatelessWidget {
+class Application extends HookWidget {
   const Application({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      initNotificationCounter();
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      return null;
+    }, []);
     return MultiBlocProvider(
       providers: [
         BlocProvider<LocalizedBloc>(
