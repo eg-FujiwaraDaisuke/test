@@ -135,23 +135,21 @@ class MessagePage extends HookWidget {
           }
         });
 
-        // プッシュ通知をバックグラウンドorターミネイトからタップした場合,メッセージ詳細を取得してダイアログを表示させる
-        if (showMessageIdState.value != null) {
-          logW('showMessageIdState.value != null');
-          showMessageIdState.value = null;
-          _getMessageDetailBloc
-              .add(GetMessageDetailEvent(messageId: showMessageId!));
-        }
+      // プッシュ通知をバックグラウンドorターミネイトからタップした場合,メッセージ詳細を取得してダイアログを表示させる
+      if (showMessageIdState.value != null) {
+        logW('showMessageIdState.value != null');
+        _getMessageDetailBloc
+            .add(GetMessageDetailEvent(messageId: showMessageId!));
+      }
 
-        return () {
-          _getMessageDetailSubscription.cancel();
-          _readMessageSubscription.cancel();
-          _getShowBadgeSubscription.cancel();
-          _getMessageDetailBloc.close();
-          _readMessageBloc.close();
-        };
-      },
-    );
+      return () {
+        _getMessageDetailSubscription.cancel();
+        _readMessageSubscription.cancel();
+        _getShowBadgeSubscription.cancel();
+        _getMessageDetailBloc.close();
+        _readMessageBloc.close();
+      };
+    }, [showMessageIdState.value]);
 
     void _readMessage(int messageId) {
       _readMessageBloc.add(ReadMessageEvent(messageId: messageId));

@@ -232,12 +232,6 @@ class HomePage extends HookWidget {
               logW('ターミネイト状態からプッシュ通知をタップした ${message?.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
             }
-
-            // メッセージ詳細画面に遷移する
-            Navigator.push(context, MessagePage.route(messageId));
-          } else if (message != null) {
-            // メッセージ一覧画面に遷移する
-            Navigator.push(context, MessagePage.route());
           }
         });
 
@@ -250,12 +244,6 @@ class HomePage extends HookWidget {
               logW('バックグラウンド状態からプッシュ通知をタップした ${message.data}');
               _getMessageBackGroundPushNotifyBloc.add(GetMessagesEvent('1'));
             }
-
-            // メッセージ詳細画面に遷移する
-            Navigator.push(context, MessagePage.route(messageId));
-          } else {
-            // メッセージ一覧画面に遷移する
-            Navigator.push(context, MessagePage.route());
           }
         });
       });

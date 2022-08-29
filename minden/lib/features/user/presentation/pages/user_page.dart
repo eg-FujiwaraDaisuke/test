@@ -64,6 +64,8 @@ class _UserPageState extends State<UserPage> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileEvent(userId: si<Account>().userId));
     _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
