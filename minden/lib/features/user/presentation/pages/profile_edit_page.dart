@@ -35,6 +35,7 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
@@ -562,7 +563,7 @@ class _ProfileWallPaperEditState extends State<_ProfileWallPaperEdit> {
                     padding: const EdgeInsets.all(10),
                     child: Center(
                       child: SvgPicture.asset(
-                        'assets/images/user/camera.svg',
+                        Assets.images.common.camera,
                         width: 15,
                         height: 14,
                       ),
@@ -689,7 +690,7 @@ class _ProfileIconEditState extends State<_ProfileIconEdit> {
                     ),
                     child: Center(
                       child: SvgPicture.asset(
-                        'assets/images/user/camera.svg',
+                        Assets.images.common.camera,
                         width: 15,
                         height: 14,
                       ),

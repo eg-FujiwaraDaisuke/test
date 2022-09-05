@@ -21,6 +21,7 @@ import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 class ProfileSettingIconPage extends StatefulWidget {
   @override
@@ -202,7 +203,7 @@ class _ProfileSettingIconPageState extends State<ProfileSettingIconPage> {
       ),
       child: Center(
         child: SvgPicture.asset(
-          'assets/images/common/camera.svg',
+          Assets.images.common.camera,
           width: 32,
           height: 28,
         ),
