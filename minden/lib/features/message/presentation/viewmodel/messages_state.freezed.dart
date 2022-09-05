@@ -1,5 +1,7 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'messages_state.dart';
 
@@ -35,7 +37,7 @@ class _$MessagesStateTearOff {
     );
   }
 
-  MessagesState fromJson(Map<String, Object> json) {
+  MessagesState fromJson(Map<String, Object?> json) {
     return MessagesState.fromJson(json);
   }
 }
@@ -171,9 +173,8 @@ class __$MessagesStateCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_MessagesState implements _MessagesState {
   const _$_MessagesState(
       {this.hasEverGetMessage = false,
@@ -183,21 +184,21 @@ class _$_MessagesState implements _MessagesState {
       this.messages = const []});
 
   factory _$_MessagesState.fromJson(Map<String, dynamic> json) =>
-      _$_$_MessagesStateFromJson(json);
+      _$$_MessagesStateFromJson(json);
 
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool hasEverGetMessage;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool showBadge;
-  @JsonKey(defaultValue: 0)
+  @JsonKey()
   @override
   final int page;
-  @JsonKey(defaultValue: 0)
+  @JsonKey()
   @override
   final int total;
-  @JsonKey(defaultValue: const [])
+  @JsonKey()
   @override
   final List<MessageDetail> messages;
 
@@ -209,30 +210,24 @@ class _$_MessagesState implements _MessagesState {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _MessagesState &&
-            (identical(other.hasEverGetMessage, hasEverGetMessage) ||
-                const DeepCollectionEquality()
-                    .equals(other.hasEverGetMessage, hasEverGetMessage)) &&
-            (identical(other.showBadge, showBadge) ||
-                const DeepCollectionEquality()
-                    .equals(other.showBadge, showBadge)) &&
-            (identical(other.page, page) ||
-                const DeepCollectionEquality().equals(other.page, page)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)) &&
-            (identical(other.messages, messages) ||
-                const DeepCollectionEquality()
-                    .equals(other.messages, messages)));
+        (other.runtimeType == runtimeType &&
+            other is _MessagesState &&
+            const DeepCollectionEquality()
+                .equals(other.hasEverGetMessage, hasEverGetMessage) &&
+            const DeepCollectionEquality().equals(other.showBadge, showBadge) &&
+            const DeepCollectionEquality().equals(other.page, page) &&
+            const DeepCollectionEquality().equals(other.total, total) &&
+            const DeepCollectionEquality().equals(other.messages, messages));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(hasEverGetMessage) ^
-      const DeepCollectionEquality().hash(showBadge) ^
-      const DeepCollectionEquality().hash(page) ^
-      const DeepCollectionEquality().hash(total) ^
-      const DeepCollectionEquality().hash(messages);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(hasEverGetMessage),
+      const DeepCollectionEquality().hash(showBadge),
+      const DeepCollectionEquality().hash(page),
+      const DeepCollectionEquality().hash(total),
+      const DeepCollectionEquality().hash(messages));
 
   @JsonKey(ignore: true)
   @override
@@ -241,7 +236,7 @@ class _$_MessagesState implements _MessagesState {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_MessagesStateToJson(this);
+    return _$$_MessagesStateToJson(this);
   }
 }
 
@@ -257,15 +252,15 @@ abstract class _MessagesState implements MessagesState {
       _$_MessagesState.fromJson;
 
   @override
-  bool get hasEverGetMessage => throw _privateConstructorUsedError;
+  bool get hasEverGetMessage;
   @override
-  bool get showBadge => throw _privateConstructorUsedError;
+  bool get showBadge;
   @override
-  int get page => throw _privateConstructorUsedError;
+  int get page;
   @override
-  int get total => throw _privateConstructorUsedError;
+  int get total;
   @override
-  List<MessageDetail> get messages => throw _privateConstructorUsedError;
+  List<MessageDetail> get messages;
   @override
   @JsonKey(ignore: true)
   _$MessagesStateCopyWith<_MessagesState> get copyWith =>
