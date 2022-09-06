@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 /// 電力会社ピックアップ一覧
 class PowerPlantPickup extends StatefulWidget {
@@ -99,7 +100,7 @@ class CarouselNextPrevController extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(right: 4),
           child: SvgPicture.asset(
-            'assets/images/common/ic_arrow_prev.svg',
+            Assets.images.common.icArrowPrev,
             fit: BoxFit.none,
           ),
         ),
@@ -123,7 +124,7 @@ class CarouselNextPrevController extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 4),
           child: SvgPicture.asset(
-            'assets/images/common/ic_arrow_next.svg',
+            Assets.images.common.icArrowNext,
             fit: BoxFit.none,
           ),
         ),

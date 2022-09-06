@@ -15,6 +15,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 /// 特典から探す
@@ -145,7 +146,7 @@ class _PowerPlantSearchByGiftState extends State<PowerPlantSearchByGift> {
         onTap: Navigator.of(context).pop,
         child: Center(
           child: SvgPicture.asset(
-            'assets/images/common/leading_back.svg',
+            Assets.images.common.leadingBack,
             fit: BoxFit.fill,
             width: 44,
             height: 44,

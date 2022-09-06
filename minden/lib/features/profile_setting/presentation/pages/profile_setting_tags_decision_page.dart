@@ -15,6 +15,7 @@ import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,7 +65,7 @@ class _ProfileSettingTagsDecisionPageState
           onTap: () => _prev(context),
           child: Center(
             child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
+              Assets.images.common.leadingBack,
               fit: BoxFit.fill,
               width: 44,
               height: 44,

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/ext/logger_ext.dart';
 import 'package:minden/features/matching/pages/matching_ratio_tab.dart';
 import 'package:minden/features/matching/viewmodel/matching_page_view_model.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 final matchingPageViewModelProvider =
     StateNotifierProvider<MatchingPageViewModel, MatchingPageState>(
@@ -61,7 +62,7 @@ class MatchingPage extends StatelessWidget {
   Widget _buildBackLeadingButton(BuildContext context) {
     return IconButton(
       icon: SvgPicture.asset(
-        'assets/images/common/leading_back.svg',
+        Assets.images.common.leadingBack,
         width: 44,
         height: 44,
       ),

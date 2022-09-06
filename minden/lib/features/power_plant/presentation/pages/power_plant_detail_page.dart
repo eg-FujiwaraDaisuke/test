@@ -38,6 +38,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -794,7 +795,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                   ),
                                   const SizedBox(width: 6),
                                   SvgPicture.asset(
-                                    'assets/images/common/ic_arrow_collapse.svg',
+                                    Assets.images.common.icArrowCollapse,
                                   ),
                                 ],
                               ),
@@ -873,7 +874,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                       ),
                       const SizedBox(width: 6),
                       SvgPicture.asset(
-                        'assets/images/common/ic_arrow_collapse.svg',
+                        Assets.images.common.icArrowCollapse,
                       ),
                     ],
                   ),
@@ -908,7 +909,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     ),
                   ),
                   SvgPicture.asset(
-                    'assets/images/common/ic_arrow_expand.svg',
+                    Assets.images.common.icArrowExpand,
                   ),
                 ],
               ),
@@ -1048,7 +1049,6 @@ class SupportButton extends StatelessWidget {
 
                     if (isConfirm) {
                       getSupportAction();
-                      
                     }
                     return;
                   }

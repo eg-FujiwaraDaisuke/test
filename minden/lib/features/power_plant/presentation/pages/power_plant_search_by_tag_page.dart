@@ -17,6 +17,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
@@ -104,7 +105,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
           onTap: Navigator.of(context).pop,
           child: Center(
             child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
+              Assets.images.common.leadingBack,
               fit: BoxFit.fill,
               width: 44,
               height: 44,

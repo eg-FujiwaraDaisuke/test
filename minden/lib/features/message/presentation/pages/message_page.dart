@@ -18,6 +18,7 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookConsumerWidget {
@@ -189,7 +190,7 @@ class MessagePage extends HookConsumerWidget {
   Widget _buildBackLeadingButton(BuildContext context) {
     return IconButton(
       icon: SvgPicture.asset(
-        'assets/images/common/leading_back.svg',
+        Assets.images.common.leadingBack,
         width: 44,
         height: 44,
       ),

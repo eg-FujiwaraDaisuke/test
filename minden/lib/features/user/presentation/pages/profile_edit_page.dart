@@ -178,7 +178,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     },
                     child: Center(
                       child: SvgPicture.asset(
-                        'assets/images/common/leading_back.svg',
+                        Assets.images.common.leadingBack,
                         fit: BoxFit.fill,
                         width: 44,
                         height: 44,
