@@ -65,11 +65,11 @@ class _SupportHistoryPowerPlantListState
             Loading.show(context);
             return;
           }
-          Loading.hide();
         },
         child: BlocBuilder<GetPowerPlantsHistoryBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is HistoryLoaded) {
+              Loading.hide();
               var index = 0;
               return Column(
                   children:

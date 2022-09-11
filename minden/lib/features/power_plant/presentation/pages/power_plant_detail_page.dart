@@ -157,15 +157,15 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
       ),
     );
 
-    var firstLoad = true;
     _getSupportActionBloc.stream.listen((event) async {
       if (event is SupportActionLoading) {
         Loading.show(context);
         return;
       }
-      Loading.hide();
 
+      var firstLoad = true;
       if (event is SupportActionLoaded) {
+        Loading.hide();
         if (!firstLoad) {
           _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
           _participantBloc.add(GetPowerPlantEvent(plantId: widget.plantId));
@@ -240,6 +240,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
         child: BlocBuilder<GetPowerPlantBloc, PowerPlantState>(
           builder: (context, state) {
             if (state is PowerPlantLoaded) {
+              Loading.hide();
               final images = <String>[];
               final detail = state.powerPlant;
 
@@ -290,6 +291,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                 PowerPlantState>(
                               builder: (context, state) {
                                 if (state is SupportActionLoaded) {
+                                  Loading.hide();
                                   if (state.supportAction.support_action !=
                                           'configured' &&
                                       state.supportAction.support_action !=
@@ -1046,7 +1048,6 @@ class SupportButton extends StatelessWidget {
                       user: user,
                     ).showDialog();
                     final isConfirm = result != null && result == true;
-
                     if (isConfirm) {
                       getSupportAction();
                     }
@@ -1066,13 +1067,16 @@ class SupportButton extends StatelessWidget {
                     // 応援プラントを選択した場合、確定ダイアログに飛ばす
                     if (isSelected ?? false) {
                       // ignore: use_build_context_synchronously
-                      await SupportPowerPlantDecisionDialog(
+                      final result = await SupportPowerPlantDecisionDialog(
                         context: context,
                         selectPowerPlant: selectPowerPlant,
                         registPowerPlants: _registerPowerPlants,
                         user: user,
                       ).showDialog();
-                      getSupportAction();
+                      final isDecision = result != null && result == true;
+                      if (isDecision) {
+                        getSupportAction();
+                      }
                     } else {
                       // 応援プラントを選択しなかった場合、stateの中身をリセット
                       _registerPowerPlants = historyPowerPlants

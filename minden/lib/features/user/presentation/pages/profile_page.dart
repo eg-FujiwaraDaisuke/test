@@ -3,25 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:minden/core/hook/use_analytics.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/success/account.dart';
-import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/Issue_report/presentation/issue_report_complete_dialog.dart';
 import 'package:minden/features/Issue_report/presentation/issue_report_dialog.dart';
 import 'package:minden/features/Issue_report/presentation/issue_report_message_dialog.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
-import 'package:minden/features/login/presentation/bloc/logout_bloc.dart';
-import 'package:minden/features/login/presentation/bloc/logout_event.dart';
-import 'package:minden/features/login/presentation/pages/login_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
-import 'package:minden/features/user/data/datasources/profile_datasource.dart';
-import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -51,272 +43,219 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late GetProfileBloc _getProfileBloc;
-
   @override
   void initState() {
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileEvent(userId: widget.userId));
     super.initState();
-
-    _getProfileBloc = GetProfileBloc(
-      const ProfileStateInitial(),
-      GetProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
-    _getProfileBloc.stream.listen((event) async {
-      if (event is ProfileLoadError) {
-        if (event.needLogin) {
-          BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-          Loading.show(context);
-          await Future.delayed(const Duration(seconds: 2));
-          await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ), (_) {
-            Loading.hide();
-            return false;
-          });
-        }
-      }
-    });
-
-    _getProfileBloc.add(GetProfileEvent(
-      userId: widget.userId,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _getProfileBloc.close();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isMe = si<Account>().isMe(widget.userId);
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        if (state is ProfileLoaded) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/images/common/leading_back.svg',
+                    fit: BoxFit.fill,
+                    width: 44,
+                    height: 44,
+                  ),
+                ),
+              ),
+              actions: [
+                if (isMe)
+                  GestureDetector(
+                    onTap: () async {
+                      await Navigator.push<bool>(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  ProfileEditPage(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return const FadeUpwardsPageTransitionsBuilder()
+                                .buildTransitions(
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfileEditPage(),
+                                      settings: const RouteSettings(
+                                          name: ProfileEditPage.routeName),
+                                    ),
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child);
+                          },
+                        ),
+                      );
+                      // 常にリロード
+                    },
+                    child: Container(
+                      width: 90,
+                      height: 44,
+                      margin:
+                          const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/images/user/edit.svg'),
+                          const SizedBox(
+                            width: 9,
+                          ),
+                          Text(
+                            i18nTranslate(context, 'user_edit'),
+                            style: const TextStyle(
+                              color: Color(0xFF575292),
+                              fontSize: 12,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () async {
+                      // ユーザーの通報
+                      useButtonAnalytics(
+                          ButtonAnalyticsType.requestIssueReport);
 
-    return BlocProvider.value(
-      value: _getProfileBloc,
-      child: BlocListener<GetProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetProfileBloc, ProfileState>(
-            builder: (context, state) {
-          if (state is ProfileLoaded) {
-            return Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                centerTitle: true,
-                leading: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Center(
-                    child: SvgPicture.asset(
-                      Assets.images.common.leadingBack,
-                      fit: BoxFit.fill,
+                      final isShowReport = await IssueReportDialog(
+                              context: context,
+                              userName: state.profile.name ?? '')
+                          .showDialog();
+                      final isReport = isShowReport!
+                          ? await IssueReportMessageDialog(
+                              context: context,
+                              targetUserId: widget.userId,
+                            ).showDialog()
+                          : false;
+
+                      isReport!
+                          ? IssueReportCompleteDialog(context: context)
+                              .showDialog()
+                          : null;
+                    },
+                    child: Container(
                       width: 44,
                       height: 44,
+                      margin:
+                          const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Colors.black.withOpacity(0.2),
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.more_horiz),
+                      ),
                     ),
-                  ),
-                ),
-                actions: [
-                  if (isMe)
-                    GestureDetector(
-                      onTap: () async {
-                        await Navigator.push<bool>(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    ProfileEditPage(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return const FadeUpwardsPageTransitionsBuilder()
-                                  .buildTransitions(
-                                      MaterialPageRoute(
-                                        builder: (context) => ProfileEditPage(),
-                                        settings: const RouteSettings(
-                                            name: ProfileEditPage.routeName),
-                                      ),
-                                      context,
-                                      animation,
-                                      secondaryAnimation,
-                                      child);
-                            },
-                          ),
-                        );
-
-                        // 常にリロード
-                        _getProfileBloc
-                            .add(GetProfileEvent(userId: si<Account>().userId));
-                      },
-                      child: Container(
-                        width: 90,
-                        height: 44,
-                        margin:
-                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          color: Colors.white,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset('assets/images/user/edit.svg'),
-                            const SizedBox(
-                              width: 9,
-                            ),
-                            Text(
-                              i18nTranslate(context, 'user_edit'),
-                              style: const TextStyle(
-                                color: Color(0xFF575292),
-                                fontSize: 12,
-                                fontFamily: 'NotoSansJP',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  else
-                    GestureDetector(
-                      onTap: () async {
-                        // ユーザーの通報
-                        useButtonAnalytics(
-                            ButtonAnalyticsType.requestIssueReport);
-
-                        final isShowReport = await IssueReportDialog(
-                                context: context,
-                                userName: state.profile.name ?? '')
-                            .showDialog();
-                        final isReport = isShowReport!
-                            ? await IssueReportMessageDialog(
-                                context: context,
-                                targetUserId: widget.userId,
-                              ).showDialog()
-                            : false;
-
-                        isReport!
-                            ? IssueReportCompleteDialog(context: context)
-                                .showDialog()
-                            : null;
-                      },
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        margin:
-                            const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          color: Colors.black.withOpacity(0.2),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.more_horiz),
-                        ),
-                      ),
-                    )
-                ],
-              ),
-              extendBodyBehindAppBar: true,
-              body: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          clipBehavior: Clip.none,
-                          children: [
-                            if (state.profile.wallPaper?.isEmpty ?? true)
-                              Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 173,
-                                  color: const Color(0xFFFFFB92))
-                            else
-                              CachedNetworkImage(
-                                imageUrl: state.profile.wallPaper!,
-                                placeholder: (context, url) {
-                                  return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 173,
-                                      color: const Color(0xFFFFFB92));
-                                },
-                                errorWidget: (context, url, error) => Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 173,
-                                  color: const Color(0xFFFFFB92),
-                                ),
+                  )
+              ],
+            ),
+            extendBodyBehindAppBar: true,
+            body: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.none,
+                        children: [
+                          if (state.profile.wallPaper?.isEmpty ?? true)
+                            Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 173,
-                                fit: BoxFit.cover,
+                                color: const Color(0xFFFFFB92))
+                          else
+                            CachedNetworkImage(
+                              imageUrl: state.profile.wallPaper!,
+                              placeholder: (context, url) {
+                                return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 173,
+                                    color: const Color(0xFFFFFB92));
+                              },
+                              errorWidget: (context, url, error) => Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 173,
+                                color: const Color(0xFFFFFB92),
                               ),
-                            CustomPaint(
-                              size:
-                                  Size(MediaQuery.of(context).size.width, 173),
-                              painter: WallPaperArcPainter(color: Colors.white),
+                              width: MediaQuery.of(context).size.width,
+                              height: 173,
+                              fit: BoxFit.cover,
                             ),
-                            Positioned(
-                              bottom: -44,
-                              child: ProfileIcon(icon: state.profile.icon),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        ProfileName(
-                          name: state.profile.name,
-                        ),
-                        const SizedBox(
-                          height: 22,
-                        ),
-                        // SNS
-                        _buildSnsLinks(state),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        // 自己紹介
-                        _ProfileBio(bio: state.profile.bio),
-                        const SizedBox(
-                          height: 43,
-                        ),
-                        _TagsList(
-                          tagsList: state.profile.tags,
-                        ),
-                        const SizedBox(
-                          height: 37,
-                        ),
-                        _SupportPowerPlant(
-                          userId: widget.userId,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
+                          CustomPaint(
+                            size: Size(MediaQuery.of(context).size.width, 173),
+                            painter: WallPaperArcPainter(color: Colors.white),
+                          ),
+                          Positioned(
+                            bottom: -44,
+                            child: ProfileIcon(icon: state.profile.icon),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 60,
+                      ),
+                      ProfileName(
+                        name: state.profile.name,
+                      ),
+                      const SizedBox(
+                        height: 22,
+                      ),
+                      // SNS
+                      _buildSnsLinks(state),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      // 自己紹介
+                      _ProfileBio(bio: state.profile.bio),
+                      const SizedBox(
+                        height: 43,
+                      ),
+                      _TagsList(
+                        tagsList: state.profile.tags,
+                      ),
+                      const SizedBox(
+                        height: 37,
+                      ),
+                      _SupportPowerPlant(
+                        userId: widget.userId,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            );
-          }
+            ),
+          );
+        } else {
           return PlaceHolderProfile();
-        }),
-      ),
+        }
+      },
     );
   }
 

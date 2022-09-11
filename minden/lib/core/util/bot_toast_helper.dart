@@ -6,9 +6,10 @@ class Loading {
   static void show(BuildContext context) {
     BotToast.showCustomLoading(
       toastBuilder: (_) => const CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.black12),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.black54),
       ),
       backgroundColor: Colors.transparent,
+      allowClick: true
     );
   }
 

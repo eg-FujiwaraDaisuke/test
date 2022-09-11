@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/home_mypage_tab_navigation/home_mypage_tab.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_state.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/injection_container.dart';
 
 class HomeMypageTabNavigation extends HookConsumerWidget {
   HomeMypageTabNavigation({
@@ -67,6 +71,9 @@ class HomeMypageTabNavigation extends HookConsumerWidget {
 
           BlocProvider.of<TransitionScreenBloc>(context)
               .add(TransitionScreenEvent('UserPage', false));
+
+          BlocProvider.of<ProfileBloc>(context)
+              .add(GetProfileEvent(userId: si<Account>().userId));
         }
       },
       currentIndex: currentTab.index,

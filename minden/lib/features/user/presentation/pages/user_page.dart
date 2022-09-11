@@ -22,9 +22,6 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
-import 'package:minden/features/user/data/datasources/profile_datasource.dart';
-import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
-import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -61,26 +58,11 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  late GetProfileBloc _getProfileBloc;
   late TransitionScreenBloc _transitionScreenBloc;
 
   @override
   void initState() {
     super.initState();
-
-    _getProfileBloc = GetProfileBloc(
-      const ProfileStateInitial(),
-      GetProfile(
-        ProfileRepositoryImpl(
-          dataSource: ProfileDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
-    _getProfileBloc.add(GetProfileEvent(userId: si<Account>().userId));
-
     _transitionScreenBloc = BlocProvider.of<TransitionScreenBloc>(context);
     _transitionScreenBloc.stream.listen((event) {
       if (event is TransitionScreenStart) {
@@ -99,117 +81,112 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void dispose() {
-    _getProfileBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _getProfileBloc,
-      child: BlocListener<GetProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileLoading) {
-            Loading.show(context);
-            return;
-          }
-          Loading.hide();
-        },
-        child: BlocBuilder<GetProfileBloc, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileLoaded) {
-              return Scaffold(
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  centerTitle: true,
-                  title: Text(
-                    i18nTranslate(context, 'user_menu'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontFamily: 'NotoSansJP',
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: calcLetterSpacing(letter: 0.5),
-                    ),
-                  ),
-                ),
-                extendBodyBehindAppBar: true,
-                body: SafeArea(
-                  top: false,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            if (state.profile.wallPaper?.isEmpty ?? true)
-                              Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 173,
-                                  color: const Color(0xFFFFFB92))
-                            else
-                              CachedNetworkImage(
-                                imageUrl: state.profile.wallPaper!,
-                                placeholder: (context, url) {
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 173,
-                                    color: const Color(0xFFFFFB92),
-                                  );
-                                },
-                                errorWidget: (context, url, error) => Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 173,
-                                  color: const Color(0xFFFFFB92),
-                                ),
-                                width: MediaQuery.of(context).size.width,
-                                height: 173,
-                                fit: BoxFit.cover,
-                              ),
-                            CustomPaint(
-                              size:
-                                  Size(MediaQuery.of(context).size.width, 173),
-                              painter: WallPaperArcPainter(color: Colors.white),
-                            ),
-                            Positioned(
-                              bottom: -44,
-                              child: ProfileIcon(icon: state.profile.icon),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        ProfileName(
-                          name: state.profile.name,
-                        ),
-                        const SizedBox(
-                          height: 61,
-                        ),
-                        _MenuListView(),
-                        _MenuItem(
-                          title: i18nTranslate(context, 'user_menu_logout'),
-                          icon: 'logout',
-                          routeName: '/logout',
-                          handler: () async {
-                            await _showAlert(
-                                message:
-                                    i18nTranslate(context, "confirm_logout"),
-                                actionName: i18nTranslate(context, "YES"));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          i18nTranslate(context, 'user_menu'),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontFamily: 'NotoSansJP',
+            fontWeight: FontWeight.w700,
+            letterSpacing: calcLetterSpacing(letter: 0.5),
+          ),
+        ),
+      ),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                      builder: (context, state) {
+                    if (state is ProfileLoaded) {
+                      if (state.profile.wallPaper?.isEmpty ?? true) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 173,
+                            color: const Color(0xFFFFFB92));
+                      } else {
+                        return CachedNetworkImage(
+                          imageUrl: state.profile.wallPaper!,
+                          placeholder: (context, url) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 173,
+                              color: const Color(0xFFFFFB92),
+                            );
                           },
-                        ),
-                      ],
-                    ),
+                          errorWidget: (context, url, error) => Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 173,
+                            color: const Color(0xFFFFFB92),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 173,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    }
+                    return Container();
+                  }),
+                  CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 173),
+                    painter: WallPaperArcPainter(color: Colors.white),
                   ),
-                ),
-              );
-            }
-            return PlaceHolderProfile();
-          },
+                  Positioned(
+                      bottom: -44,
+                      child: BlocBuilder<ProfileBloc, ProfileState>(
+                          builder: (context, state) {
+                        if (state is ProfileLoaded) {
+                          return ProfileIcon(icon: state.profile.icon);
+                        }
+                        return Container();
+                      }))
+                ],
+              ),
+              const SizedBox(
+                height: 60,
+              ),
+              BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+                if (state is ProfileLoaded) {
+                  return ProfileName(
+                    name: state.profile.name,
+                  );
+                }
+                return const ProfileName(name: '');
+              }),
+              const SizedBox(
+                height: 61,
+              ),
+              _MenuListView(),
+              _MenuItem(
+                title: i18nTranslate(context, 'user_menu_logout'),
+                icon: 'logout',
+                routeName: '/logout',
+                handler: () async {
+                  await _showAlert(
+                      message: i18nTranslate(context, "confirm_logout"),
+                      actionName: i18nTranslate(context, "YES"));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -233,7 +210,7 @@ class _UserPageState extends State<UserPage> {
               TextButton(
                 onPressed: () =>
                     Navigator.of(context, rootNavigator: true).pop(false),
-                child: Text(i18nTranslate(context, "NO")),
+                child: Text(i18nTranslate(context, 'NO')),
               ),
             ],
           );
@@ -243,7 +220,7 @@ class _UserPageState extends State<UserPage> {
 
     if (ret) {
       BlocProvider.of<LogoutBloc>(context).add(LogoutEvent());
-      Loading.show(context);
+      // Loading.show(context);
       await Future.delayed(const Duration(seconds: 2));
       await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -327,8 +304,6 @@ class _MenuItem extends StatelessWidget {
           case ProfilePage.routeName:
             final userId = si<Account>().userId;
             await Navigator.push(context, ProfilePage.route(userId));
-            BlocProvider.of<GetProfileBloc>(context)
-                .add(GetProfileEvent(userId: si<Account>().userId));
             break;
           case SupportHistoryPowerPlantPage.routeName:
             final route = MaterialPageRoute(

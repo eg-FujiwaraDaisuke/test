@@ -32,16 +32,20 @@ import 'package:minden/features/message/presentation/pages/message_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_page.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
+import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
 import 'package:minden/features/uploader/domain/usecases/media_usecase.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_bloc.dart';
 import 'package:minden/features/uploader/presentation/bloc/upload_state.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
+import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
-
-import 'features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
@@ -118,7 +122,24 @@ class Application extends StatelessWidget {
           create: (BuildContext context) => TransitionScreenBloc(
             const TransitionScreenInitial(),
           ),
-        )
+        ),
+        BlocProvider<ProfileBloc>(
+            create: (BuildContext context) => ProfileBloc(
+                const ProfileStateInitial(),
+                GetProfile(
+                  ProfileRepositoryImpl(
+                    dataSource: ProfileDataSourceImpl(
+                      client: http.Client(),
+                    ),
+                  ),
+                ),
+                UpdateProfile(
+                  ProfileRepositoryImpl(
+                    dataSource: ProfileDataSourceImpl(
+                      client: http.Client(),
+                    ),
+                  ),
+                )))
       ],
       child: MaterialApp(
         builder: BotToastInit(),

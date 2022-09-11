@@ -89,7 +89,7 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: _generateCircularRadius(),
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTapMenu,
         child: Column(
           children: [
