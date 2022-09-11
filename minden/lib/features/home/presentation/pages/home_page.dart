@@ -29,7 +29,7 @@ final homePageTabProvider = StateProvider((ref) => TabItem.home);
 
 // FCMプッシュ通知の遷移周りの初期化を行っています。
 // bottomNavigationBarの出し分けを行います
-class HomePage extends HookWidget {
+class HomePage extends HookConsumerWidget {
   static const String routeName = '/home';
 
   static Route<dynamic> route() {
@@ -45,8 +45,8 @@ class HomePage extends HookWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
-    final homePageTab = useProvider(homePageTabProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homePageTab = ref.watch(homePageTabProvider.state);
 
     // バックグラウンドorターミネイト状態からプッシュ通知をタップした際のMessageIdを一時保持
     final _shoWMessageId = useState('');
@@ -58,7 +58,7 @@ class HomePage extends HookWidget {
 
     void _selectTab(TabItem tabItem) => homePageTab.state = tabItem;
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
+        ref.watch(messagesStateControllerProvider.notifier);
 
     void _postToken(String? token) {
       logD('FCM token : $token');

@@ -465,7 +465,7 @@ packages:
       name: flutter_hooks
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.2"
+    version: "0.18.3"
   flutter_i18n:
     dependency: "direct main"
     description:
@@ -526,7 +526,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.3"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -604,7 +604,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+5"
+    version: "1.0.3"
   http:
     dependency: transitive
     description:
@@ -910,7 +910,7 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.3"
   rxdart:
     dependency: transitive
     description:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/success/account.dart';
@@ -14,17 +13,17 @@ import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/injection_container.dart';
 
-class HomeMypageTabNavigation extends HookWidget {
+class HomeMypageTabNavigation extends HookConsumerWidget {
   HomeMypageTabNavigation({
     required this.currentTab,
   }) : super();
   final TabItem currentTab;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+        ref.watch(messagesStateControllerProvider.notifier);
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
 
     return BottomNavigationBar(
       backgroundColor: Colors.white,

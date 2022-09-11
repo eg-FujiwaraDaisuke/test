@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/firebase/dynamic_links_route_mapper.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
@@ -34,8 +34,8 @@ class SupportPowerPlantCompleteDialog {
     return Navigator.push(
       context,
       CustomDialogOverlay(
-        HookBuilder(
-          builder: (context) {
+        HookConsumer(
+          builder: (context, ref, child) {
             // シェア呼び出し
             // NOTE: DynamicLinksの処遇について決まったら、削除 or 復活させる
             // final createdDynamicLink = useProvider(
