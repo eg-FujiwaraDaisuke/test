@@ -154,10 +154,8 @@ class _PowerPlantImage extends StatelessWidget {
             fit: BoxFit.cover,
           );
         },
-        errorWidget: (context, url, error) => Image.asset(
-          'assets/images/common/noimage.png',
-          fit: BoxFit.cover,
-        ),
+        errorWidget: (context, url, error) =>
+            Assets.images.common.noimage.image(fit: BoxFit.cover),
         fit: BoxFit.cover,
       ),
     );

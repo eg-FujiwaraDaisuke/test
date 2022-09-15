@@ -13,6 +13,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 /// 発電所応援ダイアログ
 class SupportParticipantsDialog {
@@ -267,10 +268,8 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
                         fit: BoxFit.cover,
                       );
                     },
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/common/noimage.png',
-                      fit: BoxFit.cover,
-                    ),
+                    errorWidget: (context, url, error) =>
+                        Assets.images.common.noimage.image(fit: BoxFit.cover),
                   )
                 : Image.asset(
                     'assets/images/user/icon_no_photo.png',

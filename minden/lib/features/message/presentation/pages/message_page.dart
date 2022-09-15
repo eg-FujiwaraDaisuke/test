@@ -355,10 +355,8 @@ class _MessagesListItem extends HookConsumerWidget {
                           fit: BoxFit.cover,
                         );
                       },
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) =>
+                          Assets.images.common.noimage.image(fit: BoxFit.cover),
                       width: 64,
                       height: 64,
                       fit: BoxFit.cover,

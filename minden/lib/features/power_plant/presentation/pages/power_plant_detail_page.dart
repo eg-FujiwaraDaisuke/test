@@ -744,10 +744,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 width: 303,
                 height: 203,
                 child: detail.giftImage == null
-                    ? Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      )
+                    ? Assets.images.common.noimage.image(fit: BoxFit.cover)
                     : Image.network(
                         detail.giftImage!,
                         fit: BoxFit.cover,
