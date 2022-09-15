@@ -215,7 +215,8 @@ class _SupportHistoryPageState extends State<SupportHistoryPage> {
         Center(
           child: GestureDetector(
             onTap: () {
-              launch('https://minden.co.jp/personal/cheer/');
+              launch('https://minden.co.jp/personal/cheer/',
+                  forceSafariVC: false);
             },
             child: Container(
               width: 284,
