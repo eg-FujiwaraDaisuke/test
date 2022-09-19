@@ -11,6 +11,7 @@ import 'package:minden/features/message/presentation/viewmodel/messages_state.da
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 
 class HomeMypageTabNavigation extends HookConsumerWidget {
@@ -88,12 +89,11 @@ class HomeMypageTabNavigation extends HookConsumerWidget {
         ? const Color(0xFFFF8C00)
         : const Color(0xFFA7A7A7);
     final tabTitle = i18nTranslate(context, 'tab_navigation_home');
-    const tabIcon = 'home';
 
     return BottomNavigationBarItem(
       tooltip: '',
       icon: SvgPicture.asset(
-        'assets/images/common/$tabIcon.svg',
+        Assets.images.common.home,
         color: color,
       ),
       label: tabTitle.toString(),
@@ -109,7 +109,6 @@ class HomeMypageTabNavigation extends HookConsumerWidget {
         ? const Color(0xFFFF8C00)
         : const Color(0xFFA7A7A7);
     final tabTitle = i18nTranslate(context, 'tab_navigation_menu');
-    const tabIcon = 'mypage';
     return BottomNavigationBarItem(
       tooltip: '',
       icon: Stack(

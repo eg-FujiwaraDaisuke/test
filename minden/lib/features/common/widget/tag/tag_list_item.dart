@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/color_code_util.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/gen/fonts.gen.dart';
 
 class TagListItem extends StatefulWidget {
   const TagListItem({
@@ -44,7 +45,7 @@ class _TagListItemState extends State<TagListItem> {
               ? const Color(0xFF575292)
               : const Color(0xFF787877),
           fontSize: 14,
-          fontFamily: 'NotoSansJP',
+          fontFamily: FontFamily.notoSansJP,
           fontWeight: FontWeight.w400,
         ),
       ),
