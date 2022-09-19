@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 import '../../../utile.dart';
 
@@ -61,8 +62,7 @@ class IssueReportCompleteDialog {
                     SizedBox(
                       width: 160,
                       height: 122,
-                      child: Image.asset(
-                        'assets/images/violate/character.png',
+                      child: Assets.images.violate.character.image(
                         width: 160,
                         height: 122,
                         fit: BoxFit.cover,
