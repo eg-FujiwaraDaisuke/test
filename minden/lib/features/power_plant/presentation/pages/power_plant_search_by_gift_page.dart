@@ -78,8 +78,7 @@ class _PowerPlantSearchByGiftState extends State<PowerPlantSearchByGift> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                Image.asset(
-                  'assets/images/power_plant/present_box_header.png',
+                Assets.images.powerPlant.presentBoxHeader.image(
                   fit: BoxFit.contain,
                   width: 253,
                   height: 48,

@@ -13,6 +13,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_bloc.d
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.dart';
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 発電所一覧
@@ -123,35 +124,34 @@ class PowerPlantListState extends State<PowerPlantList> {
       height: 188,
       child: Stack(
         children: [
-          Image.asset(
-            'assets/images/power_plant/support_history_button_confetti.png',
+          Assets.images.powerPlant.supportHistoryButtonConfetti.image(
             height: 188,
           ),
           Align(
             alignment: const Alignment(0.97, 1),
-            child: Image.asset(
-              'assets/images/power_plant/support_history_button_character_2.png',
+            child:
+                Assets.images.powerPlant.supportHistoryButtonCharacter2.image(
               height: 100,
             ),
           ),
           Align(
             alignment: const Alignment(0.92, -1),
-            child: Image.asset(
-              'assets/images/power_plant/support_history_button_character_3.png',
+            child:
+                Assets.images.powerPlant.supportHistoryButtonCharacter3.image(
               height: 120,
             ),
           ),
           Align(
             alignment: const Alignment(-0.8, -1),
-            child: Image.asset(
-              'assets/images/power_plant/support_history_button_character_4.png',
+            child:
+                Assets.images.powerPlant.supportHistoryButtonCharacter4.image(
               height: 120,
             ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
-            child: Image.asset(
-              'assets/images/power_plant/support_history_button_character_5.png',
+            child:
+                Assets.images.powerPlant.supportHistoryButtonCharacter5.image(
               height: 120,
             ),
           ),
@@ -187,8 +187,9 @@ class PowerPlantListState extends State<PowerPlantList> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              'assets/images/power_plant/support_history_button_character_1.png',
+                            Assets.images.powerPlant
+                                .supportHistoryButtonCharacter1
+                                .image(
                               height: 90,
                             ),
                             Row(
@@ -205,8 +206,9 @@ class PowerPlantListState extends State<PowerPlantList> {
                                 const SizedBox(width: 4),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 3),
-                                  child: Image.asset(
-                                    'assets/images/power_plant/support_history_button_arrow.png',
+                                  child: Assets.images.powerPlant
+                                      .supportHistoryButtonArrow
+                                      .image(
                                     height: 10,
                                   ),
                                 ),
@@ -262,8 +264,7 @@ class PowerPlantListState extends State<PowerPlantList> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/power_plant/character_smile.png',
+                Assets.images.powerPlant.characterSmile.image(
                   width: 92,
                 ),
                 SizedBox(

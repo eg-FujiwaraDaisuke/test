@@ -271,8 +271,7 @@ class SupportPowerPlantDecisionDialog {
                   imageUrl: powerPlant.plantImage1,
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                    return Image.asset(
-                      'assets/images/common/placeholder.png',
+                    return Assets.images.common.placeholder.image(
                       fit: BoxFit.cover,
                     );
                   },

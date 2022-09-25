@@ -149,8 +149,7 @@ class _PowerPlantImage extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         placeholder: (context, url) {
-          return Image.asset(
-            'assets/images/common/placeholder.png',
+          return Assets.images.common.placeholder.image(
             fit: BoxFit.cover,
           );
         },

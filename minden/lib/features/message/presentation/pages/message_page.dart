@@ -332,8 +332,7 @@ class _MessagesListItem extends HookConsumerWidget {
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/message/minden_thumbnail.png',
+                      child: Assets.images.message.mindenThumbnail.image(
                         width: 57,
                         height: 54,
                       ),
@@ -350,8 +349,7 @@ class _MessagesListItem extends HookConsumerWidget {
                     child: CachedNetworkImage(
                       imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/common/placeholder.png',
+                        return Assets.images.common.placeholder.image(
                           fit: BoxFit.cover,
                         );
                       },

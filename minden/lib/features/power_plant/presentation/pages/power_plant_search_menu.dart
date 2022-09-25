@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_gift_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_by_tag_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 /// メニューから、発電所の探し方を選択する
@@ -35,8 +36,7 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
             'power_plant_search_menu_by_tag_description',
             Padding(
               padding: const EdgeInsets.only(top: 5, right: 7),
-              child: Image.asset(
-                'assets/images/power_plant/balloon.png',
+              child: Assets.images.powerPlant.balloon.image(
                 width: 76,
                 height: 52,
               ),
@@ -58,8 +58,7 @@ class _PowerPlantSearchMenuState extends State<PowerPlantSearchMenu> {
             'power_plant_search_menu_by_gift_description',
             Padding(
               padding: const EdgeInsets.only(top: 9, right: 19),
-              child: Image.asset(
-                'assets/images/power_plant/present_box.png',
+              child: Assets.images.powerPlant.presentBox.image(
                 width: 66,
                 height: 39,
               ),

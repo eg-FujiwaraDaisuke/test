@@ -47,8 +47,7 @@ class PowerPlantMessageDialog {
                     child: CachedNetworkImage(
                       imageUrl: messageDetail.image ?? '',
                       placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/common/placeholder.png',
+                        return Assets.images.common.placeholder.image(
                           fit: BoxFit.cover,
                         );
                       },
@@ -119,8 +118,7 @@ class PowerPlantMessageDialog {
             Positioned(
               bottom: -119,
               right: -39,
-              child: Image.asset(
-                'assets/images/message/character_fly.png',
+              child: Assets.images.message.characterFly.image(
                 width: 160,
                 height: 119,
               ),

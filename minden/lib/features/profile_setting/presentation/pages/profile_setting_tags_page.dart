@@ -231,8 +231,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 7),
-              Image.asset(
-                'assets/images/profile_setting/hukidasi_illust.png',
+              Assets.images.profileSetting.hukidasiIllust.image(
                 fit: BoxFit.contain,
                 width: 213,
                 height: 65,
@@ -245,8 +244,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                     Positioned(
                       left: 0,
                       bottom: 10,
-                      child: Image.asset(
-                        'assets/images/profile_setting/character.png',
+                      child: Assets.images.profileSetting.character.image(
                         fit: BoxFit.contain,
                         width: 69,
                         height: 77,
@@ -261,8 +259,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
                         child: Stack(
                             alignment: AlignmentDirectional.center,
                             children: [
-                              Image.asset(
-                                'assets/images/profile_setting/fukidasi.png',
+                              Assets.images.profileSetting.fukidasi.image(
                                 fit: BoxFit.contain,
                                 width: 186,
                                 height: 134,

@@ -263,16 +263,14 @@ ${users.length.toString()}${i18nTranslate(context, 'support_participants_people'
                     imageUrl: participant.icon!,
                     fit: BoxFit.cover,
                     placeholder: (context, url) {
-                      return Image.asset(
-                        'assets/images/user/icon_no_photo.png',
+                      return Assets.images.user.iconNoPhoto.image(
                         fit: BoxFit.cover,
                       );
                     },
                     errorWidget: (context, url, error) =>
                         Assets.images.common.noimage.image(fit: BoxFit.cover),
                   )
-                : Image.asset(
-                    'assets/images/user/icon_no_photo.png',
+                : Assets.images.user.iconNoPhoto.image(
                     fit: BoxFit.cover,
                   ),
           ),
