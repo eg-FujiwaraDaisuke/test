@@ -102,7 +102,7 @@ class PowerPlantMessageDialog {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     color: Color(0xFF967D5E),
-                    fontSize: 18,
+                    fontSize: 12,
                     fontFamily: 'NotoSansJP',
                     fontWeight: FontWeight.w700,
                   ),
