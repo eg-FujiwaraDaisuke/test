@@ -18,6 +18,7 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 class MessagePage extends HookConsumerWidget {
@@ -189,7 +190,7 @@ class MessagePage extends HookConsumerWidget {
   Widget _buildBackLeadingButton(BuildContext context) {
     return IconButton(
       icon: SvgPicture.asset(
-        'assets/images/common/leading_back.svg',
+        Assets.images.common.leadingBack,
         width: 44,
         height: 44,
       ),
@@ -331,8 +332,7 @@ class _MessagesListItem extends HookConsumerWidget {
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/message/minden_thumbnail.png',
+                      child: Assets.images.message.mindenThumbnail.image(
                         width: 57,
                         height: 54,
                       ),
@@ -349,15 +349,12 @@ class _MessagesListItem extends HookConsumerWidget {
                     child: CachedNetworkImage(
                       imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/common/placeholder.png',
+                        return Assets.images.common.placeholder.image(
                           fit: BoxFit.cover,
                         );
                       },
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) =>
+                          Assets.images.common.noimage.image(fit: BoxFit.cover),
                       width: 64,
                       height: 64,
                       fit: BoxFit.cover,

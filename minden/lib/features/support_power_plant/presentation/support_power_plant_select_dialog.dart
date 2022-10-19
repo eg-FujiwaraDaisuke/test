@@ -7,6 +7,7 @@ import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialo
 import 'package:minden/features/login/domain/entities/user.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/domain/entities/regist_power_plant.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 class SupportPowerPlantSelectDialog {
@@ -409,15 +410,12 @@ class SupportPowerPlantSelectDialog {
               imageUrl: selectPowerPlant.plantImage1,
               fit: BoxFit.cover,
               placeholder: (context, url) {
-                return Image.asset(
-                  'assets/images/common/placeholder.png',
+                return Assets.images.common.placeholder.image(
                   fit: BoxFit.cover,
                 );
               },
-              errorWidget: (context, url, error) => Image.asset(
-                'assets/images/common/noimage.png',
-                fit: BoxFit.cover,
-              ),
+              errorWidget: (context, url, error) =>
+                  Assets.images.common.noimage.image(fit: BoxFit.cover),
             ),
           ),
           const SizedBox(

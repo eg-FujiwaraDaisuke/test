@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:minden/features/common/widget/ellipse_progress_widget/ellipse_progress_widget.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 class _WidgetData {
   _WidgetData({
@@ -38,10 +39,13 @@ class SupportHistoryAmountWidget extends StatelessWidget {
 
   /// 応援金の額
   final int? supportAmount;
+
   /// 祝福状態の表示にするか
   final bool isBlessing;
+
   /// 中央キャラクターの足元のグラフの進行度(0~1)
   final double progress;
+
   /// 表示するタイプ([_widgetData])
   final int typeIndex;
 
@@ -222,8 +226,9 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Image.asset(
-                          'assets/images/support_history/support_history_white_balloon_triangle.png',
+                        Assets.images.supportHistory
+                            .supportHistoryWhiteBalloonTriangle
+                            .image(
                           height: 10,
                         ),
                       ],
@@ -237,9 +242,7 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                 ],
               ),
               if (isBlessing)
-                Image.asset(
-                  'assets/images/support_history/support_history_confetti.gif',
-                ),
+                Assets.images.supportHistory.supportHistoryConfetti.image(),
             ],
           ),
           SizedBox(
@@ -365,16 +368,18 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                   if (isBlessing)
                     Align(
                       alignment: const Alignment(0.2, 0.3),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_1_1.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter11
+                          .image(
                         height: 215,
                       ),
                     )
                   else
                     Align(
                       alignment: const Alignment(1, 0.3),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_1_2.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter12
+                          .image(
                         height: 215,
                       ),
                     ),
@@ -433,16 +438,18 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                   if (isBlessing)
                     Align(
                       alignment: const Alignment(-0.5, 1),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_3_1.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter31
+                          .image(
                         height: 210,
                       ),
                     )
                   else
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_3_2.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter32
+                          .image(
                         height: 210,
                       ),
                     ),
@@ -501,16 +508,18 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                   if (isBlessing)
                     Align(
                       alignment: const Alignment(-0.5, 0.5),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_2_1.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter21
+                          .image(
                         height: 230,
                       ),
                     )
                   else
                     Align(
                       alignment: const Alignment(0, 0.5),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_2_2.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter22
+                          .image(
                         height: 230,
                       ),
                     ),
@@ -569,16 +578,18 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                   if (isBlessing)
                     Align(
                       alignment: const Alignment(-0.5, 0.5),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_4_1.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter41
+                          .image(
                         height: 200,
                       ),
                     )
                   else
                     Align(
                       alignment: const Alignment(0, 0.5),
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_4_2.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter42
+                          .image(
                         height: 200,
                       ),
                     ),
@@ -637,16 +648,18 @@ class SupportHistoryAmountWidget extends StatelessWidget {
                   if (isBlessing)
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_5_1.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter51
+                          .image(
                         height: 230,
                       ),
                     )
                   else
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Image.asset(
-                        'assets/images/support_history/support_history_character_5_2.gif',
+                      child: Assets
+                          .images.supportHistory.supportHistoryCharacter52
+                          .image(
                         height: 220,
                       ),
                     ),
@@ -690,16 +703,16 @@ class SupportHistoryAmountWidget extends StatelessWidget {
           if (isBlessing)
             Align(
               alignment: const Alignment(0.1, 0.7),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_1_1.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter11.image(
                 height: 98,
               ),
             )
           else
             Align(
               alignment: const Alignment(0.2, 0.7),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_1_2.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter12.image(
                 height: 98,
               ),
             ),
@@ -723,16 +736,16 @@ class SupportHistoryAmountWidget extends StatelessWidget {
           if (isBlessing)
             Align(
               alignment: const Alignment(-0.1, 1),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_2_1.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter21.image(
                 height: 117,
               ),
             )
           else
             Align(
               alignment: const Alignment(0.1, 1),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_2_2.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter22.image(
                 height: 117,
               ),
             ),
@@ -756,16 +769,16 @@ class SupportHistoryAmountWidget extends StatelessWidget {
           if (isBlessing)
             Align(
               alignment: const Alignment(0.45, 0.95),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_3_1.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter31.image(
                 height: 110,
               ),
             )
           else
             Align(
               alignment: const Alignment(0.3, 0.95),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_3_2.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter32.image(
                 height: 110,
               ),
             ),
@@ -789,16 +802,16 @@ class SupportHistoryAmountWidget extends StatelessWidget {
           if (!isBlessing)
             Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_4_1.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter41.image(
                 height: 110,
               ),
             )
           else
             Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_4_2.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter42.image(
                 height: 110,
               ),
             ),
@@ -822,16 +835,16 @@ class SupportHistoryAmountWidget extends StatelessWidget {
           if (!isBlessing)
             Align(
               alignment: const Alignment(-0.5, 0.75),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_5_1.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter51.image(
                 height: 130,
               ),
             )
           else
             Align(
               alignment: const Alignment(-0.3, 0.9),
-              child: Image.asset(
-                'assets/images/support_history/support_history_character_5_2.gif',
+              child:
+                  Assets.images.supportHistory.supportHistoryCharacter52.image(
                 height: 120,
               ),
             ),

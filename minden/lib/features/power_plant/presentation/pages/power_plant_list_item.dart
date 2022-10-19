@@ -6,6 +6,7 @@ import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_detail_page.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_participant_users.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 /// 発電所一覧要素におけるキャッチコピー表示位置
 enum Direction {
@@ -123,13 +124,12 @@ class PowerPlantListItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ParticipantUserIconGroup(
-                            participantUserList: powerPlant.orderedUserList,
-                            participantSize: powerPlant.userList.length,
-                            maxUserIconCount: 6,
-                            iconSize: 38,
-                            overlapLength: 42.75,
-                            type: "list"
-                          ),
+                              participantUserList: powerPlant.orderedUserList,
+                              participantSize: powerPlant.userList.length,
+                              maxUserIconCount: 6,
+                              iconSize: 38,
+                              overlapLength: 42.75,
+                              type: "list"),
                         ],
                       ),
                     ),
@@ -189,15 +189,12 @@ class PowerPlantListItem extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: imageUrl,
               placeholder: (context, url) {
-                return Image.asset(
-                  'assets/images/common/placeholder.png',
+                return Assets.images.common.placeholder.image(
                   fit: BoxFit.cover,
                 );
               },
-              errorWidget: (context, url, error) => Image.asset(
-                'assets/images/common/noimage.png',
-                fit: BoxFit.cover,
-              ),
+              errorWidget: (context, url, error) =>
+                  Assets.images.common.noimage.image(fit: BoxFit.cover),
               fit: BoxFit.cover,
             ),
           ),

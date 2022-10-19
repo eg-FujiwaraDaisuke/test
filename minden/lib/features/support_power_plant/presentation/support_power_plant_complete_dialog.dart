@@ -9,6 +9,7 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -182,15 +183,12 @@ class SupportPowerPlantCompleteDialog {
                   imageUrl: powerPlant.plantImage1,
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                    return Image.asset(
-                      'assets/images/common/placeholder.png',
+                    return Assets.images.common.placeholder.image(
                       fit: BoxFit.cover,
                     );
                   },
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/common/noimage.png',
-                    fit: BoxFit.cover,
-                  ),
+                  errorWidget: (context, url, error) =>
+                      Assets.images.common.noimage.image(fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(

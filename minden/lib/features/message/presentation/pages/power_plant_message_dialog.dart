@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PowerPlantMessageDialog {
@@ -46,15 +47,12 @@ class PowerPlantMessageDialog {
                     child: CachedNetworkImage(
                       imageUrl: messageDetail.image ?? '',
                       placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/common/placeholder.png',
+                        return Assets.images.common.placeholder.image(
                           fit: BoxFit.cover,
                         );
                       },
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) =>
+                          Assets.images.common.noimage.image(fit: BoxFit.cover),
                       width: 256,
                       height: 192,
                       fit: BoxFit.cover,
@@ -120,8 +118,7 @@ class PowerPlantMessageDialog {
             Positioned(
               bottom: -119,
               right: -39,
-              child: Image.asset(
-                'assets/images/message/character_fly.png',
+              child: Assets.images.message.characterFly.image(
                 width: 160,
                 height: 119,
               ),

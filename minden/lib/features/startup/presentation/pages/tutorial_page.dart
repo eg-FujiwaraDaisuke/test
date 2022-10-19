@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/login/presentation/pages/login_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,21 +48,21 @@ class _TutorialPageState extends State<TutorialPage> {
   Widget build(BuildContext context) {
     final tutorialData = <Tutorial>[
       Tutorial(
-        imagePath: 'tutorial-1.png',
+        imagePath: Assets.images.tutorial.tutorial1.path,
         title: i18nTranslate(context, 'tutorial_step_1_title'),
         description: i18nTranslate(context, 'tutorial_step_1_description'),
         titleTextAlign: TextAlign.left,
         tittlePosition: {'left': 39, 'top': 86},
       ),
       Tutorial(
-        imagePath: 'tutorial-2.png',
+        imagePath: Assets.images.tutorial.tutorial2.path,
         title: i18nTranslate(context, 'tutorial_step_2_title'),
         description: i18nTranslate(context, 'tutorial_step_2_description'),
         titleTextAlign: TextAlign.right,
         tittlePosition: {'left': 30, 'top': 85},
       ),
       Tutorial(
-        imagePath: 'tutorial-3.png',
+        imagePath: Assets.images.tutorial.tutorial3.path,
         title: i18nTranslate(context, 'tutorial_step_3_title'),
         description: i18nTranslate(context, 'tutorial_step_3_description'),
         titleTextAlign: TextAlign.right,
@@ -219,7 +220,7 @@ class Slide extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/images/tutorial/${data.imagePath}'),
+                  image: AssetImage(data.imagePath),
                 ),
               ),
             ),

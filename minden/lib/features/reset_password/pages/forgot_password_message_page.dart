@@ -3,6 +3,7 @@ import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/reset_password/pages/reset_password_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 class ForgotPasswordMessagePage extends StatelessWidget {
@@ -36,8 +37,7 @@ class ForgotPasswordMessagePage extends StatelessWidget {
               const SizedBox(
                 height: 38,
               ),
-              Image.asset(
-                'assets/images/login/chara.png',
+              Assets.images.login.chara.image(
                 width: 140,
                 height: 140,
               ),
