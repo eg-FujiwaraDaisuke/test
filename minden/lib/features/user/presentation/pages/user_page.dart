@@ -23,12 +23,9 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
-import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
-import 'package:minden/features/user/presentation/pages/contact.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
-import 'package:minden/features/user/presentation/pages/web_menu_page.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -257,12 +254,12 @@ class _MenuListView extends StatelessWidget {
       _Menu(
           title: i18nTranslate(context, 'user_menu_web_mymenu'),
           icon: 'web_my_menu',
-          routeName: WebMenuPage.routeName,
+          routeName: '/webMyMenu',
           type: MenuType.common),
       _Menu(
         title: i18nTranslate(context, 'user_menu_contact'),
         icon: 'contact',
-        routeName: ContactPage.routeName,
+        routeName: '/contact',
         type: MenuType.common,
       ),
     ];
@@ -314,11 +311,12 @@ class _MenuItem extends StatelessWidget {
             );
             await Navigator.push(context, route);
             break;
-          case WebMenuPage.routeName:
-            await Navigator.push(context, WebMenuPage.route());
+          case '/contact':
+            await launch('https://portal.minden.co.jp/contact/guest',
+                forceSafariVC: false);
             break;
-          case ContactPage.routeName:
-            await Navigator.push(context, ContactPage.route());
+          case '/webMyMenu':
+            await launch('https://portal.minden.co.jp', forceSafariVC: false);
             break;
           case '/logout':
             handler?.call();

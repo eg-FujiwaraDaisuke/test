@@ -257,7 +257,7 @@ class PowerPlantListState extends State<PowerPlantList> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            launch('https://portal.minden.co.jp');
+            launch('https://portal.minden.co.jp', forceSafariVC: false);
           },
           child: Padding(
             padding: const EdgeInsets.all(4),
