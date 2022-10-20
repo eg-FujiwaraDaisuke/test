@@ -19,6 +19,7 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: Center(
                   child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
+                    Assets.images.common.leadingBack,
                     fit: BoxFit.fill,
                     width: 44,
                     height: 44,

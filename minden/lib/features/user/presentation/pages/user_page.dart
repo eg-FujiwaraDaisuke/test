@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -359,7 +358,7 @@ class _MenuItem extends StatelessWidget {
   }
 }
 
-class _MenuMessageItem extends HookWidget {
+class _MenuMessageItem extends HookConsumerWidget {
   _MenuMessageItem({
     required this.title,
     required this.icon,
@@ -372,10 +371,10 @@ class _MenuMessageItem extends HookWidget {
   late GetPowerPlantBloc _getPowerPlantsBloc;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+        ref.watch(messagesStateControllerProvider.notifier);
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
 
     useEffect(() {
       _bloc = BlocProvider.of<GetMessagesBloc>(context);
@@ -436,19 +435,19 @@ class _MenuMessageItem extends HookWidget {
                         messagesStateController.updateMessages(state.messages);
                       }
                     },
-                    child: _buildMessageNav(context),
+                    child: _buildMessageNav(context, ref),
                   ),
                 )
-              : _buildMessageNav(context)),
+              : _buildMessageNav(context, ref)),
     );
   }
 
-  Widget _buildMessageNav(BuildContext context) {
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+  Widget _buildMessageNav(BuildContext context, WidgetRef ref) {
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
 
     // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
     final latestUnreadMessageDetail = messagesStateData.messages
-        .firstWhereOrNull((messageDetail) => messageDetail.read == false);
+        .firstWhere((messageDetail) => messageDetail.read == false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/message/domain/entities/message_detail.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -60,8 +61,7 @@ class MindenMessageDialog {
                     SizedBox(
                       width: 142,
                       height: 142,
-                      child: Image.asset(
-                        'assets/images/message/character.png',
+                      child: Assets.images.message.character.image(
                         width: 142,
                         height: 142,
                       ),

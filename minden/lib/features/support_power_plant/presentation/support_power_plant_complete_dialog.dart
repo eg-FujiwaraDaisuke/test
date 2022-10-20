@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/firebase/dynamic_links_route_mapper.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
@@ -9,6 +9,7 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/common/widget/custom_dialog_overlay/custom_dialog_overlay.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -34,8 +35,8 @@ class SupportPowerPlantCompleteDialog {
     return Navigator.push(
       context,
       CustomDialogOverlay(
-        HookBuilder(
-          builder: (context) {
+        HookConsumer(
+          builder: (context, ref, child) {
             // シェア呼び出し
             // NOTE: DynamicLinksの処遇について決まったら、削除 or 復活させる
             // final createdDynamicLink = useProvider(
@@ -182,15 +183,12 @@ class SupportPowerPlantCompleteDialog {
                   imageUrl: powerPlant.plantImage1,
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                    return Image.asset(
-                      'assets/images/common/placeholder.png',
+                    return Assets.images.common.placeholder.image(
                       fit: BoxFit.cover,
                     );
                   },
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/common/noimage.png',
-                    fit: BoxFit.cover,
-                  ),
+                  errorWidget: (context, url, error) =>
+                      Assets.images.common.noimage.image(fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(

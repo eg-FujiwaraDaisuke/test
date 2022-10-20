@@ -18,9 +18,10 @@ import 'package:minden/features/message/presentation/bloc/message_bloc.dart';
 import 'package:minden/features/message/presentation/pages/minden_message_dialog.dart';
 import 'package:minden/features/message/presentation/pages/power_plant_message_dialog.dart';
 import 'package:minden/features/message/presentation/viewmodel/messages_controller_provider.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
-class MessagePage extends HookWidget {
+class MessagePage extends HookConsumerWidget {
   MessagePage({this.showMessageId});
 
   static const String routeName = '/user/message';
@@ -51,9 +52,9 @@ class MessagePage extends HookWidget {
   late StreamSubscription _readMessageSubscription;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
+        ref.watch(messagesStateControllerProvider.notifier);
     final showMessageIdState = useState(showMessageId);
     useEffect(
       () {
@@ -189,7 +190,7 @@ class MessagePage extends HookWidget {
   Widget _buildBackLeadingButton(BuildContext context) {
     return IconButton(
       icon: SvgPicture.asset(
-        'assets/images/common/leading_back.svg',
+        Assets.images.common.leadingBack,
         width: 44,
         height: 44,
       ),
@@ -201,7 +202,7 @@ class MessagePage extends HookWidget {
   }
 }
 
-class _MessagesList extends HookWidget {
+class _MessagesList extends HookConsumerWidget {
   _MessagesList({
     required this.readMessage,
   });
@@ -212,10 +213,10 @@ class _MessagesList extends HookWidget {
   late StreamSubscription _getMessagesSubscription;
 
   @override
-  Widget build(BuildContext context) {
-    final messagesStateData = useProvider(messagesStateControllerProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messagesStateData = ref.watch(messagesStateControllerProvider);
     final messagesStateController =
-        useProvider(messagesStateControllerProvider.notifier);
+        ref.watch(messagesStateControllerProvider.notifier);
     final _isLoading = useState<bool>(false);
 
     useEffect(
@@ -273,7 +274,7 @@ class _MessagesList extends HookWidget {
   }
 }
 
-class _MessagesListItem extends HookWidget {
+class _MessagesListItem extends HookConsumerWidget {
   _MessagesListItem({
     required this.messageDetail,
     required this.readMessage,
@@ -283,7 +284,7 @@ class _MessagesListItem extends HookWidget {
   final Function readMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final dd = DateTime.fromMillisecondsSinceEpoch(messageDetail.created);
 
     return GestureDetector(
@@ -331,8 +332,7 @@ class _MessagesListItem extends HookWidget {
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/message/minden_thumbnail.png',
+                      child: Assets.images.message.mindenThumbnail.image(
                         width: 57,
                         height: 54,
                       ),
@@ -349,15 +349,12 @@ class _MessagesListItem extends HookWidget {
                     child: CachedNetworkImage(
                       imageUrl: messageDetail.image!,
                       placeholder: (context, url) {
-                        return Image.asset(
-                          'assets/images/common/placeholder.png',
+                        return Assets.images.common.placeholder.image(
                           fit: BoxFit.cover,
                         );
                       },
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) =>
+                          Assets.images.common.noimage.image(fit: BoxFit.cover),
                       width: 64,
                       height: 64,
                       fit: BoxFit.cover,

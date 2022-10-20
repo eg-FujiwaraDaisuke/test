@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 class SupportPowerPlantTabData {
   SupportPowerPlantTabData({
@@ -44,7 +45,7 @@ class SupportHistoryPowerPlantPage extends StatelessWidget {
             onTap: Navigator.of(context).pop,
             child: Center(
               child: SvgPicture.asset(
-                'assets/images/common/leading_back.svg',
+                Assets.images.common.leadingBack,
                 fit: BoxFit.fill,
                 width: 44,
                 height: 44,

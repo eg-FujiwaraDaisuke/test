@@ -13,6 +13,7 @@ import 'package:minden/features/support_amount/presentation/bloc/support_amount_
 import 'package:minden/features/support_amount/presentation/bloc/support_amount_event.dart';
 import 'package:minden/features/support_amount/presentation/bloc/support_amount_state.dart';
 import 'package:minden/features/support_history/presentation/support_history_amount_widget.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 応援の軌跡ページ
@@ -317,8 +318,9 @@ class _CaseWidget extends StatelessWidget {
             padding: const EdgeInsets.only(
               left: 36,
             ),
-            child: Image.asset(
-              'assets/images/support_history/support_history_green_balloon_triangle.png',
+            child: Assets
+                .images.supportHistory.supportHistoryGreenBalloonTriangle
+                .image(
               width: 20,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:minden/features/power_plant/domain/entities/power_plant_participant_user.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 /// 応援ユーザー表示
 class ParticipantUserIconGroup extends StatelessWidget {
@@ -62,7 +63,8 @@ class ParticipantUserIconGroup extends StatelessWidget {
     } else {
       participantCount = total - maxUserIconCount;
     }
-    if ((maxUserIconCount < total && type == 'list') || (participantCount > 0 && type == 'detail')) {
+    if ((maxUserIconCount < total && type == 'list') ||
+        (participantCount > 0 && type == 'detail')) {
       // 規定数人以上応援ユーザーがいる場合、
       return [
         ...participantUserList
@@ -96,20 +98,18 @@ class ParticipantUserIconGroup extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: imageUrl!,
                 placeholder: (context, url) {
-                  return Image.asset(
-                    'assets/images/user/icon_no_photo.png',
+                  return Assets.images.user.iconNoPhoto.image(
                     fit: BoxFit.cover,
                   );
                 },
-                errorWidget: (context, url, error) => Image.asset(
-                  'assets/images/user/icon_no_photo.png',
+                errorWidget: (context, url, error) =>
+                    Assets.images.user.iconNoPhoto.image(
                   fit: BoxFit.cover,
                 ),
                 width: iconSize,
                 height: iconSize,
               )
-            : Image.asset(
-                'assets/images/user/icon_no_photo.png',
+            : Assets.images.user.iconNoPhoto.image(
                 fit: BoxFit.cover,
                 width: iconSize,
                 height: iconSize,

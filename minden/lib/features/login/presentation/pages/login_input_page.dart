@@ -8,6 +8,8 @@ import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/login/presentation/bloc/login_bloc.dart';
 import 'package:minden/features/reset_password/pages/forgot_password_page.dart';
+import 'package:minden/gen/assets.gen.dart';
+import 'package:minden/gen/fonts.gen.dart';
 import 'package:minden/utile.dart';
 
 class LoginInputPage extends StatefulWidget {
@@ -74,11 +76,11 @@ class _LoginInputPageState extends State<LoginInputPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    'assets/images/login/logo.svg',
+                    Assets.images.login.logo,
                     width: 159,
                     height: 45,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 146,
                   ),
                   Container(
@@ -90,7 +92,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                           onChanged: _onInputChangedId,
                           onReset: _onInputResetId,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 29,
                         ),
                         PasswordInput(
@@ -102,16 +104,16 @@ class _LoginInputPageState extends State<LoginInputPage> {
                           child: widget.isError
                               ? Column(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 16,
                                     ),
                                     Text(
                                       i18nTranslate(context, 'login_error'),
                                       style: TextStyle(
-                                        color:
-                                            Color(0xFFFF0000).withOpacity(0.6),
+                                        color: const Color(0xFFFF0000)
+                                            .withOpacity(0.6),
                                         fontSize: 12,
-                                        fontFamily: 'NotoSansJP',
+                                        fontFamily: FontFamily.notoSansJP,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -119,7 +121,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                                 )
                               : null,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         Container(
@@ -134,17 +136,16 @@ class _LoginInputPageState extends State<LoginInputPage> {
 
                                   final route = NoAnimationMaterialPageRoute(
                                     builder: (context) => ForgotPasswordPage(),
-                                    settings:
-                                        RouteSettings(name: '/forgotPassword'),
+                                    settings: const RouteSettings(
+                                        name: '/forgotPassword'),
                                   );
                                   Navigator.push(context, route);
                                 },
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       border: Border(
-                                    bottom: const BorderSide(
+                                    bottom: BorderSide(
                                       color: Color(0xFFFF8C00),
-                                      width: 1,
                                     ),
                                   )),
                                   child: Text(
@@ -154,9 +155,9 @@ class _LoginInputPageState extends State<LoginInputPage> {
                                       fontSize: 11,
                                       letterSpacing:
                                           calcLetterSpacing(letter: 1),
-                                      fontFamily: 'NotoSansJP',
+                                      fontFamily: FontFamily.notoSansJP,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xFFFF8C00),
+                                      color: const Color(0xFFFF8C00),
                                     ),
                                   ),
                                 ),
@@ -164,7 +165,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 32,
                         ),
                         Button(
@@ -207,14 +208,14 @@ class _EmailInputState extends State<EmailInput> {
       children: [
         Text(
           i18nTranslate(context, 'login_id'),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.0,
             color: Color(0xFF6A6F7D),
-            fontFamily: 'NotoSansJP',
+            fontFamily: FontFamily.notoSansJP,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 14,
         ),
         TextFormField(
@@ -225,17 +226,17 @@ class _EmailInputState extends State<EmailInput> {
           decoration: InputDecoration(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFFA7A7A7).withOpacity(0.5),
+                color: const Color(0xFFA7A7A7).withOpacity(0.5),
               ),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xFFFF8C00),
               ),
             ),
             suffixIcon: IconButton(
               icon: SvgPicture.asset(
-                'assets/images/login/cancel.svg',
+                Assets.images.login.cancel,
                 width: 26,
                 height: 26,
               ),
@@ -246,9 +247,9 @@ class _EmailInputState extends State<EmailInput> {
             ),
           ),
           style: TextStyle(
-            fontSize: 17.0,
-            color: Color(0xFF000000),
-            fontFamily: 'NotoSansJP',
+            fontSize: 17,
+            color: const Color(0xFF000000),
+            fontFamily: FontFamily.notoSansJP,
             fontWeight: FontWeight.w500,
             letterSpacing: calcLetterSpacing(letter: 4),
           ),
@@ -275,14 +276,14 @@ class PasswordInput extends StatelessWidget {
       children: [
         Text(
           i18nTranslate(context, 'login_password'),
-          style: TextStyle(
-            fontSize: 14.0,
+          style: const TextStyle(
+            fontSize: 14,
             color: Color(0xFF6A6F7D),
-            fontFamily: 'NotoSansJP',
+            fontFamily: FontFamily.notoSansJP,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 14,
         ),
         TextFormField(
@@ -296,7 +297,7 @@ class PasswordInput extends StatelessWidget {
                 color: Color(0xFFA7A7A7).withOpacity(0.5),
               ),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xFFFF8C00),
               ),
@@ -314,9 +315,9 @@ class PasswordInput extends StatelessWidget {
             ),
           ),
           style: TextStyle(
-            fontSize: 17.0,
-            color: Color(0xFF000000),
-            fontFamily: 'NotoSansJP',
+            fontSize: 17,
+            color: const Color(0xFF000000),
+            fontFamily: FontFamily.notoSansJP,
             fontWeight: FontWeight.w500,
             letterSpacing: calcLetterSpacing(letter: 4),
           ),
