@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,6 +24,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_page.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
+import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
@@ -449,7 +451,7 @@ class _MenuMessageItem extends HookConsumerWidget {
 
     // 取得したメッセージの中でもっとも最新で未読のメッセージを取得
     final latestUnreadMessageDetail = messagesStateData.messages
-        .firstWhere((messageDetail) => messageDetail.read == false);
+        .firstWhereOrNull((messageDetail) => messageDetail.read == false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
