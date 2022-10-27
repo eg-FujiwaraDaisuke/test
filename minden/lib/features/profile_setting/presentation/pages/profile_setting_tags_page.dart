@@ -43,34 +43,10 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   final List<Tag> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
   late GetTagsBloc _tagBloc;
-  late UpdateTagBloc _updateTagBloc;
 
   @override
   void initState() {
     super.initState();
-
-    _updateTagBloc = UpdateTagBloc(
-      const TagStateInitial(),
-      UpdateTags(
-        TagRepositoryImpl(
-          dataSource: TagDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-
-    _updateTagBloc.stream.listen((event) {
-      if (event is TagUpdated) {
-        final route = MaterialPageRoute(
-          builder: (context) => ProfileSettingTagsDecisionPage(),
-          settings: const RouteSettings(
-              name: ProfileSettingTagsDecisionPage.routeName),
-        );
-        Navigator.push(context, route);
-      }
-    });
-
     _allTagBloc = GetAllTagsBloc(
       const TagStateInitial(),
       GetAllTags(
@@ -116,7 +92,6 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   void dispose() {
     _allTagBloc.close();
     _tagBloc.close();
-    _updateTagBloc.close();
     super.dispose();
   }
 
@@ -163,191 +138,204 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       ),
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 38),
-              Text(
-                i18nTranslate(context, 'profile_setting_select_tag'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF575292),
-                ),
-              ),
-              const SizedBox(height: 19),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: i18nTranslate(
-                          context, 'profile_setting_tag_description_you'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF787877),
-                        height: calcFontHeight(lineHeight: 30, fontSize: 18),
-                      ),
-                    ),
-                    TextSpan(
-                      text: i18nTranslate(
-                          context, 'profile_setting_tag_description_important'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFFFF8C00),
-                        height: calcFontHeight(lineHeight: 30, fontSize: 18),
-                      ),
-                    ),
-                    TextSpan(
-                      text: i18nTranslate(
-                          context, 'profile_setting_tag_description_wo'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF787877),
-                        height: calcFontHeight(lineHeight: 30, fontSize: 18),
-                      ),
-                    ),
-                    TextSpan(
-                      text: i18nTranslate(
-                          context, 'profile_setting_tag_description_select'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'NotoSansJP',
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF787877),
-                        height: calcFontHeight(lineHeight: 30, fontSize: 18),
-                      ),
-                    )
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 7),
-              Assets.images.profileSetting.hukidasiIllust.image(
-                fit: BoxFit.contain,
-                width: 213,
-                height: 65,
-              ),
-              SizedBox(
-                width: 262,
-                height: 134,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      bottom: 10,
-                      child: Assets.images.profileSetting.character.image(
-                        fit: BoxFit.contain,
-                        width: 69,
-                        height: 77,
-                      ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: SizedBox(
-                        width: 186,
-                        height: 134,
-                        child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              Assets.images.profileSetting.fukidasi.image(
-                                fit: BoxFit.contain,
-                                width: 186,
-                                height: 134,
-                              ),
-                              Text(
-                                i18nTranslate(
-                                    context, 'profile_setting_tag_fukidasi'),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontFamily: 'NotoSansJP',
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF9A7446),
-                                  height: calcFontHeight(
-                                      fontSize: 10, lineHeight: 14),
-                                  letterSpacing: calcLetterSpacing(letter: -6),
-                                ),
-                              ),
-                            ]),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                i18nTranslate(
-                    context, 'profile_setting_important_tag_find_user'),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'NotoSansJP',
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF75C975),
-                  height: calcFontHeight(fontSize: 12, lineHeight: 17.38),
-                ),
-              ),
-              const SizedBox(height: 15),
-              BlocProvider.value(
-                value: _allTagBloc,
-                child: BlocListener<GetAllTagsBloc, TagState>(
-                  listener: (context, state) {
-                    if (state is TagLoading) {
-                      Loading.show(context);
-                      return;
-                    }
-                    Loading.hide();
-                    if (state is CategoryGetSucceed) {
-                      _tagBloc.add(GetTagEvent(userId: si<Account>().userId));
-                    }
-                  },
-                  child: BlocBuilder<GetAllTagsBloc, TagState>(
-                    builder: (context, state) {
-                      if (state is CategoryGetSucceed) {
-                        return Column(
-                          children: state.category.map((e) {
-                            return TagsList(
-                              tagsList: e.tags,
-                              onSelect: _onSelectTag,
-                              selectedTags: _selectedTags,
-                              color: getColorFromCode(e.colorCode),
-                              title: e.categoryName,
-                            );
-                          }).toList(),
-                        );
-                      }
-                      return Container();
-                    },
+        child: BlocListener<UpdateTagBloc, TagState>(
+          listener: (context, state) {
+            if (state is TagUpdated) {
+              final route = MaterialPageRoute(
+                builder: (context) => ProfileSettingTagsDecisionPage(),
+                settings: const RouteSettings(
+                    name: ProfileSettingTagsDecisionPage.routeName),
+              );
+              Navigator.push(context, route);
+            }
+          },
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 38),
+                Text(
+                  i18nTranslate(context, 'profile_setting_select_tag'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF575292),
                   ),
                 ),
-              ),
-              const SizedBox(height: 28),
-              // 次へ
-              if (_selectedTags.isEmpty || _selectedTags.length > 4)
-                Button(
-                  onTap: () => {},
-                  text: i18nTranslate(context, 'to_next'),
-                  size: ButtonSize.S,
-                  isActive: false,
-                )
-              else
-                Button(
-                  onTap: _next,
-                  text: i18nTranslate(context, 'to_next'),
-                  size: ButtonSize.S,
+                const SizedBox(height: 19),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_you'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      ),
+                      TextSpan(
+                        text: i18nTranslate(context,
+                            'profile_setting_tag_description_important'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFFFF8C00),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      ),
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_wo'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      ),
+                      TextSpan(
+                        text: i18nTranslate(
+                            context, 'profile_setting_tag_description_select'),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'NotoSansJP',
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF787877),
+                          height: calcFontHeight(lineHeight: 30, fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              const SizedBox(height: 32),
-            ],
+                const SizedBox(height: 7),
+                Assets.images.profileSetting.hukidasiIllust.image(
+                  fit: BoxFit.contain,
+                  width: 213,
+                  height: 65,
+                ),
+                SizedBox(
+                  width: 262,
+                  height: 134,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        bottom: 10,
+                        child: Assets.images.profileSetting.character.image(
+                          fit: BoxFit.contain,
+                          width: 69,
+                          height: 77,
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: SizedBox(
+                          width: 186,
+                          height: 134,
+                          child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Assets.images.profileSetting.fukidasi.image(
+                                  fit: BoxFit.contain,
+                                  width: 186,
+                                  height: 134,
+                                ),
+                                Text(
+                                  i18nTranslate(
+                                      context, 'profile_setting_tag_fukidasi'),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontFamily: 'NotoSansJP',
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF9A7446),
+                                    height: calcFontHeight(
+                                        fontSize: 10, lineHeight: 14),
+                                    letterSpacing:
+                                        calcLetterSpacing(letter: -6),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  i18nTranslate(
+                      context, 'profile_setting_important_tag_find_user'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'NotoSansJP',
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF75C975),
+                    height: calcFontHeight(fontSize: 12, lineHeight: 17.38),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                BlocProvider.value(
+                  value: _allTagBloc,
+                  child: BlocListener<GetAllTagsBloc, TagState>(
+                    listener: (context, state) {
+                      if (state is TagLoading) {
+                        Loading.show(context);
+                        return;
+                      }
+                      Loading.hide();
+                      if (state is CategoryGetSucceed) {
+                        _tagBloc.add(GetTagEvent(userId: si<Account>().userId));
+                      }
+                    },
+                    child: BlocBuilder<GetAllTagsBloc, TagState>(
+                      builder: (context, state) {
+                        if (state is CategoryGetSucceed) {
+                          return Column(
+                            children: state.category.map((e) {
+                              return TagsList(
+                                tagsList: e.tags,
+                                onSelect: _onSelectTag,
+                                selectedTags: _selectedTags,
+                                color: getColorFromCode(e.colorCode),
+                                title: e.categoryName,
+                              );
+                            }).toList(),
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                // 次へ
+                if (_selectedTags.isEmpty || _selectedTags.length > 4)
+                  Button(
+                    onTap: () => {},
+                    text: i18nTranslate(context, 'to_next'),
+                    size: ButtonSize.S,
+                    isActive: false,
+                  )
+                else
+                  Button(
+                    onTap: _next,
+                    text: i18nTranslate(context, 'to_next'),
+                    size: ButtonSize.S,
+                  ),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),
@@ -370,7 +358,8 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       Navigator.pop(context, _selectedTags);
       return;
     }
-    _updateTagBloc
+    context
+        .read<UpdateTagBloc>()
         .add(UpdateTagEvent(tags: _selectedTags.map((e) => e.tagId).toList()));
   }
 }

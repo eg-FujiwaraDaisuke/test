@@ -13,6 +13,9 @@ import 'package:minden/features/Issue_report/presentation/issue_report_message_d
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_search_list_page.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
+import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/support_history_power_plant/presentation/pages/support_history_power_plant_list.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
@@ -47,6 +50,8 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     BlocProvider.of<ProfileBloc>(context)
         .add(GetProfileEvent(userId: widget.userId));
+    BlocProvider.of<GetTagsBloc>(context)
+        .add(GetTagEvent(userId: widget.userId));
     super.initState();
   }
 
@@ -84,7 +89,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         PageRouteBuilder(
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  ProfileEditPage(),
+                                  BlocProvider.value(
+                                      value: context.read<UpdateTagBloc>(),
+                                      child: ProfileEditPage()),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
                             return const FadeUpwardsPageTransitionsBuilder()
@@ -234,8 +241,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                         height: 43,
                       ),
-                      _TagsList(
-                        tagsList: state.profile.tags,
+
+                      BlocListener<UpdateTagBloc, TagState>(
+                        listener: (context, state) {
+                          if (state is TagUpdated) {
+                            BlocProvider.of<GetTagsBloc>(context)
+                                .add(GetTagEvent(userId: widget.userId));
+                          }
+                        },
+                        child: BlocBuilder<GetTagsBloc, TagState>(
+                            builder: (context, state) {
+                          if (state is TagGetSucceed) {
+                            return _TagsList(
+                              tagsList: state.tags,
+                            );
+                          }
+                          return Container();
+                        }),
                       ),
                       const SizedBox(
                         height: 37,

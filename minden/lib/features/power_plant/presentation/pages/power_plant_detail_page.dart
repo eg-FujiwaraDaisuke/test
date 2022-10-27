@@ -408,12 +408,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     builder: (context, historyState) {
                       if (historyState is HistoryLoaded) {
                         return SupportButton(
-                          detail: detail,
-                          user: me,
-                          supportAction: state.supportAction.support_action,
-                          getSupportAction: _getSupportAction,
-                          historyPowerPlants: historyState.history.powerPlants,
-                        );
+                            detail: detail,
+                            user: me,
+                            supportAction: state.supportAction.support_action,
+                            getSupportAction: _getSupportAction,
+                            historyPowerPlants:
+                                historyState.history.powerPlants,
+                            getTagsPowerPlant: _getTagsPowerPlant);
                       }
                       return Container();
                     },
@@ -430,6 +431,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   void _getSupportAction() {
     _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
+  }
+
+  void _getTagsPowerPlant() {
+    _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
   }
 
   Widget _generateDetail(
@@ -962,12 +967,14 @@ class SupportButton extends StatelessWidget {
     required this.supportAction,
     required this.getSupportAction,
     required this.historyPowerPlants,
+    required this.getTagsPowerPlant,
   });
 
   final PowerPlantDetail detail;
   final User user;
   final String supportAction;
   final Function getSupportAction;
+  final Function getTagsPowerPlant;
   final List<SupportHistoryPowerPlant> historyPowerPlants;
 
   List<RegistPowerPlant> _registerPowerPlants = [];
@@ -1073,6 +1080,7 @@ class SupportButton extends StatelessWidget {
                       final isDecision = result != null && result == true;
                       if (isDecision) {
                         getSupportAction();
+                        getTagsPowerPlant();
                       }
                     } else {
                       // 応援プラントを選択しなかった場合、stateの中身をリセット
