@@ -102,8 +102,7 @@ class ImagePickerBottomSheet {
         compressQuality: 100,
         maxWidth: clipWidth,
         maxHeight: clipHeight,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
+        androidUiSettings: const AndroidUiSettings(
           toolbarColor: Colors.white,
           statusBarColor: Colors.black,
           toolbarTitle: '画像を編集',

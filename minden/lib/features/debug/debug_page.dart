@@ -1,7 +1,6 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
 import 'package:minden/core/success/account.dart';
@@ -110,13 +109,13 @@ class DebugPageState extends State<DebugPage> {
 }
 
 /// DynamicLinks経由で起動されたときのurl情報を表示する
-class DynamicLinksDataPreview extends HookWidget {
+class DynamicLinksDataPreview extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final currentDynamicLink = useProvider(pendingDynamicLink);
-    final streamDynamicLink = useProvider(pendingDynamicLinkStream);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentDynamicLink = ref.watch(pendingDynamicLink);
+    final streamDynamicLink = ref.watch(pendingDynamicLinkStream);
     final createdDynamicLink =
-        useProvider(createDynamicLink('powerplant-info/MP000606'));
+        ref.watch(createDynamicLink('powerplant-info/MP000606'));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

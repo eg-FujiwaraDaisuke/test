@@ -7,17 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:minden/core/hook/use_analytics.dart';
+import 'package:minden/core/success/account.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/image_picker_bottom_sheet/image_picker_bottom_sheet.dart';
 import 'package:minden/features/common/widget/tag/tag_list_item.dart';
-import 'package:minden/features/profile_setting/data/datasources/tag_datasource.dart';
-import 'package:minden/features/profile_setting/data/repositories/tag_repository_impl.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
-import 'package:minden/features/profile_setting/domain/usecases/tag_usecase.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
@@ -31,6 +28,8 @@ import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_page.dart';
 import 'package:minden/features/user/presentation/pages/wall_paper_arc_painter.dart';
+import 'package:minden/gen/assets.gen.dart';
+import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -42,7 +41,6 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late UpdateTagBloc _updateTagBloc;
 
   late String? _wallPaperUrl;
   late String? _iconUrl;
@@ -60,25 +58,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   void initState() {
     super.initState();
-    _updateTagBloc = UpdateTagBloc(
-      const TagStateInitial(),
-      UpdateTags(
-        TagRepositoryImpl(
-          dataSource: TagDataSourceImpl(
-            client: http.Client(),
-          ),
-        ),
-      ),
-    );
-    context.read<ProfileBloc>().stream.listen((event) {
-      if (event is ProfileLoaded) {
-        if (_tags.isNotEmpty) {
-          _updateTagBloc
-              .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
-          return;
+    BlocProvider.of<GetTagsBloc>(context)
+      ..add(GetTagEvent(userId: si<Account>().userId))
+      ..stream.listen((state) {
+        if (state is TagGetSucceed) {
+          _tags = state.tags;
         }
-      }
-    });
+      });
   }
 
   @override
@@ -88,8 +74,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) {},
+    return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoaded) {
           _profile = state.profile;
@@ -101,7 +86,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           _twitterLink = state.profile.twitterLink;
           _freeLink = state.profile.freeLink;
           _iconUrl = state.profile.icon;
-          _tags = state.profile.tags;
           return Scaffold(
             backgroundColor: const Color(0xFFF6F5EF),
             appBar: AppBar(
@@ -114,7 +98,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 },
                 child: Center(
                   child: SvgPicture.asset(
-                    'assets/images/common/leading_back.svg',
+                    Assets.images.common.leadingBack,
                     fit: BoxFit.fill,
                     width: 44,
                     height: 44,
@@ -206,12 +190,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                           height: 30,
                         ),
                         // 大切にしていること
-                        _ImportantTagsList(
-                          tagsList: state.profile.tags,
-                          tagHandler: (tags) {
-                            _tags = tags;
-                          },
-                        ),
+
+                        BlocBuilder<GetTagsBloc, TagState>(
+                            builder: (context, state) {
+                          if (state is TagGetSucceed) {
+                            return _ImportantTagsList(
+                              tagsList: state.tags,
+                              tagHandler: (newTags) {
+                                setState(() {
+                                  _tags = newTags;
+                                });
+                              },
+                            );
+                          }
+                          return Container();
+                        }),
                         const SizedBox(height: 38),
                         // SNS
                         _SnsLinkEditForm(
@@ -377,7 +370,13 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             facebookLink: _facebookLink ?? '',
             instagramLink: _instagramLink ?? '',
           ));
-      Navigator.pop(context);
+
+      context
+          .read<UpdateTagBloc>()
+          .add(UpdateTagEvent(tags: _tags.map((e) => e.tagId).toList()));
+      Future.delayed(const Duration(milliseconds: 200)).then((value) {
+        Navigator.pop(context);
+      });
     }
   }
 }

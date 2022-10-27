@@ -9,6 +9,7 @@ import 'package:minden/features/profile_setting/presentation/pages/profile_setti
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
+import 'package:minden/gen/assets.gen.dart';
 
 class ProfileSettingBioPage extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
           onTap: _prev,
           child: Center(
             child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
+              Assets.images.common.leadingBack,
               fit: BoxFit.fill,
               width: 44,
               height: 44,

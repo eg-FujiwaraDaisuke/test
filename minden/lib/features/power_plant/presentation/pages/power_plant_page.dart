@@ -1,7 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/core/firebase/analytics_factory.dart';
 import 'package:minden/core/firebase/dynamic_links_route_mapper.dart';
@@ -28,14 +27,14 @@ class PowerPlantHomeTabData {
 }
 
 /// ホームタブ
-class PowerPlantHomePage extends StatefulHookWidget {
+class PowerPlantHomePage extends StatefulHookConsumerWidget {
   static const String routeName = '/home/top';
 
   @override
   _PowerPlantHomePageState createState() => _PowerPlantHomePageState();
 }
 
-class _PowerPlantHomePageState extends State<PowerPlantHomePage>
+class _PowerPlantHomePageState extends ConsumerState<PowerPlantHomePage>
     with SingleTickerProviderStateMixin {
   late TransitionScreenBloc _transitionScreenBloc;
 
@@ -94,7 +93,7 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
 
   @override
   Widget build(BuildContext context) {
-    final homePageTab = useProvider(homePageTabProvider);
+    final homePageTab = ref.watch(homePageTabProvider.state);
 
     // 画面表示時の、初回表示タブについて、ScreenViewEventを送信する
     // NOTE: BottomNavigation切り替えの場合、0とは限らない
@@ -124,10 +123,10 @@ class _PowerPlantHomePageState extends State<PowerPlantHomePage>
           backgroundColor: Colors.white,
         ),
         body: SafeArea(
-          child: HookBuilder(builder: (context) {
+          child: HookConsumer(builder: (context, ref, child) {
             // ホームタブにて、DynamicLinksの待受
-            final initialDynamicLink = useProvider(pendingDynamicLink);
-            final currentDynamicLink = useProvider(pendingDynamicLinkStream);
+            final initialDynamicLink = ref.watch(pendingDynamicLink);
+            final currentDynamicLink = ref.watch(pendingDynamicLinkStream);
 
             final hasInitialLink = initialDynamicLink.data?.value?.link != null;
             final hasCurrentLink = currentDynamicLink.data?.value?.link != null;

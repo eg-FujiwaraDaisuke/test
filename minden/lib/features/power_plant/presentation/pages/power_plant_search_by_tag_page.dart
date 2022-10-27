@@ -17,6 +17,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_event.dart';
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 
@@ -104,7 +105,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
           onTap: Navigator.of(context).pop,
           child: Center(
             child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
+              Assets.images.common.leadingBack,
               fit: BoxFit.fill,
               width: 44,
               height: 44,
@@ -122,8 +123,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
                 const SizedBox(
                   height: 12,
                 ),
-                Image.asset(
-                  'assets/images/profile_setting/hukidasi_illust.png',
+                Assets.images.profileSetting.hukidasiIllust.image(
                   fit: BoxFit.contain,
                   width: 213,
                   height: 65,
@@ -233,8 +233,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
           Positioned(
             top: 35,
             left: 1,
-            child: Image.asset(
-              'assets/images/power_plant/light.png',
+            child: Assets.images.powerPlant.light.image(
               fit: BoxFit.contain,
               width: 72,
               height: 72,
@@ -243,8 +242,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
           Positioned(
             bottom: 13,
             left: 1,
-            child: Image.asset(
-              'assets/images/power_plant/character.png',
+            child: Assets.images.powerPlant.character.image(
               fit: BoxFit.contain,
               width: 97,
               height: 93,
@@ -254,8 +252,7 @@ class _PowerPlantSearchByTagState extends State<PowerPlantSearchByTag> {
             left: 55,
             child: Stack(
               children: [
-                Image.asset(
-                  'assets/images/power_plant/fukidashi.png',
+                Assets.images.powerPlant.fukidashi.image(
                   fit: BoxFit.contain,
                   width: 263,
                   height: 193,

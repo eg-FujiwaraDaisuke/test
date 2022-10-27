@@ -15,6 +15,7 @@ import 'package:minden/features/support_power_plant/data/repositories/support_po
 import 'package:minden/features/support_power_plant/domain/usecases/support_power_plant_usecase.dart';
 import 'package:minden/features/support_power_plant/presentation/bloc/support_power_plant_bloc.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_complete_dialog.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 class SupportPowerPlantDecisionDialog {
@@ -270,15 +271,12 @@ class SupportPowerPlantDecisionDialog {
                   imageUrl: powerPlant.plantImage1,
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                    return Image.asset(
-                      'assets/images/common/placeholder.png',
+                    return Assets.images.common.placeholder.image(
                       fit: BoxFit.cover,
                     );
                   },
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/common/noimage.png',
-                    fit: BoxFit.cover,
-                  ),
+                  errorWidget: (context, url, error) =>
+                      Assets.images.common.noimage.image(fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(

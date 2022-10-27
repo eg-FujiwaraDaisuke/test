@@ -16,6 +16,7 @@ import 'package:minden/features/power_plant/presentation/bloc/power_plant_event.
 import 'package:minden/features/power_plant/presentation/bloc/power_plant_state.dart';
 import 'package:minden/features/power_plant/presentation/pages/power_plant_list_item.dart';
 import 'package:minden/features/profile_setting/domain/entities/tag.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/utile.dart';
 
 enum PowerPlantSearchType {
@@ -127,7 +128,7 @@ class _PowerPlantSearchListPageState extends State<PowerPlantSearchListPage> {
           onTap: Navigator.of(context).pop,
           child: Center(
             child: SvgPicture.asset(
-              'assets/images/common/leading_back.svg',
+              Assets.images.common.leadingBack,
               fit: BoxFit.fill,
               width: 44,
               height: 44,

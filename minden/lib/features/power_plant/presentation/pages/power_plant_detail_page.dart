@@ -38,6 +38,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart
 import 'package:minden/features/support_participant/presentation/support_participants_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_decision_dialog.dart';
 import 'package:minden/features/support_power_plant/presentation/support_power_plant_select_dialog.dart';
+import 'package:minden/gen/assets.gen.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/utile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -407,12 +408,13 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     builder: (context, historyState) {
                       if (historyState is HistoryLoaded) {
                         return SupportButton(
-                          detail: detail,
-                          user: me,
-                          supportAction: state.supportAction.support_action,
-                          getSupportAction: _getSupportAction,
-                          historyPowerPlants: historyState.history.powerPlants,
-                        );
+                            detail: detail,
+                            user: me,
+                            supportAction: state.supportAction.support_action,
+                            getSupportAction: _getSupportAction,
+                            historyPowerPlants:
+                                historyState.history.powerPlants,
+                            getTagsPowerPlant: _getTagsPowerPlant);
                       }
                       return Container();
                     },
@@ -429,6 +431,10 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
 
   void _getSupportAction() {
     _getSupportActionBloc.add(GetSupportActionEvent(plantId: widget.plantId));
+  }
+
+  void _getTagsPowerPlant() {
+    _plantTagsBloc.add(GetTagEvent(plantId: widget.plantId));
   }
 
   Widget _generateDetail(
@@ -743,10 +749,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                 width: 303,
                 height: 203,
                 child: detail.giftImage == null
-                    ? Image.asset(
-                        'assets/images/common/noimage.png',
-                        fit: BoxFit.cover,
-                      )
+                    ? Assets.images.common.noimage.image(fit: BoxFit.cover)
                     : Image.network(
                         detail.giftImage!,
                         fit: BoxFit.cover,
@@ -796,7 +799,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                                   ),
                                   const SizedBox(width: 6),
                                   SvgPicture.asset(
-                                    'assets/images/common/ic_arrow_collapse.svg',
+                                    Assets.images.common.icArrowCollapse,
                                   ),
                                 ],
                               ),
@@ -875,7 +878,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                       ),
                       const SizedBox(width: 6),
                       SvgPicture.asset(
-                        'assets/images/common/ic_arrow_collapse.svg',
+                        Assets.images.common.icArrowCollapse,
                       ),
                     ],
                   ),
@@ -910,7 +913,7 @@ class PowerPlantDetailPageState extends State<PowerPlantDetailPage> {
                     ),
                   ),
                   SvgPicture.asset(
-                    'assets/images/common/ic_arrow_expand.svg',
+                    Assets.images.common.icArrowExpand,
                   ),
                 ],
               ),
@@ -964,12 +967,14 @@ class SupportButton extends StatelessWidget {
     required this.supportAction,
     required this.getSupportAction,
     required this.historyPowerPlants,
+    required this.getTagsPowerPlant,
   });
 
   final PowerPlantDetail detail;
   final User user;
   final String supportAction;
   final Function getSupportAction;
+  final Function getTagsPowerPlant;
   final List<SupportHistoryPowerPlant> historyPowerPlants;
 
   List<RegistPowerPlant> _registerPowerPlants = [];
@@ -1075,6 +1080,7 @@ class SupportButton extends StatelessWidget {
                       final isDecision = result != null && result == true;
                       if (isDecision) {
                         getSupportAction();
+                        getTagsPowerPlant();
                       }
                     } else {
                       // 応援プラントを選択しなかった場合、stateの中身をリセット
