@@ -74,7 +74,7 @@ class MindenMessageDialog {
                       child: Linkify(
                         onOpen: (link) async {
                           if (await canLaunch(link.url)) {
-                            await launch(link.url);
+                            await launch(link.url, forceSafariVC: false);
                           }
                         },
                         text: messageDetail.body,
