@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minden/features/token/data/datasources/app_badge_data_source.dart';
 import 'package:minden/injection_container.dart';
 
+final unreadBadgeCountProvider = StateProvider<int>((ref) => 1);
+
 final appBadgeManagerProvider = Provider<AppBadgeManager>(
     (ref) => AppBadgeManager(ref.watch(unreadBadgeDataSourceProvider)));
 

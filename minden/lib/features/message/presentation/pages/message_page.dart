@@ -7,9 +7,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/event_bus/event.dart';
-import 'package:minden/core/event_bus/event_bus.dart';
 import 'package:minden/core/ext/logger_ext.dart';
+import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
@@ -165,7 +164,8 @@ class MessagePage extends HookConsumerWidget {
 
       // EventBus経由で未読件数を通知する
       // NOTE: 未読件数はHiveで管理しているため、EventBusを経由せずとよい
-      eventBus.fire(NotificationCounterEvent(count: currentUnreadCount - 1));
+      ref.watch(unreadBadgeCountProvider.notifier).state =
+          currentUnreadCount - 1;
     }
 
     return Scaffold(

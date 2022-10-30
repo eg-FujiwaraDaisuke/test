@@ -9,8 +9,6 @@ import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:minden/core/event_bus/event.dart';
-import 'package:minden/core/event_bus/event_bus.dart';
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/features/debug/debug_page.dart';
@@ -67,9 +65,9 @@ class Application extends HookConsumerWidget {
 
     useEffect(() {
       // EventBusで管理している未読件数変化に応じて、未読バッジ数に反映する
-      eventBus.on<NotificationCounterEvent>().listen((event) {
-        appBadgeManager.setCount(event.count);
-      });
+      ref
+          .watch(unreadBadgeCountProvider.notifier)
+          .addListener(appBadgeManager.setCount);
       // アプリがバックグラウンドにいる or プロセスkillされた状態のメッセージ受信検知
       FirebaseMessaging.onBackgroundMessage(
           (message) => appBadgeManager.incrementCount());
