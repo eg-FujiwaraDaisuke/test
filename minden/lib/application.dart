@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/hook/use_logger.dart';
+import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
@@ -55,14 +57,17 @@ import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
 import 'package:minden/main.dart';
 
-class Application extends HookWidget {
+class Application extends HookConsumerWidget {
   const Application({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appBadgeManager = ref.watch(appBadgeManagerProvider);
+
     useEffect(() {
-      initNotificationCounter();
-      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      initNotificationCounter(appBadgeManager);
+      FirebaseMessaging.onBackgroundMessage(
+          (message) async => appBadgeManager.incrementCount());
       return null;
     }, []);
     return MultiBlocProvider(

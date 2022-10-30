@@ -5,42 +5,22 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
 import 'package:minden/core/event_bus/event.dart';
 import 'package:minden/core/event_bus/event_bus.dart';
+import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
 import 'package:minden/core/provider/package_info_provider.dart';
 import 'package:minden/injection_container.dart' as di;
-import 'package:minden/injection_container.dart';
 import 'package:package_info/package_info.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  final box = await Hive.openBox('notificationCountBox');
-  final int numMessageUnread= box.get('messageUnread') ?? 0;
-  if (await FlutterAppBadger.isAppBadgeSupported()) {
-    FlutterAppBadger.updateBadgeCount(numMessageUnread+1);
-  }
-}
-
-Future<void> initNotificationCounter() async {
-  final box = await Hive.openBox('notificationCountBox');
+/// 未読件数変化に応じて、未読バッジ数に反映する
+Future<void> initNotificationCounter(AppBadgeManager manager) async {
   eventBus.on<NotificationCounterEvent>().listen((event) async {
-    await box.put('messageUnread',event.count);
-    if (await FlutterAppBadger.isAppBadgeSupported()) {
-      FlutterAppBadger.updateBadgeCount(box.get('messageUnread'));
-    }
-    if (event.count == 0) {
-      await si<FlutterLocalNotificationsPlugin>().cancelAll();
-      FlutterAppBadger.removeBadge();
-    }
+    await manager.setCount(event.count);
   });
 }
 
