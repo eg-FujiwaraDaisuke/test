@@ -158,14 +158,17 @@ class MessagePage extends HookConsumerWidget {
       final currentUnreadCount =
           messagesStateData.messages.where((msg) => !msg.read).length;
 
+      logD('Request read message($messageId). '
+          '$currentUnreadCount/${messagesStateData.messages.length}');
+
       // 該当メッセージを既読状態に更新する
       _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
       messagesStateController.readMessage(messageId);
 
-      // EventBus経由で未読件数を通知する
-      // NOTE: 未読件数はHiveで管理しているため、EventBusを経由せずとよい
-      ref.watch(unreadBadgeCountProvider.notifier).state =
-          currentUnreadCount - 1;
+      // 新しい未読件数を通知する
+      ref
+          .watch(unreadBadgeCountProvider.notifier)
+          .setCount(currentUnreadCount - 1);
     }
 
     return Scaffold(
