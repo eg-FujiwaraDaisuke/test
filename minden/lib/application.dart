@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/hook/use_logger.dart';
 import 'package:minden/core/provider/app_badge_manager_provider.dart';
+import 'package:minden/core/util/app_lifecycle.dart';
 import 'package:minden/features/debug/debug_page.dart';
 import 'package:minden/features/home/presentation/pages/home_page.dart';
 import 'package:minden/features/localize/data/datasources/localized_info_datasource.dart';
@@ -41,6 +44,7 @@ import 'package:minden/features/profile_setting/presentation/bloc/tag_bloc.dart'
 import 'package:minden/features/profile_setting/presentation/bloc/tag_state.dart';
 import 'package:minden/features/startup/presentation/pages/initial_page.dart';
 import 'package:minden/features/startup/presentation/pages/tutorial_page.dart';
+import 'package:minden/features/token/data/datasources/app_badge_data_source.dart';
 import 'package:minden/features/transition_screen/presentation/bloc/transition_screen_bloc.dart';
 import 'package:minden/features/uploader/data/datasources/media_datasource.dart';
 import 'package:minden/features/uploader/data/repositories/media_repository_impl.dart';
@@ -55,28 +59,63 @@ import 'package:minden/features/user/presentation/bloc/profile_state.dart';
 import 'package:minden/features/user/presentation/pages/profile_edit_page.dart';
 import 'package:minden/features/user/presentation/pages/user_page.dart';
 import 'package:minden/injection_container.dart';
+import 'package:path_provider/path_provider.dart';
+
+/// アプリがバックグラウンドにいる or プロセスkillされた状態のメッセージ受信検知
+/// NOTE: 公式ドキュメント記載の通り、BackgroundHandlerはトップレベル関数の必要がある
+/// https://firebase.flutter.dev/docs/messaging/usage/#background-messages
+///
+/// NOTE: リリースビルド向けにアノテーション追加が必要
+/// https://pub.dev/packages/firebase_messaging/example
+@pragma('vm:entry-point')
+Future<void> backgroundMessageHandler(RemoteMessage message) async {
+  // NOTE: 本関数は別プロセスで動作し、Logger（Crashlytics）の初期化との兼ね合いで、debugPrint利用
+  debugPrint('FirebaseMessaging#onBackgroundMessage.');
+
+  // NOTE: background動作の場合、I/Oに限り実行可能
+  // await di.init();
+  await Firebase.initializeApp();
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+
+  // 永続化・バッジ更新
+  final manager = AppBadgeManager(UnreadBadgeDataSourceImpl());
+  await manager.incrementCount();
+
+  await Hive.close();
+}
 
 class Application extends HookConsumerWidget {
   const Application({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appBadgeManager = ref.watch(appBadgeManagerProvider);
+    final notifier = ref.watch(unreadBadgeCountProvider.notifier);
 
-    useEffect(() {
-      // EventBusで管理している未読件数変化に応じて、未読バッジ数に反映する
-      ref
-          .watch(unreadBadgeCountProvider.notifier)
-          .addListener(appBadgeManager.setCount);
-      // アプリがバックグラウンドにいる or プロセスkillされた状態のメッセージ受信検知
-      FirebaseMessaging.onBackgroundMessage(
-          (message) => appBadgeManager.incrementCount());
-      // アプリがフォアグラウンドにいる状態のメッセージ受信検知
-      FirebaseMessaging.onMessage.listen((event) {
-        appBadgeManager.incrementCount();
-      });
-      return null;
-    }, []);
+    // アプリがバックグラウンドにいる or プロセスkillされた状態のメッセージ受信検知
+    FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
+    // アプリがフォアグラウンドにいる状態のメッセージ受信検知
+    FirebaseMessaging.onMessage.listen((event) {
+      logD('FirebaseMessaging#onMessage. $event');
+      notifier.increment();
+    });
+
+    useEffect(
+      () {
+        final observer = AppLifeCycleObserver(
+          // バックグラウンド移行時に、Hiveを一度閉じる
+          // NOTE: Hiveはプロセスごとにオンメモリで値をキャッシュする
+          // onBackgroundHandlerによって、バックグラウンド時にHiveアクセスをしているため、
+          // アプリプロセス <=> バックグラウンドプロセスの移行のたびに、Hive#closeを呼ぶことで
+          // 値を同期させる
+          onPause: Hive.close,
+        );
+        WidgetsBinding.instance?.addObserver(observer);
+        return () => WidgetsBinding.instance?.removeObserver(observer);
+      },
+      const [],
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<LocalizedBloc>(
