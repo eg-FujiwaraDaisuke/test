@@ -9,20 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
-import 'package:minden/core/event_bus/event.dart';
-import 'package:minden/core/event_bus/event_bus.dart';
-import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/core/provider/firebase_dynamic_links_provider.dart';
 import 'package:minden/core/provider/package_info_provider.dart';
 import 'package:minden/injection_container.dart' as di;
 import 'package:package_info/package_info.dart';
-
-/// 未読件数変化に応じて、未読バッジ数に反映する
-Future<void> initNotificationCounter(AppBadgeManager manager) async {
-  eventBus.on<NotificationCounterEvent>().listen((event) async {
-    await manager.setCount(event.count);
-  });
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -155,15 +155,17 @@ class MessagePage extends HookConsumerWidget {
     }, [showMessageIdState.value]);
 
     void _readMessage(int messageId) {
+      // 該当メッセージを既読にする前の、未読件数を取得
+      final currentUnreadCount =
+          messagesStateData.messages.where((msg) => !msg.read).length;
+
+      // 該当メッセージを既読状態に更新する
       _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
       messagesStateController.readMessage(messageId);
-      var numMessUnread = 0;
-      for (final messageDetail in messagesStateData.messages) {
-        if (!messageDetail.read) {
-          numMessUnread++;
-        }
-      }
-      eventBus.fire(NotificationCounterEvent(count: numMessUnread - 1));
+
+      // EventBus経由で未読件数を通知する
+      // NOTE: 未読件数はHiveで管理しているため、EventBusを経由せずとよい
+      eventBus.fire(NotificationCounterEvent(count: currentUnreadCount - 1));
     }
 
     return Scaffold(
