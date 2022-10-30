@@ -73,7 +73,6 @@ Future<void> backgroundMessageHandler(RemoteMessage message) async {
   debugPrint('FirebaseMessaging#onBackgroundMessage.');
 
   // NOTE: background動作の場合、I/Oに限り実行可能
-  // await di.init();
   await Firebase.initializeApp();
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
@@ -82,6 +81,7 @@ Future<void> backgroundMessageHandler(RemoteMessage message) async {
   final manager = AppBadgeManager(UnreadBadgeDataSourceImpl());
   await manager.incrementCount();
 
+  // NOTE: closeすることで、次回値更新がアプリプロセスでもバックグランドプロセスでも、値が同期される
   await Hive.close();
 }
 
