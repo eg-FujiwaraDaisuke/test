@@ -73,102 +73,93 @@ class Application extends HookConsumerWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LocalizedBloc>(
-          create: (BuildContext context) =>
-              LocalizedBloc(
-                LocalizedStateEmpty(),
-                GetLocalizedEvent(
-                  LocalizedInfoRepositoryImpl(
-                    dataSource: LocalizedInfoDataSourceImpl(),
-                  ),
-                ),
+          create: (BuildContext context) => LocalizedBloc(
+            LocalizedStateEmpty(),
+            GetLocalizedEvent(
+              LocalizedInfoRepositoryImpl(
+                dataSource: LocalizedInfoDataSourceImpl(),
               ),
+            ),
+          ),
         ),
         BlocProvider<LoginBloc>(
-          create: (BuildContext context) =>
-              LoginBloc(
-                const LoginInitial(),
-                GetLoginUser(
-                  LoginRepositoryImpl(
-                    userDataSource: UserDataSourceImpl(client: http.Client()),
-                  ),
-                ),
+          create: (BuildContext context) => LoginBloc(
+            const LoginInitial(),
+            GetLoginUser(
+              LoginRepositoryImpl(
+                userDataSource: UserDataSourceImpl(client: http.Client()),
               ),
+            ),
+          ),
         ),
         BlocProvider<UploadBloc>(
-          create: (BuildContext context) =>
-              UploadBloc(
-                const UploadInitial(),
-                UploadMedia(
-                  MediaRepositoryImpl(
-                    dataSource: MediaDataSourceImpl(client: http.Client()),
-                  ),
-                ),
+          create: (BuildContext context) => UploadBloc(
+            const UploadInitial(),
+            UploadMedia(
+              MediaRepositoryImpl(
+                dataSource: MediaDataSourceImpl(client: http.Client()),
               ),
+            ),
+          ),
         ),
         BlocProvider<LogoutBloc>(
-          create: (BuildContext context) =>
-              LogoutBloc(
-                LogoutStateInitial(),
-                LogoutUser(
-                  LogoutRepositoryImpl(
-                    userDataSource: UserDataSourceImpl(client: http.Client()),
-                  ),
-                ),
+          create: (BuildContext context) => LogoutBloc(
+            LogoutStateInitial(),
+            LogoutUser(
+              LogoutRepositoryImpl(
+                userDataSource: UserDataSourceImpl(client: http.Client()),
               ),
+            ),
+          ),
         ),
         BlocProvider<GetMessagesBloc>(
-          create: (BuildContext context) =>
-              GetMessagesBloc(
-                const MessageInitial(),
-                GetMessages(
-                  MessageRepositoryImpl(
-                    dataSource: MessageDataSourceImpl(
-                      client: http.Client(),
-                    ),
-                  ),
+          create: (BuildContext context) => GetMessagesBloc(
+            const MessageInitial(),
+            GetMessages(
+              MessageRepositoryImpl(
+                dataSource: MessageDataSourceImpl(
+                  client: http.Client(),
                 ),
               ),
+            ),
+          ),
         ),
         BlocProvider<GetShowBadgeBloc>(
-          create: (BuildContext context) =>
-              GetShowBadgeBloc(
-                const MessageInitial(),
-                GetMessages(
-                  MessageRepositoryImpl(
-                    dataSource: MessageDataSourceImpl(
+          create: (BuildContext context) => GetShowBadgeBloc(
+            const MessageInitial(),
+            GetMessages(
+              MessageRepositoryImpl(
+                dataSource: MessageDataSourceImpl(
+                  client: http.Client(),
+                ),
+              ),
+            ),
+          ),
+        ),
+        BlocProvider<TransitionScreenBloc>(
+          create: (BuildContext context) => TransitionScreenBloc(
+            const TransitionScreenInitial(),
+          ),
+        ),
+        BlocProvider<ProfileBloc>(
+            create: (BuildContext context) => ProfileBloc(
+                const ProfileStateInitial(),
+                GetProfile(
+                  ProfileRepositoryImpl(
+                    dataSource: ProfileDataSourceImpl(
                       client: http.Client(),
                     ),
                   ),
                 ),
-              ),
-        ),
-        BlocProvider<TransitionScreenBloc>(
-          create: (BuildContext context) =>
-              TransitionScreenBloc(
-                const TransitionScreenInitial(),
-              ),
-        ),
-        BlocProvider<ProfileBloc>(
-            create: (BuildContext context) =>
-                ProfileBloc(
-                    const ProfileStateInitial(),
-                    GetProfile(
-                      ProfileRepositoryImpl(
-                        dataSource: ProfileDataSourceImpl(
-                          client: http.Client(),
-                        ),
-                      ),
+                UpdateProfile(
+                  ProfileRepositoryImpl(
+                    dataSource: ProfileDataSourceImpl(
+                      client: http.Client(),
                     ),
-                    UpdateProfile(
-                      ProfileRepositoryImpl(
-                        dataSource: ProfileDataSourceImpl(
-                          client: http.Client(),
-                        ),
-                      ),
-                    ))),
+                  ),
+                ))),
         BlocProvider<GetTagsBloc>(
-            create: (context) =>
-                GetTagsBloc(
+            create: (context) => GetTagsBloc(
                   const TagStateInitial(),
                   GetTags(
                     TagRepositoryImpl(
@@ -179,8 +170,7 @@ class Application extends HookConsumerWidget {
                   ),
                 )),
         BlocProvider<UpdateTagBloc>(
-            create: (context) =>
-                UpdateTagBloc(
+            create: (context) => UpdateTagBloc(
                   const TagStateInitial(),
                   UpdateTags(
                     TagRepositoryImpl(
@@ -189,8 +179,7 @@ class Application extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                )
-        )
+                ))
       ],
       child: MaterialApp(
         builder: BotToastInit(),
