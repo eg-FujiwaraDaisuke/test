@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/common/widget/button/button.dart';
 import 'package:minden/features/common/widget/button/button_size.dart';
 import 'package:minden/features/profile_setting/presentation/pages/profile_setting_tags_page.dart';
+import 'package:minden/features/user/data/datasources/profile_datasource.dart';
+import 'package:minden/features/user/data/repositories/profile_repository_impl.dart';
+import 'package:minden/features/user/domain/usecases/profile_usecase.dart';
 import 'package:minden/features/user/presentation/bloc/profile_bloc.dart';
 import 'package:minden/features/user/presentation/bloc/profile_event.dart';
 import 'package:minden/features/user/presentation/bloc/profile_state.dart';
@@ -19,12 +22,30 @@ class ProfileSettingBioPage extends StatefulWidget {
 class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   String _inputBio = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late ProfileBloc profileBloc;
 
   @override
   void initState() {
     super.initState();
 
-    context.read<ProfileBloc>().stream.listen((event) {
+    profileBloc = ProfileBloc(
+        const ProfileStateInitial(),
+        GetProfile(
+          ProfileRepositoryImpl(
+            dataSource: ProfileDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ),
+        UpdateProfile(
+          ProfileRepositoryImpl(
+            dataSource: ProfileDataSourceImpl(
+              client: http.Client(),
+            ),
+          ),
+        ));
+
+    profileBloc.stream.listen((event) {
       if (event is ProfileLoading) {
         Loading.show(context);
         return;
@@ -44,6 +65,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
 
   @override
   void dispose() {
+    profileBloc.close();
     super.dispose();
   }
 
@@ -105,7 +127,7 @@ class _ProfileSettingBioPageState extends State<ProfileSettingBioPage> {
   void _next() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      BlocProvider.of<ProfileBloc>(context).add(
+      profileBloc.add(
         UpdateProfileEvent(
           name: '',
           icon: '',

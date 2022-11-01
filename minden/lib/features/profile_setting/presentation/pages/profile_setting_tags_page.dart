@@ -43,6 +43,7 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
   final List<Tag> _selectedTags = [];
   late GetAllTagsBloc _allTagBloc;
   late GetTagsBloc _tagBloc;
+  late UpdateTagBloc _updateTagBloc;
 
   @override
   void initState() {
@@ -139,14 +140,14 @@ class _ProfileSettingTagsPageState extends State<ProfileSettingTagsPage> {
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         child: BlocListener<UpdateTagBloc, TagState>(
-          listener: (context, state) {
+          listener: (_, state) {
             if (state is TagUpdated) {
               final route = MaterialPageRoute(
                 builder: (context) => ProfileSettingTagsDecisionPage(),
                 settings: const RouteSettings(
                     name: ProfileSettingTagsDecisionPage.routeName),
               );
-              Navigator.push(context, route);
+                Navigator.push(context, route);
             }
           },
           child: Center(
