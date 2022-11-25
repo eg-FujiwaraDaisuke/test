@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:minden/core/ext/logger_ext.dart';
-import 'package:minden/core/provider/app_badge_manager_provider.dart';
 import 'package:minden/core/util/bot_toast_helper.dart';
 import 'package:minden/core/util/string_util.dart';
 import 'package:minden/features/message/data/datasources/message_datasource.dart';
@@ -56,86 +55,86 @@ class MessagePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final messagesStateController =
         ref.watch(messagesStateControllerProvider.notifier);
-    final messagesStateData = ref.watch(messagesStateControllerProvider);
     final showMessageIdState = useState(showMessageId);
-    useEffect(() {
-      _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
+    useEffect(
+      () {
+        _getShowBadgeBloc = BlocProvider.of<GetShowBadgeBloc>(context);
 
-      _getMessageDetailBloc = GetMessageDetailBloc(
-        const MessageInitial(),
-        GetMessageDetail(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
+        _getMessageDetailBloc = GetMessageDetailBloc(
+          const MessageInitial(),
+          GetMessageDetail(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      _readMessageBloc = ReadMessageBloc(
-        const MessageInitial(),
-        ReadMessage(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
+        _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      _readMessageBloc = ReadMessageBloc(
-        const MessageInitial(),
-        ReadMessage(
-          MessageRepositoryImpl(
-            dataSource: MessageDataSourceImpl(
-              client: http.Client(),
+        _readMessageBloc = ReadMessageBloc(
+          const MessageInitial(),
+          ReadMessage(
+            MessageRepositoryImpl(
+              dataSource: MessageDataSourceImpl(
+                client: http.Client(),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      //最新のShowBadgeを取得し,ShowBadgeのviewmodelを更新する
-      _getShowBadgeSubscription = _getShowBadgeBloc.stream.listen((event) {
-        if (event is ShowBadgeLoaded) {
-          messagesStateController.updateShowBadge(event.messages);
-        }
-      });
-
-      // メッセージをタップした際に既読APIを叩く、既読APIが終わったら最新のShowBadgeを取得しviewmodelを更新する
-      _readMessageSubscription = _readMessageBloc.stream.listen((event) {
-        if (event is MessageReaded) {
-          _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
-        }
-      });
-
-      _getMessageDetailSubscription =
-          _getMessageDetailBloc.stream.listen((event) async {
-        if (event is MessageDetailLoading) {
-          Loading.show(context);
-          return;
-        }
-        Loading.hide();
-
-        if (event is MessageDetailLoaded) {
-          // viewmodelのreadをtrueに変える
-          messagesStateController.readMessage(event.messageDetail.messageId);
-          // apiを叩いて既読する
-          _readMessageBloc
-              .add(ReadMessageEvent(messageId: event.messageDetail.messageId));
-
-          if (event.messageDetail.messageType == '1') {
-            MindenMessageDialog(
-              context: context,
-              messageDetail: event.messageDetail,
-            ).showDialog();
-          } else {
-            PowerPlantMessageDialog(
-              context: context,
-              messageDetail: event.messageDetail,
-            ).showDialog();
+        //最新のShowBadgeを取得し,ShowBadgeのviewmodelを更新する
+        _getShowBadgeSubscription = _getShowBadgeBloc.stream.listen((event) {
+          if (event is ShowBadgeLoaded) {
+            messagesStateController.updateShowBadge(event.messages);
           }
-        }
-      });
+        });
+
+        // メッセージをタップした際に既読APIを叩く、既読APIが終わったら最新のShowBadgeを取得しviewmodelを更新する
+        _readMessageSubscription = _readMessageBloc.stream.listen((event) {
+          if (event is MessageReaded) {
+            _getShowBadgeBloc.add(GetShowBadgeEvent('1'));
+          }
+        });
+
+        _getMessageDetailSubscription =
+            _getMessageDetailBloc.stream.listen((event) async {
+          if (event is MessageDetailLoading) {
+            Loading.show(context);
+            return;
+          }
+          Loading.hide();
+
+          if (event is MessageDetailLoaded) {
+            // viewmodelのreadをtrueに変える
+            messagesStateController.readMessage(event.messageDetail.messageId);
+            // apiを叩いて既読する
+            _readMessageBloc.add(
+                ReadMessageEvent(messageId: event.messageDetail.messageId));
+
+            if (event.messageDetail.messageType == '1') {
+              MindenMessageDialog(
+                context: context,
+                messageDetail: event.messageDetail,
+              ).showDialog();
+            } else {
+              PowerPlantMessageDialog(
+                context: context,
+                messageDetail: event.messageDetail,
+              ).showDialog();
+            }
+          }
+        });
 
       // プッシュ通知をバックグラウンドorターミネイトからタップした場合,メッセージ詳細を取得してダイアログを表示させる
       if (showMessageIdState.value != null) {
@@ -154,21 +153,8 @@ class MessagePage extends HookConsumerWidget {
     }, [showMessageIdState.value]);
 
     void _readMessage(int messageId) {
-      // 該当メッセージを既読にする前の、未読件数を取得
-      final currentUnreadCount =
-          messagesStateData.messages.where((msg) => !msg.read).length;
-
-      logD('Request read message($messageId). '
-          '$currentUnreadCount/${messagesStateData.messages.length}');
-
-      // 該当メッセージを既読状態に更新する
       _readMessageBloc.add(ReadMessageEvent(messageId: messageId));
       messagesStateController.readMessage(messageId);
-
-      // 新しい未読件数を通知する
-      ref
-          .watch(unreadBadgeCountProvider.notifier)
-          .setCount(currentUnreadCount - 1);
     }
 
     return Scaffold(
