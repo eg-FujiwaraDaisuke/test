@@ -86,172 +86,180 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           _twitterLink = state.profile.twitterLink;
           _freeLink = state.profile.freeLink;
           _iconUrl = state.profile.icon;
-          return Scaffold(
-            backgroundColor: const Color(0xFFF6F5EF),
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              centerTitle: true,
-              leading: GestureDetector(
-                onTap: () {
-                  _prev(context);
-                },
-                child: Center(
-                  child: SvgPicture.asset(
-                    Assets.images.common.leadingBack,
-                    fit: BoxFit.fill,
-                    width: 44,
-                    height: 44,
+          return WillPopScope(
+            onWillPop: () async {
+              // NOTE: BACKキー（Android）におけるpop制御
+              await _prev(context);
+              return false;
+            },
+            child: Scaffold(
+              backgroundColor: const Color(0xFFF6F5EF),
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                centerTitle: true,
+                leading: GestureDetector(
+                  onTap: () {
+                    _prev(context);
+                  },
+                  child: Center(
+                    child: SvgPicture.asset(
+                      Assets.images.common.leadingBack,
+                      fit: BoxFit.fill,
+                      width: 44,
+                      height: 44,
+                    ),
                   ),
                 ),
-              ),
-              actions: [
-                GestureDetector(
-                  onTap: () => _complete(context),
-                  child: Container(
-                    width: 90,
-                    height: 44,
-                    margin: const EdgeInsets.only(right: 8, top: 6, bottom: 6),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('assets/images/user/check.svg'),
-                        const SizedBox(
-                          width: 10.5,
-                        ),
-                        Text(
-                          i18nTranslate(context, 'user_edit_complete'),
-                          style: const TextStyle(
-                            color: Color(0xFF575292),
-                            fontSize: 12,
-                            fontFamily: 'NotoSansJP',
-                            fontWeight: FontWeight.w500,
+                actions: [
+                  GestureDetector(
+                    onTap: () => _complete(context),
+                    child: Container(
+                      width: 90,
+                      height: 44,
+                      margin:
+                          const EdgeInsets.only(right: 8, top: 6, bottom: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/images/user/check.svg'),
+                          const SizedBox(
+                            width: 10.5,
                           ),
-                        )
-                      ],
+                          Text(
+                            i18nTranslate(context, 'user_edit_complete'),
+                            style: const TextStyle(
+                              color: Color(0xFF575292),
+                              fontSize: 12,
+                              fontFamily: 'NotoSansJP',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            extendBodyBehindAppBar: true,
-            body: SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomCenter,
-                          clipBehavior: Clip.antiAlias,
-                          children: [
-                            _ProfileWallPaperEdit(
-                              imageUrl: state.profile.wallPaper,
-                              imageHandler: (value) {
-                                _wallPaperUrl = value;
-                              },
-                            ),
-                            Positioned(
-                              child: _ProfileIconEdit(
-                                imageUrl: state.profile.icon,
+                ],
+              ),
+              extendBodyBehindAppBar: true,
+              body: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.bottomCenter,
+                            clipBehavior: Clip.antiAlias,
+                            children: [
+                              _ProfileWallPaperEdit(
+                                imageUrl: state.profile.wallPaper,
                                 imageHandler: (value) {
-                                  _iconUrl = value;
+                                  _wallPaperUrl = value;
                                 },
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 17,
-                        ),
-                        _ProfileNameEditForm(
-                          name: state.profile.name,
-                          textHandler: (value) {
-                            _name = value;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 33,
-                        ),
-                        // 自己紹介
-                        _ProfileBioEditForm(
-                          bio: state.profile.bio,
-                          textHandler: (value) {
-                            _bio = value;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        // 大切にしていること
+                              Positioned(
+                                child: _ProfileIconEdit(
+                                  imageUrl: state.profile.icon,
+                                  imageHandler: (value) {
+                                    _iconUrl = value;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 17,
+                          ),
+                          _ProfileNameEditForm(
+                            name: state.profile.name,
+                            textHandler: (value) {
+                              _name = value;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 33,
+                          ),
+                          // 自己紹介
+                          _ProfileBioEditForm(
+                            bio: state.profile.bio,
+                            textHandler: (value) {
+                              _bio = value;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          // 大切にしていること
 
-                        BlocBuilder<GetTagsBloc, TagState>(
-                            builder: (context, state) {
-                          if (state is TagGetSucceed) {
-                            return _ImportantTagsList(
-                              tagsList: state.tags,
-                              tagHandler: (newTags) {
-                                setState(() {
-                                  _tags = newTags;
-                                });
-                              },
-                            );
-                          }
-                          return Container();
-                        }),
-                        const SizedBox(height: 38),
-                        // SNS
-                        _SnsLinkEditForm(
-                          prefixIconKey:
-                              'assets/images/user/input_sns_instagram.svg',
-                          placeholderKey: 'profile_setting_sns_instagram',
-                          link: state.profile.instagramLink,
-                          validateDomains: const [
-                            'www.instagram.com',
-                            'instagram.com'
-                          ],
-                          textHandler: (value) {
-                            _instagramLink = value;
-                          },
-                          hasSectionTitle: true,
-                        ),
-                        _SnsLinkEditForm(
-                          prefixIconKey:
-                              'assets/images/user/input_sns_facebook.svg',
-                          placeholderKey: 'profile_setting_sns_facebook',
-                          link: state.profile.facebookLink,
-                          validateDomains: const ['www.facebook.com'],
-                          textHandler: (value) {
-                            _facebookLink = value;
-                          },
-                        ),
-                        _SnsLinkEditForm(
-                          prefixIconKey:
-                              'assets/images/user/input_sns_twitter.svg',
-                          placeholderKey: 'profile_setting_sns_twitter',
-                          link: state.profile.twitterLink,
-                          validateDomains: const ['twitter.com'],
-                          textHandler: (value) {
-                            _twitterLink = value;
-                          },
-                        ),
-                        _SnsLinkEditForm(
-                          prefixIconKey:
-                              'assets/images/user/input_sns_free.svg',
-                          placeholderKey: 'profile_setting_sns_free',
-                          link: state.profile.freeLink,
-                          textHandler: (value) {
-                            _freeLink = value;
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                      ],
+                          BlocBuilder<GetTagsBloc, TagState>(
+                              builder: (context, state) {
+                            if (state is TagGetSucceed) {
+                              return _ImportantTagsList(
+                                tagsList: state.tags,
+                                tagHandler: (newTags) {
+                                  setState(() {
+                                    _tags = newTags;
+                                  });
+                                },
+                              );
+                            }
+                            return Container();
+                          }),
+                          const SizedBox(height: 38),
+                          // SNS
+                          _SnsLinkEditForm(
+                            prefixIconKey:
+                                'assets/images/user/input_sns_instagram.svg',
+                            placeholderKey: 'profile_setting_sns_instagram',
+                            link: state.profile.instagramLink,
+                            validateDomains: const [
+                              'www.instagram.com',
+                              'instagram.com'
+                            ],
+                            textHandler: (value) {
+                              _instagramLink = value;
+                            },
+                            hasSectionTitle: true,
+                          ),
+                          _SnsLinkEditForm(
+                            prefixIconKey:
+                                'assets/images/user/input_sns_facebook.svg',
+                            placeholderKey: 'profile_setting_sns_facebook',
+                            link: state.profile.facebookLink,
+                            validateDomains: const ['www.facebook.com'],
+                            textHandler: (value) {
+                              _facebookLink = value;
+                            },
+                          ),
+                          _SnsLinkEditForm(
+                            prefixIconKey:
+                                'assets/images/user/input_sns_twitter.svg',
+                            placeholderKey: 'profile_setting_sns_twitter',
+                            link: state.profile.twitterLink,
+                            validateDomains: const ['twitter.com'],
+                            textHandler: (value) {
+                              _twitterLink = value;
+                            },
+                          ),
+                          _SnsLinkEditForm(
+                            prefixIconKey:
+                                'assets/images/user/input_sns_free.svg',
+                            placeholderKey: 'profile_setting_sns_free',
+                            link: state.profile.freeLink,
+                            textHandler: (value) {
+                              _freeLink = value;
+                            },
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
                     ),
                   ),
                 ),
