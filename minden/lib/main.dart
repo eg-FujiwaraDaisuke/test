@@ -4,8 +4,8 @@ import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minden/application.dart';
 import 'package:minden/core/env/config.dart';
@@ -16,15 +16,6 @@ import 'package:package_info/package_info.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  //config don't rotate
-  await SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ],
-  );
-
   const env = String.fromEnvironment('DEFINE_BUILD_ENV');
   Config.setEnvironment(env);
   await di.init();
