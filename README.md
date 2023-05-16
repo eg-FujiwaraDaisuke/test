@@ -1,10 +1,10 @@
 # flutter version
 
 ```
-Flutter 2.8.1 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision d79295af24 (3 weeks ago) • 2021-06-11 08:56:01 -0700
-Engine • revision 91c9fc8fe0
-Tools • Dart 2.15.1
+Flutter 3.3.5 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision d9111f6402 (6 months ago) • 2022-10-19 12:27:13 -0700
+Engine • revision 3ad69d7be3
+Tools • Dart 2.18.2 • DevTools 2.15.0
 ```
 
 # cl-minden-app
